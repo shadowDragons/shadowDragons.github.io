@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <!-- JQuery (used for bootstrap and jekyll search) -->
+    <script src="/assets/js/jquery-3.2.1.min.js" ></script>
+    
+    <!-- Main JS (navbar.js and katex_init.js)-->
+    <script defer=true src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <link rel="stylesheet" href="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="http://localhost:4000/2017/02/02/mac-rsync-fswatch.html">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="小白" href="http://localhost:4000///feed.xml"/>
+
+    <!-- Font Awesome -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css">
+
+    <!-- Google Fonts -->
+    
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,700italic,400italic" rel="stylesheet" type="text/css"> 
+    
+
+    <!-- KaTeX 0.8.3 -->
+    
+    <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/katex.min.css">
+    <script src="/assets/js/katex.min.js">
+    </script>
+    
+
+    <!-- Google Analytics -->
+    
+    
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>mac使用rsync+fswatch实现目录文件实时同步 | 小白成长史</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="mac使用rsync+fswatch实现目录文件实时同步" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="安装rsync brew install rsync" />
+<meta property="og:description" content="安装rsync brew install rsync" />
+<link rel="canonical" href="http://localhost:4000/2017/02/02/mac-rsync-fswatch.html" />
+<meta property="og:url" content="http://localhost:4000/2017/02/02/mac-rsync-fswatch.html" />
+<meta property="og:site_name" content="小白成长史" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-02-02T00:00:00+08:00" />
+<script type="application/ld+json">
+{"description":"安装rsync brew install rsync","@type":"BlogPosting","url":"http://localhost:4000/2017/02/02/mac-rsync-fswatch.html","headline":"mac使用rsync+fswatch实现目录文件实时同步","dateModified":"2017-02-02T00:00:00+08:00","datePublished":"2017-02-02T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2017/02/02/mac-rsync-fswatch.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- Manual seo tags -->
+    <!--
+    <title>mac使用rsync+fswatch实现目录文件实时同步 | 小白</title>
+    <meta name="description" content="安装rsyncbrew install rsync">
+    -->
+</head>
+
+  <body>
+    <header class="site-header">
+    
+    <!-- Logo and title -->
+	<div class="branding">
+		<a href="/">
+			<img class="avatar" src="/assets/img/photo.jpeg" alt=""/>
+		</a>
+
+		<h1 class="site-title">
+			<a href="/">小白</a>
+		</h1>
+	</div>
+    
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+    
+    <!-- Menu -->
+    <ul>
+        
+        
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="/about/">
+                About
+            </a>
+        </li>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+         
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/portfolio">
+                Portfolio
+            </a>
+        </li>
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/tags">
+                <i class="fa fa-tags" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+    </ul>
+        
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="background-image: url('/')">
+    <h1 id="mac%E4%BD%BF%E7%94%A8rsync%2Bfswatch%E5%AE%9E%E7%8E%B0%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6%E5%AE%9E%E6%97%B6%E5%90%8C%E6%AD%A5" class="title">mac使用rsync+fswatch实现目录文件实时同步</h1>
+    <p class="meta">
+    February 2, 2017
+    
+    </p>
+  </header>
+  <section class="post-content"><h4 id="安装rsync">安装rsync</h4>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install </span>rsync
+</code></pre></div></div>
+
+<h4 id="创建用户">创建用户</h4>
+<p>创建用户配置文件\etc\rsyncd.secrets  <br />
+添加用户名:密码  <br />
+这里我们设置用户名为root，密码123456，即root:123456</p>
+
+<h4 id="配置">配置</h4>
+<p>创建配置文件 \etc\rsyncd.conf</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>uid <span class="o">=</span> root                   <span class="c">#守护进程的用户权限</span>
+gid <span class="o">=</span> root
+port <span class="o">=</span> 873                   <span class="c">#rsync使用的端口，默认873</span>
+address <span class="o">=</span> 192.168.0.101      <span class="c"># 本机的ip地址</span>
+use <span class="nb">chroot</span> <span class="o">=</span> <span class="nb">yes
+</span>uid <span class="o">=</span> root                   <span class="c">#守护进程的用户权限</span>
+gid <span class="o">=</span> root
+port <span class="o">=</span> 873                   <span class="c">#rsync使用的端口，默认873</span>
+address <span class="o">=</span> 192.168.0.101      <span class="c"># 本机的ip地址</span>
+use <span class="nb">chroot</span> <span class="o">=</span> <span class="nb">yes
+read </span>only <span class="o">=</span> no               <span class="c"># no客户端可上传文件,yes只读</span>
+write only <span class="o">=</span> no              <span class="c"># no客户端可下载文件,yes不能下载</span>
+<span class="c">#list = yes                  # 是否提供资源列表</span>
+hosts <span class="nv">allow</span><span class="o">=</span>192.168.0.101    <span class="c"># 本模块允许通过的IP地址</span>
+hosts <span class="nv">deny</span><span class="o">=</span><span class="k">*</span>                 <span class="c"># 禁止主机IP</span>
+max connections <span class="o">=</span> 5          <span class="c"># 客户端最大连接数目</span>
+motd file <span class="o">=</span> /etc/rsyncd.motd
+pid file <span class="o">=</span> /var/run/rsyncd.pid   <span class="c"># 进程号存放位置</span>
+log file <span class="o">=</span> /var/log/rsyncd.log   <span class="c"># 日志位置</span>
+lock file <span class="o">=</span> /var/run/rsync.lock  <span class="c"># 锁文件存放位置</span>
+transfer logging <span class="o">=</span> <span class="nb">yes
+</span>log format <span class="o">=</span> %t %a %m %f %b
+syslog facility <span class="o">=</span> local3
+<span class="nb">timeout</span> <span class="o">=</span> 300
+<span class="o">[</span>phproot1]                            <span class="c"># 要同步的模块名</span>
+path <span class="o">=</span> /Users/Username/Document/Kitematic/nginx/htdocs/php1 <span class="c"># 要同步的目录</span>
+<span class="nv">list</span><span class="o">=</span><span class="nb">yes
+</span>ignore errors
+auth <span class="nb">users</span> <span class="o">=</span> root                  <span class="c"># 登陆系统使用的用户名，没有默认为匿名。</span>
+secrets file <span class="o">=</span> /etc/rsyncd.secrets <span class="c"># 密码文件存放的位置</span>
+comment <span class="o">=</span> linuxsir tmp             <span class="c"># 这个名名称无所谓，最后模块名一直</span>
+<span class="o">[</span>phproot2]                            <span class="c"># 要同步的模块名</span>
+path <span class="o">=</span> /Users/Username/Document/Kitematic/nginx/htdocs/php2 <span class="c"># 要同步的目录</span>
+<span class="nv">list</span><span class="o">=</span><span class="nb">yes
+</span>ignore errors
+auth <span class="nb">users</span> <span class="o">=</span> root                  <span class="c"># 登陆系统使用的用户名，没有默认为匿名。</span>
+secrets file <span class="o">=</span> /etc/rsyncd.secrets <span class="c"># 密码文件存放的位置</span>
+comment <span class="o">=</span> linuxsir tmp             <span class="c"># 这个名名称无所谓，最后模块名一直</span>
+<span class="o">[</span>phproot3]                            <span class="c"># 要同步的模块名</span>
+path <span class="o">=</span> /Users/Username/Document/Kitematic/nginx/htdocs/php3 <span class="c"># 要同步的目录</span>
+<span class="nv">list</span><span class="o">=</span><span class="nb">yes
+</span>ignore errors
+auth <span class="nb">users</span> <span class="o">=</span> root                  <span class="c"># 登陆系统使用的用户名，没有默认为匿名。</span>
+secrets file <span class="o">=</span> /etc/rsyncd.secrets <span class="c"># 密码文件存放的位置</span>
+comment <span class="o">=</span> linuxsir tmp             <span class="c"># 这个名名称无所谓，最后模块名一直</span>
+</code></pre></div></div>
+<p>这里我们设置了3个同步模块，对应三个需要同步的目录</p>
+
+<h4 id="启动">启动</h4>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>rsync <span class="nt">--daemon</span> <span class="nt">--config</span><span class="o">=</span>/etc/rsyncd.conf
+</code></pre></div></div>
+
+<h4 id="同步">同步</h4>
+<p>这里我们以同步/Users/Username/Document/Kitematic/nginx/htdocs/php1到/Users/Username/Document/Kitematic/nginx/htdocs/php2为例</p>
+
+<p>本地同步</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rsync <span class="nt">-ave</span> /Users/Username/Document/Kitematic/nginx/htdocs/php1/ /Users/Username/Document/Kitematic/nginx/htdocs/php2/
+</code></pre></div></div>
+
+<p>远程同步</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rsync <span class="nt">-ave</span> ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ username@192.168.0.101:phproot1/
+</code></pre></div></div>
+
+<h4 id="安装fswatch">安装fswatch</h4>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install </span>fswatch
+</code></pre></div></div>
+
+<h4 id="实时同步">实时同步</h4>
+<p>创建shell文件 rsync.sh</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/zsh</span>
+fswatch /Users/zhongjunbin/Document/Kitematic/nginx/htdocs/php1/ | <span class="k">while </span><span class="nb">read </span>file
+<span class="k">do
+    </span>rsync <span class="nt">-ave</span> ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ Username@192.168.0.101:phproot2/
+    rsync <span class="nt">-ave</span> ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ Username@192.168.0.101:phproot3/
+    <span class="nb">echo</span> <span class="s2">"</span><span class="k">${</span><span class="nv">file</span><span class="k">}</span><span class="s2"> was rsynced"</span> <span class="o">&gt;&gt;</span> /usr/local/var/log/rsync.log 2&gt;&amp;1
+<span class="k">done
+
+</span>fswatch /Users/zhongjunbin/Document/Kitematic/nginx/htdocs/php2/ | <span class="k">while </span><span class="nb">read </span>file
+<span class="k">do
+    </span>rsync <span class="nt">-ave</span> ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ Username@192.168.0.101:phproot1/
+    rsync <span class="nt">-ave</span> ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ Username@192.168.0.101:phproot3/
+    <span class="nb">echo</span> <span class="s2">"</span><span class="k">${</span><span class="nv">file</span><span class="k">}</span><span class="s2"> was rsynced"</span> <span class="o">&gt;&gt;</span> /usr/local/var/log/rsync.log 2&gt;&amp;1
+<span class="k">done
+
+</span>fswatch /Users/zhongjunbin/Document/Kitematic/nginx/htdocs/php3/ | <span class="k">while </span><span class="nb">read </span>file
+<span class="k">do
+    </span>rsync <span class="nt">-ave</span> ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ Username@192.168.0.101:phproot1/
+    rsync <span class="nt">-ave</span> ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ Username@192.168.0.101:phproot2/
+    <span class="nb">echo</span> <span class="s2">"</span><span class="k">${</span><span class="nv">file</span><span class="k">}</span><span class="s2"> was rsynced"</span> <span class="o">&gt;&gt;</span> /usr/local/var/log/rsync.log 2&gt;&amp;1
+<span class="k">done</span>
+</code></pre></div></div>
+
+<h4 id="后台运行shell">后台运行shell</h4>
+<p>sudo sh rsync.sh &amp;</p>
+
+<h4 id="完成">完成</h4>
+</section>
+   
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list">
+    
+      <div class="meta">Tags</div>
+    
+
+    
+    <a class="button" href="/tags#文件同步">
+      <p><i class="fa fa-tag fa-fw"></i> 文件同步</p>
+    </a>
+    
+  </div>
+</footer>
+
+    
+</article>
+
+<!-- Disqus -->
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+  
+  <div id="previous-post" class="post-nav-post">
+      <p>Previous post</p>
+      <a href="/2016/11/24/transaction-deal.html">
+        数据库的事务处理
+      </a>
+  </div>
+  
+  
+  <div id="next-post" class="post-nav-post">
+      <p>Next post</p>
+      <a href="/2017/02/05/php-daemon.html">
+        php实现守护进程
+      </a>
+  </div>
+  
+</div>
+
+    </div>
+    
+<footer class="site-footer">
+    <p class="text">Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+	<a href="http://localhost:4000/feed.xml" title="Follow RSS feed">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+	<a href="https://github.com/shadowdragons" title="Follow on GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <!-- JQuery (used for bootstrap and jekyll search) -->
+    <script src="/assets/js/jquery-3.2.1.min.js" ></script>
+    
+    <!-- Main JS (navbar.js and katex_init.js)-->
+    <script defer=true src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <link rel="stylesheet" href="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="http://localhost:4000/2016/11/13/php-session.html">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="小白" href="http://localhost:4000///feed.xml"/>
+
+    <!-- Font Awesome -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css">
+
+    <!-- Google Fonts -->
+    
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,700italic,400italic" rel="stylesheet" type="text/css"> 
+    
+
+    <!-- KaTeX 0.8.3 -->
+    
+    <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/katex.min.css">
+    <script src="/assets/js/katex.min.js">
+    </script>
+    
+
+    <!-- Google Analytics -->
+    
+    
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>php实现session跨域 | 小白成长史</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="php实现session跨域" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="session跨域 在*.a.com上保存session，在客户端浏览器中会生成一个sessionID，作用范围仅仅是在a.com这个域名下，这个sessionID就是对应该服务器存储session文件的文件名，在用户打开浏览器访问a.com，浏览器会发送该sessionID去服务器找到该文件名，然后获取session。" />
+<meta property="og:description" content="session跨域 在*.a.com上保存session，在客户端浏览器中会生成一个sessionID，作用范围仅仅是在a.com这个域名下，这个sessionID就是对应该服务器存储session文件的文件名，在用户打开浏览器访问a.com，浏览器会发送该sessionID去服务器找到该文件名，然后获取session。" />
+<link rel="canonical" href="http://localhost:4000/2016/11/13/php-session.html" />
+<meta property="og:url" content="http://localhost:4000/2016/11/13/php-session.html" />
+<meta property="og:site_name" content="小白成长史" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-11-13T00:00:00+08:00" />
+<script type="application/ld+json">
+{"description":"session跨域 在*.a.com上保存session，在客户端浏览器中会生成一个sessionID，作用范围仅仅是在a.com这个域名下，这个sessionID就是对应该服务器存储session文件的文件名，在用户打开浏览器访问a.com，浏览器会发送该sessionID去服务器找到该文件名，然后获取session。","@type":"BlogPosting","url":"http://localhost:4000/2016/11/13/php-session.html","headline":"php实现session跨域","dateModified":"2016-11-13T00:00:00+08:00","datePublished":"2016-11-13T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2016/11/13/php-session.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- Manual seo tags -->
+    <!--
+    <title>php实现session跨域 | 小白</title>
+    <meta name="description" content="session跨域在*.a.com上保存session，在客户端浏览器中会生成一个sessionID，作用范围仅仅是在a.com这个域名下，这个sessionID就是对应该服务器存储session文件的文件名，在用户打开浏览器访问a.com，浏览器会发送该sessionID去服务器找到该文件名，然后获取session。">
+    -->
+</head>
+
+  <body>
+    <header class="site-header">
+    
+    <!-- Logo and title -->
+	<div class="branding">
+		<a href="/">
+			<img class="avatar" src="/assets/img/photo.jpeg" alt=""/>
+		</a>
+
+		<h1 class="site-title">
+			<a href="/">小白</a>
+		</h1>
+	</div>
+    
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+    
+    <!-- Menu -->
+    <ul>
+        
+        
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="/about/">
+                About
+            </a>
+        </li>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+         
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/portfolio">
+                Portfolio
+            </a>
+        </li>
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/tags">
+                <i class="fa fa-tags" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+    </ul>
+        
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="background-image: url('/')">
+    <h1 id="php%E5%AE%9E%E7%8E%B0session%E8%B7%A8%E5%9F%9F" class="title">php实现session跨域</h1>
+    <p class="meta">
+    November 13, 2016
+    
+    </p>
+  </header>
+  <section class="post-content"><h4 id="session跨域">session跨域</h4>
+<p>在*.a.com上保存session，在客户端浏览器中会生成一个sessionID，作用范围仅仅是在a.com这个域名下，这个sessionID就是对应该服务器存储session文件的文件名，在用户打开浏览器访问a.com，浏览器会发送该sessionID去服务器找到该文件名，然后获取session。</p>
+
+<h4 id="同服务器">同服务器</h4>
+<p><strong>跨主域</strong>  <br />
+由于sessionID只会在一个主域下面有效，所以要在另外一个域名下生成相应的sessionID。</p>
+
+<p>实现</p>
+
+<p>a.com</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nb">session_start</span><span class="p">();</span>
+<span class="nv">$ssid</span> <span class="o">=</span> <span class="nb">session_id</span><span class="p">();</span>
+<span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'name'</span><span class="p">;</span>
+<span class="nb">header</span><span class="p">(</span><span class="s1">'Location:http://www.b.com?ssid='</span> <span class="o">.</span> <span class="nv">$ssid</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>b.com</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nb">session_id</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'ssid'</span><span class="p">]);</span>
+<span class="nb">session_start</span><span class="p">();</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$_SESSION</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>这样就能在b.com域名下生成同样的sessionID，当然a.com和b.com找到是同个文件 有个问题： 如果传递不了sessionID，需要配置php.ini，让url支持或者使用p3p协议进行传输</p>
+
+<p><strong>跨子域</strong>  <br />
+只要设置session_set_cookie_params(1800 , ‘/’, ‘.a.com’);，就ok</p>
+
+<h4 id="不同服务器">不同服务器</h4>
+<p><strong>跨主域</strong>  <br />
+这个就比较蛋疼了，只能是把要设置session的参数传递到b.com，然后在该服务器下重新设置session，因为session文件在另外一台服务器不能被找到。</p>
+
+<p><strong>跨子域</strong>  <br />
+可以传递sessionID到b.com，然后生成相应的session文件，当然session文件内容也要传递过去。</p>
+
+<h4 id="统一解决办法">统一解决办法</h4>
+<p>1.用两台服务器都能访问到的数据库服务器存储session  <br />
+2.使用memcache</p>
+</section>
+   
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list">
+    
+      <div class="meta">Tags</div>
+    
+
+    
+    <a class="button" href="/tags#php">
+      <p><i class="fa fa-tag fa-fw"></i> php</p>
+    </a>
+    
+    <a class="button" href="/tags#session">
+      <p><i class="fa fa-tag fa-fw"></i> session</p>
+    </a>
+    
+  </div>
+</footer>
+
+    
+</article>
+
+<!-- Disqus -->
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+  
+  <div id="previous-post" class="post-nav-post">
+      <p>Previous post</p>
+      <a href="/2016/11/13/link.html">
+        链表
+      </a>
+  </div>
+  
+  
+  <div id="next-post" class="post-nav-post">
+      <p>Next post</p>
+      <a href="/2016/11/13/sort.html">
+        排序
+      </a>
+  </div>
+  
+</div>
+
+    </div>
+    
+<footer class="site-footer">
+    <p class="text">Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+	<a href="http://localhost:4000/feed.xml" title="Follow RSS feed">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+	<a href="https://github.com/shadowdragons" title="Follow on GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+
+  </body>
+</html>

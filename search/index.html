@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <!-- JQuery (used for bootstrap and jekyll search) -->
+    <script src="/assets/js/jquery-3.2.1.min.js" ></script>
+    
+    <!-- Main JS (navbar.js and katex_init.js)-->
+    <script defer=true src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <link rel="stylesheet" href="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="http://localhost:4000/search/">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="小白" href="http://localhost:4000///feed.xml"/>
+
+    <!-- Font Awesome -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css">
+
+    <!-- Google Fonts -->
+    
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,700italic,400italic" rel="stylesheet" type="text/css"> 
+    
+
+    <!-- KaTeX 0.8.3 -->
+    
+    <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/katex.min.css">
+    <script src="/assets/js/katex.min.js">
+    </script>
+    
+
+    <!-- Google Analytics -->
+    
+    
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Search | 小白成长史</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="Search" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="php mysql 分布式 区块链" />
+<meta property="og:description" content="php mysql 分布式 区块链" />
+<link rel="canonical" href="http://localhost:4000/search/" />
+<meta property="og:url" content="http://localhost:4000/search/" />
+<meta property="og:site_name" content="小白成长史" />
+<script type="application/ld+json">
+{"description":"php mysql 分布式 区块链","@type":"WebPage","url":"http://localhost:4000/search/","headline":"Search","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- Manual seo tags -->
+    <!--
+    <title>Search | 小白</title>
+    <meta name="description" content="">
+    -->
+</head>
+
+  <body>
+    <header class="site-header">
+    
+    <!-- Logo and title -->
+	<div class="branding">
+		<a href="/">
+			<img class="avatar" src="/assets/img/photo.jpeg" alt=""/>
+		</a>
+
+		<h1 class="site-title">
+			<a href="/">小白</a>
+		</h1>
+	</div>
+    
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+    
+    <!-- Menu -->
+    <ul>
+        
+        
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="/about/">
+                About
+            </a>
+        </li>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+         
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/portfolio">
+                Portfolio
+            </a>
+        </li>
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/tags">
+                <i class="fa fa-tags" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+    </ul>
+        
+	</nav>
+</header>
+
+    <div class="content">
+      <article class="feature-image">
+  <header id="main" style="background-image: url('/assets/img/pexels/search-map.jpeg')">
+    <h1 id="Search" class="title">
+        Search
+    </h1>
+    
+    
+    <h2 class="subtitle">What are you looking for?</h2>
+    
+      
+  </header>
+  <section class="post-content"><!-- Html Elements for Search -->
+<input type="text" id="search-input" placeholder="Enter keywords..." class="search-bar">
+<br>
+<br>
+<ul id="results-container"></ul>
+
+<section>
+    <!-- Script pointing to jekyll-search.js -->
+    <script src="/assets/js/simple-jekyll-search.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        SimpleJekyllSearch({
+            searchInput: document.getElementById('search-input'),
+            resultsContainer: document.getElementById('results-container'),
+            json: [
+                    
+                     
+                        {
+                          "title"    : "共识算法",
+                          "category" : "",
+                          "tags"     : " 区块链, 算法",
+                          "url"      : "/2018/03/23/agreement.html",
+                          "date"     : "March 23, 2018",
+                          "excerpt"  : "查看原图  drow.io源文件下载",
+                          "content"  : "查看原图  drow.io源文件下载"
+                        } ,
+                     
+                        {
+                          "title"    : "比特币挖矿",
+                          "category" : "",
+                          "tags"     : " 区块链, 比特币",
+                          "url"      : "/2018/03/18/bitcoin-mining.html",
+                          "date"     : "March 18, 2018",
+                          "excerpt"  : "查看原图  drow.io源文件下载",
+                          "content"  : "查看原图  drow.io源文件下载"
+                        } ,
+                     
+                        {
+                          "title"    : "比特币51攻击",
+                          "category" : "",
+                          "tags"     : " 区块链, 比特币",
+                          "url"      : "/2018/03/18/bitcoin-51attach.html",
+                          "date"     : "March 18, 2018",
+                          "excerpt"  : "查看原图  drow.io源文件下载",
+                          "content"  : "查看原图  drow.io源文件下载"
+                        } ,
+                     
+                        {
+                          "title"    : "RSA算法",
+                          "category" : "",
+                          "tags"     : " 加密, 算法",
+                          "url"      : "/2018/03/17/rsa.html",
+                          "date"     : "March 17, 2018",
+                          "excerpt"  : "查看原图  drow.io源文件下载",
+                          "content"  : "查看原图  drow.io源文件下载"
+                        } ,
+                     
+                        {
+                          "title"    : "拜占庭算法",
+                          "category" : "",
+                          "tags"     : " 共识, 算法",
+                          "url"      : "/2018/03/09/Byzantine-failures.html",
+                          "date"     : "March 9, 2018",
+                          "excerpt"  : "查看原图  drow.io源文件下载",
+                          "content"  : "查看原图  drow.io源文件下载"
+                        } ,
+                     
+                        {
+                          "title"    : "比特币网络",
+                          "category" : "",
+                          "tags"     : " 区块链, 比特币",
+                          "url"      : "/2018/03/03/bitcoin-network.html",
+                          "date"     : "March 3, 2018",
+                          "excerpt"  : "查看原图  drow.io源文件下载",
+                          "content"  : "查看原图  drow.io源文件下载"
+                        } ,
+                     
+                        {
+                          "title"    : "比特币区块链",
+                          "category" : "",
+                          "tags"     : " 区块链, 比特币",
+                          "url"      : "/2018/03/03/bitcoin-chain.html",
+                          "date"     : "March 3, 2018",
+                          "excerpt"  : "查看原图  drow.io源文件下载",
+                          "content"  : "查看原图  drow.io源文件下载"
+                        } ,
+                     
+                        {
+                          "title"    : "比特币交易",
+                          "category" : "",
+                          "tags"     : " 区块链, 比特币",
+                          "url"      : "/2018/02/25/bitcoin-exchange.html",
+                          "date"     : "February 25, 2018",
+                          "excerpt"  : "查看原图  drow.io源文件下载",
+                          "content"  : "查看原图  drow.io源文件下载"
+                        } ,
+                     
+                        {
+                          "title"    : "比特币钱包",
+                          "category" : "",
+                          "tags"     : " 区块链, 比特币",
+                          "url"      : "/2018/02/21/bitcoin-wallet.html",
+                          "date"     : "February 21, 2018",
+                          "excerpt"  : "查看原图  drow.io源文件下载",
+                          "content"  : "查看原图  drow.io源文件下载"
+                        } ,
+                     
+                        {
+                          "title"    : "比特币地址&amp;密钥",
+                          "category" : "",
+                          "tags"     : " 区块链, 比特币",
+                          "url"      : "/2018/02/21/bitcoin-address.html",
+                          "date"     : "February 21, 2018",
+                          "excerpt"  : "查看原图  drow.io源文件下载",
+                          "content"  : "查看原图  drow.io源文件下载"
+                        } ,
+                     
+                        {
+                          "title"    : "shadowsock部署",
+                          "category" : "",
+                          "tags"     : " shadowsock",
+                          "url"      : "/2017/12/11/shadowsock.html",
+                          "date"     : "December 11, 2017",
+                          "excerpt"  : "部署我是选了网上大多数人推荐的vultr，性价比高，而且还有很骚的操作，后面讲。  1.选服务器，直接选最便宜的，因为我只是拿来当ss用。  2.安装ss参考文章以root用户进入该服务器终端，执行一下命令wget --no-check-certificate -O shadowsocks-all.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-all.shchmo...",
+                          "content"  : "部署我是选了网上大多数人推荐的vultr，性价比高，而且还有很骚的操作，后面讲。  1.选服务器，直接选最便宜的，因为我只是拿来当ss用。  2.安装ss参考文章以root用户进入该服务器终端，执行一下命令wget --no-check-certificate -O shadowsocks-all.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-all.shchmod +x shadowsocks-all.sh./shadowsocks-all.sh 2&gt;&amp;1 | tee shadowsocks-all.log过程中会提示你输入ss的脚本语言、密码、端口、以及加密方式3.安装加速器参考文章执行wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh &amp;&amp; chmod +x bbr.sh &amp;&amp; ./bbr.sh验证uname -r4.骚操作vultr它是以小时来计费的，即使你是月付的，它也会折算成小时。 那它是怎么算使用的，你部署了服务器，就算使用。  所以我们可以把部署好ss的服务器备份，然后在你不使用的时候摧毁掉，想用的时候再恢复。第一步：点击Add Snapshot，创建一个备份，名称随便填第二步：摧毁第三步：恢复使用安装shadowsocks客户端macbrew install shadowsocks-libevubuntusudo apt install shadowsocks使用shadowsocks客户端1.创建新连接  2.设置ip、端口、加密方式  这样就可以使用我们搭建的ss服务了，其他应用如果要走ss，只需连上我们的shadowsocks即可。 默认shadowsocks的端口为1080我以dropbox为例  只要在首选项&gt;网络&gt;设置代理即可  命令行使用安装proxychains-ngmacbrew install proxychains-ngubuntu# 安装git clone https://github.com/rofl0r/proxychains-ng.git./configure --prefix=/usr --sysconfdir=/etcmakesudo make installsudo make install-config# 配置 socks4 127.0.0.1 9050改为socks5 127.0.0.1 1080vi /usr/local/etc/proxychains.conf# 验证ip是否为ss服务器的ipproxychains4 curl ip.gs之后如果需要只用ss，只要在命令前加上proxychains4即可。"
+                        } ,
+                     
+                        {
+                          "title"    : "php实现记住登录",
+                          "category" : "",
+                          "tags"     : " php, 登录",
+                          "url"      : "/2017/06/25/php-remember-login.html",
+                          "date"     : "June 25, 2017",
+                          "excerpt"  : "流程1.用户通过点击“记住密码”，提交登陆表单传递给服务器。  2.服务器生成唯一标识token，保存到数据库  3.写cookie，设置失效时间（这样token就保存到了客户端）  4.如果用户登陆失效，服务器取客户端token进行校验  5.token与服务器保存的token一致，且没有失效，则判定用户登录成功  6.token与服务器保存的token不一致或超过失效时间，则判定用户需要重新登录方案一用用户id来作为token，如remember_user=1337，这样等于把用户id...",
+                          "content"  : "流程1.用户通过点击“记住密码”，提交登陆表单传递给服务器。  2.服务器生成唯一标识token，保存到数据库  3.写cookie，设置失效时间（这样token就保存到了客户端）  4.如果用户登陆失效，服务器取客户端token进行校验  5.token与服务器保存的token一致，且没有失效，则判定用户登录成功  6.token与服务器保存的token不一致或超过失效时间，则判定用户需要重新登录方案一用用户id来作为token，如remember_user=1337，这样等于把用户id暴露了出来。 这样一来，可以不断尝试不同的用户id来登录其他人的账号，甚至可以登录管理员账号，相当危险！！方案二使用一个随机字符串作为token。function generateInsecureToken($length = 20){    $buf = '';    for ($i = 0; $i &lt; $length; ++$i) {        $buf .= chr(mt_rand(0, 255));    }    return bin2hex($buf);}mt_rant其实并不安全，如果你要生成随机数，可以使用以下几个方案1.RandomLib12.random_bytes($length) (PHP 7, or available in PHP 5 via random_compat2)  3.Raw bytes read from /dev/urandom  4.mcrypt_create_iv($length, MCRYPT_DEV_URANDOM)  5.openssl_random_pseudo_bytes($length)可以这么写function generateToken($length = 20){    return bin2hex(random_bytes($length));}这个方案会有时序攻击的风险。 如果你的token＝WBWgm2oMFxsiGRGQNJ6n8gtN3gOuQ2wjN8ZRjZtU0Mn 如果你是通过数据库来校验SELECT * FROM auth_tokens WHERE token = 'WBWgm2oMFxsiGRGQNJ6n8gtN3gOuQ2wjN8ZRjZtU0Mn';或者通过从数据库取出token，在程序中做简单校验$getToken = $_GET[‘token’];if ($getToken == $token) {    //success} else {    //fail}这时有人按以下步骤修改他的cookie1.第一次把第一个字节从W改为X  2.第二次把最后一个字节从n改为o 第二次的校验时间要比第一次的校验时间要短，这样用户可以不断修改尝试来确认更改的字符是否正确，就是一次时序攻击。参考It’s All About Time. 这个时间差异仅在纳秒级有意义。 这不是一个简单或容易的攻击，但是我们写一个存在风险的程序是完全没有意义的。方案三在token中不留下任何有用的信息（甚至服务器时间）给攻击者。 使用selector:validator来取代单一的token，通过selector在数据库中去取出validator,这样可以防止不可避免的时序风险。从数据库取出token，程序中使用hash_equals()来做校验，因为hash_equals()能够防止时序攻击。生成tokenif ($login-&gt;success &amp;&amp; $login-&gt;rememberMe) { // However you implement it    $selector = base64_encode(random_bytes(9));    $authenticator = random_bytes(33);    setcookie(        'remember',         $selector.':'.base64_encode($authenticator),         time() + 864000,         '/',         'yourdomain.com',         true, // TLS-only         true  // http-only    );    $database-&gt;exec(        \"INSERT INTO auth_tokens (selector, token, userid, expires) VALUES (?, ?, ?, ?)\",         [            $selector,            hash('sha256', $authenticator),            $login-&gt;userId,            date('Y-m-d\TH:i:s', time() + 864000)        ]    );}验证if (empty($_SESSION['userid']) &amp;&amp; !empty($_COOKIE['remember'])) {    list($selector, $authenticator) = explode(':', $_COOKIE['remember']);    $row = $database-&gt;selectRow(        \"SELECT * FROM auth_tokens WHERE selector = ?\",        [            $selector        ]    );    if (hash_equals($row['token'], hash('sha256', base64_decode($authenticator)))) {        $_SESSION['userid'] = $row['userid'];        // Then regenerate login token as above    }}实际例子这里没有把uc记住登陆接口用异步请求去处理，主要因为我们系统并不都在同个主域名下，所以如果要实现全系统统一记住登陆处理，只能跳转到uc，在uc设置cookie。1.记住登录 sequenceDiagram    participant 系统A    participant UC    系统A--&gt;&gt;UC: 请求异步登录接口校验    UC-&gt;&gt;系统A: 返回登录校验结果    Note left of 系统A: 失败则结束流程    系统A--&gt;&gt;UC: 跳转到记住登录接口    Note right of UC: 1.生成token 2.写入数据库 3.设置cookie    UC-&gt;&gt;系统A: 跳转回系统A首页    Note left of 系统A: 完成2.校验登录 sequenceDiagram    participant 系统A    participant UC    系统A--&gt;&gt;UC: 跳转到校验记住登录接口    Note right of UC: 校验cookie及有效期    Note right of UC: 校验失败    UC-&gt;&gt;系统A: 跳转回系统A登录页    Note left of 系统A: 完成    Note right of UC: 校验成功 1.生成新token 2.写入数据库 3.设置cookie    UC-&gt;&gt;系统A: 跳转回系统A首页    Note left of 系统A: 完成3.移除记住登录 sequenceDiagram    participant 系统A    participant UC    系统A--&gt;&gt;UC: 跳转到移除记住登录接口    Note right of UC: 1.删除cookie 2.删除数据库token    UC-&gt;&gt;系统A: 跳转回系统A首页    Note left of 系统A: 完成资源            https://github.com/ircmaxell/RandomLib &#8617;              https://github.com/paragonie/random_compat &#8617;      "
+                        } ,
+                     
+                        {
+                          "title"    : "php实现webSocket",
+                          "category" : "",
+                          "tags"     : " php, webSocket",
+                          "url"      : "/2017/06/11/php-websocket.html",
+                          "date"     : "June 11, 2017",
+                          "excerpt"  : "socketSocket是应用层与TCP/IP协议族通信的中间软件抽象层，它是一组接口。在设计模式中，Socket其实就是一个门面模式，它把复杂的TCP/IP协议族隐藏在Socket接口后面，对用户来说，一组简单的接口就是全部，让Socket去组织数据，以符合指定的协议。执行流程服务器端  1.初始化  2.绑定端口(bind)  3.进入监听(listen)  4.阻塞(accept),等待用户连接  5.接收，发送客户端数据客户端  1.初始化  2.连接服务器(connect)  3...",
+                          "content"  : "socketSocket是应用层与TCP/IP协议族通信的中间软件抽象层，它是一组接口。在设计模式中，Socket其实就是一个门面模式，它把复杂的TCP/IP协议族隐藏在Socket接口后面，对用户来说，一组简单的接口就是全部，让Socket去组织数据，以符合指定的协议。执行流程服务器端  1.初始化  2.绑定端口(bind)  3.进入监听(listen)  4.阻塞(accept),等待用户连接  5.接收，发送客户端数据客户端  1.初始化  2.连接服务器(connect)  3.发送，读取数据实现服务器端&lt;?php//确保在连接客户端时不会超时set_time_limit(0);$ip = '127.0.0.1';$port = 1935;/* +------------------------------- *    @socket通信整个过程 +------------------------------- *    @socket_create *    @socket_bind *    @socket_listen *    @socket_accept *    @socket_read *    @socket_write *    @socket_close +-------------------------------- *//*----------------    以下操作都是手册上的    -------------------*/if(($sock = socket_create(AF_INET,SOCK_STREAM,SOL_TCP)) &lt; 0) {    echo \"socket_create() 失败的原因是:\".socket_strerror($sock).\"\n\";}if(($ret = socket_bind($sock,$ip,$port)) &lt; 0) {    echo \"socket_bind() 失败的原因是:\".socket_strerror($ret).\"\n\";}if(($ret = socket_listen($sock,4)) &lt; 0) {    echo \"socket_listen() 失败的原因是:\".socket_strerror($ret).\"\n\";}$count = 0;do {    if (($msgsock = socket_accept($sock)) &lt; 0) {        echo \"socket_accept() failed: reason: \" . socket_strerror($msgsock) . \"\n\";        break;    } else {                //发到客户端        $msg =\"测试成功！\n\";        socket_write($msgsock, $msg, strlen($msg));                echo \"测试成功了啊\n\";        $buf = socket_read($msgsock,8192);                        $talkback = \"收到的信息:$buf\n\";        echo $talkback;                if(++$count &gt;= 5){            break;        };                }    //echo $buf;    socket_close($msgsock);} while (true);socket_close($sock);?&gt;客户端&lt;?phperror_reporting(E_ALL);set_time_limit(0);echo \"&lt;h2&gt;TCP/IP Connection&lt;/h2&gt;\n\";$port = 1935;$ip = \"127.0.0.1\";/* +------------------------------- *    @socket连接整个过程 +------------------------------- *    @socket_create *    @socket_connect *    @socket_write *    @socket_read *    @socket_close +-------------------------------- */$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);if ($socket &lt; 0) {    echo \"socket_create() failed: reason: \" . socket_strerror($socket) . \"\n\";}else {    echo \"OK.\n\";}echo \"试图连接 '$ip' 端口 '$port'...\n\";$result = socket_connect($socket, $ip, $port);if ($result &lt; 0) {    echo \"socket_connect() failed.\nReason: ($result) \" . socket_strerror($result) . \"\n\";}else {    echo \"连接OK\n\";}$in = \"Ho\r\n\";$in .= \"first blood\r\n\";$out = '';if(!socket_write($socket, $in, strlen($in))) {    echo \"socket_write() failed: reason: \" . socket_strerror($socket) . \"\n\";}else {    echo \"发送到服务器信息成功！\n\";    echo \"发送的内容为:&lt;font color='red'&gt;$in&lt;/font&gt; &lt;br&gt;\";}while($out = socket_read($socket, 8192)) {    echo \"接收服务器回传信息成功！\n\";    echo \"接受的内容为:\",$out;}echo \"关闭SOCKET...\n\";socket_close($socket);echo \"关闭OK\n\";?&gt;webSocket执行流程  1.初始化  2.绑定端口  3.监听  4.等待用户连接  5.客户端发送握手  6.服务器响应握手  7.握手完毕后,可以相互传输数据  8.连接结束,发送关闭控制帧并断开TCP握手流程socket-select说明function socket_select (array &amp;$read, array &amp;$write, array &amp;$except, $tv_sec, $tv_usec = null)获取read数组中活动的socket，并且把不活跃的从read数组中删除,具体的看文档. 这是一个同步方法，必须得到响应之后才会继续下一步,常用在同步非阻塞IO。  1.新连接到来时,被监听的端口是活跃的,如果是新数据到来或者客户端关闭链接时,活跃的是对应的客户端socket而不是服务器上被监听的端口  2.如果客户端发来数据没有被读走,则socket_select将会始终显示客户端是活跃状态并将其保存在readfds数组中  3.如果客户端先关闭了,则必须手动关闭服务器上相对应的客户端socket,否则socket_select也始终显示该客户端活跃(这个道理跟”有新连接到来然后没有用socket_access把它读出来,导致监听的端口一直活跃”是一样的)实现server.php&lt;?php/** * Simple server class which manage WebSocket protocols * @author Sann-Remy Chea &lt;http://srchea.com&gt; * @license This program is free software: you can redistribute it and/or modify * 	it under the terms of the GNU General Public License as published by * 	the Free Software Foundation, either version 3 of the License, or * 	(at your option) any later version. * 	This program is distributed in the hope that it will be useful, * 	but WITHOUT ANY WARRANTY; without even the implied warranty of * 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the * 	GNU General Public License for more details. * 	You should have received a copy of the GNU General Public License * 	along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;. * @version 1.0.0 */namespace PushWebSocket;class Server {	/**	 * The address of the server	 * @var String	 */	private $address;	/**	 * The port for the master socket	 * @var int	 */	private $port;	/**	 * The master socket	 * @var Resource	 */	private $master;	/**	 * The array of sockets (1 socket = 1 client)	 * @var Array of resource	 */	private $sockets;	/**	 * The array of connected clients	 * @var Array of clients	 */	private $clients;	/**	 * If true, the server will print messages to the terminal	 * @var Boolean	 */	private $verboseMode;	/**	 * Server constructor	 * @param $address The address IP or hostname of the server (default: 127.0.0.1).	 * @param $port The port for the master socket (default: 5001)	 */	public function __construct($address = '127.0.0.1', $port = 5001, $verboseMode = false) {		$this-&gt;console(\"Server starting...\");		$this-&gt;address = $address;		$this-&gt;port = $port;		$this-&gt;verboseMode = $verboseMode;		// socket creation		$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);		socket_set_option($socket, SOL_SOCKET, SO_REUSEADDR, 1);		if(!is_resource($socket)) {			$this-&gt;console(\"socket_create() failed: \".socket_strerror(socket_last_error()), true);		}		if(!socket_bind($socket, $this-&gt;address, $this-&gt;port)) {			$this-&gt;console(\"socket_bind() failed: \".socket_strerror(socket_last_error()), true);		}		if(!socket_listen($socket, 20)) {			$this-&gt;console(\"socket_listen() failed: \".socket_strerror(socket_last_error()), true);		}		$this-&gt;master = $socket;		$this-&gt;sockets = array($socket);		$this-&gt;console(\"Server started on {$this-&gt;address}:{$this-&gt;port}\");	}	/**	 * Create a client object with its associated socket	 * @param $socket	 */	private function connect($socket) {		$this-&gt;console(\"Creating client...\");		$client = new \PushWebSocket\Client(uniqid(), $socket);		$this-&gt;clients[] = $client;		$this-&gt;sockets[] = $socket;		$this-&gt;console(\"Client #{$client-&gt;getId()} is successfully created!\");	}	/**	 * Do the handshaking between client and server	 * @param $client	 * @param $headers	 */	private function handshake($client, $headers) {		$this-&gt;console(\"Getting client WebSocket version...\");		if(preg_match(\"/Sec-WebSocket-Version: (.*)\r\n/\", $headers, $match)) {			$version = $match[1];		}		else {			$this-&gt;console(\"The client doesn't support WebSocket\");			return false;		}		$this-&gt;console(\"Client WebSocket version is {$version}, (required: 13)\");		if($version == 13) {			// Extract header variables			$this-&gt;console(\"Getting headers...\");			if(preg_match(\"/GET (.*) HTTP/\", $headers, $match))				$root = $match[1];			if(preg_match(\"/Host: (.*)\r\n/\", $headers, $match))				$host = $match[1];			if(preg_match(\"/Origin: (.*)\r\n/\", $headers, $match))				$origin = $match[1];			if(preg_match(\"/Sec-WebSocket-Key: (.*)\r\n/\", $headers, $match))				$key = $match[1];			$this-&gt;console(\"Client headers are:\");			$this-&gt;console(\"\t- Root: \".$root);			$this-&gt;console(\"\t- Host: \".$host);			$this-&gt;console(\"\t- Origin: \".$origin);			$this-&gt;console(\"\t- Sec-WebSocket-Key: \".$key);			$this-&gt;console(\"Generating Sec-WebSocket-Accept key...\");			$acceptKey = $key.'258EAFA5-E914-47DA-95CA-C5AB0DC85B11';			$acceptKey = base64_encode(sha1($acceptKey, true));			$upgrade = \"HTTP/1.1 101 Switching Protocols\r\n\".					   \"Upgrade: websocket\r\n\".					   \"Connection: Upgrade\r\n\".					   \"Sec-WebSocket-Accept: $acceptKey\".					   \"\r\n\r\n\";			$this-&gt;console(\"Sending this response to the client #{$client-&gt;getId()}:\r\n\".$upgrade);			socket_write($client-&gt;getSocket(), $upgrade);			$client-&gt;setHandshake(true);			$this-&gt;console(\"Handshake is successfully done!\");			return true;		}		else {			$this-&gt;console(\"WebSocket version 13 required (the client supports version {$version})\");			return false;		}	}	/**	 * Disconnect a client and close the connection	 * @param $socket	 */	private function disconnect($client) {		$this-&gt;console(\"Disconnecting client #{$client-&gt;getId()}\");		$client-&gt;setIsConnected(false);		$i = array_search($client, $this-&gt;clients);		$j = array_search($client-&gt;getSocket(), $this-&gt;sockets);		if($j &gt;= 0) {			if($client-&gt;getSocket()) {				array_splice($this-&gt;sockets, $j, 1);				socket_shutdown($client-&gt;getSocket(), 2);				socket_close($client-&gt;getSocket());				$this-&gt;console(\"Socket closed\");			}		}		if($i &gt;= 0) {			array_splice($this-&gt;clients, $i, 1);		}		$this-&gt;console(\"Client #{$client-&gt;getId()} disconnected\");	}	/**	 * Get the client associated with the socket	 * @param $socket	 * @return A client object if found, if not false	 */	private function getClientBySocket($socket) {		foreach($this-&gt;clients as $client)			if($client-&gt;getSocket() == $socket) {				$this-&gt;console(\"Client found\");				return $client;			}		return false;	}	/**	 * Do an action	 * @param $client	 * @param $action	 */	private function action($client, $action) {		$action = $this-&gt;unmask($action);		$this-&gt;console(\"Performing action: \".$action);		if($action == \"exit\" || $action == \"quit\") {			$this-&gt;console(\"Killing a child process\");			posix_kill($client-&gt;getPid(), SIGTERM);			$this-&gt;console(\"Process {$client-&gt;getPid()} is killed!\");		}	}	/**	 * Run the server	 */	public function run() {		$this-&gt;console(\"Start running...\");		$this-&gt;console(\"Open in a browser: websocket_client.html (http)\");		$i = 1;		while(true) {			$changed_sockets = $this-&gt;sockets;			if($changed_sockets) {				@socket_select($changed_sockets, $write = NULL, $except = NULL, 1);				foreach($changed_sockets as $socket) {                    //如果是主机，则有新客户端请求连接					if($socket == $this-&gt;master) {						if(($acceptedSocket = socket_accept($this-&gt;master)) &lt; 0) {							$this-&gt;console(\"Socket error: \".socket_strerror(socket_last_error($acceptedSocket)));						}						else {							$this-&gt;console($i);							$this-&gt;connect($acceptedSocket);						}					}                    //有客户端的新数据到来或者关闭链接					else {						$this-&gt;console($i);						$this-&gt;console(\"Finding the socket that associated to the client...\");						$client = $this-&gt;getClientBySocket($socket);						if($client) {							$this-&gt;console(\"Receiving data from the client\");							$data = null;							while($bytes = @socket_recv($socket, $r_data, 2048, MSG_DONTWAIT)) {								$data .= $r_data;							}							if(!$client-&gt;getHandshake()) {								$this-&gt;console(\"Doing the handshake\");								if($this-&gt;handshake($client, $data)) {									$this-&gt;startProcess($client);								}								else {									$this-&gt;disconnect($client);								}							}							elseif($bytes === 0) {								$this-&gt;disconnect($client);							}							else {								// When received data from client								$this-&gt;action($client, $data);							}						}					}				}			}			$i ++;		}	}	/**	 * Start a child process for pushing data	 * @param unknown_type $client	 */	private function startProcess($client) {		$this-&gt;console(\"Start a client process\");		$pid = pcntl_fork();		if($pid == -1) {			die('could not fork');		}		elseif($pid) { // process			$client-&gt;setPid($pid);		}		else {			// we are the child			while(true) {				// check if the client is connected				if(!$client-&gt;isConnected()){					break;				}				// push something to the client				$seconds = rand(2, 5);				$this-&gt;send($client, \"I am waiting {$seconds} seconds\");				sleep($seconds);			}		}	}	/**	 * Send a text to client	 * @param $client	 * @param $text	 */	private function send($client, $text) {		$this-&gt;console(\"Send '\".$text.\"' to client #{$client-&gt;getId()}\");		$text = $this-&gt;encode($text);		if(socket_write($client-&gt;getSocket(), $text, strlen($text)) === false) {			$this-&gt;console(\"Unable to write to client #{$client-&gt;getId()}'s socket\");			$this-&gt;disconnect($client);		}	}	/**	 * Encode a text for sending to clients via ws://	 * @param $text	 * @param $messageType	 */	function encode($message, $messageType='text') {		switch ($messageType) {			case 'continuous':				$b1 = 0;				break;			case 'text':				$b1 = 1;				break;			case 'binary':				$b1 = 2;				break;			case 'close':				$b1 = 8;				break;			case 'ping':				$b1 = 9;				break;			case 'pong':				$b1 = 10;				break;		}			$b1 += 128;		$length = strlen($message);		$lengthField = \"\";		if($length &lt; 126) {			$b2 = $length;		} elseif($length &lt;= 65536) {			$b2 = 126;			$hexLength = dechex($length);			//$this-&gt;stdout(\"Hex Length: $hexLength\");			if(strlen($hexLength)%2 == 1) {				$hexLength = '0' . $hexLength;			}			$n = strlen($hexLength) - 2;			for($i = $n; $i &gt;= 0; $i=$i-2) {				$lengthField = chr(hexdec(substr($hexLength, $i, 2))) . $lengthField;			}			while(strlen($lengthField) &lt; 2) {				$lengthField = chr(0) . $lengthField;			}		} else {			$b2 = 127;			$hexLength = dechex($length);			if(strlen($hexLength) % 2 == 1) {				$hexLength = '0' . $hexLength;			}			$n = strlen($hexLength) - 2;			for($i = $n; $i &gt;= 0; $i = $i - 2) {				$lengthField = chr(hexdec(substr($hexLength, $i, 2))) . $lengthField;			}			while(strlen($lengthField) &lt; 8) {				$lengthField = chr(0) . $lengthField;			}		}		return chr($b1) . chr($b2) . $lengthField . $message;	}	/**	 * Unmask a received payload	 * @param $buffer	 */	private function unmask($payload) {		$length = ord($payload[1]) &amp; 127;		if($length == 126) {			$masks = substr($payload, 4, 4);			$data = substr($payload, 8);		}		elseif($length == 127) {			$masks = substr($payload, 10, 4);			$data = substr($payload, 14);		}		else {			$masks = substr($payload, 2, 4);			$data = substr($payload, 6);		}		$text = '';		for($i = 0; $i &lt; strlen($data); ++$i) {			$text .= $data[$i] ^ $masks[$i%4];		}		return $text;	}	/**	 * Print a text to the terminal	 * @param $text the text to display	 * @param $exit if true, the process will exit	 */	private function console($text, $exit = false) {		$text = date('[Y-m-d H:i:s] ').$text.\"\r\n\";		if($exit) {			die($text);		}		if($this-&gt;verboseMode) {			echo $text;		}	}}?&gt;client.php/** * Define a Client object * @author Sann-Remy Chea &lt;http://srchea.com&gt; * @license This program is free software: you can redistribute it and/or modify * it under the terms of the GNU General Public License as published by * the Free Software Foundation, either version 3 of the License, or * (at your option) any later version. * This program is distributed in the hope that it will be useful, * but WITHOUT ANY WARRANTY; without even the implied warranty of * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the * GNU General Public License for more details. * You should have received a copy of the GNU General Public License * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;. * @version 1.0.0 */namespace PushWebSocket;class Client {	private $id;	private $socket;	private $handshake;	private $pid;	private $isConnected;	public function __construct($id, $socket) {		$this-&gt;id = $id;		$this-&gt;socket = $socket;		$this-&gt;handshake = false;		$this-&gt;pid = null;		$this-&gt;isConnected = true;	}	public function getId() {		return $this-&gt;id;	}	public function getSocket() {		return $this-&gt;socket;	}	public function getHandshake() {		return $this-&gt;handshake;	}	public function getPid() {		return $this-&gt;pid;	}	public function isConnected() {		return $this-&gt;isConnected;	}	public function setId($id) {		$this-&gt;id = $id;	}	public function setSocket($socket) {		$this-&gt;socket = $socket;	}	public function setHandshake($handshake) {		$this-&gt;handshake = $handshake;	}	public function setPid($pid) {		$this-&gt;pid = $pid;	}	public function setIsConnected($isConnected) {		$this-&gt;isConnected = $isConnected;	}}run.php/** * A daemon of PHP Push WebSocket * @author Sann-Remy Chea &lt;http://srchea.com&gt; * @license This program is free software: you can redistribute it and/or modify * it under the terms of the GNU General Public License as published by * the Free Software Foundation, either version 3 of the License, or * (at your option) any later version. * This program is distributed in the hope that it will be useful, * but WITHOUT ANY WARRANTY; without even the implied warranty of * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the * GNU General Public License for more details. * You should have received a copy of the GNU General Public License * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;. * @version 1.0.0 */date_default_timezone_set('PRC');error_reporting(E_ALL);require_once './server.php'; // Autoload files using Composer autoloadrequire_once './client.php'; // Autoload files using Composer autoloadset_time_limit(0);// variables$address = '0.0.0.0';$port = 8080;$verboseMode = true;$server = new \PushWebSocket\Server($address, $port, $verboseMode);$server-&gt;run();client.html&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;title&gt;Test - PHP Push WebSocket&lt;/title&gt;&lt;meta charset=\"utf-8\" /&gt;&lt;script type=\"text/javascript\"&gt;var ws, url = 'ws://192.168.99.100:8080';window.onbeforeunload = function() {	ws.send('quit');};window.onload = function() {	try {		ws = new WebSocket(url);		write('Connecting... (readyState '+ws.readyState+')');		ws.onopen = function(msg) {			write('Connection successfully opened (readyState ' + this.readyState+')');		};		ws.onmessage = function(msg) {			write('Server says: '+msg.data);		};		ws.onclose = function(msg) {			if(this.readyState == 2)				write('Closing... The connection is going throught the closing handshake (readyState '+this.readyState+')');			else if(this.readyState == 3)				write('Connection closed... The connection has been closed or could not be opened (readyState '+this.readyState+')');			else				write('Connection closed... (unhandled readyState '+this.readyState+')');		};		ws.onerror = function(event) {			terminal.innerHTML = '&lt;li style=\"color: red;\"&gt;'+event.data+'&lt;/li&gt;'+terminal.innerHTML;		};	}	catch(exception) {		write(exception);	}};function write(text) {	var date = new Date();	var dateText = '['+date.getFullYear()+'-'+(date.getMonth()+1 &gt; 9 ? date.getMonth()+1 : '0'+date.getMonth()+1)+'-'+(date.getDate() &gt; 9 ? date.getDate() : '0'+date.getDate())+' '+(date.getHours() &gt; 9 ? date.getHours() : '0'+date.getHours())+':'+(date.getMinutes() &gt; 9 ? date.getMinutes() : '0'+date.getMinutes())+':'+(date.getSeconds() &gt; 9 ? date.getSeconds() : '0'+date.getSeconds())+']';	var terminal = document.getElementById('terminal');	terminal.innerHTML = '&lt;li&gt;'+dateText+' '+text+'&lt;/li&gt;'+terminal.innerHTML;}&lt;/script&gt;&lt;/head&gt;&lt;body&gt;	&lt;a href=\"client.html\" target=\"_blank\"&gt;Add another client&lt;/a&gt;	&lt;ul id=\"terminal\"&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;使用swoole&lt;?php$server = new swoole_websocket_server(\"0.0.0.0\", 8080);$server-&gt;on('open', function (swoole_websocket_server $server, $request) {    file_put_contents( __DIR__ .'/log.txt' , $request-&gt;fd);});$server-&gt;on('message', function (swoole_websocket_server $server, $frame) {    global $client;    $data = $frame-&gt;data;    $m = file_get_contents( __DIR__ .'/log.txt');    for ($i=1 ; $i&lt;= $m ; $i++) {        echo PHP_EOL . '  i is  ' . $i .  '  data  is '.$data  . '  m = ' . $m;        $server-&gt;push($i, $data );    }});$server-&gt;on('close', function ($ser, $fd) {    echo \"client {$fd} closed\n\";});$server-&gt;start();参考文章深入浅出讲解：php的socket通信  细说websocket - php篇  php socket_select() 说明"
+                        } ,
+                     
+                        {
+                          "title"    : "php实现守护进程",
+                          "category" : "",
+                          "tags"     : " php, 守护进程",
+                          "url"      : "/2017/02/05/php-daemon.html",
+                          "date"     : "February 5, 2017",
+                          "excerpt"  : "守护进程应该能达到的要求 不依赖于当前会话，且无法打开控制终端。编写过程  1.假设当前进程为p  2.创建子进程c1，然后退出父进程p(进程组组长无法创建会话，这样c1就不是进程组组长)。  3.在c1进程中创建会话，此时进程c1为会话组长，并且可以打开控制终端。  4.在c1进程中创建子进程c2,退出父进程c1。  5.在c2进程中进行逻辑处理。实现&lt;?php// 创建子进程$pid = pcntl_fork();// 如果是父进程，退出if ($pid) {    exit($...",
+                          "content"  : "守护进程应该能达到的要求 不依赖于当前会话，且无法打开控制终端。编写过程  1.假设当前进程为p  2.创建子进程c1，然后退出父进程p(进程组组长无法创建会话，这样c1就不是进程组组长)。  3.在c1进程中创建会话，此时进程c1为会话组长，并且可以打开控制终端。  4.在c1进程中创建子进程c2,退出父进程c1。  5.在c2进程中进行逻辑处理。实现&lt;?php// 创建子进程$pid = pcntl_fork();// 如果是父进程，退出if ($pid) {    exit($pid);}// 创建会话posix_setsid();// 创建子进程$pid = pcntl_fork();// 如果是父进程，退出if ($pid) {    exit($pid);}while(true) {    //逻辑处理    sleep(1);    echo '执行中';}参考文章  Linux信号列表详解  Linux-进程、进程组、作业、会话、控制终端详解  进程 、进程组、会话、控制终端之间的关系  php写守护进程（Daemon）  每天进步一点点——Linux中的文件描述符与打开文件之间的关系  Linux 系统文件描述符继承带来的危害  关于PHP的STDIN/STDOUT/STDERR  PHP高级编程之守护进程，实现优雅重启"
+                        } ,
+                     
+                        {
+                          "title"    : "mac使用rsync+fswatch实现目录文件实时同步",
+                          "category" : "",
+                          "tags"     : " 文件同步",
+                          "url"      : "/2017/02/02/mac-rsync-fswatch.html",
+                          "date"     : "February 2, 2017",
+                          "excerpt"  : "安装rsyncbrew install rsync创建用户创建用户配置文件\etc\rsyncd.secrets  添加用户名:密码  这里我们设置用户名为root，密码123456，即root:123456配置创建配置文件 \etc\rsyncd.confuid = root                   #守护进程的用户权限gid = rootport = 873                   #rsync使用的端口，默认873address = 192.168.0.101...",
+                          "content"  : "安装rsyncbrew install rsync创建用户创建用户配置文件\etc\rsyncd.secrets  添加用户名:密码  这里我们设置用户名为root，密码123456，即root:123456配置创建配置文件 \etc\rsyncd.confuid = root                   #守护进程的用户权限gid = rootport = 873                   #rsync使用的端口，默认873address = 192.168.0.101      # 本机的ip地址use chroot = yesuid = root                   #守护进程的用户权限gid = rootport = 873                   #rsync使用的端口，默认873address = 192.168.0.101      # 本机的ip地址use chroot = yesread only = no               # no客户端可上传文件,yes只读write only = no              # no客户端可下载文件,yes不能下载#list = yes                  # 是否提供资源列表hosts allow=192.168.0.101    # 本模块允许通过的IP地址hosts deny=*                 # 禁止主机IPmax connections = 5          # 客户端最大连接数目motd file = /etc/rsyncd.motdpid file = /var/run/rsyncd.pid   # 进程号存放位置log file = /var/log/rsyncd.log   # 日志位置lock file = /var/run/rsync.lock  # 锁文件存放位置transfer logging = yeslog format = %t %a %m %f %bsyslog facility = local3timeout = 300[phproot1]                            # 要同步的模块名path = /Users/Username/Document/Kitematic/nginx/htdocs/php1 # 要同步的目录list=yesignore errorsauth users = root                  # 登陆系统使用的用户名，没有默认为匿名。secrets file = /etc/rsyncd.secrets # 密码文件存放的位置comment = linuxsir tmp             # 这个名名称无所谓，最后模块名一直[phproot2]                            # 要同步的模块名path = /Users/Username/Document/Kitematic/nginx/htdocs/php2 # 要同步的目录list=yesignore errorsauth users = root                  # 登陆系统使用的用户名，没有默认为匿名。secrets file = /etc/rsyncd.secrets # 密码文件存放的位置comment = linuxsir tmp             # 这个名名称无所谓，最后模块名一直[phproot3]                            # 要同步的模块名path = /Users/Username/Document/Kitematic/nginx/htdocs/php3 # 要同步的目录list=yesignore errorsauth users = root                  # 登陆系统使用的用户名，没有默认为匿名。secrets file = /etc/rsyncd.secrets # 密码文件存放的位置comment = linuxsir tmp             # 这个名名称无所谓，最后模块名一直这里我们设置了3个同步模块，对应三个需要同步的目录启动sudo rsync --daemon --config=/etc/rsyncd.conf同步这里我们以同步/Users/Username/Document/Kitematic/nginx/htdocs/php1到/Users/Username/Document/Kitematic/nginx/htdocs/php2为例本地同步rsync -ave /Users/Username/Document/Kitematic/nginx/htdocs/php1/ /Users/Username/Document/Kitematic/nginx/htdocs/php2/远程同步rsync -ave ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ username@192.168.0.101:phproot1/安装fswatchbrew install fswatch实时同步创建shell文件 rsync.sh#!/bin/zshfswatch /Users/zhongjunbin/Document/Kitematic/nginx/htdocs/php1/ | while read filedo    rsync -ave ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ Username@192.168.0.101:phproot2/    rsync -ave ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ Username@192.168.0.101:phproot3/    echo \"${file} was rsynced\" &gt;&gt; /usr/local/var/log/rsync.log 2&gt;&amp;1donefswatch /Users/zhongjunbin/Document/Kitematic/nginx/htdocs/php2/ | while read filedo    rsync -ave ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ Username@192.168.0.101:phproot1/    rsync -ave ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ Username@192.168.0.101:phproot3/    echo \"${file} was rsynced\" &gt;&gt; /usr/local/var/log/rsync.log 2&gt;&amp;1donefswatch /Users/zhongjunbin/Document/Kitematic/nginx/htdocs/php3/ | while read filedo    rsync -ave ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ Username@192.168.0.101:phproot1/    rsync -ave ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ Username@192.168.0.101:phproot2/    echo \"${file} was rsynced\" &gt;&gt; /usr/local/var/log/rsync.log 2&gt;&amp;1done后台运行shellsudo sh rsync.sh &amp;完成"
+                        } ,
+                     
+                        {
+                          "title"    : "数据库的事务处理",
+                          "category" : "",
+                          "tags"     : " 数据库, 分布式",
+                          "url"      : "/2016/11/24/transaction-deal.html",
+                          "date"     : "November 24, 2016",
+                          "excerpt"  : "事务四个核心要素1.原子性  一组操作，要么都成功，要么都失败，不存在中间状态。  2.一致性  事务在提交或回滚时，对其他人来说，数据的状态是统一的，不存在其他状态。  最理想的状态是，数据提交后，所有的更改能立刻生效，但由于cpu运算，磁盘写入，内存写入需要时间，所以不可能达到立刻生效。  所以一般说的是逻辑上同时生效。  比如修改a，b两行数据，要保证一致性，对a，b加锁，修改数据，对a，b解锁。  3.隔离性  读未提交：什么锁也没有，别人可以读到中间状态（即为提交）数据。  读已...",
+                          "content"  : "事务四个核心要素1.原子性  一组操作，要么都成功，要么都失败，不存在中间状态。  2.一致性  事务在提交或回滚时，对其他人来说，数据的状态是统一的，不存在其他状态。  最理想的状态是，数据提交后，所有的更改能立刻生效，但由于cpu运算，磁盘写入，内存写入需要时间，所以不可能达到立刻生效。  所以一般说的是逻辑上同时生效。  比如修改a，b两行数据，要保证一致性，对a，b加锁，修改数据，对a，b解锁。  3.隔离性  读未提交：什么锁也没有，别人可以读到中间状态（即为提交）数据。  读已提交：（读写锁）即不可重复读。在一个事务中，两次读取同样一条记录，数据可能会改变。  可重复读：（读写锁）在事务中读取的数据，在提交前不会被改变。 序列化：事务被处理为顺序执行。  4.持久性  事务执行完，数据就不会丢。单机事务从性能上看，读写锁在并行上并不理想，因为读的时候不能写，写的时候不能读。 于是MVCC出现了  MVCC是使用copy-on-write来解决这个问题  一个人开启一个事务，此时会申请一个事务id，此id是自增的且不会合并到全局id。在事务中，每执行一条sql都会令这个id递增，但只会读取到&lt;=自己事务id的数据， 这样就实现了数据读取不受事务外影响，即可重复读。而其他人只会读取&lt;=全局事务id的数据。在事务提交时，把该事务id更新到全局id。Q1: MVCC有解决版本冲突的问题吗？  Q2: 不同数据库的MVCC实现多机事务在单机事务中我们可以用锁来解决问题。可以用一个例子来说明这个问题，bob要给smith100块钱。  最简单的协议是,两段提交协议  Prepare(bob-100) at 机器a -&gt; Prepare(smith+100) at 机器b -&gt; commit(bob) -&gt; commit(smith)这样会引发一个性能问题，如果b机器一直无反馈，导致a机器一直处于等待状态，锁无法释放。如何改进呢？  其实smith并不需要很强的一致可见性，只要在合理时间内给smith加钱就行了。 在a机器做如下操作：  1.开启本地事务  2.读取bob账户  3.判断是否有充足余额  4.更新bob账户，bob－100  5.将需要给smith＋100写log，并且生成唯一的transactionID  6.事务关闭  7.异步发送通知消费者  在b机器做如下操作 查看去重表是否有相应transactionID，如果没有则  1.开启本地事务  2.smith＋100  3.将transactionID写入去重表  4.事务关闭  5.通知a机器已操作成功  如果有则通知a机器已操作成功Q1: 为何要使用去重表呢？ 因为b有可能会操作失败，或无反馈给a。此时a应继续发送通知，直到b反馈成功。 如果不用去重表，会导致b已操作成功，而a仍继续发送通知，让b去给smith＋100。  Q2: 如果bob是个消费大户，短时间内进行了大量购买，可能会让bob所在机器成为热点，可能会让事务在某个单节点大量堆积，导致挂掉。  可把写log操作放到另外一台机器，这样可以通过水平加log机器来防止热点产生。  Q3: 如果有几十个系统同时关注smith＋100这个操作呢？ 可以增加一个队列，使用推，拉，或推拉结合的方式将smith＋100这个操作加以分发，减少主机压力。"
+                        } ,
+                     
+                        {
+                          "title"    : "数据库的一致性与高可用",
+                          "category" : "",
+                          "tags"     : " 分布式",
+                          "url"      : "/2016/11/24/consistency-highavailability.html",
+                          "date"     : "November 24, 2016",
+                          "excerpt"  : "在给定多台计算机，他们相互之间由网络相互连通，能够做到  1.数据每次成功写入，数据不会丢失，并且按照写入的顺序排列  2.给定安全级别，保证服务可用性，并尽可能减少机器消耗。2PC所谓的两个阶段是指：第一阶段：准备阶段(投票阶段)和第二阶段：提交阶段（执行阶段）。准备阶段事务协调者(事务管理器)给每个参与者(资源管理器)发送Prepare消息，每个参与者要么直接返回失败(如权限验证失败)，要么在本地执行事务，写本地的redo和undo日志，但不提交，到达一种“万事俱备，只欠东风”的状态。...",
+                          "content"  : "在给定多台计算机，他们相互之间由网络相互连通，能够做到  1.数据每次成功写入，数据不会丢失，并且按照写入的顺序排列  2.给定安全级别，保证服务可用性，并尽可能减少机器消耗。2PC所谓的两个阶段是指：第一阶段：准备阶段(投票阶段)和第二阶段：提交阶段（执行阶段）。准备阶段事务协调者(事务管理器)给每个参与者(资源管理器)发送Prepare消息，每个参与者要么直接返回失败(如权限验证失败)，要么在本地执行事务，写本地的redo和undo日志，但不提交，到达一种“万事俱备，只欠东风”的状态。可以进一步将准备阶段分为以下三个步骤：  1）协调者节点向所有参与者节点询问是否可以执行提交操作(vote)，并开始等待各参与者节点的响应。  2）参与者节点执行询问发起为止的所有事务操作，并将Undo信息和Redo信息写入日志。（注意：若成功这里其实每个参与者已经执行了事务操作）  3）各参与者节点响应协调者节点发起的询问。如果参与者节点的事务操作实际执行成功，则它返回一个”同意”消息；如果参与者节点的事务操作实际执行失败，则它返回一个”中止”消息。提交阶段如果协调者收到了参与者的失败消息或者超时，直接给每个参与者发送回滚(Rollback)消息；否则，发送提交(Commit)消息；参与者根据协调者的指令执行提交或者回滚操作，释放所有事务处理过程中使用的锁资源。(注意:必须在最后阶段释放锁资源)接下来分两种情况分别讨论提交阶段的过程。当协调者节点从所有参与者节点获得的相应消息都为”同意”时:1）协调者节点向所有参与者节点发出”正式提交(commit)”的请求。  2）参与者节点正式完成操作，并释放在整个事务期间内占用的资源。  3）参与者节点向协调者节点发送”完成”消息。  4）协调者节点受到所有参与者节点反馈的”完成”消息后，完成事务。如果任一参与者节点在第一阶段返回的响应消息为”中止”，或者 协调者节点在第一阶段的询问超时之前无法获取所有参与者节点的响应消息时：1）协调者节点向所有参与者节点发出”回滚操作(rollback)”的请求。  2）参与者节点利用之前写入的Undo信息执行回滚，并释放在整个事务期间内占用的资源。  3）参与者节点向协调者节点发送”回滚完成”消息。  4）协调者节点受到所有参与者节点反馈的”回滚完成”消息后，取消事务。不管最后结果如何，第二阶段都会结束当前事务。  二阶段提交看起来确实能够提供原子性的操作，但是不幸的事，二阶段提交还是有几个缺点的：  1.同步阻塞问题。执行过程中，所有参与节点都是事务阻塞型的。当参与者占有公共资源时，其他第三方节点访问公共资源不得不处于阻塞状态。  2.单点故障。由于协调者的重要性，一旦协调者发生故障。参与者会一直阻塞下去。尤其在第二阶段，协调者发生故障，那么所有的参与者还都处于锁定事务资源的状态中，而无法继续完成事务操作。（如果是协调者挂掉，可以重新选举一个协调者，但是无法解决因为协调者宕机导致的参与者处于阻塞状态的问题）  3.数据不一致。在二阶段提交的阶段二中，当协调者向参与者发送commit请求之后，发生了局部网络异常或者在发送commit请求过程中协调者发生了故障，这回导致只有一部分参与者接受到了commit请求。而在这部分参与者接到commit请求之后就会执行commit操作。但是其他部分未接到commit请求的机器则无法执行事务提交。于是整个分布式系统便出现了数据部一致性的现象。  4.二阶段无法解决的问题：协调者再发出commit消息之后宕机，而唯一接收到这条消息的参与者同时也宕机了。那么即使协调者通过选举协议产生了新的协调者，这条事务的状态也是不确定的，没人知道事务是否被已经提交。  由于二阶段提交存在着诸如同步阻塞、单点问题、脑裂等缺陷，所以，研究者们在二阶段提交的基础上做了改进，提出了三阶段提交。3PC三阶段提交（Three-phase commit），也叫三阶段提交协议（Three-phase commit protocol），是二阶段提交（2PC）的改进版本。与两阶段提交不同的是，三阶段提交有两个改动点。  1.引入超时机制。同时在协调者和参与者中都引入超时机制。  2.在第一阶段和第二阶段中插入一个准备阶段。保证了在最后提交阶段之前各参与节点的状态是一致的。  也就是说，除了引入超时机制之外，3PC把2PC的准备阶段再次一分为二，这样三阶段提交就有CanCommit、PreCommit、DoCommit三个阶段。CanCommit阶段3PC的CanCommit阶段其实和2PC的准备阶段很像。协调者向参与者发送commit请求，参与者如果可以提交就返回Yes响应，否则返回No响应。  1.事务询问 协调者向参与者发送CanCommit请求。询问是否可以执行事务提交操作。然后开始等待参与者的响应。  2.响应反馈 参与者接到CanCommit请求之后，正常情况下，如果其自身认为可以顺利执行事务，则返回Yes响应，并进入预备状态。否则反馈NoPreCommit阶段协调者根据参与者的反应情况来决定是否可以记性事务的PreCommit操作。根据响应情况，有以下两种可能。  假如协调者从所有的参与者获得的反馈都是Yes响应，那么就会执行事务的预执行。  1.发送预提交请求 协调者向参与者发送PreCommit请求，并进入Prepared阶段。  2.事务预提交 参与者接收到PreCommit请求后，会执行事务操作，并将undo和redo信息记录到事务日志中。  3.响应反馈 如果参与者成功的执行了事务操作，则返回ACK响应，同时开始等待最终指令。假如有任何一个参与者向协调者发送了No响应，或者等待超时之后，协调者都没有接到参与者的响应，那么就执行事务的中断。  1.发送中断请求 协调者向所有参与者发送abort请求。  2.中断事务 参与者收到来自协调者的abort请求之后（或超时之后，仍未收到协调者的请求），执行事务的中断。doCommit阶段该阶段进行真正的事务提交，也可以分为以下两种情况。执行提交  1.发送提交请求 协调接收到参与者发送的ACK响应，那么他将从预提交状态进入到提交状态。并向所有参与者发送doCommit请求。  2.事务提交 参与者接收到doCommit请求之后，执行正式的事务提交。并在完成事务提交之后释放所有事务资源。  3.响应反馈 事务提交完之后，向协调者发送Ack响应。  4.完成事务 协调者接收到所有参与者的ack响应之后，完成事务。中断事务  协调者没有接收到参与者发送的ACK响应（可能是接受者发送的不是ACK响应，也可能响应超时），那么就会执行中断事务。  1.发送中断请求 协调者向所有参与者发送abort请求  2.事务回滚 参与者接收到abort请求之后，利用其在阶段二记录的undo信息来执行事务的回滚操作，并在完成回滚之后释放所有的事务资源。3.反馈结果 参与者完成事务回滚之后，向协调者发送ACK消息  4.中断事务 协调者接收到参与者反馈的ACK消息之后，执行事务的中断。在doCommit阶段，如果参与者无法及时接收到来自协调者的doCommit或者rebort请求时，会在等待超时之后，会继续进行事务的提交。（其实这个应该是基于概率来决定的，当进入第三阶段时，说明参与者在第二阶段已经收到了PreCommit请求，那么协调者产生PreCommit请求的前提条件是他在第二阶段开始之前，收到所有参与者的CanCommit响应都是Yes。（一旦参与者收到了PreCommit，意味他知道大家其实都同意修改了）所以，一句话概括就是，当进入第三阶段时，由于网络超时等原因，虽然参与者没有收到commit或者abort响应，但是他有理由相信：成功提交的几率很大。 ）2PC与3PC的区别相对于2PC，3PC主要解决的单点故障问题，并减少阻塞，因为一旦参与者无法及时收到来自协调者的信息之后，他会默认执行commit。而不会一直持有事务资源并处于阻塞状态。但是这种机制也会导致数据一致性问题，因为，由于网络原因，协调者发送的abort响应没有及时被参与者接收到，那么参与者在等待超时之后执行了commit操作。这样就和其他接到abort命令并执行回滚的参与者之间存在数据不一致的情况。了解了2PC和3PC之后，我们可以发现，无论是二阶段提交还是三阶段提交都无法彻底解决分布式的一致性问题。Google Chubby的作者Mike Burrows说过， there is only one consensus protocol, and that’s Paxos” – all other approaches are just broken versions of Paxos. 意即世上只有一种一致性算法，那就是Paxos，所有其他一致性算法都是Paxos算法的不完整版。Paxos其实就是“少数服从多数”我们假定有A,B,C,D,E五台机器。kv系统需要put一个数据[key=Whisper -&gt; val=3306]到我们这5台机器上，要保证只要反馈为真，任意两台机器挂掉都不会丢失数据，并且可以保证高可用。怎么做：  首先,客户端随机选择一个节点，进行写入提交，这里我们随机选择了C这个节点，这时候C节点就是这次提议的发起人【也叫proposer，在老的2pc协议里也叫做coodinator】，当C收到这个提议的时候，C首先要做的事情是根据当前节点的最新全局global id，做一次自增操作，我们假定，在当时全局id,Global ID是0,所以，这个议案就被对应了一个编号，1—&gt;[key=Whisper -&gt; val=3306]。这里有两个我们经常犯的错误，下面做一个解说：  1.global id问题，在老的论文里，Lamport没有描述这个自增id是怎么生成的，所以大家的第一个疑问一般是问id怎么生成，从我目前能够看到的所有实现里面，基本上就是选择哪一台机器，就是以那台机器当前所保持的全局id(snapshot，可能不是全局来看的最高值，但没关系，只要是自己这台机器的最高值就行了)，然后做一下自增就行了。我们后面会看到协议如何保证非全局最高值的globalID提议会被拒绝以至于不能够形成决议。  2.global id —&gt;[key=Whisper -&gt; val=3306] . 这也是个会让人困惑的问题，在原文中，他被表示为一个key-value的形式，比如proposal[0-&gt;value] 。这会让人自然的联想到与数据库的kv相对应，key是0，value是value。然后就会困惑，这个数据是怎么和数据库对应起来的呢？这是我当时的困惑，现在也把他列在这里。其实很简单，这里的global id对应value.global id只是对paxos协议有意义，对于数据库，其实只需要关心value里面的数据即可，也即将global id —&gt;[key=Whisper -&gt; val=3306]里面的value: [key=Whisper-&gt; val=3306] 作为数据库构建映射时所需要的redoLog就行了，global id的作用只是告诉你这些数据的顺序是按照global id来排列的，其他无意义。我们回到文中，我们已经将这个新的议案标记了从C这台机器看起来最大的global id : 1—&gt;[key=Whisper -&gt; val=3306]。然后，他会尝试将这个信息发送给其余的A,B,D,E这几台机器。 我们来看这些机器的操作流程。 在这个过程中，Paxos将A,B,D,E叫做accepter【老的协议里没有区分，管这些都叫做参与者，cohorts】，他们的行为模式如下： 如果A,B,D,E这几台机器的globalID 小于C给出的决议的GID(1—&gt;[key=Whisper -&gt; val=3306])，那么就告诉C，这个决议被批准了。而如果A,B,D,E这几台机器的GlobalID 大于或等于C给出决议的GID.那么就告知C 这个决议不能够被批准。 我们假定A,B两台机器当时的Max(GID)是0 ，而D,E的Max(GID)是1.那么，A,B两台机器会反馈给C说协议被接受，这时候我们算算，C的议案有几票了？A+B+!C!，一定要算自己哦:) 。所以，这个议案有三票，5台机器的半数是3.超过法定人数，于是决议就被同意了。我们保持这个上下文，来看看D,E这边的情况。首先，要思考的问题是，为什么D,E的Max(GID)是1呢？ 其实很简单，D可能在C发起决议的同时，也发起了一个决议，我们假定这个决议是由D发起的，决议是 1—&gt;[key=taobao -&gt;val=1234]。既然D,E的Max(GID)是1，那么意味着E已经告知D,它同意了他的决议，但D马上会发现，A,B,C里面的任意一个都返回了D不同意。他的议案只拿到两票，没有通过，它虽然有点不爽，但也是没办法的事情啊。。这时候C的决议已经被多数派接受，所以他需要告知所有人，我的议案1—&gt;[key=Whisper -&gt; val=3306]已经被接受，你们去学习吧。zab协议(Paxos改进)zab协议把整个过程分为两个部分，第一个部分叫选总统，第二个部分叫进行决议。 选总统的过程比较特殊，这种模式，相对的给人感觉思路来源于lamport的面包房算法，这个我们后面讲。，选择的主要依据是：  1.如果有gid最大的机器，那么他是主机。  2.如果好几台主机的gid相同，那么按照序号选择最小的那个。所以，在开始的时候，给A,B,C,D,E进行编号，0,1,2,3,4。 第一轮的时候，因为大家的Max(gid)都是0，所以自然而然按照第二个规则，选择A作为主机。 然后，所有人都知道A是主机以后，无论谁收到的请求，都直接转发给A,由A机器去做后续的分发，这个分发的过程，我们叫进行决议。  进行决议的规则就简单很多了，对其他机器进行3pc 提交，但与3pc不同的是，因为是群发议案给所有其他机器，所以一个机器无反馈对大局是没有影响的，只有当在一段时间以后，超过半数没有反馈，才是有问题的时候，这时候要做的事情是，重新选择总统。 具体过程是，A会将决议precommit给B,C,D,E。然后等待，当B,C,D,E里面的任意两个返回收到后，就可以进行doCommit().否则进行doAbort(). 为什么要任意两个？原因其实也是一样的，为了防止脑裂，原则上只能大于半数，不能少于半数，因为一旦决议成立的投票数少于半数，那么就存在另立中央的可能，两个总统可不是闹着玩的。  定两个，就能够保证，任意“两台”机器挂掉，数据不丢:)，能够做到quorum。参考文章淘宝沈询"
+                        } ,
+                     
+                        {
+                          "title"    : "php线程安全",
+                          "category" : "",
+                          "tags"     : " php",
+                          "url"      : "/2016/11/18/php-about-thred-safe.html",
+                          "date"     : "November 18, 2016",
+                          "excerpt"  : "线程不安全线程不安全就是不提供数据访问保护，有可能出现多个线程先后更改数据造成所得到的数据是脏数据。  比如一个 ArrayList 类，在添加一个元素的时候，它可能会有两步来完成：1. 在 Items[Size] 的位置存放此元素；2. 增大 Size 的值。  在单线程运行的情况下，如果 Size = 0，添加一个元素后，此元素在位置 0，而且 Size=1；  而如果是在多线程情况下，比如有两个线程，线程 A 先将元素1存放在位置 0。但是此时 CPU 调度线程A暂停，线程 B 得到...",
+                          "content"  : "线程不安全线程不安全就是不提供数据访问保护，有可能出现多个线程先后更改数据造成所得到的数据是脏数据。  比如一个 ArrayList 类，在添加一个元素的时候，它可能会有两步来完成：1. 在 Items[Size] 的位置存放此元素；2. 增大 Size 的值。  在单线程运行的情况下，如果 Size = 0，添加一个元素后，此元素在位置 0，而且 Size=1；  而如果是在多线程情况下，比如有两个线程，线程 A 先将元素1存放在位置 0。但是此时 CPU 调度线程A暂停，线程 B 得到运行的机会。线程B向此 ArrayList 添加元素2，因为此时 Size 仍然等于 0 （注意，我们假设的是添加一个元素是要两个步骤，而线程A仅仅完成了步骤1），所以线程B也将元素存放在位置0。然后线程A和线程B都继续运行，都增加 Size 的值，结果Size等于2。处理http并发目前有两种响应请求方式  1.创建线程（线程不安全）  2.创建进程，每个进程都是单线程（线程安全）php自身是不响应http请求的，需要通过配置apache或nginx服务器来请求转发。apache支持两种并发模式  1.Worker MPM ,使用创建线程来处理并发，这种情况php需要选择线程安全版本  2.Prefork MPM 使用创建进程来处理并发其他像nginx,lighttpd使用FastCGI，都是通过进程来处理请求，所以不存在线程安全问题。php异步处理fsockopen,stream_socket等都是通过socket来创建进程实现异步处理，不存在线程安全。 curl是通过异步发起http请求来处理的，所以也不存在线程安全。php实现多线程可通过安装pthreads扩展库来实现，有线程安全问题，需要使用线程安全版本。"
+                        } ,
+                     
+                        {
+                          "title"    : "线程与cpu核",
+                          "category" : "",
+                          "tags"     : " 操作系统",
+                          "url"      : "/2016/11/14/system-thread-cpu.html",
+                          "date"     : "November 14, 2016",
+                          "excerpt"  : "进程，线程，核之间的关联  1.一个应用普遍只占一个进程，一个进程可以衍生出多个线程，而核只与线程有关。  2.一个线程只能在一个核上面跑。单核CPU，程序可以创建多个线程，但他们并不是真正意义上的并行执行，因为他们只会占用一个核，所以只是切换速度较快，没察觉到。每个线程会分配差不多20ms的时间片，执行完时间片，会切换到其他线程，该线程会处于等待执行状态，等其他线程执行完，再继续执行20ms。如果遇到有某些操作比较耗时，又要及时反馈给用户，还是很有必要多线程的。多核CPU，应该多用多线程...",
+                          "content"  : "进程，线程，核之间的关联  1.一个应用普遍只占一个进程，一个进程可以衍生出多个线程，而核只与线程有关。  2.一个线程只能在一个核上面跑。单核CPU，程序可以创建多个线程，但他们并不是真正意义上的并行执行，因为他们只会占用一个核，所以只是切换速度较快，没察觉到。每个线程会分配差不多20ms的时间片，执行完时间片，会切换到其他线程，该线程会处于等待执行状态，等其他线程执行完，再继续执行20ms。如果遇到有某些操作比较耗时，又要及时反馈给用户，还是很有必要多线程的。多核CPU，应该多用多线程，系统会把线程平均分配到每个核上面，一个核上面的线程处理参考上面的单核CPU。"
+                        } ,
+                     
+                        {
+                          "title"    : "监督学习与梯度下降",
+                          "category" : "",
+                          "tags"     : " 机器学习",
+                          "url"      : "/2016/11/14/machinelearning-supervised.html",
+                          "date"     : "November 14, 2016",
+                          "excerpt"  : "假设一个问题有n个特征，线性函数为  其中   差值计算，其中m为训练数据  所以我们要求出当最小值时的特征参数值。主要有两种方式来求出  1.梯度下降  2.正则方程组梯度下降把计算结果与真实结果的差值比做山顶，通过找寻山的最大坡度下降，达到最快到达山脚，从而实现最小差值。对每个求导，得出最快下降梯度，然后沿着这梯度下降。学习速度或下降速度。python实例import numpy as npimport matplotlib.pyplot as pltx_train = np.arra...",
+                          "content"  : "假设一个问题有n个特征，线性函数为  其中   差值计算，其中m为训练数据  所以我们要求出当最小值时的特征参数值。主要有两种方式来求出  1.梯度下降  2.正则方程组梯度下降把计算结果与真实结果的差值比做山顶，通过找寻山的最大坡度下降，达到最快到达山脚，从而实现最小差值。对每个求导，得出最快下降梯度，然后沿着这梯度下降。学习速度或下降速度。python实例import numpy as npimport matplotlib.pyplot as pltx_train = np.array([[1, 2], [2, 1], [2, 3], [3, 5], [1, 3], [4, 2], [7, 3], [4, 5], [11, 3], [8, 7]])y_train = np.array([7, 8, 10, 14, 8, 13, 20, 16, 28, 26])x_test  = np.array([[1, 4], [2, 2], [2, 5], [5, 3], [1, 5], [4, 1]])def h(x, theta0_guess, theta1_guess, theta2_guess):return theta0_guess + theta1_guess * x[0] + theta2_guess * x[1]def learn(learn_rate = 0.001,  variance = 0.00001):theta0_guess = 0theta1_guess = 0theta2_guess = 0diff = 10000dataSetCount = len(x_train)while (diff &gt; variance) :    sum0 = sum1 = sum2 = 0    for i in range(dataSetCount):        sum0 += (y_train[i] - h(x_train[i], theta0_guess, theta1_guess, theta2_guess))    for i in range(dataSetCount):        sum1 += (y_train[i] - h(x_train[i], theta0_guess, theta1_guess, theta2_guess)) * x_train[i][0]    for i in range(dataSetCount):        sum2 += (y_train[i] - h(x_train[i], theta0_guess, theta1_guess, theta2_guess)) * x_train[i][1]    theta0_guess += learn_rate * sum0    theta1_guess += learn_rate * sum1    theta2_guess += learn_rate * sum2    diff = 0    for i in range(dataSetCount):        diff += 1/2 * ((h(x_train[i], theta0_guess, theta1_guess, theta2_guess) - y_train[i]) ** 2)    plt.plot([h(x, theta0_guess, theta1_guess, theta2_guess) for x in x_train])return theta0_guess, theta1_guess, theta2_guessprint(learn())plt.show()输出结果如下：上述方法可实现收敛，但在针对大量数据的处理上性能差。批量梯度下降 每训练完一条数据，便更新值，这样可以只取其中一部分训练数据来训练，提高性能，但可能无法达到收敛。  正则方程组把训练数据集看成一个矩阵    且    得出    由性质  可得    使    推断出  python实例import numpy as npimport matplotlib.pyplot as pltx_train = np.matrix([[1, 1, 2], [1, 2, 1], [1, 2, 3], [1, 3, 5], [1, 1, 3], [1, 4, 2], [1, 7, 3], [1, 4, 5], [1, 11, 3], [1, 8, 7]])y_train = np.matrix([[7], [8], [10], [14], [8], [13], [20], [16], [28], [26]])def h(x, theta0_guess, theta1_guess, theta2_guess):    return theta0_guess + theta1_guess * x[1] + theta2_guess * x[2]def learn():    x_train_t = x_train.T    theta = (1 / (x_train_t * x_train)) * x_train_t * y_train    theta = np.asarray(theta).reshape(-1)    plot = []    for x in x_train:        x = np.asarray(x)[0]        plot.append(h(x, theta[0], theta[1], theta[2]))    plt.plot(plot)    plt.show()learn()"
+                        } ,
+                     
+                        {
+                          "title"    : "时间复杂度计算",
+                          "category" : "",
+                          "tags"     : " 算法",
+                          "url"      : "/2016/11/13/time-complexity.html",
+                          "date"     : "November 13, 2016",
+                          "excerpt"  : "用大写O()来体现算法时间复杂度，称之为大O记法。推导大O阶1.用常数1取代运行时间中的所有加法常数。  2.在修改后的运行次数函数中，只保留最高阶项。  3.如果最高阶项存在且不是1，则去除与这个项相乘的常数。  4.得出大O阶。算法分析1.计算所有情况的平均值，称为平均时间复杂度2.计算最坏情况下的时间复杂度，称为最坏时间复杂度计算实例常数阶 O(1)int sum = 0, n = 100; /*执行一次*/sum = (1 + n) * n / 2; /*执行一次*/sum = (...",
+                          "content"  : "用大写O()来体现算法时间复杂度，称之为大O记法。推导大O阶1.用常数1取代运行时间中的所有加法常数。  2.在修改后的运行次数函数中，只保留最高阶项。  3.如果最高阶项存在且不是1，则去除与这个项相乘的常数。  4.得出大O阶。算法分析1.计算所有情况的平均值，称为平均时间复杂度2.计算最坏情况下的时间复杂度，称为最坏时间复杂度计算实例常数阶 O(1)int sum = 0, n = 100; /*执行一次*/sum = (1 + n) * n / 2; /*执行一次*/sum = (1 + n) * n / 2; /*执行一次*/sum = (1 + n) * n / 2; /*执行一次*/sum = (1 + n) * n / 2; /*执行一次*/sum = (1 + n) * n / 2; /*执行一次*/sum = (1 + n) * n / 2; /*执行一次*/sum = (1 + n) * n / 2; /*执行一次*/printf(\"%d\", sum);线性阶 O(n)int sum = 0, n = 100, i;for(i = 0; i &lt; n; i++){    sum = (1 + n) * n / 2; /*执行一次*/}printf(\"%d\", sum);对数阶 O(logn)int count = 1;while(count &lt; n){    count = count * 2;}平方阶 O(n²)int i,j,sum = 0;for( i = 0; i &lt; n; i++){    for( j = iSS; j &lt; n; j++)    {        sum ++;    }}"
+                        } ,
+                     
+                        {
+                          "title"    : "排序",
+                          "category" : "",
+                          "tags"     : " 算法",
+                          "url"      : "/2016/11/13/sort.html",
+                          "date"     : "November 13, 2016",
+                          "excerpt"  : "冒泡算法do  swapped = false  for i = 1 to indexOfLastUnsortedElement    if leftElement &gt; rightElement      swap(leftElement, rightElement)      swapped = truewhile swapped选择排序repeat (numOfElements - 1) times  set the first unsorted element as the m...",
+                          "content"  : "冒泡算法do  swapped = false  for i = 1 to indexOfLastUnsortedElement    if leftElement &gt; rightElement      swap(leftElement, rightElement)      swapped = truewhile swapped选择排序repeat (numOfElements - 1) times  set the first unsorted element as the minimum  for each of the unsorted elements    if element &lt; currentMinimum      set element as new minimum  swap minimum with first unsorted position插入排序mark first element as sortedfor each unsorted element  'extract' the element  for i = lastSortedIndex to 0    if currentSortedElement &gt; extractedElement      move sorted element to the right by 1    else: insert extracted element归并排序split each element into partitions of size 1recursively merge adjancent partitions  for i = leftPartStartIndex to rightPartLastIndex inclusive    if leftPartHeadValue &lt;= rightPartHeadValue      copy leftPartHeadValue    else: copy rightPartHeadValuecopy elements back to original array统计排序create key (counting) arrayfor each element in list  increase the respective counter by 1for each counter, starting from smallest key  while counter is non-zero    restore element to list    decrease counter by 1基数排序create 10 buckets (queues) for each digit (0 to 9)for each digit placing  for each element in list    move element into respective bucket  for each bucket, starting from smallest digit    while bucket is non-empty      restore element to list"
+                        } ,
+                     
+                        {
+                          "title"    : "php实现session跨域",
+                          "category" : "",
+                          "tags"     : " php, session",
+                          "url"      : "/2016/11/13/php-session.html",
+                          "date"     : "November 13, 2016",
+                          "excerpt"  : "session跨域在*.a.com上保存session，在客户端浏览器中会生成一个sessionID，作用范围仅仅是在a.com这个域名下，这个sessionID就是对应该服务器存储session文件的文件名，在用户打开浏览器访问a.com，浏览器会发送该sessionID去服务器找到该文件名，然后获取session。同服务器跨主域  由于sessionID只会在一个主域下面有效，所以要在另外一个域名下生成相应的sessionID。实现a.com&lt;?phpsession_start(...",
+                          "content"  : "session跨域在*.a.com上保存session，在客户端浏览器中会生成一个sessionID，作用范围仅仅是在a.com这个域名下，这个sessionID就是对应该服务器存储session文件的文件名，在用户打开浏览器访问a.com，浏览器会发送该sessionID去服务器找到该文件名，然后获取session。同服务器跨主域  由于sessionID只会在一个主域下面有效，所以要在另外一个域名下生成相应的sessionID。实现a.com&lt;?phpsession_start();$ssid = session_id();$_SESSION['name'] = 'name';header('Location:http://www.b.com?ssid=' . $ssid);b.com&lt;?phpsession_id($_GET['ssid']);session_start();var_dump($_SESSION);这样就能在b.com域名下生成同样的sessionID，当然a.com和b.com找到是同个文件 有个问题： 如果传递不了sessionID，需要配置php.ini，让url支持或者使用p3p协议进行传输跨子域  只要设置session_set_cookie_params(1800 , ‘/’, ‘.a.com’);，就ok不同服务器跨主域  这个就比较蛋疼了，只能是把要设置session的参数传递到b.com，然后在该服务器下重新设置session，因为session文件在另外一台服务器不能被找到。跨子域  可以传递sessionID到b.com，然后生成相应的session文件，当然session文件内容也要传递过去。统一解决办法1.用两台服务器都能访问到的数据库服务器存储session  2.使用memcache"
+                        } ,
+                     
+                        {
+                          "title"    : "链表",
+                          "category" : "",
+                          "tags"     : " 数据结构",
+                          "url"      : "/2016/11/13/link.html",
+                          "date"     : "November 13, 2016",
+                          "excerpt"  : "单链表查找temp = head, index = 0while (temp.data != input)  temp = temp.next , index++  if temp == null    return -1return index;插入  1.指定位置v = 90, k = 2Vertex temp1 = headwhile (--k!=0)  temp1 = temp1.nextVertex temp2 = temp1.nextVertex newVertex = new...",
+                          "content"  : "单链表查找temp = head, index = 0while (temp.data != input)  temp = temp.next , index++  if temp == null    return -1return index;插入  1.指定位置v = 90, k = 2Vertex temp1 = headwhile (--k!=0)  temp1 = temp1.nextVertex temp2 = temp1.nextVertex newVertex = new Vertex(input)temp1.next = newVertexnewVertex.next = temp22.头部Vertex temp = new Vertex(input)temp.next = headhead = temp3.尾部Vertex temp = new Vertex(input)tail.next = temptail = temp删除  1.头部temp = headhead = head.nextdelete temp2.指定位置Vertex cur = headwhile (--k!=0)  cur = cur.nextVertex tobedeleted = cur.nextcur.next = cur.next.nextdelete tobedeleted3.尾部Vertex prev = headtemp = head.nextwhile (temp.next!=null)  temp = temp.next , prev = prev.nextprev.next = nulldelete temptail = prev堆栈插入Vertex temp = new Vertex(input)temp.next = headhead = temp取出temp = headhead = head.nextdelete temp队列入列Vertex temp = new Vertex(input)tail.next = temptail = temp出列temp = headhead = head.nextdelete temp双链表查找temp = head, index = 0while (temp.data != input)  temp = temp.next , index++  if temp == null    return -1return index;插入  1.指定位置Vertex temp1 = headwhile (--k!=0)  temp1 = temp1.nextVertex temp2 = temp1.nextVertex newVertex = new Vertex(input)newVertex.next = temp2 , temp2.prev = newVertextemp1.next = newVertex , newVertex.prev = temp12.头部Vertex temp = new Vertex(input)temp.next = headif (head!=null) head.prev = temphead = temp3.尾部Vertex temp = new Vertex(input)tail.next = temptemp.prev = tailtail = temp删除  1.头部temp = headhead = head.nextdelete tempif(head!=null) head.prev = null2.指定位置Vertex cur = headwhile (--k!=0)  cur = cur.nextVertex tobedeleted = cur.nextVertex temp = tobedeleted.nextdelete tobedeletedcur.next = temp, temp.prev = cur3.尾部temp = tailtail = tail.prevtail.next = nulldelete temp双端队列入列  1.头部Vertex temp = new Vertex(input)temp.next = headif (head!=null) head.prev = temphead = temp2.尾部Vertex temp = new Vertex(input)tail.next = temptemp.prev = tailtail = temp出列  1.头部temp = headhead = head.nextdelete tempif(head!=null) head.prev = null2.尾部temp = tailtail = tail.prevtail.next = nulldelete temp"
+                        } ,
+                     
+                        {
+                          "title"    : "jsonp实现异步请求跨域",
+                          "category" : "",
+                          "tags"     : " jsonp",
+                          "url"      : "/2016/11/13/jsonp.html",
+                          "date"     : "November 13, 2016",
+                          "excerpt"  : "ajax 和 jsonp的区别  ajax是通过XmlHttpRequest来获取非本页内容，而jsonp是通过动态添加为什么jsonp能够跨服  因为在web调用js文件是不受跨服影响的，不仅如此，凡是拥有src属性的都有跨服的能力。实现一www.b.com/remote.jsalert(1)www.a.com/json.html&lt;!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www...",
+                          "content"  : "ajax 和 jsonp的区别  ajax是通过XmlHttpRequest来获取非本页内容，而jsonp是通过动态添加为什么jsonp能够跨服  因为在web调用js文件是不受跨服影响的，不仅如此，凡是拥有src属性的都有跨服的能力。实现一www.b.com/remote.jsalert(1)www.a.com/json.html&lt;!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"&gt; &lt;html xmlns=\"http://www.w3.org/1999/xhtml\"&gt;&lt;head&gt;&lt;title&gt;&lt;/title&gt;&lt;script type=\"text/javascript\" src=\"http://remoteserver.com/remote.js\"&gt;&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;实例二现在我们在jsonp.html页面定义一个函数，然后在远程remote.js中传入数据进行调用。  www.a.com/json.html&lt;!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"&gt;&lt;html xmlns=\"http://www.w3.org/1999/xhtml\"&gt;&lt;head&gt;&lt;title&gt;&lt;/title&gt;&lt;script type=\"text/javascript\"&gt;var localHandler = function(data){alert('我是本地函数，可以被跨域的remote.js文件调用，远程js带来的数据是：' + data.result);};&lt;/script&gt;&lt;script type=\"text/javascript\" src=\"http://remoteserver.com/remote.js\"&gt;&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;www.b.com/remote.jslocalHandler({\"result\":\"我是远程js带来的数据\"});实现三使用callback  www.a.com/json.html&lt;!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"&gt;&lt;html xmlns=\"http://www.w3.org/1999/xhtml\"&gt;&lt;head&gt;&lt;title&gt;&lt;/title&gt;&lt;script type=\"text/javascript\"&gt;// 得到航班信息查询结果后的回调函数var flightHandler = function(data){    alert('你查询的航班结果是：票价 ' + data.price + ' 元，' + '余票 ' + data.tickets + ' 张。');};// 提供jsonp服务的url地址（不管是什么类型的地址，最终生成的返回值都是一段javascript代码）var url = \"http://www.b.com/json.php?callback=flightHandler\";// 创建script标签，设置其属性var script = document.createElement('script');script.setAttribute('src', url);// 把script标签加入head，此时调用开始document.getElementsByTagName('head')[0].appendChild(script);&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;www.b.com/json.php&lt;?phpecho $_GET['callback'] . '(' . json_encode(1) . ')';exit;####实例四 使用jquery&lt;!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"&gt;&lt;html xmlns=\"http://www.w3.org/1999/xhtml\" &gt;&lt;head&gt;&lt;title&gt;Untitled Page&lt;/title&gt;&lt;script type=\"text/javascript\" src=\"jquery.min.js\"&gt;&lt;/script&gt;&lt;script type=\"text/javascript\"&gt;jQuery(document).ready(function(){    $.ajax({        type: \"get\",        async: false,        url: \"http://www.b.com/jsonp.php\",        dataType: \"jsonp\",        jsonp: \"callback\",//传递给请求处理程序或页面的，用以获得jsonp回调函数名的参数名(一般默认为:callback)        jsonpCallback:\"flightHandler\",//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名，也可以写\"?\"，jQuery会自动为你处理数据        success: function(json){            alert('您查询到航班信息：票价： ' + json.price + ' 元，余票： ' + json.tickets + ' 张。');        },        error: function(){            alert('fail');        }    });});&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;"
+                        } ,
+                     
+                        {
+                          "title"    : "哈希表",
+                          "category" : "",
+                          "tags"     : " 数据结构",
+                          "url"      : "/2016/11/13/hash-table.html",
+                          "date"     : "November 13, 2016",
+                          "excerpt"  : "线性探查查找i = base = key%HT.length // get hashed indexwhile (true)  if (HT[i] == EMPTY) return \"not found\"  else if (HT[i] == key) return \"found at index i\"  else i = (base+step*1)%HT.length插入if HT is 1 item before full, prevent insertioni = base ...",
+                          "content"  : "线性探查查找i = base = key%HT.length // get hashed indexwhile (true)  if (HT[i] == EMPTY) return \"not found\"  else if (HT[i] == key) return \"found at index i\"  else i = (base+step*1)%HT.length插入if HT is 1 item before full, prevent insertioni = base = key%HT.length // get hashed indexwhile (HT[i] != EMPTY || HT[i] != DELETED)  i = (base+step*1)%HT.lengthfound insertion point, insert key at HT[i]删除i = base = key%HT.length // get hashed indexwhile (true)  if (HT[i] == EMPTY) break // key not found  else if (HT[i] == key)    HT[i] = DELETED  else i = (base+step*1)%HT.length二次探查查找i = base = key%HT.length // get hashed indexwhile (true)  if (HT[i] == EMPTY) return \"not found\"  else if (HT[i] == key) return \"found at index i\"  else i = (base+step*step)%HT.length插入if HT is 1 item before full, prevent insertioni = base = key%HT.length // get hashed indexwhile (HT[i] != EMPTY || HT[i] != DELETED)  i = (base+step*step)%HT.lengthfound insertion point, insert key at HT[i]删除i = base = key%HT.length // get hashed indexwhile (true)  if (HT[i] == EMPTY) break // key not found  else if (HT[i] == key)    HT[i] = DELETED  else i = (base+step*step)%HT.length"
+                        } ,
+                     
+                        {
+                          "title"    : "位运算",
+                          "category" : "",
+                          "tags"     : " 算法",
+                          "url"      : "/2016/11/13/bit-cal.html",
+                          "date"     : "November 13, 2016",
+                          "excerpt"  : "以S = 1001011,j = 0000000为例。获取第 i 标志位j = 0000001(shift left j) * iS AND j切换第 i 标志位j = 0000001(shift left j) * iS XOR j(XOR: 11 = 0 10 = 1 01 = 1 00 = 0)清除第 i 标志位j = 0000001(shift left j) * iinvert j(反转)S AND j获取最后一个有效位j = NOT(S)+1S AND jS = 1001011...",
+                          "content"  : "以S = 1001011,j = 0000000为例。获取第 i 标志位j = 0000001(shift left j) * iS AND j切换第 i 标志位j = 0000001(shift left j) * iS XOR j(XOR: 11 = 0 10 = 1 01 = 1 00 = 0)清除第 i 标志位j = 0000001(shift left j) * iinvert j(反转)S AND j获取最后一个有效位j = NOT(S)+1S AND jS = 1001011j = 0000000获取第 i 标志位j = 0000001(shift left j) * iS AND j切换第 i 标志位j = 0000001(shift left j) * iS XOR j(XOR: 11 = 0 10 = 1 01 = 1 00 = 0)清除第 i 标志位j = 0000001(shift left j) * iinvert j(反转)S AND j获取最后一个有效位j = NOT(S)+1S AND jS = 1001011j = 0000000获取第 i 标志位j = 0000001(shift left j) * iS AND j切换第 i 标志位j = 0000001(shift left j) * iS XOR j(XOR: 11 = 0 10 = 1 01 = 1 00 = 0)清除第 i 标志位j = 0000001(shift left j) * iinvert j(反转)S AND j获取最后一个有效位j = NOT(S)+1S AND jS = 1001011j = 0000000获取第 i 标志位j = 0000001(shift left j) * iS AND j切换第 i 标志位j = 0000001(shift left j) * iS XOR j(XOR: 11 = 0 10 = 1 01 = 1 00 = 0)清除第 i 标志位j = 0000001(shift left j) * iinvert j(反转)S AND j获取最后一个有效位j = NOT(S)+1S AND j"
+                        } ,
+                     
+                        {
+                          "title"    : "php实现异步",
+                          "category" : "",
+                          "tags"     : " php",
+                          "url"      : "/2016/11/12/php-async.html",
+                          "date"     : "November 12, 2016",
+                          "excerpt"  : "php在处理异步执行主要有以下四种方式来处理，其中第四种方式是最好的，推荐使用。1.ajax或嵌入img标签，在src中指向异步地址。  缺点 不能算是真正异步，主要用户关闭浏览器，异步脚本也就被终止掉了&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;img src=\"b.php\"&gt; &lt;script src=\"jquery.js\"&gt;&lt;/script&gt;&lt;script&gt;$(documen...",
+                          "content"  : "php在处理异步执行主要有以下四种方式来处理，其中第四种方式是最好的，推荐使用。1.ajax或嵌入img标签，在src中指向异步地址。  缺点 不能算是真正异步，主要用户关闭浏览器，异步脚本也就被终止掉了&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;img src=\"b.php\"&gt; &lt;script src=\"jquery.js\"&gt;&lt;/script&gt;&lt;script&gt;$(document).ready(function(){    $.ajax({url:\"b.php\",async:false});});    &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;2.popen  缺点 只能在命令行中执行本地脚本，如果访问量高，会产生大量进程pclose(popen(\"php -f /Users/zhongjunbin/Document/Kitematic/nginx/htdocs/b.php &amp;\", 'r'));3.curl  缺点 会有至少一秒的等待时间$ch = curl_init();$curl_opt = array(CURLOPT_URL, 'http://www.example.com/backend.php',                            CURLOPT_RETURNTRANSFER, 1,                            CURLOPT_TIMEOUT, 1,);curl_setopt_array($ch, $curl_opt);4.fsockopen 或 socker_stream_client  缺点 需要自己拼接http头信息&lt;?php$fp = fsockopen(\"192.168.99.100\", 80, $errno, $errstr, 30);if (!$fp) {    echo \"$errstr ($errno)&lt;br /&gt;\n\";} else {    $out = \"GET /b.php HTTP/1.1\r\n\";    $out .= \"Host: 192.168.99.100\r\n\";    $out .= \"Connection: Close\r\n\r\n\";    fwrite($fp, $out);    /*忽略执行结果    while (!feof($fp)) {        echo fgets($fp, 128);    }*/    fclose($fp);}&lt;?php$fp = stream_socket_client(\"192.168.99.100:80\", $errno, $errstr, 30);if (!$fp) {    echo \"$errstr ($errno)&lt;br /&gt;\n\";} else {    fwrite($fp, \"GET /b.php HTTP/1.0\r\nHost: 192.168.99.100\r\nAccept: */*\r\n\r\n\");    /*忽略执行结果    while (!feof($fp)) {         echo fgets($fp, 1024);    }*/    fclose($fp);}"
+                        } ,
+                     
+                        {
+                          "title"    : "phpcgi",
+                          "category" : "",
+                          "tags"     : " php",
+                          "url"      : "/2016/11/11/php-cgi.html",
+                          "date"     : "November 11, 2016",
+                          "excerpt"  : "php-cgi它本身是一个进程，工作原理是，获取cgi的配置信息，解析配置文件，初始化环境变量和数据结构。cgicgi 就是一个 php-cgi.exe 的管理器。  1.当服务器启动时它会去获取一份配置文件。  2.当用户发出请求时，它会去fork一个php-cgi.exe进程进行处理。  3.处理完请求时，会马上对其进行销毁。fastcgifastcgi 相当于是cgi的一个扩展，可以看成cgi内部的东西。1.cgi启动时会一次性fork多个php-cgi.exe进程，并处于等待用户请...",
+                          "content"  : "php-cgi它本身是一个进程，工作原理是，获取cgi的配置信息，解析配置文件，初始化环境变量和数据结构。cgicgi 就是一个 php-cgi.exe 的管理器。  1.当服务器启动时它会去获取一份配置文件。  2.当用户发出请求时，它会去fork一个php-cgi.exe进程进行处理。  3.处理完请求时，会马上对其进行销毁。fastcgifastcgi 相当于是cgi的一个扩展，可以看成cgi内部的东西。1.cgi启动时会一次性fork多个php-cgi.exe进程，并处于等待用户请求的状态。  2.当用户发出请求，就不需要再去fork，直接从等待的进程中取。  3.处理完请求，该进程不会马上销毁，而是等待下一次请求。php-fpm我认为php-fpm是nginx独有的东西，它的工作原理是获取apche配置信息，然后将处理结果反馈给nginx，所以说nginx是方向代理。关于修改apache，nginx，php配置文件的重启  1.修改apache配置，apache是要重启的，因为php-cgi.exe获取的配置信息是从cgi那里获得，而cgi的配置信息只有在apache重启时才会重新获取一遍。  2.修改nginx配置，只需平滑重启nginx，不需重启php-fpm。因为nginx是反向代理。  3.修改php配置，在apache下，只能重启apache。在nginx，只需平滑重启php-fpm，因为nginx是反向代理，从php-fpm那里获取来的配置信息。"
+                        } ,
+                     
+                        {
+                          "title"    : "Sample post",
+                          "category" : "",
+                          "tags"     : " Test, Lorem, Ipsum",
+                          "url"      : "/2014/11/30/sample-post.html",
+                          "date"     : "November 30, 2014",
+                          "excerpt"  : "Consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincid...",
+                          "content"  : "Consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem.  Consectetur adipiscing elit  Donec a diam lectus  Sed sit amet ipsum maurisUt turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.Nunc diam velit, adipiscing ut tristique vitae, sagittis vel odio. Maecenas convallis ullamcorper ultricies. Curabitur ornare, ligula semper consectetur sagittis, nisi diam iaculis velit, id fringilla sem nunc vel mi. Nam dictum, odio nec pretium volutpat, arcu ante placerat erat, non tristique elit urna et turpis. Quisque mi metus, ornare sit amet fermentum et, tincidunt et orci. Fusce eget orci a orci congue vestibulum.Ut dolor diam, elementum et vestibulum eu, porttitor vel elit. Curabitur venenatis pulvinar tellus gravida ornare. Sed et erat faucibus nunc euismod ultricies ut id justo. Nullam cursus suscipit nisi, et ultrices justo sodales nec. Fusce venenatis facilisis lectus ac semper. Aliquam at massa ipsum. Quisque bibendum purus convallis nulla ultrices ultricies. Nullam aliquam, mi eu aliquam tincidunt, purus velit laoreet tortor, viverra pretium nisi quam vitae mi. Fusce vel volutpat elit. Nam sagittis nisi dui.  Suspendisse lectus leo, consectetur in tempor sit amet, placerat quis nequeEtiam luctus porttitor lorem, sed suscipit est rutrum non. Curabitur lobortis nisl a enim congue semper. Aenean commodo ultrices imperdiet. Vestibulum ut justo vel sapien venenatis tincidunt.Phasellus eget dolor sit amet ipsum dapibus condimentum vitae quis lectus. Aliquam ut massa in turpis dapibus convallis. Praesent elit lacus, vestibulum at malesuada et, ornare et est. Ut augue nunc, sodales ut euismod non, adipiscing vitae orci. Mauris ut placerat justo. Mauris in ultricies enim. Quisque nec est eleifend nulla ultrices egestas quis ut quam. Donec sollicitudin lectus a mauris pulvinar id aliquam urna cursus. Cras quis ligula sem, vel elementum mi. Phasellus non ullamcorper urna."
+                        } ,
+                     
+                        {
+                          "title"    : "Feature images",
+                          "category" : "",
+                          "tags"     : " Test, Lorem",
+                          "url"      : "/2014/11/29/feature-images.html",
+                          "date"     : "November 29, 2014",
+                          "excerpt"  : "This is an example of a post which includes a feature image specified in the front matter of the post. The feature image spans the full-width of the page, and is shown with the title on permalink pages.",
+                          "content"  : "This is an example of a post which includes a feature image specified in the front matter of the post. The feature image spans the full-width of the page, and is shown with the title on permalink pages."
+                        } ,
+                     
+                        {
+                          "title"    : "Markdown and HTML",
+                          "category" : "",
+                          "tags"     : " Test, Markdown",
+                          "url"      : "/2014/11/28/markdown-and-html.html",
+                          "date"     : "November 28, 2014",
+                          "excerpt"  : "Jekyll supports the use of Markdown with inline HTML tags which makes it easier to quickly write posts with Jekyll, without having to worry too much about text formatting. A sample of the formatting follows.Tables have also been extended from Mark...",
+                          "content"  : "Jekyll supports the use of Markdown with inline HTML tags which makes it easier to quickly write posts with Jekyll, without having to worry too much about text formatting. A sample of the formatting follows.Tables have also been extended from Markdown:            First Header      Second Header                  Content Cell      Content Cell              Content Cell      Content Cell      Here’s an example of an image, which is included using Markdown:Highlighting for code in Jekyll is done using Base16 or Rouge. This theme makes use of Rouge by default.// count to tenfor (var i = 1; i &lt;= 10; i++) {    console.log(i);}// count to twentyvar j = 0;while (j &lt; 20) {    j++;    console.log(j);}Type on Strap uses KaTeX to display maths. Equations such as  can be displayed inline.Alternatively, they can be shown on a new line:"
+                        } ,
+                     
+                        {
+                          "title"    : "Markup: Syntax Highlighting",
+                          "category" : "",
+                          "tags"     : " code",
+                          "url"      : "/2014/08/08/Markup-Syntax-Highlighting.html",
+                          "date"     : "August 8, 2014",
+                          "excerpt"  : "From Michael’s Rose Minimal Mistakes. 1Syntax highlighting is a feature that displays source code, in different colors and fonts according to the category of terms. This feature facilitates writing in a structured language such as a programming la...",
+                          "content"  : "From Michael’s Rose Minimal Mistakes. 1Syntax highlighting is a feature that displays source code, in different colors and fonts according to the category of terms. This feature facilitates writing in a structured language such as a programming language or a markup language as both structures and syntax errors are visually distinct. Highlighting does not affect the meaning of the text itself; it is intended only for human readers.2GFM Code BlocksGitHub Flavored Markdown fenced code blocks are supported. To modify styling and highlight colors edit /_sass/syntax.scss.#container {  float: left;  margin: 0 -240px 0 0;  width: 100%;}1234567.highlight {  margin: 0;  padding: 1em;  font-family: $monospace;  font-size: $type-size-7;  line-height: 1.8;}&lt;nav class=\"pagination\" role=\"navigation\"&gt;  {% if page.previous %}    &lt;a href=\"{{ site.url }}{{ page.previous.url }}\" class=\"btn\" title=\"{{ page.previous.title }}\"&gt;Previous article&lt;/a&gt;  {% endif %}  {% if page.next %}    &lt;a href=\"{{ site.url }}{{ page.next.url }}\" class=\"btn\" title=\"{{ page.next.title }}\"&gt;Next article&lt;/a&gt;  {% endif %}&lt;/nav&gt;&lt;!-- /.pagination --&gt;module Jekyll  class TagIndex &lt; Page    def initialize(site, base, dir, tag)      @site = site      @base = base      @dir = dir      @name = 'index.html'      self.process(@name)      self.read_yaml(File.join(base, '_layouts'), 'tag_index.html')      self.data['tag'] = tag      tag_title_prefix = site.config['tag_title_prefix'] || 'Tagged: '      tag_title_suffix = site.config['tag_title_suffix'] || '&amp;#8211;'      self.data['title'] = \"#{tag_title_prefix}#{tag}\"      self.data['description'] = \"An archive of posts tagged #{tag}.\"    end  endendCode Blocks in ListsIndentation matters. Be sure the indent of the code block aligns with the first non-space character after the list item marker (e.g., 1.). Usually this will mean indenting 3 spaces instead of 4.  Do step 1.      Now do this:    def print_hi(name)  puts \"Hi, #{name}\"endprint_hi('Tom')#=&gt; prints 'Hi, Tom' to STDOUT.        Now you can do this.GitHub Gist EmbedAn example of a Gist embed below.Source            https://mmistakes.github.io/minimal-mistakes/markup-syntax-highlighting/ &#8617;              http://en.wikipedia.org/wiki/Syntax_highlighting &#8617;      "
+                        } ,
+                     
+                        {
+                          "title"    : "Blogging with title",
+                          "category" : "",
+                          "tags"     : " Test, Ipsum, Markdown, Portfolio",
+                          "url"      : "/2013/11/18/blogging-with-title.html",
+                          "date"     : "November 18, 2013",
+                          "excerpt"  : "I am a BIG titleThis is a very tiny tiny post with less than 250 letters.",
+                          "content"  : "I am a BIG titleThis is a very tiny tiny post with less than 250 letters."
+                        } 
+                     ,
+                     
+                       {
+                         
+                            "title"    : "Ninja",
+                            "category" : "",
+                            "tags"     : " Lorem",
+                            "url"      : "/portfolio/ninja",
+                            "date"     : "April 8, 2014",
+                            "excerpt"  : "",
+                            "content"  : "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+                         
+                       } ,
+                     
+                       {
+                         
+                            "title"    : "Creative",
+                            "category" : "",
+                            "tags"     : " Ipsum",
+                            "url"      : "/portfolio/safe",
+                            "date"     : "August 16, 2014",
+                            "excerpt"  : "",
+                            "content"  : "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?Use this area of the page to describe your project. The icon above is part of a free icon set by Flat Icons. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!"
+                         
+                       } ,
+                     
+                       {
+                         
+                            "title"    : "Circus",
+                            "category" : "",
+                            "tags"     : " Ipsum",
+                            "url"      : "/portfolio/circus",
+                            "date"     : "September 1, 2014",
+                            "excerpt"  : "",
+                            "content"  : "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+                         
+                       } ,
+                     
+                       {
+                         
+                            "title"    : "Tower of Hanoi",
+                            "category" : "",
+                            "tags"     : " ",
+                            "url"      : "/portfolio/hanoi",
+                            "date"     : "September 1, 2014",
+                            "excerpt"  : "",
+                            "content"  : "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+                         
+                       } ,
+                     
+                       {
+                         
+                            "title"    : "Tic tac toe",
+                            "category" : "",
+                            "tags"     : " ",
+                            "url"      : "/portfolio/tictactoe",
+                            "date"     : "September 1, 2014",
+                            "excerpt"  : "",
+                            "content"  : "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+                         
+                       } ,
+                     
+                       {
+                         
+                            "title"    : "Cake",
+                            "category" : "",
+                            "tags"     : " Lorem, Ipsum, Portfolio",
+                            "url"      : "/portfolio/cake",
+                            "date"     : "September 27, 2015",
+                            "excerpt"  : "",
+                            "content"  : "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?Use this area of the page to describe your project. The icon above is part of a free icon set by Flat Icons. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!"
+                         
+                       } ,
+                     
+                       {
+                         
+                            "title"    : "Jekyll",
+                            "category" : "",
+                            "tags"     : " ",
+                            "url"      : "/portfolio/jekyllblog",
+                            "date"     : "May 26, 2017",
+                            "excerpt"  : "",
+                            "content"  : "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+                         
+                       } ,
+                     
+                       {
+                         
+                            "title"    : "Lorem Ipsum",
+                            "category" : "",
+                            "tags"     : " ",
+                            "url"      : "/portfolio/submarine",
+                            "date"     : "September 3, 2017",
+                            "excerpt"  : "",
+                            "content"  : "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?Use this area of the page to describe your project. The icon above is part of a free icon set by Flat Icons. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!"
+                         
+                       } ,
+                     
+                       {
+                         
+                            "title"    : "Github",
+                            "category" : "",
+                            "tags"     : " Lorem, Portfolio",
+                            "url"      : "/portfolio/gitlecture",
+                            "date"     : "October 20, 2017",
+                            "excerpt"  : "",
+                            "content"  : "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+                         
+                       } 
+                     
+                    
+                  ],
+            searchResultTemplate: '<div class="search-title"><a href="{url}"><h3> {title}</h3></a><div class="meta">{date} <div class="right"><i class="fa fa-tag"></i> {tags}</div></div><p>{excerpt}</p></div><hr> ',
+            noResultsText: 'No results found',
+            limit: 10,
+            fuzzy: false,
+            exclude: []
+        })
+    </script>
+</section>
+</section>
+    
+    
+  <!-- Tag list for portfolio -->
+  
+  
+
+
+<footer>
+  <div class="tag-list"></div>
+</footer>
+
+    
+</article>
+
+    </div>
+    
+<footer class="site-footer">
+    <p class="text">Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+	<a href="http://localhost:4000/feed.xml" title="Follow RSS feed">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+	<a href="https://github.com/shadowdragons" title="Follow on GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+
+  </body>
+</html>

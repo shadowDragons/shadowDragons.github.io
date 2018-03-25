@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <!-- JQuery (used for bootstrap and jekyll search) -->
+    <script src="/assets/js/jquery-3.2.1.min.js" ></script>
+    
+    <!-- Main JS (navbar.js and katex_init.js)-->
+    <script defer=true src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <link rel="stylesheet" href="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="http://localhost:4000/2016/11/24/consistency-highavailability.html">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="小白" href="http://localhost:4000///feed.xml"/>
+
+    <!-- Font Awesome -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css">
+
+    <!-- Google Fonts -->
+    
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,700italic,400italic" rel="stylesheet" type="text/css"> 
+    
+
+    <!-- KaTeX 0.8.3 -->
+    
+    <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/katex.min.css">
+    <script src="/assets/js/katex.min.js">
+    </script>
+    
+
+    <!-- Google Analytics -->
+    
+    
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>数据库的一致性与高可用 | 小白成长史</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="数据库的一致性与高可用" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="在给定多台计算机，他们相互之间由网络相互连通，能够做到 1.数据每次成功写入，数据不会丢失，并且按照写入的顺序排列 2.给定安全级别，保证服务可用性，并尽可能减少机器消耗。" />
+<meta property="og:description" content="在给定多台计算机，他们相互之间由网络相互连通，能够做到 1.数据每次成功写入，数据不会丢失，并且按照写入的顺序排列 2.给定安全级别，保证服务可用性，并尽可能减少机器消耗。" />
+<link rel="canonical" href="http://localhost:4000/2016/11/24/consistency-highavailability.html" />
+<meta property="og:url" content="http://localhost:4000/2016/11/24/consistency-highavailability.html" />
+<meta property="og:site_name" content="小白成长史" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-11-24T00:00:00+08:00" />
+<script type="application/ld+json">
+{"description":"在给定多台计算机，他们相互之间由网络相互连通，能够做到 1.数据每次成功写入，数据不会丢失，并且按照写入的顺序排列 2.给定安全级别，保证服务可用性，并尽可能减少机器消耗。","@type":"BlogPosting","url":"http://localhost:4000/2016/11/24/consistency-highavailability.html","headline":"数据库的一致性与高可用","dateModified":"2016-11-24T00:00:00+08:00","datePublished":"2016-11-24T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2016/11/24/consistency-highavailability.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- Manual seo tags -->
+    <!--
+    <title>数据库的一致性与高可用 | 小白</title>
+    <meta name="description" content="在给定多台计算机，他们相互之间由网络相互连通，能够做到  1.数据每次成功写入，数据不会丢失，并且按照写入的顺序排列  2.给定安全级别，保证服务可用性，并尽可能减少机器消耗。">
+    -->
+</head>
+
+  <body>
+    <header class="site-header">
+    
+    <!-- Logo and title -->
+	<div class="branding">
+		<a href="/">
+			<img class="avatar" src="/assets/img/photo.jpeg" alt=""/>
+		</a>
+
+		<h1 class="site-title">
+			<a href="/">小白</a>
+		</h1>
+	</div>
+    
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+    
+    <!-- Menu -->
+    <ul>
+        
+        
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="/about/">
+                About
+            </a>
+        </li>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+         
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/portfolio">
+                Portfolio
+            </a>
+        </li>
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/tags">
+                <i class="fa fa-tags" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+    </ul>
+        
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="background-image: url('/')">
+    <h1 id="%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E4%B8%8E%E9%AB%98%E5%8F%AF%E7%94%A8" class="title">数据库的一致性与高可用</h1>
+    <p class="meta">
+    November 24, 2016
+    
+    </p>
+  </header>
+  <section class="post-content"><p>在给定多台计算机，他们相互之间由网络相互连通，能够做到  <br />
+1.数据每次成功写入，数据不会丢失，并且按照写入的顺序排列  <br />
+2.给定安全级别，保证服务可用性，并尽可能减少机器消耗。</p>
+
+<h4 id="2pc">2PC</h4>
+
+<p>所谓的两个阶段是指：第一阶段：准备阶段(投票阶段)和第二阶段：提交阶段（执行阶段）。</p>
+
+<h5 id="准备阶段">准备阶段</h5>
+
+<p>事务协调者(事务管理器)给每个参与者(资源管理器)发送Prepare消息，每个参与者要么直接返回失败(如权限验证失败)，要么在本地执行事务，写本地的redo和undo日志，但不提交，到达一种“万事俱备，只欠东风”的状态。</p>
+
+<p>可以进一步将准备阶段分为以下三个步骤：  <br />
+1）协调者节点向所有参与者节点询问是否可以执行提交操作(vote)，并开始等待各参与者节点的响应。  <br />
+2）参与者节点执行询问发起为止的所有事务操作，并将Undo信息和Redo信息写入日志。（注意：若成功这里其实每个参与者已经执行了事务操作）  <br />
+3）各参与者节点响应协调者节点发起的询问。如果参与者节点的事务操作实际执行成功，则它返回一个”同意”消息；如果参与者节点的事务操作实际执行失败，则它返回一个”中止”消息。</p>
+
+<h5 id="提交阶段">提交阶段</h5>
+<p>如果协调者收到了参与者的失败消息或者超时，直接给每个参与者发送回滚(Rollback)消息；否则，发送提交(Commit)消息；参与者根据协调者的指令执行提交或者回滚操作，释放所有事务处理过程中使用的锁资源。(注意:必须在最后阶段释放锁资源)</p>
+
+<p>接下来分两种情况分别讨论提交阶段的过程。</p>
+
+<p>当协调者节点从所有参与者节点获得的相应消息都为”同意”时:
+<img src="/assets/img/posts/2016-11-24-consistency-highavailability/1.png" alt="1.png" /></p>
+
+<p>1）协调者节点向所有参与者节点发出”正式提交(commit)”的请求。  <br />
+2）参与者节点正式完成操作，并释放在整个事务期间内占用的资源。  <br />
+3）参与者节点向协调者节点发送”完成”消息。  <br />
+4）协调者节点受到所有参与者节点反馈的”完成”消息后，完成事务。</p>
+
+<p>如果任一参与者节点在第一阶段返回的响应消息为”中止”，或者 协调者节点在第一阶段的询问超时之前无法获取所有参与者节点的响应消息时：
+<img src="/assets/img/posts/2016-11-24-consistency-highavailability/2.png" alt="2.png" /></p>
+
+<p>1）协调者节点向所有参与者节点发出”回滚操作(rollback)”的请求。  <br />
+2）参与者节点利用之前写入的Undo信息执行回滚，并释放在整个事务期间内占用的资源。  <br />
+3）参与者节点向协调者节点发送”回滚完成”消息。  <br />
+4）协调者节点受到所有参与者节点反馈的”回滚完成”消息后，取消事务。</p>
+
+<p>不管最后结果如何，第二阶段都会结束当前事务。  <br />
+二阶段提交看起来确实能够提供原子性的操作，但是不幸的事，二阶段提交还是有几个缺点的：  <br />
+1.同步阻塞问题。执行过程中，所有参与节点都是事务阻塞型的。当参与者占有公共资源时，其他第三方节点访问公共资源不得不处于阻塞状态。  <br />
+2.单点故障。由于协调者的重要性，一旦协调者发生故障。参与者会一直阻塞下去。尤其在第二阶段，协调者发生故障，那么所有的参与者还都处于锁定事务资源的状态中，而无法继续完成事务操作。（如果是协调者挂掉，可以重新选举一个协调者，但是无法解决因为协调者宕机导致的参与者处于阻塞状态的问题）  <br />
+3.数据不一致。在二阶段提交的阶段二中，当协调者向参与者发送commit请求之后，发生了局部网络异常或者在发送commit请求过程中协调者发生了故障，这回导致只有一部分参与者接受到了commit请求。而在这部分参与者接到commit请求之后就会执行commit操作。但是其他部分未接到commit请求的机器则无法执行事务提交。于是整个分布式系统便出现了数据部一致性的现象。  <br />
+4.二阶段无法解决的问题：协调者再发出commit消息之后宕机，而唯一接收到这条消息的参与者同时也宕机了。那么即使协调者通过选举协议产生了新的协调者，这条事务的状态也是不确定的，没人知道事务是否被已经提交。  <br />
+由于二阶段提交存在着诸如同步阻塞、单点问题、脑裂等缺陷，所以，研究者们在二阶段提交的基础上做了改进，提出了三阶段提交。</p>
+
+<h4 id="3pc">3PC</h4>
+
+<p>三阶段提交（Three-phase commit），也叫三阶段提交协议（Three-phase commit protocol），是二阶段提交（2PC）的改进版本。</p>
+
+<p><img src="/assets/img/posts/2016-11-24-consistency-highavailability/3.png" alt="3.png" /></p>
+
+<p>与两阶段提交不同的是，三阶段提交有两个改动点。  <br />
+1.引入超时机制。同时在协调者和参与者中都引入超时机制。  <br />
+2.在第一阶段和第二阶段中插入一个准备阶段。保证了在最后提交阶段之前各参与节点的状态是一致的。  <br />
+也就是说，除了引入超时机制之外，3PC把2PC的准备阶段再次一分为二，这样三阶段提交就有CanCommit、PreCommit、DoCommit三个阶段。</p>
+
+<h5 id="cancommit阶段">CanCommit阶段</h5>
+
+<p>3PC的CanCommit阶段其实和2PC的准备阶段很像。协调者向参与者发送commit请求，参与者如果可以提交就返回Yes响应，否则返回No响应。  <br />
+1.事务询问 协调者向参与者发送CanCommit请求。询问是否可以执行事务提交操作。然后开始等待参与者的响应。  <br />
+2.响应反馈 参与者接到CanCommit请求之后，正常情况下，如果其自身认为可以顺利执行事务，则返回Yes响应，并进入预备状态。否则反馈No</p>
+
+<h5 id="precommit阶段">PreCommit阶段</h5>
+
+<p>协调者根据参与者的反应情况来决定是否可以记性事务的PreCommit操作。根据响应情况，有以下两种可能。  <br />
+假如协调者从所有的参与者获得的反馈都是Yes响应，那么就会执行事务的预执行。  <br />
+1.发送预提交请求 协调者向参与者发送PreCommit请求，并进入Prepared阶段。  <br />
+2.事务预提交 参与者接收到PreCommit请求后，会执行事务操作，并将undo和redo信息记录到事务日志中。  <br />
+3.响应反馈 如果参与者成功的执行了事务操作，则返回ACK响应，同时开始等待最终指令。</p>
+
+<p>假如有任何一个参与者向协调者发送了No响应，或者等待超时之后，协调者都没有接到参与者的响应，那么就执行事务的中断。  <br />
+1.发送中断请求 协调者向所有参与者发送abort请求。  <br />
+2.中断事务 参与者收到来自协调者的abort请求之后（或超时之后，仍未收到协调者的请求），执行事务的中断。</p>
+
+<h5 id="docommit阶段">doCommit阶段</h5>
+
+<p>该阶段进行真正的事务提交，也可以分为以下两种情况。</p>
+
+<p>执行提交  <br />
+1.发送提交请求 协调接收到参与者发送的ACK响应，那么他将从预提交状态进入到提交状态。并向所有参与者发送doCommit请求。  <br />
+2.事务提交 参与者接收到doCommit请求之后，执行正式的事务提交。并在完成事务提交之后释放所有事务资源。  <br />
+3.响应反馈 事务提交完之后，向协调者发送Ack响应。  <br />
+4.完成事务 协调者接收到所有参与者的ack响应之后，完成事务。</p>
+
+<p>中断事务  <br />
+协调者没有接收到参与者发送的ACK响应（可能是接受者发送的不是ACK响应，也可能响应超时），那么就会执行中断事务。  <br />
+1.发送中断请求 协调者向所有参与者发送abort请求  <br />
+2.事务回滚 参与者接收到abort请求之后，利用其在阶段二记录的undo信息来执行事务的回滚操作，并在完成回滚之后释放所有的事务资源。
+3.反馈结果 参与者完成事务回滚之后，向协调者发送ACK消息  <br />
+4.中断事务 协调者接收到参与者反馈的ACK消息之后，执行事务的中断。</p>
+
+<p>在doCommit阶段，如果参与者无法及时接收到来自协调者的doCommit或者rebort请求时，会在等待超时之后，会继续进行事务的提交。（其实这个应该是基于概率来决定的，当进入第三阶段时，说明参与者在第二阶段已经收到了PreCommit请求，那么协调者产生PreCommit请求的前提条件是他在第二阶段开始之前，收到所有参与者的CanCommit响应都是Yes。（一旦参与者收到了PreCommit，意味他知道大家其实都同意修改了）所以，一句话概括就是，当进入第三阶段时，由于网络超时等原因，虽然参与者没有收到commit或者abort响应，但是他有理由相信：成功提交的几率很大。 ）</p>
+
+<h4 id="2pc与3pc的区别">2PC与3PC的区别</h4>
+
+<p>相对于2PC，3PC主要解决的单点故障问题，并减少阻塞，因为一旦参与者无法及时收到来自协调者的信息之后，他会默认执行commit。而不会一直持有事务资源并处于阻塞状态。但是这种机制也会导致数据一致性问题，因为，由于网络原因，协调者发送的abort响应没有及时被参与者接收到，那么参与者在等待超时之后执行了commit操作。这样就和其他接到abort命令并执行回滚的参与者之间存在数据不一致的情况。</p>
+
+<hr />
+
+<p>了解了2PC和3PC之后，我们可以发现，无论是二阶段提交还是三阶段提交都无法彻底解决分布式的一致性问题。Google Chubby的作者Mike Burrows说过， there is only one consensus protocol, and that’s Paxos” – all other approaches are just broken versions of Paxos. 意即世上只有一种一致性算法，那就是Paxos，所有其他一致性算法都是Paxos算法的不完整版。</p>
+
+<h4 id="paxos">Paxos</h4>
+
+<p>其实就是“少数服从多数”</p>
+
+<p>我们假定有A,B,C,D,E五台机器。kv系统需要put一个数据[key=Whisper -&gt; val=3306]到我们这5台机器上，要保证只要反馈为真，任意两台机器挂掉都不会丢失数据，并且可以保证高可用。怎么做：  <br />
+首先,客户端随机选择一个节点，进行写入提交，这里我们随机选择了C这个节点，这时候C节点就是这次提议的发起人【也叫proposer，在老的2pc协议里也叫做coodinator】，当C收到这个提议的时候，C首先要做的事情是根据当前节点的最新全局global id，做一次自增操作，我们假定，在当时全局id,Global ID是0,所以，这个议案就被对应了一个编号，1—&gt;[key=Whisper -&gt; val=3306]。</p>
+
+<p>这里有两个我们经常犯的错误，下面做一个解说：  <br />
+1.global id问题，在老的论文里，Lamport没有描述这个自增id是怎么生成的，所以大家的第一个疑问一般是问id怎么生成，从我目前能够看到的所有实现里面，基本上就是选择哪一台机器，就是以那台机器当前所保持的全局id(snapshot，可能不是全局来看的最高值，但没关系，只要是自己这台机器的最高值就行了)，然后做一下自增就行了。我们后面会看到协议如何保证非全局最高值的globalID提议会被拒绝以至于不能够形成决议。  <br />
+2.global id —&gt;[key=Whisper -&gt; val=3306] . 这也是个会让人困惑的问题，在原文中，他被表示为一个key-value的形式，比如proposal[0-&gt;value] 。这会让人自然的联想到与数据库的kv相对应，key是0，value是value。然后就会困惑，这个数据是怎么和数据库对应起来的呢？这是我当时的困惑，现在也把他列在这里。其实很简单，这里的global id对应value.global id只是对paxos协议有意义，对于数据库，其实只需要关心value里面的数据即可，也即将global id —&gt;[key=Whisper -&gt; val=3306]里面的value: [key=Whisper-&gt; val=3306] 作为数据库构建映射时所需要的redoLog就行了，global id的作用只是告诉你这些数据的顺序是按照global id来排列的，其他无意义。</p>
+
+<p>我们回到文中，我们已经将这个新的议案标记了从C这台机器看起来最大的global id : 1—&gt;[key=Whisper -&gt; val=3306]。然后，他会尝试将这个信息发送给其余的A,B,D,E这几台机器。 我们来看这些机器的操作流程。 在这个过程中，Paxos将A,B,D,E叫做accepter【老的协议里没有区分，管这些都叫做参与者，cohorts】，他们的行为模式如下： 如果A,B,D,E这几台机器的globalID 小于C给出的决议的GID(1—&gt;[key=Whisper -&gt; val=3306])，那么就告诉C，这个决议被批准了。而如果A,B,D,E这几台机器的GlobalID 大于或等于C给出决议的GID.那么就告知C 这个决议不能够被批准。 我们假定A,B两台机器当时的Max(GID)是0 ，而D,E的Max(GID)是1.那么，A,B两台机器会反馈给C说协议被接受，这时候我们算算，C的议案有几票了？A+B+!C!，一定要算自己哦:) 。所以，这个议案有三票，5台机器的半数是3.超过法定人数，于是决议就被同意了。</p>
+
+<p>我们保持这个上下文，来看看D,E这边的情况。首先，要思考的问题是，为什么D,E的Max(GID)是1呢？ 
+其实很简单，D可能在C发起决议的同时，也发起了一个决议，我们假定这个决议是由D发起的，决议是 1—&gt;[key=taobao -&gt;val=1234]。既然D,E的Max(GID)是1，那么意味着E已经告知D,它同意了他的决议，但D马上会发现，A,B,C里面的任意一个都返回了D不同意。他的议案只拿到两票，没有通过，它虽然有点不爽，但也是没办法的事情啊。。</p>
+
+<p>这时候C的决议已经被多数派接受，所以他需要告知所有人，我的议案1—&gt;[key=Whisper -&gt; val=3306]已经被接受，你们去学习吧。</p>
+
+<h4 id="zab协议paxos改进">zab协议(Paxos改进)</h4>
+
+<p>zab协议把整个过程分为两个部分，第一个部分叫选总统，第二个部分叫进行决议。 选总统的过程比较特殊，这种模式，相对的给人感觉思路来源于lamport的面包房算法，这个我们后面讲。，选择的主要依据是：  <br />
+1.如果有gid最大的机器，那么他是主机。  <br />
+2.如果好几台主机的gid相同，那么按照序号选择最小的那个。</p>
+
+<p>所以，在开始的时候，给A,B,C,D,E进行编号，0,1,2,3,4。 第一轮的时候，因为大家的Max(gid)都是0，所以自然而然按照第二个规则，选择A作为主机。 然后，所有人都知道A是主机以后，无论谁收到的请求，都直接转发给A,由A机器去做后续的分发，这个分发的过程，我们叫进行决议。  <br />
+进行决议的规则就简单很多了，对其他机器进行3pc 提交，但与3pc不同的是，因为是群发议案给所有其他机器，所以一个机器无反馈对大局是没有影响的，只有当在一段时间以后，超过半数没有反馈，才是有问题的时候，这时候要做的事情是，重新选择总统。 具体过程是，A会将决议precommit给B,C,D,E。然后等待，当B,C,D,E里面的任意两个返回收到后，就可以进行doCommit().否则进行doAbort(). 
+为什么要任意两个？原因其实也是一样的，为了防止脑裂，原则上只能大于半数，不能少于半数，因为一旦决议成立的投票数少于半数，那么就存在另立中央的可能，两个总统可不是闹着玩的。  <br />
+定两个，就能够保证，任意“两台”机器挂掉，数据不丢:)，能够做到quorum。</p>
+
+<h4 id="参考文章">参考文章</h4>
+
+<p><a href="http://blog.sina.com.cn/u/1765738567">淘宝沈询</a></p>
+</section>
+   
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list">
+    
+      <div class="meta">Tags</div>
+    
+
+    
+    <a class="button" href="/tags#分布式">
+      <p><i class="fa fa-tag fa-fw"></i> 分布式</p>
+    </a>
+    
+  </div>
+</footer>
+
+    
+</article>
+
+<!-- Disqus -->
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+  
+  <div id="previous-post" class="post-nav-post">
+      <p>Previous post</p>
+      <a href="/2016/11/18/php-about-thred-safe.html">
+        php线程安全
+      </a>
+  </div>
+  
+  
+  <div id="next-post" class="post-nav-post">
+      <p>Next post</p>
+      <a href="/2016/11/24/transaction-deal.html">
+        数据库的事务处理
+      </a>
+  </div>
+  
+</div>
+
+    </div>
+    
+<footer class="site-footer">
+    <p class="text">Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+	<a href="http://localhost:4000/feed.xml" title="Follow RSS feed">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+	<a href="https://github.com/shadowdragons" title="Follow on GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+
+  </body>
+</html>

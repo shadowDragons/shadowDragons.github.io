@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <!-- JQuery (used for bootstrap and jekyll search) -->
+    <script src="/assets/js/jquery-3.2.1.min.js" ></script>
+    
+    <!-- Main JS (navbar.js and katex_init.js)-->
+    <script defer=true src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <link rel="stylesheet" href="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="http://localhost:4000/blog/page4/">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="小白" href="http://localhost:4000///feed.xml"/>
+
+    <!-- Font Awesome -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css">
+
+    <!-- Google Fonts -->
+    
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,700italic,400italic" rel="stylesheet" type="text/css"> 
+    
+
+    <!-- KaTeX 0.8.3 -->
+    
+    <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/katex.min.css">
+    <script src="/assets/js/katex.min.js">
+    </script>
+    
+
+    <!-- Google Analytics -->
+    
+    
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>小白成长史 | php mysql 分布式 区块链</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="小白成长史" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="php mysql 分布式 区块链" />
+<meta property="og:description" content="php mysql 分布式 区块链" />
+<link rel="canonical" href="http://localhost:4000/blog/page4/" />
+<meta property="og:url" content="http://localhost:4000/blog/page4/" />
+<meta property="og:site_name" content="小白成长史" />
+<link rel="prev" href="http://localhost:4000/blog/page3" />
+<link rel="next" href="http://localhost:4000/blog/page5" />
+<script type="application/ld+json">
+{"description":"php mysql 分布式 区块链","@type":"WebPage","url":"http://localhost:4000/blog/page4/","headline":"小白成长史","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- Manual seo tags -->
+    <!--
+    <title> 小白</title>
+    <meta name="description" content="">
+    -->
+</head>
+
+  <body>
+    <header class="site-header">
+    
+    <!-- Logo and title -->
+	<div class="branding">
+		<a href="/">
+			<img class="avatar" src="/assets/img/photo.jpeg" alt=""/>
+		</a>
+
+		<h1 class="site-title">
+			<a href="/">小白</a>
+		</h1>
+	</div>
+    
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+    
+    <!-- Menu -->
+    <ul>
+        
+        
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="/about/">
+                About
+            </a>
+        </li>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+         
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/portfolio">
+                Portfolio
+            </a>
+        </li>
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/tags">
+                <i class="fa fa-tags" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+    </ul>
+        
+	</nav>
+</header>
+
+    <div class="content">
+      <div class="home">
+  
+  <div id="main" class="call-out"
+  style="background-image: url('/assets/img/pexels/triangular.jpeg')">
+    <p>一个小白的成长学习历程</p>
+
+  </div>
+  
+
+  <div class="posts">
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2016/11/24/transaction-deal.html">
+                数据库的事务处理
+              </a>
+            </h1>
+            <p class="meta">
+              November 24, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            事务四个核心要素
+1.原子性  
+一组操作，要么都成功，要么都失败，不存在中间状态。  
+2.一致性  
+事务在提交或回滚时，对其他人来说，数据的状态是统一的，不存在其他状态。  
+最理想的状态是，数据提交后，所有的更改能立刻生效，但由于cpu运算，磁盘写入，内存写入需要时间，所以不可能达到立刻生效。  
+所以一般说的是逻辑上同时生效。  
+比如修改a，b两行数据，要保证一致性，对a，b加锁，修改数据，对a，b解锁。  
+3.隔离性  
+读未提交：什么锁也没有，别人可以读到中间状态（即为提...
+            <!--<a class="button" href="/2016/11/24/transaction-deal.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2016/11/24/consistency-highavailability.html">
+                数据库的一致性与高可用
+              </a>
+            </h1>
+            <p class="meta">
+              November 24, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            在给定多台计算机，他们相互之间由网络相互连通，能够做到  
+1.数据每次成功写入，数据不会丢失，并且按照写入的顺序排列  
+2.给定安全级别，保证服务可用性，并尽可能减少机器消耗。
+
+2PC
+
+所谓的两个阶段是指：第一阶段：准备阶段(投票阶段)和第二阶段：提交阶段（执行阶段）。
+
+准备阶段
+
+事务协调者(事务管理器)给每个参与者(资源管理器)发送Prepare消息，每个参与者要么直接返回失败(如权限验证失败)，要么在本地执行事务，写本地的redo和undo日志，但不提交，到达一种“万事俱备...
+            <!--<a class="button" href="/2016/11/24/consistency-highavailability.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2016/11/18/php-about-thred-safe.html">
+                php线程安全
+              </a>
+            </h1>
+            <p class="meta">
+              November 18, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            线程不安全
+线程不安全就是不提供数据访问保护，有可能出现多个线程先后更改数据造成所得到的数据是脏数据。  
+比如一个 ArrayList 类，在添加一个元素的时候，它可能会有两步来完成：1. 在 Items[Size] 的位置存放此元素；2. 增大 Size 的值。  
+在单线程运行的情况下，如果 Size = 0，添加一个元素后，此元素在位置 0，而且 Size=1；  
+而如果是在多线程情况下，比如有两个线程，线程 A 先将元素1存放在位置 0。但是此时 CPU 调度线程A暂停，线程 ...
+            <!--<a class="button" href="/2016/11/18/php-about-thred-safe.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2016/11/14/system-thread-cpu.html">
+                线程与cpu核
+              </a>
+            </h1>
+            <p class="meta">
+              November 14, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            进程，线程，核之间的关联  
+1.一个应用普遍只占一个进程，一个进程可以衍生出多个线程，而核只与线程有关。  
+2.一个线程只能在一个核上面跑。
+
+单核CPU，程序可以创建多个线程，但他们并不是真正意义上的并行执行，因为他们只会占用一个核，所以只是切换速度较快，没察觉到。每个线程会分配差不多20ms的时间片，执行完时间片，会切换到其他线程，该线程会处于等待执行状态，等其他线程执行完，再继续执行20ms。如果遇到有某些操作比较耗时，又要及时反馈给用户，还是很有必要多线程的。
+
+多核CPU，应...
+            <!--<a class="button" href="/2016/11/14/system-thread-cpu.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2016/11/14/machinelearning-supervised.html">
+                监督学习与梯度下降
+              </a>
+            </h1>
+            <p class="meta">
+              November 14, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            假设一个问题有n个特征，线性函数为
+  
+其中   
+差值计算，其中m为训练数据  
+所以我们要求出当最小值时的特征参数值。
+
+主要有两种方式来求出  
+1.梯度下降  
+2.正则方程组
+
+梯度下降
+
+把计算结果与真实结果的差值比做山顶，通过找寻山的最大坡度下降，达到最快到达山脚，从而实现最小差值。
+
+对每个求导，得出最快下降梯度，然后沿着这梯度下降。学习速度或下降速度。
+
+
+python实例
+import numpy as np
+import matplotlib.pyplot as p...
+            <!--<a class="button" href="/2016/11/14/machinelearning-supervised.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+  </div>
+
+  
+  <div class="pagination">
+    
+    <a href="/blog/page3" class="button" >
+      <i class="fa fa-chevron-left"></i>
+      Prev
+    </a>
+    
+    
+    <a href="/blog/page5" class="button" >
+      Next
+      <i class="fa fa-chevron-right"></i>
+    </a>
+    
+  </div>
+  
+</div>
+
+    </div>
+    
+<footer class="site-footer">
+    <p class="text">Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+	<a href="http://localhost:4000/feed.xml" title="Follow RSS feed">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+	<a href="https://github.com/shadowdragons" title="Follow on GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+
+  </body>
+</html>
