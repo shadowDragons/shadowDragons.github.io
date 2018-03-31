@@ -5,7 +5,124 @@
         <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
         <link>http://localhost:4000/</link>
         <description></description>
-        <pubDate>Sun, 01 Apr 2018 03:15:03 +0800</pubDate>
+        <pubDate>Sun, 01 Apr 2018 04:08:36 +0800</pubDate>
+        
+        <item>
+            <title>搭建以太坊私有网络</title>
+            <link>/2018/04/01/ether-private-network.html</link>
+            <guid isPermaLink="true">/2018/04/01/ether-private-network.html</guid>
+            <description>&lt;h3 id=&quot;geth&quot;&gt;Geth&lt;/h3&gt;
+
+&lt;p&gt;可以通过命令行方式实现以太坊的各种功能,如账户的新建编辑删除，开启挖矿，ether币的转移，智能合约的部署和执行等等。&lt;/p&gt;
+
+&lt;p&gt;安装&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew tap ethereum/ethereum
+brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;ethereum
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;安装完成后检查，输入&lt;code class=&quot;highlighter-rouge&quot;&gt;geth version&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-04-01-ether-private-network/1.png&quot; alt=&quot;1.png&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;创建私有网络&quot;&gt;创建私有网络&lt;/h3&gt;
+
+&lt;p&gt;1.创建一个目录，如geth-private-test&lt;/p&gt;
+
+&lt;p&gt;2.进入该目录下，创建文件genesis.json，并写入以下内容&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;config&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;chainId&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;homesteadBlock&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;eip155Block&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;eip158Block&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;coinbase&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;0x0000000000000000000000000000000000000000&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;difficulty&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;0x20000&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;extraData&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;gasLimit&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;0x2fefd8&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;nonce&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;0x0000000000000042&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;mixhash&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;0x0000000000000000000000000000000000000000000000000000000000000000&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;parentHash&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;0x0000000000000000000000000000000000000000000000000000000000000000&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;timestamp&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;0x00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;alloc&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;3.初始化，并指定数据目录，例如这里的&lt;em&gt;chain&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;geth init ./genesis.json &lt;span class=&quot;nt&quot;&gt;--datadir&lt;/span&gt; ./chain
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;4.进入后台，并指定日志输出文件，例如这里的&lt;em&gt;eth_output.logs&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;geth &lt;span class=&quot;nt&quot;&gt;--datadir&lt;/span&gt; ./chain &lt;span class=&quot;nt&quot;&gt;--nodiscover&lt;/span&gt; console 2&amp;gt;&amp;gt; eth_output.logs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;后续操作可以通过 &lt;em&gt;tail -f eth_output.logs&lt;/em&gt; 查看日志输出&lt;/p&gt;
+
+&lt;p&gt;5.创建用户&lt;/p&gt;
+
+&lt;p&gt;查看当前用户列表&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;go&quot;&gt;eth.accounts
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;可以看到是空的&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;go&quot;&gt;[]
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;创建新用户&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;personal.newAccount(密码)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;完成再查看用户列表，即可看到用户。例如我这里创建了两个用户。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-04-01-ether-private-network/2.png&quot; alt=&quot;2.png&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;挖矿&quot;&gt;挖矿&lt;/h3&gt;
+
+&lt;p&gt;开始挖矿&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;miner.start&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;执行一段时间后，可以看到用户余额已经增加了。&lt;/p&gt;
+
+&lt;p&gt;结束挖矿&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;miner.stop&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;mist&quot;&gt;Mist&lt;/h3&gt;
+
+&lt;p&gt;Mist是以太坊钱包，可作为我们geth的可视化操作界面。&lt;/p&gt;
+
+&lt;p&gt;安装&lt;/p&gt;
+
+&lt;p&gt;可直接到&lt;a href=&quot;https://github.com/ethereum/mist/releases&quot;&gt;官网&lt;/a&gt;选择适合自己版本下载安装。&lt;/p&gt;
+
+&lt;p&gt;启动并连接我们的已经创建好的私有网络&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/Applications/Mist.app/Contents/MacOS/Mist --rpc ~/geth-private-test/chain/geth.ipc
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;启动后如下图所示&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-04-01-ether-private-network/3.png&quot; alt=&quot;3.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;点击 LAUNCH APPLICATION 进入，如图所示&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-04-01-ether-private-network/4.png&quot; alt=&quot;4.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如果页面显示的账号跟我们geth显示的账号一致，且显示的网络是Private，说明已经连接成功了。   &lt;br /&gt;
+后续geth的操作都会同步到Mist。&lt;/p&gt;
+</description>
+            <pubDate>Sun, 01 Apr 2018 00:00:00 +0800</pubDate>
+        </item>
         
         <item>
             <title>共识算法</title>
@@ -1204,121 +1321,6 @@ sequenceDiagram
 &lt;a href=&quot;https://my.oschina.net/neochen/blog/519156&quot;&gt;PHP高级编程之守护进程，实现优雅重启&lt;/a&gt;&lt;/p&gt;
 </description>
             <pubDate>Sun, 05 Feb 2017 00:00:00 +0800</pubDate>
-        </item>
-        
-        <item>
-            <title>mac使用rsync+fswatch实现目录文件实时同步</title>
-            <link>/2017/02/02/mac-rsync-fswatch.html</link>
-            <guid isPermaLink="true">/2017/02/02/mac-rsync-fswatch.html</guid>
-            <description>&lt;h4 id=&quot;安装rsync&quot;&gt;安装rsync&lt;/h4&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;rsync
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;创建用户&quot;&gt;创建用户&lt;/h4&gt;
-&lt;p&gt;创建用户配置文件\etc\rsyncd.secrets  &lt;br /&gt;
-添加用户名:密码  &lt;br /&gt;
-这里我们设置用户名为root，密码123456，即root:123456&lt;/p&gt;
-
-&lt;h4 id=&quot;配置&quot;&gt;配置&lt;/h4&gt;
-&lt;p&gt;创建配置文件 \etc\rsyncd.conf&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;uid &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; root                   &lt;span class=&quot;c&quot;&gt;#守护进程的用户权限&lt;/span&gt;
-gid &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; root
-port &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 873                   &lt;span class=&quot;c&quot;&gt;#rsync使用的端口，默认873&lt;/span&gt;
-address &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 192.168.0.101      &lt;span class=&quot;c&quot;&gt;# 本机的ip地址&lt;/span&gt;
-use &lt;span class=&quot;nb&quot;&gt;chroot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;yes
-&lt;/span&gt;uid &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; root                   &lt;span class=&quot;c&quot;&gt;#守护进程的用户权限&lt;/span&gt;
-gid &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; root
-port &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 873                   &lt;span class=&quot;c&quot;&gt;#rsync使用的端口，默认873&lt;/span&gt;
-address &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 192.168.0.101      &lt;span class=&quot;c&quot;&gt;# 本机的ip地址&lt;/span&gt;
-use &lt;span class=&quot;nb&quot;&gt;chroot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;yes
-read &lt;/span&gt;only &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; no               &lt;span class=&quot;c&quot;&gt;# no客户端可上传文件,yes只读&lt;/span&gt;
-write only &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; no              &lt;span class=&quot;c&quot;&gt;# no客户端可下载文件,yes不能下载&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#list = yes                  # 是否提供资源列表&lt;/span&gt;
-hosts &lt;span class=&quot;nv&quot;&gt;allow&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;192.168.0.101    &lt;span class=&quot;c&quot;&gt;# 本模块允许通过的IP地址&lt;/span&gt;
-hosts &lt;span class=&quot;nv&quot;&gt;deny&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;                 &lt;span class=&quot;c&quot;&gt;# 禁止主机IP&lt;/span&gt;
-max connections &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 5          &lt;span class=&quot;c&quot;&gt;# 客户端最大连接数目&lt;/span&gt;
-motd file &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; /etc/rsyncd.motd
-pid file &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; /var/run/rsyncd.pid   &lt;span class=&quot;c&quot;&gt;# 进程号存放位置&lt;/span&gt;
-log file &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; /var/log/rsyncd.log   &lt;span class=&quot;c&quot;&gt;# 日志位置&lt;/span&gt;
-lock file &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; /var/run/rsync.lock  &lt;span class=&quot;c&quot;&gt;# 锁文件存放位置&lt;/span&gt;
-transfer logging &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;yes
-&lt;/span&gt;log format &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; %t %a %m %f %b
-syslog facility &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; local3
-&lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 300
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;phproot1]                            &lt;span class=&quot;c&quot;&gt;# 要同步的模块名&lt;/span&gt;
-path &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; /Users/Username/Document/Kitematic/nginx/htdocs/php1 &lt;span class=&quot;c&quot;&gt;# 要同步的目录&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;yes
-&lt;/span&gt;ignore errors
-auth &lt;span class=&quot;nb&quot;&gt;users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; root                  &lt;span class=&quot;c&quot;&gt;# 登陆系统使用的用户名，没有默认为匿名。&lt;/span&gt;
-secrets file &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; /etc/rsyncd.secrets &lt;span class=&quot;c&quot;&gt;# 密码文件存放的位置&lt;/span&gt;
-comment &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; linuxsir tmp             &lt;span class=&quot;c&quot;&gt;# 这个名名称无所谓，最后模块名一直&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;phproot2]                            &lt;span class=&quot;c&quot;&gt;# 要同步的模块名&lt;/span&gt;
-path &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; /Users/Username/Document/Kitematic/nginx/htdocs/php2 &lt;span class=&quot;c&quot;&gt;# 要同步的目录&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;yes
-&lt;/span&gt;ignore errors
-auth &lt;span class=&quot;nb&quot;&gt;users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; root                  &lt;span class=&quot;c&quot;&gt;# 登陆系统使用的用户名，没有默认为匿名。&lt;/span&gt;
-secrets file &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; /etc/rsyncd.secrets &lt;span class=&quot;c&quot;&gt;# 密码文件存放的位置&lt;/span&gt;
-comment &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; linuxsir tmp             &lt;span class=&quot;c&quot;&gt;# 这个名名称无所谓，最后模块名一直&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;phproot3]                            &lt;span class=&quot;c&quot;&gt;# 要同步的模块名&lt;/span&gt;
-path &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; /Users/Username/Document/Kitematic/nginx/htdocs/php3 &lt;span class=&quot;c&quot;&gt;# 要同步的目录&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;yes
-&lt;/span&gt;ignore errors
-auth &lt;span class=&quot;nb&quot;&gt;users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; root                  &lt;span class=&quot;c&quot;&gt;# 登陆系统使用的用户名，没有默认为匿名。&lt;/span&gt;
-secrets file &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; /etc/rsyncd.secrets &lt;span class=&quot;c&quot;&gt;# 密码文件存放的位置&lt;/span&gt;
-comment &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; linuxsir tmp             &lt;span class=&quot;c&quot;&gt;# 这个名名称无所谓，最后模块名一直&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;这里我们设置了3个同步模块，对应三个需要同步的目录&lt;/p&gt;
-
-&lt;h4 id=&quot;启动&quot;&gt;启动&lt;/h4&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;rsync &lt;span class=&quot;nt&quot;&gt;--daemon&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/etc/rsyncd.conf
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;同步&quot;&gt;同步&lt;/h4&gt;
-&lt;p&gt;这里我们以同步/Users/Username/Document/Kitematic/nginx/htdocs/php1到/Users/Username/Document/Kitematic/nginx/htdocs/php2为例&lt;/p&gt;
-
-&lt;p&gt;本地同步&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rsync &lt;span class=&quot;nt&quot;&gt;-ave&lt;/span&gt; /Users/Username/Document/Kitematic/nginx/htdocs/php1/ /Users/Username/Document/Kitematic/nginx/htdocs/php2/
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;远程同步&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rsync &lt;span class=&quot;nt&quot;&gt;-ave&lt;/span&gt; ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ username@192.168.0.101:phproot1/
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;安装fswatch&quot;&gt;安装fswatch&lt;/h4&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;fswatch
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;实时同步&quot;&gt;实时同步&lt;/h4&gt;
-&lt;p&gt;创建shell文件 rsync.sh&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/zsh&lt;/span&gt;
-fswatch /Users/zhongjunbin/Document/Kitematic/nginx/htdocs/php1/ | &lt;span class=&quot;k&quot;&gt;while &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;read &lt;/span&gt;file
-&lt;span class=&quot;k&quot;&gt;do
-    &lt;/span&gt;rsync &lt;span class=&quot;nt&quot;&gt;-ave&lt;/span&gt; ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ Username@192.168.0.101:phproot2/
-    rsync &lt;span class=&quot;nt&quot;&gt;-ave&lt;/span&gt; ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ Username@192.168.0.101:phproot3/
-    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; was rsynced&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; /usr/local/var/log/rsync.log 2&amp;gt;&amp;amp;1
-&lt;span class=&quot;k&quot;&gt;done
-
-&lt;/span&gt;fswatch /Users/zhongjunbin/Document/Kitematic/nginx/htdocs/php2/ | &lt;span class=&quot;k&quot;&gt;while &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;read &lt;/span&gt;file
-&lt;span class=&quot;k&quot;&gt;do
-    &lt;/span&gt;rsync &lt;span class=&quot;nt&quot;&gt;-ave&lt;/span&gt; ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ Username@192.168.0.101:phproot1/
-    rsync &lt;span class=&quot;nt&quot;&gt;-ave&lt;/span&gt; ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ Username@192.168.0.101:phproot3/
-    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; was rsynced&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; /usr/local/var/log/rsync.log 2&amp;gt;&amp;amp;1
-&lt;span class=&quot;k&quot;&gt;done
-
-&lt;/span&gt;fswatch /Users/zhongjunbin/Document/Kitematic/nginx/htdocs/php3/ | &lt;span class=&quot;k&quot;&gt;while &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;read &lt;/span&gt;file
-&lt;span class=&quot;k&quot;&gt;do
-    &lt;/span&gt;rsync &lt;span class=&quot;nt&quot;&gt;-ave&lt;/span&gt; ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ Username@192.168.0.101:phproot1/
-    rsync &lt;span class=&quot;nt&quot;&gt;-ave&lt;/span&gt; ssh /Users/Username/Document/Kitematic/nginx/htdocs/php1/ Username@192.168.0.101:phproot2/
-    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; was rsynced&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; /usr/local/var/log/rsync.log 2&amp;gt;&amp;amp;1
-&lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;后台运行shell&quot;&gt;后台运行shell&lt;/h4&gt;
-&lt;p&gt;sudo sh rsync.sh &amp;amp;&lt;/p&gt;
-
-&lt;h4 id=&quot;完成&quot;&gt;完成&lt;/h4&gt;
-</description>
-            <pubDate>Thu, 02 Feb 2017 00:00:00 +0800</pubDate>
         </item>
         
     </channel>

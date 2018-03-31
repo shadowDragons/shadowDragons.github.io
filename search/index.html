@@ -205,6 +205,16 @@
                     
                      
                         {
+                          "title"    : "搭建以太坊私有网络",
+                          "category" : "",
+                          "tags"     : " 区块链, 以太坊",
+                          "url"      : "/2018/04/01/ether-private-network.html",
+                          "date"     : "April 1, 2018",
+                          "excerpt"  : "Geth可以通过命令行方式实现以太坊的各种功能,如账户的新建编辑删除，开启挖矿，ether币的转移，智能合约的部署和执行等等。安装brew tap ethereum/ethereumbrew install ethereum安装完成后检查，输入geth version创建私有网络1.创建一个目录，如geth-private-test2.进入该目录下，创建文件genesis.json，并写入以下内容{  \"config\": {        \"chainId\": 10,       ...",
+                          "content"  : "Geth可以通过命令行方式实现以太坊的各种功能,如账户的新建编辑删除，开启挖矿，ether币的转移，智能合约的部署和执行等等。安装brew tap ethereum/ethereumbrew install ethereum安装完成后检查，输入geth version创建私有网络1.创建一个目录，如geth-private-test2.进入该目录下，创建文件genesis.json，并写入以下内容{  \"config\": {        \"chainId\": 10,        \"homesteadBlock\": 0,        \"eip155Block\": 0,        \"eip158Block\": 0  },  \"coinbase\"   : \"0x0000000000000000000000000000000000000000\",  \"difficulty\" : \"0x20000\",  \"extraData\"  : \"\",  \"gasLimit\"   : \"0x2fefd8\",  \"nonce\"      : \"0x0000000000000042\",  \"mixhash\"    : \"0x0000000000000000000000000000000000000000000000000000000000000000\",  \"parentHash\" : \"0x0000000000000000000000000000000000000000000000000000000000000000\",  \"timestamp\"  : \"0x00\",  \"alloc\"      : { }}3.初始化，并指定数据目录，例如这里的chaingeth init ./genesis.json --datadir ./chain4.进入后台，并指定日志输出文件，例如这里的eth_output.logsgeth --datadir ./chain --nodiscover console 2&gt;&gt; eth_output.logs后续操作可以通过 tail -f eth_output.logs 查看日志输出5.创建用户查看当前用户列表eth.accounts可以看到是空的[]创建新用户personal.newAccount(密码)完成再查看用户列表，即可看到用户。例如我这里创建了两个用户。挖矿开始挖矿miner.start()执行一段时间后，可以看到用户余额已经增加了。结束挖矿miner.stop()MistMist是以太坊钱包，可作为我们geth的可视化操作界面。安装可直接到官网选择适合自己版本下载安装。启动并连接我们的已经创建好的私有网络/Applications/Mist.app/Contents/MacOS/Mist --rpc ~/geth-private-test/chain/geth.ipc启动后如下图所示点击 LAUNCH APPLICATION 进入，如图所示如果页面显示的账号跟我们geth显示的账号一致，且显示的网络是Private，说明已经连接成功了。   后续geth的操作都会同步到Mist。"
+                        } ,
+                     
+                        {
                           "title"    : "共识算法",
                           "category" : "",
                           "tags"     : " 区块链, 算法",
