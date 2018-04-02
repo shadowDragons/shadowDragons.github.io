@@ -13,7 +13,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="/assets/css/main.css">
 
-    <link rel="stylesheet" href="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.css">
+    <link rel="stylesheet" href="/assets/css/mermaid.css">
 
     <!--Favicon-->
     <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
@@ -148,6 +148,8 @@
         
         
         
+        
+        
          
         
         
@@ -188,6 +190,42 @@
   
 
   <div class="posts">
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2017/02/05/php-daemon.html">
+                php实现守护进程
+              </a>
+            </h1>
+            <p class="meta">
+              February 5, 2017
+            </p>
+          </header>
+          <div class="excerpt">
+            守护进程应该能达到的要求 不依赖于当前会话，且无法打开控制终端。
+
+编写过程  
+1.假设当前进程为p  
+2.创建子进程c1，然后退出父进程p(进程组组长无法创建会话，这样c1就不是进程组组长)。  
+3.在c1进程中创建会话，此时进程c1为会话组长，并且可以打开控制终端。  
+4.在c1进程中创建子进程c2,退出父进程c1。  
+5.在c2进程中进行逻辑处理。
+
+实现
+&lt;?php
+// 创建子进程
+$pid = pcntl_fork();
+// 如果是父进程，退出
+if ($pi...
+            <!--<a class="button" href="/2017/02/05/php-daemon.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
     
     <div class="post-teaser">
       
@@ -308,34 +346,6 @@ address =...
 在单线程运行的情况下，如果 Size = 0，添加一个元素后，此元素在位置 0，而且 Size=1；  
 而如果是在多线程情况下，比如有两个线程，线程 A 先将元素1存放在位置 0。但是此时 CPU 调度线程A暂停，线程 ...
             <!--<a class="button" href="/2016/11/18/php-about-thred-safe.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/14/system-thread-cpu.html">
-                线程与cpu核
-              </a>
-            </h1>
-            <p class="meta">
-              November 14, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            进程，线程，核之间的关联  
-1.一个应用普遍只占一个进程，一个进程可以衍生出多个线程，而核只与线程有关。  
-2.一个线程只能在一个核上面跑。
-
-单核CPU，程序可以创建多个线程，但他们并不是真正意义上的并行执行，因为他们只会占用一个核，所以只是切换速度较快，没察觉到。每个线程会分配差不多20ms的时间片，执行完时间片，会切换到其他线程，该线程会处于等待执行状态，等其他线程执行完，再继续执行20ms。如果遇到有某些操作比较耗时，又要及时反馈给用户，还是很有必要多线程的。
-
-多核CPU，应...
-            <!--<a class="button" href="/2016/11/14/system-thread-cpu.html">
               Continue reading
             </a>-->
           </div>

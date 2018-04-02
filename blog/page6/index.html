@@ -13,7 +13,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="/assets/css/main.css">
 
-    <link rel="stylesheet" href="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.css">
+    <link rel="stylesheet" href="/assets/css/mermaid.css">
 
     <!--Favicon-->
     <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
@@ -88,6 +88,7 @@
 <meta property="og:url" content="http://localhost:4000/blog/page6/" />
 <meta property="og:site_name" content="小白成长史" />
 <link rel="prev" href="http://localhost:4000/blog/page5" />
+<link rel="next" href="http://localhost:4000/blog/page7" />
 <script type="application/ld+json">
 {"description":"php mysql 分布式 区块链","@type":"WebPage","url":"http://localhost:4000/blog/page6/","headline":"小白成长史","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
@@ -121,6 +122,8 @@
     
     <!-- Menu -->
     <ul>
+        
+        
         
         
         
@@ -187,6 +190,45 @@
   
 
   <div class="posts">
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2016/11/13/link.html">
+                链表
+              </a>
+            </h1>
+            <p class="meta">
+              November 13, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            单链表
+查找
+temp = head, index = 0
+while (temp.data != input)
+  temp = temp.next , index++
+  if temp == null
+    return -1
+return index;
+
+
+插入  
+1.指定位置
+v = 90, k = 2
+Vertex temp1 = head
+while (--k!=0)
+  temp1 = temp1.next
+Vertex temp2 = temp1.next
+Verte...
+            <!--<a class="button" href="/2016/11/13/link.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
     
     <div class="post-teaser">
       
@@ -334,40 +376,6 @@ $...
       </span>
     </div>
     
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/11/php-cgi.html">
-                phpcgi
-              </a>
-            </h1>
-            <p class="meta">
-              November 11, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            php-cgi
-它本身是一个进程，工作原理是，获取cgi的配置信息，解析配置文件，初始化环境变量和数据结构。
-
-cgi
-cgi 就是一个 php-cgi.exe 的管理器。  
-1.当服务器启动时它会去获取一份配置文件。  
-2.当用户发出请求时，它会去fork一个php-cgi.exe进程进行处理。  
-3.处理完请求时，会马上对其进行销毁。
-
-fastcgi
-fastcgi 相当于是cgi的一个扩展，可以看成cgi内部的东西。
-
-1.cgi启动时会一次性fork多个php-cgi.ex...
-            <!--<a class="button" href="/2016/11/11/php-cgi.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
   </div>
 
   
@@ -378,6 +386,11 @@ fastcgi 相当于是cgi的一个扩展，可以看成cgi内部的东西。
       Prev
     </a>
     
+    
+    <a href="/blog/page7" class="button" >
+      Next
+      <i class="fa fa-chevron-right"></i>
+    </a>
     
   </div>
   

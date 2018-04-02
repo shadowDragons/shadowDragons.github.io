@@ -5,7 +5,7 @@
         <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
         <link>http://localhost:4000/</link>
         <description></description>
-        <pubDate>Sun, 01 Apr 2018 04:08:36 +0800</pubDate>
+        <pubDate>Mon, 02 Apr 2018 22:54:56 +0800</pubDate>
         
         <item>
             <title>搭建以太坊私有网络</title>
@@ -120,6 +120,150 @@ brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;ethereum
 
 &lt;p&gt;如果页面显示的账号跟我们geth显示的账号一致，且显示的网络是Private，说明已经连接成功了。   &lt;br /&gt;
 后续geth的操作都会同步到Mist。&lt;/p&gt;
+</description>
+            <pubDate>Sun, 01 Apr 2018 00:00:00 +0800</pubDate>
+        </item>
+        
+        <item>
+            <title>密码学</title>
+            <link>/2018/04/01/cryptography.html</link>
+            <guid isPermaLink="true">/2018/04/01/cryptography.html</guid>
+            <description>&lt;h3 id=&quot;对称加密&quot;&gt;对称加密&lt;/h3&gt;
+
+&lt;p&gt;加密  &lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;{E_k}(P) = C&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;解密   &lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;{D_k}(C) = P&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;优点  &lt;br /&gt;
+加解密效率高（速度快，空间占用小），加密强度高。&lt;/p&gt;
+
+&lt;p&gt;缺点  &lt;br /&gt;
+安全性弱，密钥由多方管理，密钥容易泄露。&lt;/p&gt;
+
+&lt;p&gt;常见加密算法  &lt;br /&gt;
+DES、3DES、Blowfish、RC2、AES以及国密的SM4。&lt;/p&gt;
+
+&lt;h3 id=&quot;非对称加密&quot;&gt;非对称加密&lt;/h3&gt;
+
+&lt;p&gt;加密  &lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;{E_\text{公钥}}(P)=C&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;解密   &lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;{D_\text{私钥}}(C)=P&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;优点  &lt;br /&gt;
+安全性高，公私钥分离。&lt;/p&gt;
+
+&lt;p&gt;缺点  &lt;br /&gt;
+加解密效率低。&lt;/p&gt;
+
+&lt;p&gt;常见加密算法  &lt;br /&gt;
+&lt;a href=&quot;/2018/03/17/rsa.html&quot;&gt;RSA&lt;/a&gt;、椭圆曲线算法&lt;/p&gt;
+
+&lt;h3 id=&quot;同态加密&quot;&gt;同态加密&lt;/h3&gt;
+
+&lt;p&gt;是一种特殊的加密方法，允许对密文进行处理得到仍然是加密的结果，即对密文直接进行处理，跟对明文进行处理再加密，得到的结果相同。从代数的角度讲，即同态性。&lt;/p&gt;
+
+&lt;p&gt;如果定义一个运算符 ，对加密算法 E 和 解密算法 D，满足 &lt;script type=&quot;math/tex&quot;&gt;E(X) = E(X) \Delta E(Y)&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;则意味着对于该运算满足同态性。&lt;/p&gt;
+
+&lt;p&gt;同态性在代数上包括：加法同态、乘法同态、减法同态和除法同态。同时满足加法同态和乘法同态，则意味着是 代数同态，即 全同态。同时满足四种同态性，则被称为 算数同态。&lt;/p&gt;
+
+&lt;h3 id=&quot;函数加密&quot;&gt;函数加密&lt;/h3&gt;
+
+&lt;p&gt;与同态加密相关的一个问题是函数加密。&lt;/p&gt;
+
+&lt;p&gt;同态加密保护的是数据本身，而函数加密顾名思义保护的是处理函数本身，即让第三方看不到处理过程的前提下，对数据进行处理。&lt;/p&gt;
+
+&lt;p&gt;该问题已被证明是不存在对多个通用函数的任意多 key 的方案，目前仅能做到对某个特定函数的一个 key 的方案。&lt;/p&gt;
+
+&lt;h3 id=&quot;hash算法&quot;&gt;Hash算法&lt;/h3&gt;
+
+&lt;p&gt;公式  &lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;h = H(m)&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;公式说明  &lt;br /&gt;
+m：任意长度消息（实际上有长度限制的，但因为长度可以非常大，这里可以认为是任意长度消息） &lt;br /&gt;
+H：哈希函数  &lt;br /&gt;
+h：固定长度的哈希值&lt;/p&gt;
+
+&lt;p&gt;一个优秀的 hash 算法，将能实现：  &lt;br /&gt;
+正向快速：给定明文和 hash 算法，在有限时间和有限资源内能计算出 hash 值。  &lt;br /&gt;
+逆向困难：给定（若干） hash 值，在有限时间内很难（基本不可能）逆推出明文。  &lt;br /&gt;
+输入敏感：原始输入信息修改一点信息，产生的 hash 值看起来应该都有很大不同。  &lt;br /&gt;
+冲突避免：很难找到两段内容不同的明文，使得它们的 hash 值一致（发生冲突），又称抗碰撞性。&lt;/p&gt;
+
+&lt;p&gt;抗碰撞性  &lt;br /&gt;
+哈希函数的抗碰撞性是指寻找两个能够产生碰撞的消息在计算上是不可行的。但找到两个碰撞的消息在计算上不可行，并不意味着不存在两个碰撞的消息。哈希函数是把大空间上的消息压缩到小空间上，碰撞肯定存在。只是计算上是不可行的。&lt;/p&gt;
+
+&lt;p&gt;主流hash算法  &lt;br /&gt;
+MD5(安全性不足应用于商业场景)  &lt;br /&gt;
+SHA-1(安全性不足应用于商业场景)  &lt;br /&gt;
+SHA-2&lt;/p&gt;
+
+&lt;h3 id=&quot;其他流行加密算法&quot;&gt;其他流行加密算法&lt;/h3&gt;
+
+&lt;p&gt;Merkle树&lt;/p&gt;
+
+&lt;h3 id=&quot;数字摘要&quot;&gt;数字摘要&lt;/h3&gt;
+
+&lt;p&gt;对数字内容进行 Hash 运算，获取唯一的摘要值来指代原始数字内容。&lt;/p&gt;
+
+&lt;p&gt;数字摘要是解决确保内容没被篡改过的问题（利用 Hash 函数的抗碰撞性特点）。&lt;/p&gt;
+
+&lt;p&gt;数字摘要是 Hash 算法最重要的一个用途。在网络上下载软件或文件时，往往同时会提供一个数字摘要值，用户下载下来原始文件可以自行进行计算，并同提供的摘要值进行比对，以确保内容没有被修改过。&lt;/p&gt;
+
+&lt;h3 id=&quot;数字签名&quot;&gt;数字签名&lt;/h3&gt;
+
+&lt;p&gt;乙方收到甲方传过来的一串信息，怎么能够确定确实是甲方而不是有人伪造呢？&lt;/p&gt;
+
+&lt;p&gt;我们把非对称加密反过来做就可以了，因为只有甲方自己才持有一份秘密的私钥，他拿这个私钥对数据进行加密得到密文 C = EA私(M)，乙方持有甲方的公钥，解密明文P = DA公(C)，如果能够解密成功就证明信息确实是甲方所发。&lt;/p&gt;
+
+&lt;p&gt;不过通常不需要对发送信息的整个内容都加密，那样太慢。只需要计算一个信息的唯一信息摘要并对信息摘要加密解密即可，下面就会讲到数据摘要算法（俗称HASH算法），这也是数字签名的算法名称，很多时候是一个摘要算法+非对称算法，例如SHA1RSA, SHA256RSA等。&lt;/p&gt;
+
+&lt;h3 id=&quot;数字证书&quot;&gt;数字证书&lt;/h3&gt;
+
+&lt;p&gt;数字证书用来证明某个公钥是谁的，并且内容是正确的。&lt;/p&gt;
+
+&lt;p&gt;对于非对称加密算法和数字签名来说，很重要的一点就是公钥的分发。一旦公钥被人替换（典型的如中间人攻击），则整个安全体系将被破坏掉。&lt;/p&gt;
+
+&lt;p&gt;怎么确保一个公钥确实是某个人的原始公钥？&lt;/p&gt;
+
+&lt;p&gt;这就需要数字证书机制。&lt;/p&gt;
+
+&lt;p&gt;顾名思义，数字证书就是像一个证书一样，证明信息和合法性。由证书认证机构（Certification Authority，CA）来签发，权威的 CA 包括 verisign 等。&lt;/p&gt;
+
+&lt;p&gt;数字证书内容可能包括版本、序列号、签名算法类型、签发者信息、有效期、被签发人、&lt;strong&gt;签发的公开密钥&lt;/strong&gt;、&lt;strong&gt;CA 数字签名&lt;/strong&gt;、其它信息等等，一般使用最广泛的标准为 ITU 和 ISO 联合制定的 X.509 规范。&lt;/p&gt;
+
+&lt;p&gt;其中，最重要的包括 签发的公开密钥、CA 数字签名 两个信息。因此，只要通过这个证书就能证明某个公钥是合法的，因为带有 CA 的数字签名。&lt;/p&gt;
+
+&lt;p&gt;更进一步地，怎么证明 CA 的签名合法不合法呢？&lt;/p&gt;
+
+&lt;p&gt;类似的，CA 的数字签名合法不合法也是通过 CA 的证书来证明的。主流操作系统和浏览器里面会提前预置一些 CA 的证书（承认这些是合法的证书），然后所有基于他们认证的签名都会自然被认为合法。&lt;/p&gt;
+
+&lt;h3 id=&quot;pki体系&quot;&gt;PKI体系&lt;/h3&gt;
+
+&lt;p&gt;在非对称加密中，公钥则可以通过证书机制来进行保护，如何管理和分发证书则可以通过 PKI（Public Key Infrastructure）来保障。&lt;/p&gt;
+
+&lt;p&gt;顾名思义，PKI 体系在现代密码学应用领域处于十分基础的地位，解决了十分核心的证书管理问题。&lt;/p&gt;
+
+&lt;p&gt;PKI 并不代表某个特定的密码学技术和流程，PKI 是建立在公私钥基础上实现安全可靠传递消息和身份确认的一个通用框架。实现了 PKI 的平台可以安全可靠地管理网络中用户的密钥和证书，包括多个实现和变种，知名的有 RSA 公司的 PKCS（Public Key Cryptography Standards）标准和 X.509 规范等。&lt;/p&gt;
+
+&lt;p&gt;一般情况下，PKI 至少包括如下组件：&lt;/p&gt;
+
+&lt;p&gt;CA（Certification Authority）：负责证书的颁发和作废，接收来自 RA 的请求，是最核心的部分；
+RA（Registration Authority）：对用户身份进行验证，校验数据合法性，负责登记，审核过了就发给 CA；
+证书数据库：存放证书，一般采用 LDAP 目录服务，标准格式采用 X.500 系列。
+CA 是最核心的组件，主要完成对证书的管理。&lt;/p&gt;
+
+&lt;p&gt;常见的流程为，用户通过 RA 登记申请证书，CA 完成证书的制造，颁发给用户。用户需要撤销证书则向 CA 发出申请。&lt;/p&gt;
+
+&lt;p&gt;之前章节内容介绍过，密钥有两种类型：用于签名和用于加解密，对应称为 签名密钥对 和 加密密钥对。&lt;/p&gt;
+
+&lt;p&gt;用户证书可以有两种方式。一般可以由 CA 来生成证书和私钥；也可以自己生成公钥和私钥，然后由 CA 来对公钥进行签发。后者情况下，当用户私钥丢失后，CA 无法完成恢复。&lt;/p&gt;
 </description>
             <pubDate>Sun, 01 Apr 2018 00:00:00 +0800</pubDate>
         </item>
@@ -1269,58 +1413,6 @@ sequenceDiagram
 &lt;a href=&quot;http://blog.csdn.net/Im_KK/article/details/45033533&quot;&gt;php socket_select() 说明&lt;/a&gt;&lt;/p&gt;
 </description>
             <pubDate>Sun, 11 Jun 2017 00:00:00 +0800</pubDate>
-        </item>
-        
-        <item>
-            <title>php实现守护进程</title>
-            <link>/2017/02/05/php-daemon.html</link>
-            <guid isPermaLink="true">/2017/02/05/php-daemon.html</guid>
-            <description>&lt;p&gt;守护进程应该能达到的要求 不依赖于当前会话，且无法打开控制终端。&lt;/p&gt;
-
-&lt;p&gt;编写过程  &lt;br /&gt;
-1.假设当前进程为p  &lt;br /&gt;
-2.创建子进程c1，然后退出父进程p(进程组组长无法创建会话，这样c1就不是进程组组长)。  &lt;br /&gt;
-3.在c1进程中创建会话，此时进程c1为会话组长，并且可以打开控制终端。  &lt;br /&gt;
-4.在c1进程中创建子进程c2,退出父进程c1。  &lt;br /&gt;
-5.在c2进程中进行逻辑处理。&lt;/p&gt;
-
-&lt;p&gt;实现&lt;/p&gt;
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 创建子进程&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;$pid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;pcntl_fork&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 如果是父进程，退出&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$pid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$pid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;// 创建会话&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;posix_setsid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;// 创建子进程&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;$pid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;pcntl_fork&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 如果是父进程，退出&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$pid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$pid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;//逻辑处理&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'执行中'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;参考文章  &lt;br /&gt;
-&lt;a href=&quot;http://www.jb51.net/LINUXjishu/173601.html&quot;&gt;Linux信号列表详解&lt;/a&gt;  &lt;br /&gt;
-&lt;a href=&quot;http://www.cnblogs.com/JohnABC/p/4079669.html&quot;&gt;Linux-进程、进程组、作业、会话、控制终端详解&lt;/a&gt;  &lt;br /&gt;
-&lt;a href=&quot;http://blog.csdn.net/yh1548503342/article/details/41891047&quot;&gt;进程 、进程组、会话、控制终端之间的关系&lt;/a&gt;  &lt;br /&gt;
-&lt;a href=&quot;http://blog.csdn.net/tengzhaorong/article/details/9764655&quot;&gt;php写守护进程（Daemon）&lt;/a&gt;  &lt;br /&gt;
-&lt;a href=&quot;http://blog.csdn.net/cywosp/article/details/38965239&quot;&gt;每天进步一点点——Linux中的文件描述符与打开文件之间的关系&lt;/a&gt;  &lt;br /&gt;
-&lt;a href=&quot;http://blog.chinaunix.net/uid-20773865-id-113940.html&quot;&gt;Linux 系统文件描述符继承带来的危害&lt;/a&gt;  &lt;br /&gt;
-&lt;a href=&quot;http://it.taocms.org/06/3631.htm&quot;&gt;关于PHP的STDIN/STDOUT/STDERR&lt;/a&gt;  &lt;br /&gt;
-&lt;a href=&quot;https://my.oschina.net/neochen/blog/519156&quot;&gt;PHP高级编程之守护进程，实现优雅重启&lt;/a&gt;&lt;/p&gt;
-</description>
-            <pubDate>Sun, 05 Feb 2017 00:00:00 +0800</pubDate>
         </item>
         
     </channel>
