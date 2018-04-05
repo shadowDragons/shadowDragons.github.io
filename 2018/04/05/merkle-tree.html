@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
 
     <!-- Canonical -->
-    <link rel="canonical" href="http://localhost:4000/blog/page2/">
+    <link rel="canonical" href="http://localhost:4000/2018/04/05/merkle-tree.html">
 
     <!-- RSS -->
     <link rel="alternate" type="application/atom+xml" title="小白" href="http://localhost:4000///feed.xml"/>
@@ -78,25 +78,25 @@
     
     <!-- seo tags -->
     <!-- Begin Jekyll SEO tag v2.4.0 -->
-<title>小白成长史 | php mysql 分布式 区块链</title>
+<title>Merkle树 | 小白成长史</title>
 <meta name="generator" content="Jekyll v3.7.3" />
-<meta property="og:title" content="小白成长史" />
+<meta property="og:title" content="Merkle树" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="php mysql 分布式 区块链" />
-<meta property="og:description" content="php mysql 分布式 区块链" />
-<link rel="canonical" href="http://localhost:4000/blog/page2/" />
-<meta property="og:url" content="http://localhost:4000/blog/page2/" />
+<meta name="description" content="Merkle树是一种哈希二叉树，它是一种用作快速归纳和校验大规模数据完整性的数据结构。 比特币校验区块交易数据就是使用这种算法。" />
+<meta property="og:description" content="Merkle树是一种哈希二叉树，它是一种用作快速归纳和校验大规模数据完整性的数据结构。 比特币校验区块交易数据就是使用这种算法。" />
+<link rel="canonical" href="http://localhost:4000/2018/04/05/merkle-tree.html" />
+<meta property="og:url" content="http://localhost:4000/2018/04/05/merkle-tree.html" />
 <meta property="og:site_name" content="小白成长史" />
-<link rel="prev" href="http://localhost:4000/" />
-<link rel="next" href="http://localhost:4000/blog/page3" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-04-05T00:00:00+08:00" />
 <script type="application/ld+json">
-{"description":"php mysql 分布式 区块链","@type":"WebPage","url":"http://localhost:4000/blog/page2/","headline":"小白成长史","@context":"http://schema.org"}</script>
+{"description":"Merkle树是一种哈希二叉树，它是一种用作快速归纳和校验大规模数据完整性的数据结构。 比特币校验区块交易数据就是使用这种算法。","@type":"BlogPosting","url":"http://localhost:4000/2018/04/05/merkle-tree.html","headline":"Merkle树","dateModified":"2018-04-05T00:00:00+08:00","datePublished":"2018-04-05T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2018/04/05/merkle-tree.html"},"@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
     <!-- Manual seo tags -->
     <!--
-    <title> 小白</title>
-    <meta name="description" content="">
+    <title>Merkle树 | 小白</title>
+    <meta name="description" content="Merkle树是一种哈希二叉树，它是一种用作快速归纳和校验大规模数据完整性的数据结构。  比特币校验区块交易数据就是使用这种算法。">
     -->
 </head>
 
@@ -180,163 +180,77 @@
 </header>
 
     <div class="content">
-      <div class="home">
+      <article >
+  <header id="main" style="background-image: url('/')">
+    <h1 id="Merkle%E6%A0%91" class="title">Merkle树</h1>
+    <p class="meta">
+    April 5, 2018
+    
+    </p>
+  </header>
+  <section class="post-content"><p>Merkle树是一种哈希二叉树，它是一种用作快速归纳和校验大规模数据完整性的数据结构。  <br />
+比特币校验区块交易数据就是使用这种算法。</p>
+
+<p>Merkle树是自底向上构建的。如图所示</p>
+
+<p><img src="/assets/img/posts/2018-04-05-merkle-tree/1.png" alt="1.png" /></p>
+
+<p>Merkle树一般用来进行完整性验证处理。在处理完整性验证的应用场景中，Merkle树会大大减少数据的传输量及计算的复杂度。</p>
+
+<p>成如果想要证明一个确切的数据块是Merkle树中的一员。通常，只需要树根及这个区块和通向树根沿途的中间哈希值，就可以暂时忽略树的其他部分，这些就已经足以让我们验证到树根。  <br />
+一个节点只需要计算log~2~(N)个32字节的哈希值，形成一条从特定交易到树根的认证路径或者Merkle路径即可。</p>
+
+<p>如图所示，我们只要知道蓝色节点的hash值，就能验证 <script type="math/tex">H_K</script> 是否在树中。</p>
+
+<p><img src="/assets/img/posts/2018-04-05-merkle-tree/2.png" alt="1.png" /></p>
+</section>
+   
+   <!-- Tag list -->
   
-  <div id="main" class="call-out"
-  style="background-image: url('/assets/img/pexels/triangular.jpeg')">
-    <p>一个小白的成长学习历程</p>
-
-  </div>
   
 
-  <div class="posts">
+
+<footer>
+  <div class="tag-list">
     
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/03/18/bitcoin-mining.html">
-                比特币挖矿
-              </a>
-            </h1>
-            <p class="meta">
-              March 18, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            
-
-查看原图  
-drow.io源文件下载
-
-            <!--<a class="button" href="/2018/03/18/bitcoin-mining.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
+      <div class="meta">Tags</div>
     
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/03/18/bitcoin-51attach.html">
-                比特币51攻击
-              </a>
-            </h1>
-            <p class="meta">
-              March 18, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            
 
-查看原图  
-drow.io源文件下载
-
-            <!--<a class="button" href="/2018/03/18/bitcoin-51attach.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
     
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/03/17/rsa.html">
-                RSA算法
-              </a>
-            </h1>
-            <p class="meta">
-              March 17, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            
-
-查看原图  
-drow.io源文件下载
-
-            <!--<a class="button" href="/2018/03/17/rsa.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/03/09/Byzantine-failures.html">
-                拜占庭算法
-              </a>
-            </h1>
-            <p class="meta">
-              March 9, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            
-
-查看原图  
-drow.io源文件下载
-
-            <!--<a class="button" href="/2018/03/09/Byzantine-failures.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/03/03/bitcoin-network.html">
-                比特币网络
-              </a>
-            </h1>
-            <p class="meta">
-              March 3, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            
-
-查看原图  
-drow.io源文件下载
-
-            <!--<a class="button" href="/2018/03/03/bitcoin-network.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-  </div>
-
-  
-  <div class="pagination">
-    
-    <a href="/" class="button" >
-      <i class="fa fa-chevron-left"></i>
-      Prev
+    <a class="button" href="/tags#区块链">
+      <p><i class="fa fa-tag fa-fw"></i> 区块链</p>
     </a>
     
-    
-    <a href="/blog/page3" class="button" >
-      Next
-      <i class="fa fa-chevron-right"></i>
+    <a class="button" href="/tags#密码学">
+      <p><i class="fa fa-tag fa-fw"></i> 密码学</p>
     </a>
     
+  </div>
+</footer>
+
+    
+</article>
+
+<!-- Disqus -->
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+  
+  <div id="previous-post" class="post-nav-post">
+      <p>Previous post</p>
+      <a href="/2018/04/01/ether-private-network.html">
+        搭建以太坊私有网络
+      </a>
+  </div>
+  
+  
+  <div id="next-post" class="post-nav-post">
+      <p>Next post</p>
+      <a href="/2018/04/05/sha256.html">
+        加密散列-sha256
+      </a>
   </div>
   
 </div>

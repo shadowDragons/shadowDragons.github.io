@@ -207,6 +207,26 @@
                     
                      
                         {
+                          "title"    : "加密散列-sha256",
+                          "category" : "",
+                          "tags"     : " 区块链, 密码学",
+                          "url"      : "/2018/04/05/sha256.html",
+                          "date"     : "April 5, 2018",
+                          "excerpt"  : "SHA256是安全散列算法SHA（Secure Hash Algorithm）系列算法之一，其摘要长度为256bits，即32个字节，故称SHA256（1个字节=8位）。算法步骤原始消息分为N个512bit的消息块。每个消息块分成16个32bit的字标记为M(i)0、M(i)1、M(i)2、…、M(i)15然后对这N个消息块依次进行处理。1.补位  由于必须分成n个512bit块，所以必须进行补位。  最后还需要预留64bit记录消息块的长度，所以消息块的长度不能大于2^64。补位使其...",
+                          "content"  : "SHA256是安全散列算法SHA（Secure Hash Algorithm）系列算法之一，其摘要长度为256bits，即32个字节，故称SHA256（1个字节=8位）。算法步骤原始消息分为N个512bit的消息块。每个消息块分成16个32bit的字标记为M(i)0、M(i)1、M(i)2、…、M(i)15然后对这N个消息块依次进行处理。1.补位  由于必须分成n个512bit块，所以必须进行补位。  最后还需要预留64bit记录消息块的长度，所以消息块的长度不能大于2^64。补位使其长度 先补一个1，然后再补0，直到长度满足对512取模后余数是448。总而言之，补位是至少补一位，最多补512位。以信息“abc”为例显示补位的过程。  原始信息：01100001 01100010 01100011  补位第一步：0110000101100010 01100011 1  首先补一个“1”  补位第二步：0110000101100010 01100011 10…..0  然后补423个“0”  我们可以把最后补位完成后的数据用16进制写成下面的样子  61626380 0000000000000000 00000000  00000000 0000000000000000 00000000  00000000 0000000000000000 00000000  00000000 000000002.补长度所谓的补长度是将原始数据的长度补到已经进行了补位操作的消息后面。通常用一个64位的数据来表示原始消息的长度。如果消息长度不大于2^64，那么第一个字就是0。在进行了补长度的操作以后，整个消息就变成下面这样了（16进制格式）61626380 0000000000000000 00000000  00000000 0000000000000000 00000000  00000000 0000000000000000 00000000  00000000 0000000000000000 00000018如果原始的消息长度超过了512，我们需要将它补成512的倍数。然后我们把整个消息分成一个一个512位的数据块，分别处理每一个数据块，从而得到消息摘要。3.常量定义这些常量是对自然数中前64个质数的立方根的小数部分取前32bit而来。k[0..63] :=  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,  0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,  0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,  0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,  0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,  0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,  0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,  0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f24.哈希初值这些初值是对自然数中前8个质数3、5、7、11等的平方根的小数部分取前32bit而来。H(0)0 = 6a09e667  H(0)1 = bb67ae85  H(0)2 = 3c6ef372  H(0)3 = a54ff53a  H(0)4 = 510e527f  H(0)5 = 9b05688c  H(0)6 = 1f83d9ab  H(0)7 = 5be0cd19实现伪代码预处理append the bit '1' to the messageappend k bits '0', where k is the minimum number &gt;= 0 such that the resulting message    length (in bits) is congruent to 448(mod 512)append length of message (before pre-processing), in bits, as 64-bit big-endian integer处理# 分割512块for each chunk    # 每块分割成16个32bit    break chunk into sixteen 32-bit big-endian words w[0..15]    # 用16个32bit，扩展其他48个32bit    for i from 16 to 63        s0 := (w[i-15] rightrotate 7) xor (w[i-15] rightrotate 18) xor(w[i-15] rightshift 3)        s1 := (w[i-2] rightrotate 17) xor (w[i-2] rightrotate 19) xor(w[i-2] rightshift 10)        w[i] := w[i-16] + s0 + w[i-7] + s1    # 哈希初始值    a := h0    b := h1    c := h2    d := h3    e := h4    f := h5    g := h6    h := h7    # 主循环    for i from 0 to 63        s0 := (a rightrotate 2) xor (a rightrotate 13) xor(a rightrotate 22)        maj := (a and b) xor (a and c) xor(b and c)        t2 := s0 + maj        s1 := (e rightrotate 6) xor (e rightrotate 11) xor(e rightrotate 25)        ch := (e and f) xor ((not e) and g)        t1 := h + s1 + ch + k[i] + w[i]        h := g        g := f        f := e        e := d + t1        d := c        c := b        b := a        a := t1 + t2    # 修改哈希值    h0 := h0 + a    h1 := h1 + b    h2 := h2 + c    h3 := h3 + d    h4 := h4 + e    h5 := h5 + f    h6 := h6 + g    h7 := h7 + h# 输出结果digest = hash = h0 append h1 append h2 append h3 append h4 append h5 append h6 append h7输出值256bit的二进制值或者64个16进制的ascii码。"
+                        } ,
+                     
+                        {
+                          "title"    : "Merkle树",
+                          "category" : "",
+                          "tags"     : " 区块链, 密码学",
+                          "url"      : "/2018/04/05/merkle-tree.html",
+                          "date"     : "April 5, 2018",
+                          "excerpt"  : "Merkle树是一种哈希二叉树，它是一种用作快速归纳和校验大规模数据完整性的数据结构。  比特币校验区块交易数据就是使用这种算法。Merkle树是自底向上构建的。如图所示Merkle树一般用来进行完整性验证处理。在处理完整性验证的应用场景中，Merkle树会大大减少数据的传输量及计算的复杂度。成如果想要证明一个确切的数据块是Merkle树中的一员。通常，只需要树根及这个区块和通向树根沿途的中间哈希值，就可以暂时忽略树的其他部分，这些就已经足以让我们验证到树根。  一个节点只需要计算log~...",
+                          "content"  : "Merkle树是一种哈希二叉树，它是一种用作快速归纳和校验大规模数据完整性的数据结构。  比特币校验区块交易数据就是使用这种算法。Merkle树是自底向上构建的。如图所示Merkle树一般用来进行完整性验证处理。在处理完整性验证的应用场景中，Merkle树会大大减少数据的传输量及计算的复杂度。成如果想要证明一个确切的数据块是Merkle树中的一员。通常，只需要树根及这个区块和通向树根沿途的中间哈希值，就可以暂时忽略树的其他部分，这些就已经足以让我们验证到树根。  一个节点只需要计算log~2~(N)个32字节的哈希值，形成一条从特定交易到树根的认证路径或者Merkle路径即可。如图所示，我们只要知道蓝色节点的hash值，就能验证  是否在树中。"
+                        } ,
+                     
+                        {
                           "title"    : "搭建以太坊私有网络",
                           "category" : "",
                           "tags"     : " 区块链, 以太坊",
