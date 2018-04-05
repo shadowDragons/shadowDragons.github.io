@@ -196,6 +196,85 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2016/11/14/machinelearning-supervised.html">
+                监督学习与梯度下降
+              </a>
+            </h1>
+            <p class="meta">
+              November 14, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            假设一个问题有n个特征，线性函数为
+  
+其中   
+差值计算，其中m为训练数据  
+所以我们要求出当最小值时的特征参数值。
+
+主要有两种方式来求出  
+1.梯度下降  
+2.正则方程组
+
+梯度下降
+
+把计算结果与真实结果的差值比做山顶，通过找寻山的最大坡度下降，达到最快到达山脚，从而实现最小差值。
+
+对每个求导，得出最快下降梯度，然后沿着这梯度下降。学习速度或下降速度。
+
+
+python实例
+import numpy as np
+import matplotlib.pyplot as p...
+            <!--<a class="button" href="/2016/11/14/machinelearning-supervised.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2016/11/13/time-complexity.html">
+                时间复杂度计算
+              </a>
+            </h1>
+            <p class="meta">
+              November 13, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            用大写O()来体现算法时间复杂度，称之为大O记法。
+
+推导大O阶
+1.用常数1取代运行时间中的所有加法常数。  
+2.在修改后的运行次数函数中，只保留最高阶项。  
+3.如果最高阶项存在且不是1，则去除与这个项相乘的常数。  
+4.得出大O阶。
+
+算法分析
+1.计算所有情况的平均值，称为平均时间复杂度
+2.计算最坏情况下的时间复杂度，称为最坏时间复杂度
+
+计算实例
+
+常数阶 O(1)
+int sum = 0, n = 100; /*执行一次*/
+sum = (1 + n) * n / 2;...
+            <!--<a class="button" href="/2016/11/13/time-complexity.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2016/11/13/sort.html">
                 排序
               </a>
@@ -291,73 +370,6 @@ while (--k!=0)
 Vertex temp2 = temp1.next
 Verte...
             <!--<a class="button" href="/2016/11/13/link.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/13/jsonp.html">
-                jsonp实现异步请求跨域
-              </a>
-            </h1>
-            <p class="meta">
-              November 13, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            ajax 和 jsonp的区别  
-ajax是通过XmlHttpRequest来获取非本页内容，而jsonp是通过动态添加
-
-为什么jsonp能够跨服  
-因为在web调用js文件是不受跨服影响的，不仅如此，凡是拥有src属性的都有跨服的能力。
-
-实现一
-www.b.com/remote.js
-alert(1)
-
-
-www.a.com/json.html
-&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "h...
-            <!--<a class="button" href="/2016/11/13/jsonp.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/13/hash-table.html">
-                哈希表
-              </a>
-            </h1>
-            <p class="meta">
-              November 13, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            线性探查
-查找
-i = base = key%HT.length // get hashed index
-while (true)
-  if (HT[i] == EMPTY) return "not found"
-  else if (HT[i] == key) return "found at index i"
-  else i = (base+step*1)%HT.length
-
-
-插入
-if HT is 1 item before full, prevent insertion
-i ...
-            <!--<a class="button" href="/2016/11/13/hash-table.html">
               Continue reading
             </a>-->
           </div>

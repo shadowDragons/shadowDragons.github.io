@@ -5,7 +5,7 @@
         <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
         <link>http://localhost:4000/</link>
         <description></description>
-        <pubDate>Thu, 05 Apr 2018 14:38:19 +0800</pubDate>
+        <pubDate>Thu, 05 Apr 2018 15:08:12 +0800</pubDate>
         
         <item>
             <title>加密散列-sha256</title>
@@ -35,7 +35,7 @@
 00000000 0000000000000000 00000000  &lt;br /&gt;
 00000000 00000000&lt;/p&gt;
 
-&lt;p&gt;2.补长度
+&lt;p&gt;2.补长度  &lt;br /&gt;
 所谓的补长度是将原始数据的长度补到已经进行了补位操作的消息后面。通常用一个64位的数据来表示原始消息的长度。如果消息长度不大于2^64，那么第一个字就是0。在进行了补长度的操作以后，整个消息就变成下面这样了（16进制格式）&lt;/p&gt;
 
 &lt;p&gt;61626380 0000000000000000 00000000  &lt;br /&gt;
@@ -144,6 +144,119 @@ H(0)7 = 5be0cd19&lt;/p&gt;
         </item>
         
         <item>
+            <title>加密散列-sha1</title>
+            <link>/2018/04/05/sha1.html</link>
+            <guid isPermaLink="true">/2018/04/05/sha1.html</guid>
+            <description>&lt;p&gt;SHA-1（英语：Secure Hash Algorithm 1，中文名：安全散列算法1）是一种密码散列函数，美国国家安全局设计，并由美国国家标准技术研究所（NIST）发布为联邦数据处理标准（FIPS）[2]。SHA-1可以生成一个被称为消息摘要的160位（20字节）散列值，散列值通常的呈现形式为40个十六进制数。&lt;/p&gt;
+
+&lt;h3 id=&quot;算法步骤&quot;&gt;算法步骤&lt;/h3&gt;
+
+&lt;p&gt;原始消息分为N个512bit的消息块。每个消息块分成16个32bit的字标记为M(i)0、M(i)1、M(i)2、…、M(i)15然后对这N个消息块依次进行处理。&lt;/p&gt;
+
+&lt;p&gt;1.补位  &lt;br /&gt;
+由于必须分成n个512bit块，所以必须进行补位。  &lt;br /&gt;
+最后还需要预留64bit记录消息块的长度，所以消息块的长度不能大于2^64。&lt;/p&gt;
+
+&lt;p&gt;补位使其长度 &lt;script type=&quot;math/tex&quot;&gt;l mod 512 = 448&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;先补一个1，然后再补0，直到长度满足对512取模后余数是448。总而言之，补位是至少补一位，最多补512位。以信息“abc”为例显示补位的过程。  &lt;br /&gt;
+原始信息：01100001 01100010 01100011  &lt;br /&gt;
+补位第一步：0110000101100010 01100011 1  &lt;br /&gt;
+首先补一个“1”  &lt;br /&gt;
+补位第二步：0110000101100010 01100011 10…..0  &lt;br /&gt;
+然后补423个“0”  &lt;br /&gt;
+我们可以把最后补位完成后的数据用16进制写成下面的样子  &lt;br /&gt;
+61626380 0000000000000000 00000000  &lt;br /&gt;
+00000000 0000000000000000 00000000  &lt;br /&gt;
+00000000 0000000000000000 00000000  &lt;br /&gt;
+00000000 00000000&lt;/p&gt;
+
+&lt;p&gt;2.补长度  &lt;br /&gt;
+所谓的补长度是将原始数据的长度补到已经进行了补位操作的消息后面。通常用一个64位的数据来表示原始消息的长度。如果消息长度不大于2^64，那么第一个字就是0。在进行了补长度的操作以后，整个消息就变成下面这样了（16进制格式）&lt;/p&gt;
+
+&lt;p&gt;61626380 0000000000000000 00000000  &lt;br /&gt;
+00000000 0000000000000000 00000000  &lt;br /&gt;
+00000000 0000000000000000 00000000  &lt;br /&gt;
+00000000 0000000000000000 00000018&lt;/p&gt;
+
+&lt;p&gt;如果原始的消息长度超过了512，我们需要将它补成512的倍数。然后我们把整个消息分成一个一个512位的数据块，分别处理每一个数据块，从而得到消息摘要。&lt;/p&gt;
+
+&lt;p&gt;3.哈希初值&lt;/p&gt;
+
+&lt;p&gt;h0 := 0x67452301
+h1 := 0xEFCDAB89
+h2 := 0x98BADCFE
+h3 := 0x10325476
+h4 := 0xC3D2E1F0&lt;/p&gt;
+
+&lt;h3 id=&quot;实现伪代码&quot;&gt;实现伪代码&lt;/h3&gt;
+
+&lt;p&gt;预处理&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;0&quot;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bits&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;until&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bits&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≡&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;448&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;mod&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;512&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;64&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;little&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;endian&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;integer&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;处理&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# 分割512块&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;512&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;chunk&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# 每块分割成16个32bit&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;chunk&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;into&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sixteen&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;little&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;endian&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;words&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;15&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# 用16个32bit，扩展其他64个32bit&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;79&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;14&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;leftrotate&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# 哈希初始值&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;e&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h4&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# 主循环&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;79&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;19&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x5A827999&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;39&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x6ED9EBA1&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;40&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;59&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;or&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x8F1BBCDC&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;60&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;79&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0xCA62C1D6&lt;/span&gt;
+ 
+        &lt;span class=&quot;nx&quot;&gt;temp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;leftrotate&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;e&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;e&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;leftrotate&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;30&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;temp&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# 修改哈希值&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;h4&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h4&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;e&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# 输出结果&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;digest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;hash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h4&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;输出值&quot;&gt;输出值&lt;/h3&gt;
+
+&lt;p&gt;160bit的二进制值或者40个16进制的ascii码。&lt;/p&gt;
+</description>
+            <pubDate>Thu, 05 Apr 2018 00:00:00 +0800</pubDate>
+        </item>
+        
+        <item>
             <title>Merkle树</title>
             <link>/2018/04/05/merkle-tree.html</link>
             <guid isPermaLink="true">/2018/04/05/merkle-tree.html</guid>
@@ -162,6 +275,120 @@ H(0)7 = 5be0cd19&lt;/p&gt;
 &lt;p&gt;如图所示，我们只要知道蓝色节点的hash值，就能验证 &lt;script type=&quot;math/tex&quot;&gt;H_K&lt;/script&gt; 是否在树中。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-04-05-merkle-tree/2.png&quot; alt=&quot;1.png&quot; /&gt;&lt;/p&gt;
+</description>
+            <pubDate>Thu, 05 Apr 2018 00:00:00 +0800</pubDate>
+        </item>
+        
+        <item>
+            <title>加密散列-md5</title>
+            <link>/2018/04/05/md5.html</link>
+            <guid isPermaLink="true">/2018/04/05/md5.html</guid>
+            <description>&lt;p&gt;MD5消息摘要算法（英语：MD5 Message-Digest Algorithm），一种被广泛使用的密码散列函数，可以产生出一个128位（16字节）的散列值（hash value），用于确保信息传输完整一致。&lt;/p&gt;
+
+&lt;h3 id=&quot;算法步骤&quot;&gt;算法步骤&lt;/h3&gt;
+
+&lt;p&gt;原始消息分为N个512bit的消息块。每个消息块分成16个32bit的字标记为M(i)0、M(i)1、M(i)2、…、M(i)15然后对这N个消息块依次进行处理。&lt;/p&gt;
+
+&lt;p&gt;1.补位  &lt;br /&gt;
+由于必须分成n个512bit块，所以必须进行补位。  &lt;br /&gt;
+最后还需要预留64bit记录消息块的长度，所以消息块的长度不能大于2^64。&lt;/p&gt;
+
+&lt;p&gt;补位使其长度 &lt;script type=&quot;math/tex&quot;&gt;l mod 512 = 448&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;先补一个1，然后再补0，直到长度满足对512取模后余数是448。总而言之，补位是至少补一位，最多补512位。以信息“abc”为例显示补位的过程。  &lt;br /&gt;
+原始信息：01100001 01100010 01100011  &lt;br /&gt;
+补位第一步：0110000101100010 01100011 1  &lt;br /&gt;
+首先补一个“1”  &lt;br /&gt;
+补位第二步：0110000101100010 01100011 10…..0  &lt;br /&gt;
+然后补423个“0”  &lt;br /&gt;
+我们可以把最后补位完成后的数据用16进制写成下面的样子  &lt;br /&gt;
+61626380 0000000000000000 00000000  &lt;br /&gt;
+00000000 0000000000000000 00000000  &lt;br /&gt;
+00000000 0000000000000000 00000000  &lt;br /&gt;
+00000000 00000000&lt;/p&gt;
+
+&lt;p&gt;2.补长度  &lt;br /&gt;
+所谓的补长度是将原始数据的长度补到已经进行了补位操作的消息后面。通常用一个64位的数据来表示原始消息的长度。如果消息长度不大于2^64，那么第一个字就是0。在进行了补长度的操作以后，整个消息就变成下面这样了（16进制格式）&lt;/p&gt;
+
+&lt;p&gt;61626380 0000000000000000 00000000  &lt;br /&gt;
+00000000 0000000000000000 00000000  &lt;br /&gt;
+00000000 0000000000000000 00000000  &lt;br /&gt;
+00000000 0000000000000000 00000018&lt;/p&gt;
+
+&lt;p&gt;如果原始的消息长度超过了512，我们需要将它补成512的倍数。然后我们把整个消息分成一个一个512位的数据块，分别处理每一个数据块，从而得到消息摘要。&lt;/p&gt;
+
+&lt;p&gt;3.常量定义&lt;/p&gt;
+
+&lt;p&gt;r[ 0..15]：= {7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22}  &lt;br /&gt;
+r[16..31]：= {5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20}  &lt;br /&gt;
+r[32..47]：= {4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23}  &lt;br /&gt;
+r[48..63]：= {6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21}&lt;/p&gt;
+
+&lt;p&gt;4.哈希初值&lt;/p&gt;
+
+&lt;p&gt;h0 := 0x67452301
+h1 := 0xEFCDAB89
+h2 := 0x98BADCFE
+h3 := 0x10325476&lt;/p&gt;
+
+&lt;h3 id=&quot;实现伪代码&quot;&gt;实现伪代码&lt;/h3&gt;
+
+&lt;p&gt;预处理&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;0&quot;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bits&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;until&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bits&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≡&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;448&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;mod&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;512&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;64&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;little&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;endian&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;integer&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;处理&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# 分割512块&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;512&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;chunk&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# 每块分割成16个32bit&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;chunk&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;into&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sixteen&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;little&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;endian&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;words&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;15&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# 哈希初始值&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# 主循环&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;63&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;15&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;g&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;31&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;g&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;×&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;mod&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;47&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;g&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;×&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;mod&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;48&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;63&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;g&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;×&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;mod&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;
+ 
+        &lt;span class=&quot;nx&quot;&gt;temp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;leftrotate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;g&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]),&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;temp&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;Next&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# 修改哈希值&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;End&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ForEach&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# 输出结果&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;digest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//(expressed as little-endian)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;输出值&quot;&gt;输出值&lt;/h3&gt;
+
+&lt;p&gt;128bit的二进制值或者32个16进制的ascii码。&lt;/p&gt;
 </description>
             <pubDate>Thu, 05 Apr 2018 00:00:00 +0800</pubDate>
         </item>
@@ -359,8 +586,8 @@ h：固定长度的哈希值&lt;/p&gt;
 哈希函数的抗碰撞性是指寻找两个能够产生碰撞的消息在计算上是不可行的。但找到两个碰撞的消息在计算上不可行，并不意味着不存在两个碰撞的消息。哈希函数是把大空间上的消息压缩到小空间上，碰撞肯定存在。只是计算上是不可行的。&lt;/p&gt;
 
 &lt;p&gt;主流hash算法  &lt;br /&gt;
-MD5(安全性不足应用于商业场景)  &lt;br /&gt;
-SHA-1(安全性不足应用于商业场景)  &lt;br /&gt;
+&lt;a href=&quot;/2018/04/05/md5.html&quot;&gt;MD5&lt;/a&gt;(安全性不足应用于商业场景)  &lt;br /&gt;
+&lt;a href=&quot;/2018/04/05/sha1.html&quot;&gt;SHA-1&lt;/a&gt;(安全性不足应用于商业场景)  &lt;br /&gt;
 &lt;a href=&quot;/2018/04/05/sha256.html&quot;&gt;SHA-2&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;其他流行加密算法&quot;&gt;其他流行加密算法&lt;/h3&gt;
@@ -533,113 +760,6 @@ CA 是最核心的组件，主要完成对证书的管理。&lt;/p&gt;
 &lt;a href=&quot;http://tadown.com/fs/6seh4acd7ocw9d1ragon0/&quot;&gt;drow.io源文件下载&lt;/a&gt;&lt;/p&gt;
 </description>
             <pubDate>Wed, 21 Feb 2018 00:00:00 +0800</pubDate>
-        </item>
-        
-        <item>
-            <title>比特币地址&amp;密钥</title>
-            <link>/2018/02/21/bitcoin-address.html</link>
-            <guid isPermaLink="true">/2018/02/21/bitcoin-address.html</guid>
-            <description>&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-02-21-bitcoin-address/bitcoin-address.png&quot; alt=&quot;bitcoin-address.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-02-21-bitcoin-address/bitcoin-address.png&quot;&gt;查看原图&lt;/a&gt;  &lt;br /&gt;
-&lt;a href=&quot;http://tadown.com/fs/cs7h2abd8o4wfd8ragon0/&quot;&gt;drow.io源文件下载&lt;/a&gt;&lt;/p&gt;
-</description>
-            <pubDate>Wed, 21 Feb 2018 00:00:00 +0800</pubDate>
-        </item>
-        
-        <item>
-            <title>shadowsock部署</title>
-            <link>/2017/12/11/shadowsock.html</link>
-            <guid isPermaLink="true">/2017/12/11/shadowsock.html</guid>
-            <description>&lt;h4 id=&quot;部署&quot;&gt;部署&lt;/h4&gt;
-
-&lt;p&gt;我是选了网上大多数人推荐的vultr，性价比高，而且还有很骚的操作，后面讲。  &lt;br /&gt;
-1.选服务器，直接选最便宜的，因为我只是拿来当ss用。  &lt;br /&gt;
-2.安装ss&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://teddysun.com/486.html&quot;&gt;参考文章&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;以root用户进入该服务器终端，执行一下命令&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget &lt;span class=&quot;nt&quot;&gt;--no-check-certificate&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-O&lt;/span&gt; shadowsocks-all.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-all.sh
-&lt;span class=&quot;nb&quot;&gt;chmod&lt;/span&gt; +x shadowsocks-all.sh
-./shadowsocks-all.sh 2&amp;gt;&amp;amp;1 | &lt;span class=&quot;nb&quot;&gt;tee &lt;/span&gt;shadowsocks-all.log
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;过程中会提示你输入ss的脚本语言、密码、端口、以及加密方式&lt;/p&gt;
-
-&lt;p&gt;3.安装加速器&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://teddysun.com/489.html&quot;&gt;参考文章&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;执行&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget &lt;span class=&quot;nt&quot;&gt;--no-check-certificate&lt;/span&gt; https://github.com/teddysun/across/raw/master/bbr.sh &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;chmod&lt;/span&gt; +x bbr.sh &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; ./bbr.sh
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;验证&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;uname -r
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;4.骚操作&lt;/p&gt;
-
-&lt;p&gt;vultr它是以小时来计费的，即使你是月付的，它也会折算成小时。 那它是怎么算使用的，你部署了服务器，就算使用。  &lt;br /&gt;
-所以我们可以把部署好ss的服务器备份，然后在你不使用的时候摧毁掉，想用的时候再恢复。&lt;/p&gt;
-
-&lt;p&gt;第一步：点击Add Snapshot，创建一个备份，名称随便填
-&lt;img src=&quot;/assets/img/posts/2017-12-11-shadowsock/2.png&quot; alt=&quot;创建备份&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;第二步：摧毁
-&lt;img src=&quot;/assets/img/posts/2017-12-11-shadowsock/3.png&quot; alt=&quot;摧毁&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;第三步：恢复
-&lt;img src=&quot;/assets/img/posts/2017-12-11-shadowsock/4.png&quot; alt=&quot;恢复&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;使用&quot;&gt;使用&lt;/h4&gt;
-
-&lt;p&gt;安装shadowsocks客户端&lt;/p&gt;
-
-&lt;p&gt;mac&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;shadowsocks-libev
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;ubuntu&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt install shadowsocks
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;使用shadowsocks客户端&lt;/p&gt;
-
-&lt;p&gt;1.创建新连接  &lt;br /&gt;
-2.设置ip、端口、加密方式  &lt;br /&gt;
-这样就可以使用我们搭建的ss服务了，其他应用如果要走ss，只需连上我们的shadowsocks即可。 默认shadowsocks的端口为1080&lt;/p&gt;
-
-&lt;p&gt;我以dropbox为例  &lt;br /&gt;
-只要在首选项&amp;gt;网络&amp;gt;设置代理即可  &lt;br /&gt;
-&lt;img src=&quot;/assets/img/posts/2017-12-11-shadowsock/1.png&quot; alt=&quot;恢复&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;命令行使用&quot;&gt;命令行使用&lt;/h4&gt;
-
-&lt;p&gt;安装proxychains-ng&lt;/p&gt;
-
-&lt;p&gt;mac&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;proxychains-ng
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;ubuntu&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 安装&lt;/span&gt;
-git clone https://github.com/rofl0r/proxychains-ng.git
-./configure &lt;span class=&quot;nt&quot;&gt;--prefix&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/usr &lt;span class=&quot;nt&quot;&gt;--sysconfdir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/etc
-make
-&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;make &lt;span class=&quot;nb&quot;&gt;install
-sudo &lt;/span&gt;make install-config
-&lt;span class=&quot;c&quot;&gt;# 配置 socks4 127.0.0.1 9050改为socks5 127.0.0.1 1080&lt;/span&gt;
-vi /usr/local/etc/proxychains.conf
-&lt;span class=&quot;c&quot;&gt;# 验证ip是否为ss服务器的ip&lt;/span&gt;
-proxychains4 curl ip.gs
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;之后如果需要只用ss，只要在命令前加上proxychains4即可。&lt;/p&gt;
-</description>
-            <pubDate>Mon, 11 Dec 2017 00:00:00 +0800</pubDate>
         </item>
         
     </channel>
