@@ -149,6 +149,8 @@
         
         
         
+        
+        
          
         
         
@@ -208,11 +210,11 @@
 
 算法步骤
 
-原始消息分为N个512bit的消息块。每个消息块分成16个32bit的字标记为M(i)0、M(i)1、M(i)2、…、M(i)15然后对这N个消息块依次进行处理。
+原始消息分为N个512bit的消息块。每个消息块分成16个32bit，标记为M(i)0、M(i)1、M(i)2、…、M(i)15然后对这N个消息块依次进行处理。
 
 1.补位  
 由于必须分成n个512bit块，所以必须进行补位。  
-最后还需要预留64bit记录消息块的长度，所以消息块的长度不能大于2...
+最后还需要预留64bit记录消息块的长度，所以消息块的长度不能大于2^6...
             <!--<a class="button" href="/2018/04/05/sha256.html">
               Continue reading
             </a>-->
@@ -238,8 +240,36 @@
 
 算法步骤
 
-原始消息分为N个512bit的消息块。每个消息块分成16个32bit的字标记为M(i)0、M(i)1、M(i)2、…、M(i)15然后对这N个消息块依次进行处...
+原始消息分为N个512bit的消息块。每个消息块分成16个32bit。
+
+1.补位  
+由于必须分成n个512bit块，所以必须进行补位。  
+最后还需要预留64...
             <!--<a class="button" href="/2018/04/05/sha1.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2018/04/05/ripemd160.html">
+                加密散列-PIPEMD160
+              </a>
+            </h1>
+            <p class="meta">
+              April 5, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            RIPEMD (RACE原始完整性校验讯息摘要)是一种加密哈希函数，由 鲁汶大学 Hans Dobbertin,Antoon Bosselaers 和 Bart Prenee组成的COSIC 研究小组发布于1996年。 RIPEMD是以MD4为基础原则所设计的 ，而且其表现与更有名的SHA-1类似.
+
+RIPEMD-160是以原始版RIPEMD所改进的160位元版本，而且是RIPEMD系列中最常见的版本。 RIPEMD-160是设计给学术社群所使用的，刚好相对于 国家安全局 所设计 SHA...
+            <!--<a class="button" href="/2018/04/05/ripemd160.html">
               Continue reading
             </a>-->
           </div>
@@ -296,56 +326,16 @@ Merkle树一般用来进行完整性验证处理。在处理完整性验证的�
 
 算法步骤
 
-原始消息分为N个512bit的消息块。每个消息块分成16个32bit的字标记为M(i)0、M(i)1、M(i)2、…、M(i)15然后对这N个消息块依次进行处理。
+原始消息分为N个512bit的消息块。每个消息块分成16个32bit。
 
 1.补位  
 由于必须分成n个512bit块，所以必须进行补位。  
-最后还需要预留64bit记录...
+最后还需要预留64bit记录消息块的长度，所以消息块的长度不能大于2^64。
+
+补位使其长度 
+
+先补一个1，然后再补0，直...
             <!--<a class="button" href="/2018/04/05/md5.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/04/01/ether-private-network.html">
-                搭建以太坊私有网络
-              </a>
-            </h1>
-            <p class="meta">
-              April 1, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            Geth
-
-可以通过命令行方式实现以太坊的各种功能,如账户的新建编辑删除，开启挖矿，ether币的转移，智能合约的部署和执行等等。
-
-安装
-
-brew tap ethereum/ethereum
-brew install ethereum
-
-
-安装完成后检查，输入geth version
-
-
-
-创建私有网络
-
-1.创建一个目录，如geth-private-test
-
-2.进入该目录下，创建文件genesis.json，并写入以下内容
-
-{
-  "config": {
-        "ch...
-            <!--<a class="button" href="/2018/04/01/ether-private-network.html">
               Continue reading
             </a>-->
           </div>

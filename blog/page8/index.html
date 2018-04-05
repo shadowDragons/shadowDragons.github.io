@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
 
     <!-- Canonical -->
-    <link rel="canonical" href="http://localhost:4000/blog/page7/">
+    <link rel="canonical" href="http://localhost:4000/blog/page8/">
 
     <!-- RSS -->
     <link rel="alternate" type="application/atom+xml" title="小白" href="http://localhost:4000///feed.xml"/>
@@ -84,13 +84,12 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="php mysql 分布式 区块链" />
 <meta property="og:description" content="php mysql 分布式 区块链" />
-<link rel="canonical" href="http://localhost:4000/blog/page7/" />
-<meta property="og:url" content="http://localhost:4000/blog/page7/" />
+<link rel="canonical" href="http://localhost:4000/blog/page8/" />
+<meta property="og:url" content="http://localhost:4000/blog/page8/" />
 <meta property="og:site_name" content="小白成长史" />
-<link rel="prev" href="http://localhost:4000/blog/page6" />
-<link rel="next" href="http://localhost:4000/blog/page8" />
+<link rel="prev" href="http://localhost:4000/blog/page7" />
 <script type="application/ld+json">
-{"description":"php mysql 分布式 区块链","@type":"WebPage","url":"http://localhost:4000/blog/page7/","headline":"小白成长史","@context":"http://schema.org"}</script>
+{"description":"php mysql 分布式 区块链","@type":"WebPage","url":"http://localhost:4000/blog/page8/","headline":"小白成长史","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
     <!-- Manual seo tags -->
@@ -198,180 +197,29 @@
       <span>
           <header>
             <h1>
-              <a class="post-link" href="/2016/11/13/link.html">
-                链表
+              <a class="post-link" href="/2016/11/11/php-cgi.html">
+                phpcgi
               </a>
             </h1>
             <p class="meta">
-              November 13, 2016
+              November 11, 2016
             </p>
           </header>
           <div class="excerpt">
-            单链表
-查找
-temp = head, index = 0
-while (temp.data != input)
-  temp = temp.next , index++
-  if temp == null
-    return -1
-return index;
+            php-cgi
+它本身是一个进程，工作原理是，获取cgi的配置信息，解析配置文件，初始化环境变量和数据结构。
 
+cgi
+cgi 就是一个 php-cgi.exe 的管理器。  
+1.当服务器启动时它会去获取一份配置文件。  
+2.当用户发出请求时，它会去fork一个php-cgi.exe进程进行处理。  
+3.处理完请求时，会马上对其进行销毁。
 
-插入  
-1.指定位置
-v = 90, k = 2
-Vertex temp1 = head
-while (--k!=0)
-  temp1 = temp1.next
-Vertex temp2 = temp1.next
-Verte...
-            <!--<a class="button" href="/2016/11/13/link.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/13/jsonp.html">
-                jsonp实现异步请求跨域
-              </a>
-            </h1>
-            <p class="meta">
-              November 13, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            ajax 和 jsonp的区别  
-ajax是通过XmlHttpRequest来获取非本页内容，而jsonp是通过动态添加
+fastcgi
+fastcgi 相当于是cgi的一个扩展，可以看成cgi内部的东西。
 
-为什么jsonp能够跨服  
-因为在web调用js文件是不受跨服影响的，不仅如此，凡是拥有src属性的都有跨服的能力。
-
-实现一
-www.b.com/remote.js
-alert(1)
-
-
-www.a.com/json.html
-&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "h...
-            <!--<a class="button" href="/2016/11/13/jsonp.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/13/hash-table.html">
-                哈希表
-              </a>
-            </h1>
-            <p class="meta">
-              November 13, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            线性探查
-查找
-i = base = key%HT.length // get hashed index
-while (true)
-  if (HT[i] == EMPTY) return "not found"
-  else if (HT[i] == key) return "found at index i"
-  else i = (base+step*1)%HT.length
-
-
-插入
-if HT is 1 item before full, prevent insertion
-i ...
-            <!--<a class="button" href="/2016/11/13/hash-table.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/13/bit-cal.html">
-                位运算
-              </a>
-            </h1>
-            <p class="meta">
-              November 13, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            以S = 1001011,j = 0000000为例。
-
-获取第 i 标志位
-j = 0000001
-(shift left j) * i
-S AND j
-
-
-切换第 i 标志位
-j = 0000001
-(shift left j) * i
-S XOR j
-(XOR: 11 = 0 10 = 1 01 = 1 00 = 0)
-
-
-清除第 i 标志位
-j = 0000001
-(shift left j) * i
-invert j(反转)
-S AND j
-
-
-获取最后一个有效位
-j = NOT...
-            <!--<a class="button" href="/2016/11/13/bit-cal.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/12/php-async.html">
-                php实现异步
-              </a>
-            </h1>
-            <p class="meta">
-              November 12, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            php在处理异步执行主要有以下四种方式来处理，其中第四种方式是最好的，推荐使用。
-
-1.ajax或嵌入img标签，在src中指向异步地址。  
-缺点 不能算是真正异步，主要用户关闭浏览器，异步脚本也就被终止掉了
-
-&lt;html&gt;
-&lt;head&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;img src="b.php"&gt; 
-&lt;script src="jquery.js"&gt;&lt;/script&gt;
-&lt;script&gt;
-$...
-            <!--<a class="button" href="/2016/11/12/php-async.html">
+1.cgi启动时会一次性fork多个php-cgi.ex...
+            <!--<a class="button" href="/2016/11/11/php-cgi.html">
               Continue reading
             </a>-->
           </div>
@@ -383,16 +231,11 @@ $...
   
   <div class="pagination">
     
-    <a href="/blog/page6" class="button" >
+    <a href="/blog/page7" class="button" >
       <i class="fa fa-chevron-left"></i>
       Prev
     </a>
     
-    
-    <a href="/blog/page8" class="button" >
-      Next
-      <i class="fa fa-chevron-right"></i>
-    </a>
     
   </div>
   
