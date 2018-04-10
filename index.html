@@ -197,6 +197,39 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2018/04/07/ethereum-crypto-currency-1.html">
+                以太坊发行代币(一)
+              </a>
+            </h1>
+            <p class="meta">
+              April 7, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            本文使用到的工具geth、Mist，并通过私有链来做测试。
+如果你不知道还不了解，请先阅读这篇文章《搭建以太坊私有网络》
+
+先从最基本的开始，打开Mist，进入到 Contract 标签页，然后点击 Deploy New Contract
+
+
+
+在Solidity Contract Source code输入框，输入以下代码：
+
+contract MyToken {
+    /* This creates an array with all balances */
+    mapping ...
+            <!--<a class="button" href="/2018/04/07/ethereum-crypto-currency-1.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2018/04/05/sha256.html">
                 加密散列-sha256
               </a>
@@ -302,40 +335,6 @@ Merkle树一般用来进行完整性验证处理。在处理完整性验证的�
 成如果想要证明一个确切的数据块是Merkle树中的一员。通常，只需要树根及这个区块和通向树根沿途的中间哈希值，就可以暂时忽略树的其他部分，这些就已经足以让我们验证到树根。  
 一个节...
             <!--<a class="button" href="/2018/04/05/merkle-tree.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/04/05/md5.html">
-                加密散列-md5
-              </a>
-            </h1>
-            <p class="meta">
-              April 5, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            MD5消息摘要算法（英语：MD5 Message-Digest Algorithm），一种被广泛使用的密码散列函数，可以产生出一个128位（16字节）的散列值（hash value），用于确保信息传输完整一致。
-
-算法步骤
-
-原始消息分为N个512bit的消息块。每个消息块分成16个32bit。
-
-1.补位  
-由于必须分成n个512bit块，所以必须进行补位。  
-最后还需要预留64bit记录消息块的长度，所以消息块的长度不能大于2^64。
-
-补位使其长度 
-
-先补一个1，然后再补0，直...
-            <!--<a class="button" href="/2018/04/05/md5.html">
               Continue reading
             </a>-->
           </div>
