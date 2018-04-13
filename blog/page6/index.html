@@ -198,6 +198,38 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2016/11/24/consistency-highavailability.html">
+                数据库的一致性与高可用
+              </a>
+            </h1>
+            <p class="meta">
+              November 24, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            在给定多台计算机，他们相互之间由网络相互连通，能够做到  
+1.数据每次成功写入，数据不会丢失，并且按照写入的顺序排列  
+2.给定安全级别，保证服务可用性，并尽可能减少机器消耗。
+
+2PC
+
+所谓的两个阶段是指：第一阶段：准备阶段(投票阶段)和第二阶段：提交阶段（执行阶段）。
+
+准备阶段
+
+事务协调者(事务管理器)给每个参与者(资源管理器)发送Prepare消息，每个参与者要么直接返回失败(如权限验证失败)，要么在本地执行事务，写本地的redo和undo日志，但不提交，到达一种“万事俱备...
+            <!--<a class="button" href="/2016/11/24/consistency-highavailability.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2016/11/18/php-about-thred-safe.html">
                 php线程安全
               </a>
@@ -320,40 +352,6 @@ import matplotlib.pyplot as p...
 int sum = 0, n = 100; /*执行一次*/
 sum = (1 + n) * n / 2;...
             <!--<a class="button" href="/2016/11/13/time-complexity.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/13/sort.html">
-                排序
-              </a>
-            </h1>
-            <p class="meta">
-              November 13, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            冒泡算法
-do
-  swapped = false
-  for i = 1 to indexOfLastUnsortedElement
-    if leftElement &gt; rightElement
-      swap(leftElement, rightElement)
-      swapped = true
-while swapped
-
-
-选择排序
-repeat (numOfElements - 1) times
-  set the first unsorted elem...
-            <!--<a class="button" href="/2016/11/13/sort.html">
               Continue reading
             </a>-->
           </div>
