@@ -276,8 +276,8 @@ $...
       <span>
           <header>
             <h1>
-              <a class="post-link" href="/2016/11/11/php-cgi.html">
-                phpcgi
+              <a class="post-link" href="/2016/11/11/php-nginx.html">
+                NGINX+PHP运行原理
               </a>
             </h1>
             <p class="meta">
@@ -285,20 +285,20 @@ $...
             </p>
           </header>
           <div class="excerpt">
-            php-cgi
-它本身是一个进程，工作原理是，获取cgi的配置信息，解析配置文件，初始化环境变量和数据结构。
+            前向代理与反向代理
 
-cgi
-cgi 就是一个 php-cgi.exe 的管理器。  
-1.当服务器启动时它会去获取一份配置文件。  
-2.当用户发出请求时，它会去fork一个php-cgi.exe进程进行处理。  
-3.处理完请求时，会马上对其进行销毁。
+前向代理作为客户端的代理，将从互联网上获取的资源返回给一个或多个的客户端，服务器端（如Web服务器）只知道代理的IP地址而不知道客户端的IP地址。
 
-fastcgi
-fastcgi 相当于是cgi的一个扩展，可以看成cgi内部的东西。
 
-1.cgi启动时会一次性fork多个php-cgi.ex...
-            <!--<a class="button" href="/2016/11/11/php-cgi.html">
+
+而反向代理是作为服务器端（如Web服务器）的代理使用，而不是客户端。客户端借由前向代理可以间接访问很多不同互联网服务器（簇）的资源，而反向代理是供很多客户端都通过它间接访问不同后端服务器上的资源，而不需要知道这些后端服务器的存在，而以为所有资源都来自于这个反向代理服务器。
+
+
+
+CGI
+
+通用网关接口（Common ...
+            <!--<a class="button" href="/2016/11/11/php-nginx.html">
               Continue reading
             </a>-->
           </div>
