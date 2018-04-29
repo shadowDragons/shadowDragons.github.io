@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <!-- JQuery (used for bootstrap and jekyll search) -->
+    <script src="/assets/js/jquery-3.2.1.min.js" ></script>
+    
+    <!-- Main JS (navbar.js and katex_init.js)-->
+    <script defer=true src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <link rel="stylesheet" href="/assets/css/mermaid.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="http://localhost:4000/2018/04/27/http-message-method.html">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="小白" href="http://localhost:4000///feed.xml"/>
+
+    <!-- Font Awesome -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css">
+
+    <!-- Google Fonts -->
+    
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,700italic,400italic" rel="stylesheet" type="text/css"> 
+    
+
+    <!-- KaTeX 0.8.3 -->
+    
+    <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/katex.min.css">
+    <script src="/assets/js/katex.min.js">
+    </script>
+    
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-89143952-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+    
+
+    <!-- Baidu Analytics -->
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = 'https://hm.baidu.com/hm.js?2a8326534823f90fa4eef816aea2ef08';
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+    </script>        
+    
+    
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>HTTP - 报文 - 方法 | 小白成长史</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="HTTP - 报文 - 方法" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="本文对HTTP报文中常见的方法做下说明。" />
+<meta property="og:description" content="本文对HTTP报文中常见的方法做下说明。" />
+<link rel="canonical" href="http://localhost:4000/2018/04/27/http-message-method.html" />
+<meta property="og:url" content="http://localhost:4000/2018/04/27/http-message-method.html" />
+<meta property="og:site_name" content="小白成长史" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-04-27T00:00:00+08:00" />
+<script type="application/ld+json">
+{"description":"本文对HTTP报文中常见的方法做下说明。","@type":"BlogPosting","url":"http://localhost:4000/2018/04/27/http-message-method.html","headline":"HTTP - 报文 - 方法","dateModified":"2018-04-27T00:00:00+08:00","datePublished":"2018-04-27T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2018/04/27/http-message-method.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- Manual seo tags -->
+    <!--
+    <title>HTTP - 报文 - 方法 | 小白</title>
+    <meta name="description" content="本文对HTTP报文中常见的方法做下说明。">
+    -->
+</head>
+
+  <body>
+    <header class="site-header">
+    
+    <!-- Logo and title -->
+	<div class="branding">
+		<a href="/">
+			<img class="avatar" src="/assets/img/photo.jpeg" alt=""/>
+		</a>
+
+		<h1 class="site-title">
+			<a href="/">小白</a>
+		</h1>
+	</div>
+    
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+    
+    <!-- Menu -->
+    <ul>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+         
+        
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="/search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="/tags">
+                <i class="fa fa-tags" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+    </ul>
+        
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="background-image: url('/')">
+    <h1 id="HTTP+-+%E6%8A%A5%E6%96%87+-+%E6%96%B9%E6%B3%95" class="title">HTTP - 报文 - 方法</h1>
+    <p class="meta">
+    April 27, 2018
+    
+    </p>
+  </header>
+  <section class="post-content"><p>本文对HTTP报文中常见的方法做下说明。</p>
+
+<h4 id="get">GET</h4>
+
+<p>是最常⽤的⽅法。通常⽤于请求服务器发送某个资源。HTTP/1.1 要求服务器实现此⽅法。</p>
+
+<p><img src="/assets/img/posts/2018-04-27-http-message-method/get.png" alt="get.png" /></p>
+
+<h4 id="head">HEAD</h4>
+
+<p>HEAD ⽅法与 GET ⽅法的⾏为很类似，但服务器在响应中只返回⾸部。不会返回实体的主体部分。这就允许客户端在未获取实际资源的情况下，对资源的⾸部进⾏检查。使⽤ HEAD，可以：</p>
+
+<ul>
+  <li>在不获取资源的情况下了解资源的情况（⽐如，判断其类型）；</li>
+  <li>通过查看响应中的状态码，看看某个对象是否存在；</li>
+  <li>通过查看⾸部，测试资源是否被修改了。</li>
+</ul>
+
+<p>服务器开发者必须确保返回的⾸部与GET请求所返回的⾸部完全相同。遵循 HTTP/1.1 规范，就必须实现 HEAD ⽅法。</p>
+
+<p><img src="/assets/img/posts/2018-04-27-http-message-method/header.png" alt="header.png" /></p>
+
+<h4 id="put">PUT</h4>
+
+<p>与 GET 从服务器读取⽂档相反，PUT ⽅法会向服务器写⼊⽂档，是让服务器⽤请求的主体部分来创建⼀个由所请求的 URL 命名的新⽂档。</p>
+
+<p><img src="/assets/img/posts/2018-04-27-http-message-method/put.png" alt="put.png" /></p>
+
+<h4 id="post">POST</h4>
+
+<p>⽤来向服务器输⼊数据的，而PUT ⽤于向服务器上的资源（例如⽂件）中存储数据。</p>
+
+<p><img src="/assets/img/posts/2018-04-27-http-message-method/post.png" alt="post.png" /></p>
+
+<h4 id="trace">TRACE</h4>
+
+<p>请求会在⽬的服务器端发起⼀个“环回”诊断。⾏程最后⼀站的服务器会弹回⼀条 TRACE 响应，并在响应主体中携带它收到的原始请求报⽂。这样客户端就可以查看在所有中间 HTTP 应⽤程序组成的请求 / 响应链上，原始报⽂是否，以及如何被毁坏或修改过。</p>
+
+<p><img src="/assets/img/posts/2018-04-27-http-message-method/trace.png" alt="trace.png" /></p>
+
+<p>TRACE ⽅法主要⽤于诊断；也就是说，⽤于验证请求是否如愿穿过了请求 / 响应链。它也是⼀种很好的⼯具，可以⽤来查看代理和其他应⽤程序对⽤户请求所产⽣效果。</p>
+
+<p>尽管 TRACE 可以很⽅便地⽤于诊断，但它确实也有缺点，它假定中间应⽤程序对各种不同类型请求（不同的⽅法——GET、HEAD、POST等）的处理是相同的。很多 HTTP 应⽤程序会根据⽅法的不同做出不同的事情——⽐如，代理可能会将 POST 请求直接发送给服务器，⽽将 GET 请求发送给另⼀个 HTTP 应⽤程序（⽐如 Web 缓存）。TRACE 并不提供区分这些⽅法的机制。通常，中间应⽤程序会⾃⾏决定对 TRACE 请求的处理⽅式。</p>
+
+<p>TRACE 请求中不能带有实体的主体部分。TRACE 响应的实体主体部分包含了响应服务器收到的请求的精确副本。</p>
+
+<h4 id="options">OPTIONS</h4>
+
+<p>OPTIONS ⽅法请求 Web 服务器告知其⽀持的各种功能。可以询问服务器通常⽀持哪些⽅法，或者对某些特殊资源⽀持哪些⽅法。这为客户端应⽤程序提供了⼀种⼿段，使其不⽤实际访问那些资源就能判定访问各种资源的最优⽅式。</p>
+
+<p><img src="/assets/img/posts/2018-04-27-http-message-method/option.png" alt="option.png" /></p>
+
+<h4 id="delete">DELETE</h4>
+
+<p>所做的事情就是请服务器删除请求 URL 所指定的资源。但是，客户端应⽤程序⽆法保证删除操作⼀定会被执⾏。因为HTTP 规范允许服务器在不通知客户端的情况下撤销请求。</p>
+
+<p><img src="/assets/img/posts/2018-04-27-http-message-method/delete.png" alt="delete.png" /></p>
+
+<h4 id="扩展方法">扩展方法</h4>
+
+<p>由于HTTP设计得易于扩展，所以除了这些⽅法之外，其他服务器可能还会实现⼀些⾃⼰的请求⽅法。这些附加的⽅法是对 HTTP 规范的扩展，因此被称为扩展⽅法。</p>
+
+<p>常用扩展方法如下：</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>⽅法</td>
+      <td>描述</td>
+    </tr>
+    <tr>
+      <td>LOCK</td>
+      <td>允许⽤户“锁定”资源——⽐如，可以在编辑某个资源的时候将其锁定，以防别⼈同时对其进⾏修改</td>
+    </tr>
+    <tr>
+      <td>MKCOL</td>
+      <td>允许⽤户创建资源</td>
+    </tr>
+    <tr>
+      <td>COPY</td>
+      <td>便于在服务器上复制资源</td>
+    </tr>
+    <tr>
+      <td>MOVE</td>
+      <td>在服务器上移动资源</td>
+    </tr>
+  </tbody>
+</table>
+</section>
+   
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list">
+    
+      <div class="meta">Tags</div>
+    
+
+    
+    <a class="button" href="/tags#http">
+      <p><i class="fa fa-tag fa-fw"></i> http</p>
+    </a>
+    
+  </div>
+</footer>
+
+    
+</article>
+
+<!-- Disqus -->
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+  
+  <div id="previous-post" class="post-nav-post">
+      <p>Previous post</p>
+      <a href="/2018/04/23/http-message.html">
+        HTTP - 报文
+      </a>
+  </div>
+  
+  
+  <div id="next-post" class="post-nav-post">
+      <p>Next post</p>
+      <a href="/2018/04/27/http-message-status.html">
+        HTTP - 报文 - 状态码
+      </a>
+  </div>
+  
+</div>
+
+    </div>
+    
+<footer class="site-footer">
+    <p class="text">Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+	<a href="http://localhost:4000/feed.xml" title="Follow RSS feed">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+	<a href="https://github.com/shadowdragons" title="Follow on GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+
+  </body>
+</html>

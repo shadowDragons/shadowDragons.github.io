@@ -151,6 +151,8 @@
         
         
         
+        
+        
          
         
         
@@ -197,23 +199,37 @@
       <span>
           <header>
             <h1>
-              <a class="post-link" href="/2018/04/10/ethereum-crypto-currency-2.html">
-                以太坊发行代币(二)
+              <a class="post-link" href="/2018/04/29/http-headers.html">
+                HTTP - 报文 - 首部
               </a>
             </h1>
             <p class="meta">
-              April 10, 2018
+              April 29, 2018
             </p>
           </header>
           <div class="excerpt">
-            在上一节中，已经讲了如何去发行一个简单的代币，如果没看过的同学，请先去阅读以太坊发行代币(一)
+            本文对HTTP报文中常见的首部做下说明。
 
-这一节，我们将对之前的代币做一次升级。
+通用首部
 
-如果你想把你的代币卖给一个交易所，只是发送到一个其他合约的以太坊地址是不够的，因为它不会意识到这个新代币或者谁发送给它的，因为这个合约没有发布一些事件或者接口。所以对于合约，你应该首先批准它们可以从你账号转出代币，然后让它们知道它们应该怎么去做。
+有些⾸部提供了与报⽂相关的最基本的信息，它们被称为通⽤⾸部。它们像和事佬⼉⼀样，不论报⽂是何类型，都为其提供⼀些有⽤信息。
 
-由于里面的一些函数是必须去做一些交易操作，这里很有必要把它们弄成集成为一个内部函数（只有这个合约本身能够...
-            <!--<a class="button" href="/2018/04/10/ethereum-crypto-currency-2.html">
+通用信息性首部如下：
+
+
+  
+    
+      ⾸部
+      描述
+    
+    
+      Connection
+      允许客户端和服务器指定与请求/响应连接有关的选项
+    
+    
+      Date
+      提供⽇期和时间标志，说明报⽂是什么时间创建的，并列出了首部可接受...
+            <!--<a class="button" href="/2018/04/29/http-headers.html">
               Continue reading
             </a>-->
           </div>
@@ -225,28 +241,27 @@
       <span>
           <header>
             <h1>
-              <a class="post-link" href="/2018/04/07/ethereum-crypto-currency-1.html">
-                以太坊发行代币(一)
+              <a class="post-link" href="/2018/04/29/http-connect.html">
+                HTTP - 连接管理
               </a>
             </h1>
             <p class="meta">
-              April 7, 2018
+              April 29, 2018
             </p>
           </header>
           <div class="excerpt">
-            本文使用到的工具geth、Mist，并通过私有链来做测试。
-如果你不知道还不了解，请先阅读这篇文章《搭建以太坊私有网络》
+            TCP连接
 
-先从最基本的开始，打开Mist，进入到 Contract 标签页，然后点击 Deploy New Contract
+世界上⼏乎所有的 HTTP 通信都是由 TCP/IP 承载的，TCP/IP 是全球计算机及⽹络设备都在使⽤的⼀种常⽤的分组交换⽹络分层协议集。客户端应⽤程序可以打开⼀条 TCP/IP 连接，连接到可能运⾏在世界任何地⽅的服务器应⽤程序。⼀旦连接建⽴起来了，在客户端和服务器的计算机之间交换的报⽂就永远不会丢失、受损或失序。
+
+完整的连接执行流程如下图所示:
 
 
 
-在Solidity Contract Source code输入框，输入以下代码：
+TCP是分段、由IP分组传送
 
-contract MyToken {
-    /* This creates an array with all balances */
-    mapping ...
-            <!--<a class="button" href="/2018/04/07/ethereum-crypto-currency-1.html">
+TCP 的数据是通过名为 IP 分组（或 IP 数据报）的⼩数据块来发送的。这样的话...
+            <!--<a class="button" href="/2018/04/29/http-connect.html">
               Continue reading
             </a>-->
           </div>
@@ -258,25 +273,35 @@ contract MyToken {
       <span>
           <header>
             <h1>
-              <a class="post-link" href="/2018/04/05/sha256.html">
-                加密散列-sha256
+              <a class="post-link" href="/2018/04/27/http-message-status.html">
+                HTTP - 报文 - 状态码
               </a>
             </h1>
             <p class="meta">
-              April 5, 2018
+              April 27, 2018
             </p>
           </header>
           <div class="excerpt">
-            SHA256是安全散列算法SHA（Secure Hash Algorithm）系列算法之一，其摘要长度为256bits，即32个字节，故称SHA256（1个字节=8位）。
+            本文对HTTP报文中常见的状态码做下说明。所有状态码参见HTTP状态码
 
-算法步骤
+100~199 信息性状态码
 
-原始消息分为N个512bit的消息块。每个消息块分成16个32bit，标记为M(i)0、M(i)1、M(i)2、…、M(i)15然后对这N个消息块依次进行处理。
+HTTP/1.1 向协议中引⼊了信息性状态码。这些状态码相对较新，关于其复杂性和感知价值存在⼀些争议。
 
-1.补位  
-由于必须分成n个512bit块，所以必须进行补位。  
-最后还需要预留64bit记录消息块的长度，所以消息块的长度不能大于2^6...
-            <!--<a class="button" href="/2018/04/05/sha256.html">
+已定义的信息性状态码如下：
+
+
+  
+    
+      状态码
+      原因短语
+      含义
+    
+    
+      100
+      Continue
+      说明收到了请求的初始部分，请客户端继续。发送了这个状态码之后，服务器在收到请求之后必须进⾏响...
+            <!--<a class="button" href="/2018/04/27/http-message-status.html">
               Continue reading
             </a>-->
           </div>
@@ -288,25 +313,32 @@ contract MyToken {
       <span>
           <header>
             <h1>
-              <a class="post-link" href="/2018/04/05/sha1.html">
-                加密散列-sha1
+              <a class="post-link" href="/2018/04/27/http-message-method.html">
+                HTTP - 报文 - 方法
               </a>
             </h1>
             <p class="meta">
-              April 5, 2018
+              April 27, 2018
             </p>
           </header>
           <div class="excerpt">
-            SHA-1（英语：Secure Hash Algorithm 1，中文名：安全散列算法1）是一种密码散列函数，美国国家安全局设计，并由美国国家标准技术研究所（NIST）发布为联邦数据处理标准（FIPS）[2]。SHA-1可以生成一个被称为消息摘要的160位（20字节）散列值，散列值通常的呈现形式为40个十六进制数。
+            本文对HTTP报文中常见的方法做下说明。
 
-算法步骤
+GET
 
-原始消息分为N个512bit的消息块。每个消息块分成16个32bit。
+是最常⽤的⽅法。通常⽤于请求服务器发送某个资源。HTTP/1.1 要求服务器实现此⽅法。
 
-1.补位  
-由于必须分成n个512bit块，所以必须进行补位。  
-最后还需要预留64...
-            <!--<a class="button" href="/2018/04/05/sha1.html">
+
+
+HEAD
+
+HEAD ⽅法与 GET ⽅法的⾏为很类似，但服务器在响应中只返回⾸部。不会返回实体的主体部分。这就允许客户端在未获取实际资源的情况下，对资源的⾸部进⾏检查。使⽤ HEAD，可以：
+
+
+  在不获取资源的情况下了解资源的情况（⽐如，判断其类型）；
+  通过查看响应中的状态码，看看某个对象是否存在；
+  通过查看⾸部，测试资源是否被...
+            <!--<a class="button" href="/2018/04/27/http-message-method.html">
               Continue reading
             </a>-->
           </div>
@@ -318,19 +350,36 @@ contract MyToken {
       <span>
           <header>
             <h1>
-              <a class="post-link" href="/2018/04/05/ripemd160.html">
-                加密散列-PIPEMD160
+              <a class="post-link" href="/2018/04/23/http-message.html">
+                HTTP - 报文
               </a>
             </h1>
             <p class="meta">
-              April 5, 2018
+              April 23, 2018
             </p>
           </header>
           <div class="excerpt">
-            RIPEMD (RACE原始完整性校验讯息摘要)是一种加密哈希函数，由 鲁汶大学 Hans Dobbertin,Antoon Bosselaers 和 Bart Prenee组成的COSIC 研究小组发布于1996年。 RIPEMD是以MD4为基础原则所设计的 ，而且其表现与更有名的SHA-1类似.
+            分为两类：请求报文和响应报文。
 
-RIPEMD-160是以原始版RIPEMD所改进的160位元版本，而且是RIPEMD系列中最常见的版本。 RIPEMD-160是设计给学术社群所使用的，刚好相对于 国家安全局 所设计 SHA...
-            <!--<a class="button" href="/2018/04/05/ripemd160.html">
+请求报文格式：
+
+//起始行
+&lt;method&gt; &lt;request-URL&gt; &lt;version&gt;
+//首部
+&lt;headers&gt;
+//实体主体
+&lt;entity-body&gt;
+
+
+响应报文格式：
+
+//起始行
+&lt;version&gt; &lt;status&gt; &lt;reason-phrase&gt;
+//首部
+&lt;headers&gt;
+//实体主体
+&lt;entity-body&gt...
+            <!--<a class="button" href="/2018/04/23/http-message.html">
               Continue reading
             </a>-->
           </div>
