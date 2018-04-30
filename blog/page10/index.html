@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
 
     <!-- Canonical -->
-    <link rel="canonical" href="http://localhost:4000/blog/page8/">
+    <link rel="canonical" href="http://localhost:4000/blog/page10/">
 
     <!-- RSS -->
     <link rel="alternate" type="application/atom+xml" title="小白" href="http://localhost:4000///feed.xml"/>
@@ -84,13 +84,12 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="php mysql 分布式 区块链" />
 <meta property="og:description" content="php mysql 分布式 区块链" />
-<link rel="canonical" href="http://localhost:4000/blog/page8/" />
-<meta property="og:url" content="http://localhost:4000/blog/page8/" />
+<link rel="canonical" href="http://localhost:4000/blog/page10/" />
+<meta property="og:url" content="http://localhost:4000/blog/page10/" />
 <meta property="og:site_name" content="小白成长史" />
-<link rel="prev" href="http://localhost:4000/blog/page7" />
-<link rel="next" href="http://localhost:4000/blog/page9" />
+<link rel="prev" href="http://localhost:4000/blog/page9" />
 <script type="application/ld+json">
-{"description":"php mysql 分布式 区块链","@type":"WebPage","url":"http://localhost:4000/blog/page8/","headline":"小白成长史","@context":"http://schema.org"}</script>
+{"description":"php mysql 分布式 区块链","@type":"WebPage","url":"http://localhost:4000/blog/page10/","headline":"小白成长史","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
     <!-- Manual seo tags -->
@@ -202,169 +201,29 @@
       <span>
           <header>
             <h1>
-              <a class="post-link" href="/2016/11/14/system-thread-cpu.html">
-                线程与cpu核
+              <a class="post-link" href="/2016/11/11/php-nginx.html">
+                NGINX+PHP运行原理
               </a>
             </h1>
             <p class="meta">
-              November 14, 2016
+              November 11, 2016
             </p>
           </header>
           <div class="excerpt">
-            进程，线程，核之间的关联  
-1.一个应用普遍只占一个进程，一个进程可以衍生出多个线程，而核只与线程有关。  
-2.一个线程只能在一个核上面跑。
+            前向代理与反向代理
 
-单核CPU，程序可以创建多个线程，但他们并不是真正意义上的并行执行，因为他们只会占用一个核，所以只是切换速度较快，没察觉到。每个线程会分配差不多20ms的时间片，执行完时间片，会切换到其他线程，该线程会处于等待执行状态，等其他线程执行完，再继续执行20ms。如果遇到有某些操作比较耗时，又要及时反馈给用户，还是很有必要多线程的。
-
-多核CPU，应...
-            <!--<a class="button" href="/2016/11/14/system-thread-cpu.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/14/machinelearning-supervised.html">
-                监督学习与梯度下降
-              </a>
-            </h1>
-            <p class="meta">
-              November 14, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            假设一个问题有n个特征，线性函数为
-  
-其中   
-差值计算，其中m为训练数据  
-所以我们要求出当最小值时的特征参数值。
-
-主要有两种方式来求出  
-1.梯度下降  
-2.正则方程组
-
-梯度下降
-
-把计算结果与真实结果的差值比做山顶，通过找寻山的最大坡度下降，达到最快到达山脚，从而实现最小差值。
-
-对每个求导，得出最快下降梯度，然后沿着这梯度下降。学习速度或下降速度。
+前向代理作为客户端的代理，将从互联网上获取的资源返回给一个或多个的客户端，服务器端（如Web服务器）只知道代理的IP地址而不知道客户端的IP地址。
 
 
-python实例
-import numpy as np
-import matplotlib.pyplot as p...
-            <!--<a class="button" href="/2016/11/14/machinelearning-supervised.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/13/time-complexity.html">
-                时间复杂度计算
-              </a>
-            </h1>
-            <p class="meta">
-              November 13, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            用大写O()来体现算法时间复杂度，称之为大O记法。
 
-推导大O阶
-1.用常数1取代运行时间中的所有加法常数。  
-2.在修改后的运行次数函数中，只保留最高阶项。  
-3.如果最高阶项存在且不是1，则去除与这个项相乘的常数。  
-4.得出大O阶。
-
-算法分析
-1.计算所有情况的平均值，称为平均时间复杂度
-2.计算最坏情况下的时间复杂度，称为最坏时间复杂度
-
-计算实例
-
-常数阶 O(1)
-int sum = 0, n = 100; /*执行一次*/
-sum = (1 + n) * n / 2;...
-            <!--<a class="button" href="/2016/11/13/time-complexity.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/13/sort.html">
-                排序
-              </a>
-            </h1>
-            <p class="meta">
-              November 13, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            冒泡算法
-do
-  swapped = false
-  for i = 1 to indexOfLastUnsortedElement
-    if leftElement &gt; rightElement
-      swap(leftElement, rightElement)
-      swapped = true
-while swapped
+而反向代理是作为服务器端（如Web服务器）的代理使用，而不是客户端。客户端借由前向代理可以间接访问很多不同互联网服务器（簇）的资源，而反向代理是供很多客户端都通过它间接访问不同后端服务器上的资源，而不需要知道这些后端服务器的存在，而以为所有资源都来自于这个反向代理服务器。
 
 
-选择排序
-repeat (numOfElements - 1) times
-  set the first unsorted elem...
-            <!--<a class="button" href="/2016/11/13/sort.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/13/php-session.html">
-                php实现session跨域
-              </a>
-            </h1>
-            <p class="meta">
-              November 13, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            session跨域
-在*.a.com上保存session，在客户端浏览器中会生成一个sessionID，作用范围仅仅是在a.com这个域名下，这个sessionID就是对应该服务器存储session文件的文件名，在用户打开浏览器访问a.com，浏览器会发送该sessionID去服务器找到该文件名，然后获取session。
 
-同服务器
-跨主域  
-由于sessionID只会在一个主域下面有效，所以要在另外一个域名下生成相应的sessionID。
+CGI
 
-实现
-
-a.com
-&lt;?php
-ses...
-            <!--<a class="button" href="/2016/11/13/php-session.html">
+通用网关接口（Common ...
+            <!--<a class="button" href="/2016/11/11/php-nginx.html">
               Continue reading
             </a>-->
           </div>
@@ -376,16 +235,11 @@ ses...
   
   <div class="pagination">
     
-    <a href="/blog/page7" class="button" >
+    <a href="/blog/page9" class="button" >
       <i class="fa fa-chevron-left"></i>
       Prev
     </a>
     
-    
-    <a href="/blog/page9" class="button" >
-      Next
-      <i class="fa fa-chevron-right"></i>
-    </a>
     
   </div>
   

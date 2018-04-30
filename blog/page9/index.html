@@ -88,6 +88,7 @@
 <meta property="og:url" content="http://localhost:4000/blog/page9/" />
 <meta property="og:site_name" content="小白成长史" />
 <link rel="prev" href="http://localhost:4000/blog/page8" />
+<link rel="next" href="http://localhost:4000/blog/page10" />
 <script type="application/ld+json">
 {"description":"php mysql 分布式 区块链","@type":"WebPage","url":"http://localhost:4000/blog/page9/","headline":"小白成长史","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
@@ -121,6 +122,8 @@
     
     <!-- Menu -->
     <ul>
+        
+        
         
         
         
@@ -193,6 +196,112 @@
   
 
   <div class="posts">
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2016/11/13/link.html">
+                链表
+              </a>
+            </h1>
+            <p class="meta">
+              November 13, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            单链表
+查找
+temp = head, index = 0
+while (temp.data != input)
+  temp = temp.next , index++
+  if temp == null
+    return -1
+return index;
+
+
+插入  
+1.指定位置
+v = 90, k = 2
+Vertex temp1 = head
+while (--k!=0)
+  temp1 = temp1.next
+Vertex temp2 = temp1.next
+Verte...
+            <!--<a class="button" href="/2016/11/13/link.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2016/11/13/jsonp.html">
+                jsonp实现异步请求跨域
+              </a>
+            </h1>
+            <p class="meta">
+              November 13, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            ajax 和 jsonp的区别  
+ajax是通过XmlHttpRequest来获取非本页内容，而jsonp是通过动态添加
+
+为什么jsonp能够跨服  
+因为在web调用js文件是不受跨服影响的，不仅如此，凡是拥有src属性的都有跨服的能力。
+
+实现一
+www.b.com/remote.js
+alert(1)
+
+
+www.a.com/json.html
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "h...
+            <!--<a class="button" href="/2016/11/13/jsonp.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2016/11/13/hash-table.html">
+                哈希表
+              </a>
+            </h1>
+            <p class="meta">
+              November 13, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            线性探查
+查找
+i = base = key%HT.length // get hashed index
+while (true)
+  if (HT[i] == EMPTY) return "not found"
+  else if (HT[i] == key) return "found at index i"
+  else i = (base+step*1)%HT.length
+
+
+插入
+if HT is 1 item before full, prevent insertion
+i ...
+            <!--<a class="button" href="/2016/11/13/hash-table.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
     
     <div class="post-teaser">
       
@@ -273,40 +382,6 @@ $...
       </span>
     </div>
     
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/11/php-nginx.html">
-                NGINX+PHP运行原理
-              </a>
-            </h1>
-            <p class="meta">
-              November 11, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            前向代理与反向代理
-
-前向代理作为客户端的代理，将从互联网上获取的资源返回给一个或多个的客户端，服务器端（如Web服务器）只知道代理的IP地址而不知道客户端的IP地址。
-
-
-
-而反向代理是作为服务器端（如Web服务器）的代理使用，而不是客户端。客户端借由前向代理可以间接访问很多不同互联网服务器（簇）的资源，而反向代理是供很多客户端都通过它间接访问不同后端服务器上的资源，而不需要知道这些后端服务器的存在，而以为所有资源都来自于这个反向代理服务器。
-
-
-
-CGI
-
-通用网关接口（Common ...
-            <!--<a class="button" href="/2016/11/11/php-nginx.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
   </div>
 
   
@@ -317,6 +392,11 @@ CGI
       Prev
     </a>
     
+    
+    <a href="/blog/page10" class="button" >
+      Next
+      <i class="fa fa-chevron-right"></i>
+    </a>
     
   </div>
   
