@@ -202,6 +202,152 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2016/11/14/machinelearning-supervised.html">
+                监督学习与梯度下降
+              </a>
+            </h1>
+            <p class="meta">
+              November 14, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            假设一个问题有n个特征，线性函数为
+  
+其中   
+差值计算，其中m为训练数据  
+所以我们要求出当最小值时的特征参数值。
+
+主要有两种方式来求出  
+1.梯度下降  
+2.正则方程组
+
+梯度下降
+
+把计算结果与真实结果的差值比做山顶，通过找寻山的最大坡度下降，达到最快到达山脚，从而实现最小差值。
+
+对每个求导，得出最快下降梯度，然后沿着这梯度下降。学习速度或下降速度。
+
+
+python实例
+import numpy as np
+import matplotlib.pyplot as p...
+            <!--<a class="button" href="/2016/11/14/machinelearning-supervised.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2016/11/13/time-complexity.html">
+                时间复杂度计算
+              </a>
+            </h1>
+            <p class="meta">
+              November 13, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            用大写O()来体现算法时间复杂度，称之为大O记法。
+
+推导大O阶
+1.用常数1取代运行时间中的所有加法常数。  
+2.在修改后的运行次数函数中，只保留最高阶项。  
+3.如果最高阶项存在且不是1，则去除与这个项相乘的常数。  
+4.得出大O阶。
+
+算法分析
+1.计算所有情况的平均值，称为平均时间复杂度
+2.计算最坏情况下的时间复杂度，称为最坏时间复杂度
+
+计算实例
+
+常数阶 O(1)
+int sum = 0, n = 100; /*执行一次*/
+sum = (1 + n) * n / 2;...
+            <!--<a class="button" href="/2016/11/13/time-complexity.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2016/11/13/sort.html">
+                排序
+              </a>
+            </h1>
+            <p class="meta">
+              November 13, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            冒泡算法
+do
+  swapped = false
+  for i = 1 to indexOfLastUnsortedElement
+    if leftElement &gt; rightElement
+      swap(leftElement, rightElement)
+      swapped = true
+while swapped
+
+
+选择排序
+repeat (numOfElements - 1) times
+  set the first unsorted elem...
+            <!--<a class="button" href="/2016/11/13/sort.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2016/11/13/php-session.html">
+                php实现session跨域
+              </a>
+            </h1>
+            <p class="meta">
+              November 13, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            session跨域
+在*.a.com上保存session，在客户端浏览器中会生成一个sessionID，作用范围仅仅是在a.com这个域名下，这个sessionID就是对应该服务器存储session文件的文件名，在用户打开浏览器访问a.com，浏览器会发送该sessionID去服务器找到该文件名，然后获取session。
+
+同服务器
+跨主域  
+由于sessionID只会在一个主域下面有效，所以要在另外一个域名下生成相应的sessionID。
+
+实现
+
+a.com
+&lt;?php
+ses...
+            <!--<a class="button" href="/2016/11/13/php-session.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2016/11/13/link.html">
                 链表
               </a>
@@ -230,152 +376,6 @@ while (--k!=0)
 Vertex temp2 = temp1.next
 Verte...
             <!--<a class="button" href="/2016/11/13/link.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/13/jsonp.html">
-                jsonp实现异步请求跨域
-              </a>
-            </h1>
-            <p class="meta">
-              November 13, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            ajax 和 jsonp的区别  
-ajax是通过XmlHttpRequest来获取非本页内容，而jsonp是通过动态添加
-
-为什么jsonp能够跨服  
-因为在web调用js文件是不受跨服影响的，不仅如此，凡是拥有src属性的都有跨服的能力。
-
-实现一
-www.b.com/remote.js
-alert(1)
-
-
-www.a.com/json.html
-&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "h...
-            <!--<a class="button" href="/2016/11/13/jsonp.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/13/hash-table.html">
-                哈希表
-              </a>
-            </h1>
-            <p class="meta">
-              November 13, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            线性探查
-查找
-i = base = key%HT.length // get hashed index
-while (true)
-  if (HT[i] == EMPTY) return "not found"
-  else if (HT[i] == key) return "found at index i"
-  else i = (base+step*1)%HT.length
-
-
-插入
-if HT is 1 item before full, prevent insertion
-i ...
-            <!--<a class="button" href="/2016/11/13/hash-table.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/13/bit-cal.html">
-                位运算
-              </a>
-            </h1>
-            <p class="meta">
-              November 13, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            以S = 1001011,j = 0000000为例。
-
-获取第 i 标志位
-j = 0000001
-(shift left j) * i
-S AND j
-
-
-切换第 i 标志位
-j = 0000001
-(shift left j) * i
-S XOR j
-(XOR: 11 = 0 10 = 1 01 = 1 00 = 0)
-
-
-清除第 i 标志位
-j = 0000001
-(shift left j) * i
-invert j(反转)
-S AND j
-
-
-获取最后一个有效位
-j = NOT...
-            <!--<a class="button" href="/2016/11/13/bit-cal.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/12/php-async.html">
-                php实现异步
-              </a>
-            </h1>
-            <p class="meta">
-              November 12, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            php在处理异步执行主要有以下四种方式来处理，其中第四种方式是最好的，推荐使用。
-
-1.ajax或嵌入img标签，在src中指向异步地址。  
-缺点 不能算是真正异步，主要用户关闭浏览器，异步脚本也就被终止掉了
-
-&lt;html&gt;
-&lt;head&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;img src="b.php"&gt; 
-&lt;script src="jquery.js"&gt;&lt;/script&gt;
-&lt;script&gt;
-$...
-            <!--<a class="button" href="/2016/11/12/php-async.html">
               Continue reading
             </a>-->
           </div>

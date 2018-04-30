@@ -202,6 +202,126 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2018/04/05/sha1.html">
+                加密散列-sha1
+              </a>
+            </h1>
+            <p class="meta">
+              April 5, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            SHA-1（英语：Secure Hash Algorithm 1，中文名：安全散列算法1）是一种密码散列函数，美国国家安全局设计，并由美国国家标准技术研究所（NIST）发布为联邦数据处理标准（FIPS）[2]。SHA-1可以生成一个被称为消息摘要的160位（20字节）散列值，散列值通常的呈现形式为40个十六进制数。
+
+算法步骤
+
+原始消息分为N个512bit的消息块。每个消息块分成16个32bit。
+
+1.补位  
+由于必须分成n个512bit块，所以必须进行补位。  
+最后还需要预留64...
+            <!--<a class="button" href="/2018/04/05/sha1.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2018/04/05/ripemd160.html">
+                加密散列-PIPEMD160
+              </a>
+            </h1>
+            <p class="meta">
+              April 5, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            RIPEMD (RACE原始完整性校验讯息摘要)是一种加密哈希函数，由 鲁汶大学 Hans Dobbertin,Antoon Bosselaers 和 Bart Prenee组成的COSIC 研究小组发布于1996年。 RIPEMD是以MD4为基础原则所设计的 ，而且其表现与更有名的SHA-1类似.
+
+RIPEMD-160是以原始版RIPEMD所改进的160位元版本，而且是RIPEMD系列中最常见的版本。 RIPEMD-160是设计给学术社群所使用的，刚好相对于 国家安全局 所设计 SHA...
+            <!--<a class="button" href="/2018/04/05/ripemd160.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2018/04/05/merkle-tree.html">
+                Merkle树
+              </a>
+            </h1>
+            <p class="meta">
+              April 5, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            Merkle树是一种哈希二叉树，它是一种用作快速归纳和校验大规模数据完整性的数据结构。  
+比特币校验区块交易数据就是使用这种算法。
+
+Merkle树是自底向上构建的。如图所示
+
+
+
+Merkle树一般用来进行完整性验证处理。在处理完整性验证的应用场景中，Merkle树会大大减少数据的传输量及计算的复杂度。
+
+成如果想要证明一个确切的数据块是Merkle树中的一员。通常，只需要树根及这个区块和通向树根沿途的中间哈希值，就可以暂时忽略树的其他部分，这些就已经足以让我们验证到树根。  
+一个节...
+            <!--<a class="button" href="/2018/04/05/merkle-tree.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2018/04/05/md5.html">
+                加密散列-md5
+              </a>
+            </h1>
+            <p class="meta">
+              April 5, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            MD5消息摘要算法（英语：MD5 Message-Digest Algorithm），一种被广泛使用的密码散列函数，可以产生出一个128位（16字节）的散列值（hash value），用于确保信息传输完整一致。
+
+算法步骤
+
+原始消息分为N个512bit的消息块。每个消息块分成16个32bit。
+
+1.补位  
+由于必须分成n个512bit块，所以必须进行补位。  
+最后还需要预留64bit记录消息块的长度，所以消息块的长度不能大于2^64。
+
+补位使其长度 
+
+先补一个1，然后再补0，直...
+            <!--<a class="button" href="/2018/04/05/md5.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2018/04/01/ether-private-network.html">
                 搭建以太坊私有网络
               </a>
@@ -235,142 +355,6 @@ brew install ethereum
   "config": {
         "ch...
             <!--<a class="button" href="/2018/04/01/ether-private-network.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/04/01/cryptography.html">
-                密码学
-              </a>
-            </h1>
-            <p class="meta">
-              April 1, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            对称加密
-
-加密  
-
-
-解密   
-
-
-优点  
-加解密效率高（速度快，空间占用小），加密强度高。
-
-缺点  
-安全性弱，密钥由多方管理，密钥容易泄露。
-
-常见加密算法  
-DES、3DES、Blowfish、RC2、AES以及国密的SM4。
-
-非对称加密
-
-加密  
-
-
-解密   
-
-
-优点  
-安全性高，公私钥分离。
-
-缺点  
-加解密效率低。
-
-常见加密算法  
-RSA、椭圆曲线算法
-
-同态加密
-
-是一种特殊的加密方法，允许对密文进行处理得到仍然是加密的结果，即对密文直接进行处理，...
-            <!--<a class="button" href="/2018/04/01/cryptography.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/03/23/agreement.html">
-                共识算法
-              </a>
-            </h1>
-            <p class="meta">
-              March 23, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            
-
-查看原图  
-drow.io源文件下载
-
-            <!--<a class="button" href="/2018/03/23/agreement.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/03/18/bitcoin-mining.html">
-                比特币挖矿
-              </a>
-            </h1>
-            <p class="meta">
-              March 18, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            
-
-查看原图  
-drow.io源文件下载
-
-            <!--<a class="button" href="/2018/03/18/bitcoin-mining.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/03/18/bitcoin-51attach.html">
-                比特币51攻击
-              </a>
-            </h1>
-            <p class="meta">
-              March 18, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            
-
-查看原图  
-drow.io源文件下载
-
-            <!--<a class="button" href="/2018/03/18/bitcoin-51attach.html">
               Continue reading
             </a>-->
           </div>

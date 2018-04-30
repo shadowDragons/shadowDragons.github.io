@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <!-- JQuery (used for bootstrap and jekyll search) -->
+    <script src="/assets/js/jquery-3.2.1.min.js" ></script>
+    
+    <!-- Main JS (navbar.js and katex_init.js)-->
+    <script defer=true src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <link rel="stylesheet" href="/assets/css/mermaid.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="http://localhost:4000/2018/04/30/network-dns.html">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="小白" href="http://localhost:4000///feed.xml"/>
+
+    <!-- Font Awesome -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css">
+
+    <!-- Google Fonts -->
+    
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,700italic,400italic" rel="stylesheet" type="text/css"> 
+    
+
+    <!-- KaTeX 0.8.3 -->
+    
+    <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/katex.min.css">
+    <script src="/assets/js/katex.min.js">
+    </script>
+    
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-89143952-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+    
+
+    <!-- Baidu Analytics -->
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = 'https://hm.baidu.com/hm.js?2a8326534823f90fa4eef816aea2ef08';
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+    </script>        
+    
+    
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>网络基础 - 域名系统(DNS) | 小白成长史</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="网络基础 - 域名系统(DNS)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="域名系统（英文：Domain Name System，缩写：DNS）是互联网的一项服务。它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。DNS使用TCP和UDP端口53。" />
+<meta property="og:description" content="域名系统（英文：Domain Name System，缩写：DNS）是互联网的一项服务。它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。DNS使用TCP和UDP端口53。" />
+<link rel="canonical" href="http://localhost:4000/2018/04/30/network-dns.html" />
+<meta property="og:url" content="http://localhost:4000/2018/04/30/network-dns.html" />
+<meta property="og:site_name" content="小白成长史" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-04-30T00:00:00+08:00" />
+<script type="application/ld+json">
+{"description":"域名系统（英文：Domain Name System，缩写：DNS）是互联网的一项服务。它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。DNS使用TCP和UDP端口53。","@type":"BlogPosting","url":"http://localhost:4000/2018/04/30/network-dns.html","headline":"网络基础 - 域名系统(DNS)","dateModified":"2018-04-30T00:00:00+08:00","datePublished":"2018-04-30T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2018/04/30/network-dns.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- Manual seo tags -->
+    <!--
+    <title>网络基础 - 域名系统(DNS) | 小白</title>
+    <meta name="description" content="域名系统（英文：Domain Name System，缩写：DNS）是互联网的一项服务。它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。DNS使用TCP和UDP端口53。">
+    -->
+</head>
+
+  <body>
+    <header class="site-header">
+    
+    <!-- Logo and title -->
+	<div class="branding">
+		<a href="/">
+			<img class="avatar" src="/assets/img/photo.jpeg" alt=""/>
+		</a>
+
+		<h1 class="site-title">
+			<a href="/">小白</a>
+		</h1>
+	</div>
+    
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+    
+    <!-- Menu -->
+    <ul>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+         
+        
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="/search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="/tags">
+                <i class="fa fa-tags" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+    </ul>
+        
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="background-image: url('/')">
+    <h1 id="%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80+-+%E5%9F%9F%E5%90%8D%E7%B3%BB%E7%BB%9F%28DNS%29" class="title">网络基础 - 域名系统(DNS)</h1>
+    <p class="meta">
+    April 30, 2018
+    
+    </p>
+  </header>
+  <section class="post-content"><p>域名系统（英文：Domain Name System，缩写：DNS）是互联网的一项服务。它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。DNS使用TCP和UDP端口53。</p>
+
+<h4 id="dns数据包结构">DNS数据包结构</h4>
+
+<p><img src="/assets/img/posts/2018-04-30-network-dns/1.png" alt="1.png" /></p>
+
+<ul>
+  <li>DNS ID号（DNS ID Numner）</li>
+</ul>
+
+<p>用来对应DNS查询和DNS响应。</p>
+
+<ul>
+  <li>查询/响应（Query/Response, QR）</li>
+</ul>
+
+<p>用来指明这个数据包是DNS查询还是响应。</p>
+
+<ul>
+  <li>操作代码（OpCode）</li>
+</ul>
+
+<p>用来定义消息中请求的类型。</p>
+
+<ul>
+  <li>权威应答（Authoritative Answer, AA）</li>
+</ul>
+
+<p>如果响应数据包中设定了这个值，则说明这个响应是由域内权威域名服务器发出的。</p>
+
+<ul>
+  <li>截断（Truncation, TC）</li>
+</ul>
+
+<p>用来指明这个响应由于太长，无法装入数据包而被截断。</p>
+
+<ul>
+  <li>期望递归（Recursion Desired, RD）</li>
+</ul>
+
+<p>当请求中设定了这个值，则说明DNS客户端在目标域名服务器不含有所请求信息的情况下，要求进行递归查询。</p>
+
+<ul>
+  <li>可用递归（Recursion Available, RA）</li>
+</ul>
+
+<p>当响应中设定了这个值，说明域名服务器支持递归查询。</p>
+
+<ul>
+  <li>保留（Z）</li>
+</ul>
+
+<p>在RFC1035的规定中被全设为0，但有时会被用来作为RCode域的扩展。</p>
+
+<ul>
+  <li>响应代码（Response Code）</li>
+</ul>
+
+<p>在DNS响应中用来指明错误。</p>
+
+<ul>
+  <li>问题计数（Question Count）</li>
+</ul>
+
+<p>在问题区段中的条目数。</p>
+
+<ul>
+  <li>回答计数（Answer Count）</li>
+</ul>
+
+<p>在回答区段中的条目数。</p>
+
+<ul>
+  <li>域名服务器计数（Name Server Count）</li>
+</ul>
+
+<p>在权威区段的域名资源记录数。</p>
+
+<ul>
+  <li>额外记录计数（Additional Records Count）</li>
+</ul>
+
+<p>在额外信息区段中其他资源记录数。</p>
+
+<ul>
+  <li>问题区段（Question section）</li>
+</ul>
+
+<p>大小可变，包含有被发送到DNS服务器的一条或多条的信息查询部分。</p>
+
+<ul>
+  <li>回答区段（Answer section）</li>
+</ul>
+
+<p>大小可变，含有用来回答查询的一条或多条资源记录。</p>
+
+<ul>
+  <li>权威区段（Authority section）</li>
+</ul>
+
+<p>大小可变，包含指向权威域名服务器的资源记录，用以继续解析过程。</p>
+
+<ul>
+  <li>额外信息区段（Additional Information section）</li>
+</ul>
+
+<p>包含资源记录且大小可变的区段。这些资源记录用来存储完全没有必要回答的查询相关的额外信息。</p>
+
+<h4 id="dns递归">DNS递归</h4>
+
+<p>由于互联网的DNS结构是层级式的，为了能有回答客户端提交的查询，DNS服务器必须能够彼此通信。我们的内部DNS服务器知道我们本地局域网服务器的名字和IP地址的映射，但不大可能知道谷歌的IP地址。</p>
+
+<p>当DNS服务器需要查找一个IP地址时，它会代表发出请求的客户端向另一个DNS服务器查询。实际上，这个DNS服务器与客户端的行为相同。这个过程叫做<strong>递归查询</strong>。</p>
+
+<script src="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.js"></script>
+<div class="mermaid">
+sequenceDiagram
+    participant A as DNS客户端
+    participant B as 本地DNS服务器
+    participant C as 外部DNS服务器
+    A-&gt;&gt;B: 递归查询
+    B-&gt;&gt;C: 递归查询
+    C-&gt;&gt;B: 查询响应
+    B-&gt;&gt;A: 查询响应
+</div>
+
+<h4 id="dns区域传送">DNS区域传送</h4>
+
+<p>DNS区域是一个DNS服务器所授权管理的名字空间（或是一组DNS名称）。</p>
+
+<p>举例来说，baidu这个网站可能是由一个DNS服务器对baidu.com负责。这样，无论是baidu内部还是外部的设备，如果希望将baidu.com解析成IP地址，都需要和这个区域的权威，也就是这个DNS服务器联系。如果baidu发展壮大了，它可能会增加一个DNS服务器，专门用来处理其名字空间的email部分，如mail.baidu.com，那么这个服务器，就成为这个邮件子区域的权威。如果必要的话，还可以为子域名添加更多的DNS服务器。</p>
+
+<p>区域传送指处于荣誉备份的需要，在两台设备之间传送区域数据。举例来说，在拥有多个DNS服务器的组织中，管理员通常都会配置一台备用DNS服务器，用来维护一份主服务器DNS信息的拷贝，以防止DNS服务器不可欧阳。主要存在两种区域传送。</p>
+
+<ul>
+  <li>完整区域传送（AXFR）</li>
+</ul>
+
+<p>这个类型的传送将整个区域在设备间进行传送。</p>
+
+<ul>
+  <li>增量区域传送（IXFR）</li>
+</ul>
+
+<p>这个类型的传送仅传送区域信息的一部分。</p>
+</section>
+   
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list">
+    
+      <div class="meta">Tags</div>
+    
+
+    
+    <a class="button" href="/tags#http">
+      <p><i class="fa fa-tag fa-fw"></i> http</p>
+    </a>
+    
+  </div>
+</footer>
+
+    
+</article>
+
+<!-- Disqus -->
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+  
+  <div id="previous-post" class="post-nav-post">
+      <p>Previous post</p>
+      <a href="/2018/04/30/network-dhcp.html">
+        网络基础 - 动态主机设置协议(DHCP)
+      </a>
+  </div>
+  
+  
+  <div id="next-post" class="post-nav-post">
+      <p>Next post</p>
+      <a href="/2018/04/30/network-icmp.html">
+        网络基础 - 互联网控制消息协议(ICMP)
+      </a>
+  </div>
+  
+</div>
+
+    </div>
+    
+<footer class="site-footer">
+    <p class="text">Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+	<a href="http://localhost:4000/feed.xml" title="Follow RSS feed">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+	<a href="https://github.com/shadowdragons" title="Follow on GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+
+  </body>
+</html>

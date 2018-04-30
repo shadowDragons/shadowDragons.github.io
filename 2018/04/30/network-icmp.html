@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
 
     <!-- Canonical -->
-    <link rel="canonical" href="http://localhost:4000/blog/page5/">
+    <link rel="canonical" href="http://localhost:4000/2018/04/30/network-icmp.html">
 
     <!-- RSS -->
     <link rel="alternate" type="application/atom+xml" title="小白" href="http://localhost:4000///feed.xml"/>
@@ -78,25 +78,25 @@
     
     <!-- seo tags -->
     <!-- Begin Jekyll SEO tag v2.4.0 -->
-<title>小白成长史 | php mysql 分布式 区块链</title>
+<title>网络基础 - 互联网控制消息协议(ICMP) | 小白成长史</title>
 <meta name="generator" content="Jekyll v3.7.3" />
-<meta property="og:title" content="小白成长史" />
+<meta property="og:title" content="网络基础 - 互联网控制消息协议(ICMP)" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="php mysql 分布式 区块链" />
-<meta property="og:description" content="php mysql 分布式 区块链" />
-<link rel="canonical" href="http://localhost:4000/blog/page5/" />
-<meta property="og:url" content="http://localhost:4000/blog/page5/" />
+<meta name="description" content="互联网控制消息协议（Internet Control Message Protocol, ICMP）是TCP/IP协议族中的一个效用协议，负责提供在TCP/IP网络上设备、服务以及路由器可用性的消息。" />
+<meta property="og:description" content="互联网控制消息协议（Internet Control Message Protocol, ICMP）是TCP/IP协议族中的一个效用协议，负责提供在TCP/IP网络上设备、服务以及路由器可用性的消息。" />
+<link rel="canonical" href="http://localhost:4000/2018/04/30/network-icmp.html" />
+<meta property="og:url" content="http://localhost:4000/2018/04/30/network-icmp.html" />
 <meta property="og:site_name" content="小白成长史" />
-<link rel="prev" href="http://localhost:4000/blog/page4" />
-<link rel="next" href="http://localhost:4000/blog/page6" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-04-30T00:00:00+08:00" />
 <script type="application/ld+json">
-{"description":"php mysql 分布式 区块链","@type":"WebPage","url":"http://localhost:4000/blog/page5/","headline":"小白成长史","@context":"http://schema.org"}</script>
+{"description":"互联网控制消息协议（Internet Control Message Protocol, ICMP）是TCP/IP协议族中的一个效用协议，负责提供在TCP/IP网络上设备、服务以及路由器可用性的消息。","@type":"BlogPosting","url":"http://localhost:4000/2018/04/30/network-icmp.html","headline":"网络基础 - 互联网控制消息协议(ICMP)","dateModified":"2018-04-30T00:00:00+08:00","datePublished":"2018-04-30T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2018/04/30/network-icmp.html"},"@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
     <!-- Manual seo tags -->
     <!--
-    <title> 小白</title>
-    <meta name="description" content="">
+    <title>网络基础 - 互联网控制消息协议(ICMP) | 小白</title>
+    <meta name="description" content="互联网控制消息协议（Internet Control Message Protocol, ICMP）是TCP/IP协议族中的一个效用协议，负责提供在TCP/IP网络上设备、服务以及路由器可用性的消息。">
     -->
 </head>
 
@@ -186,195 +186,97 @@
 </header>
 
     <div class="content">
-      <div class="home">
+      <article >
+  <header id="main" style="background-image: url('/')">
+    <h1 id="%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80+-+%E4%BA%92%E8%81%94%E7%BD%91%E6%8E%A7%E5%88%B6%E6%B6%88%E6%81%AF%E5%8D%8F%E8%AE%AE%28ICMP%29" class="title">网络基础 - 互联网控制消息协议(ICMP)</h1>
+    <p class="meta">
+    April 30, 2018
+    
+    </p>
+  </header>
+  <section class="post-content"><p>互联网控制消息协议（Internet Control Message Protocol, ICMP）是TCP/IP协议族中的一个效用协议，负责提供在TCP/IP网络上设备、服务以及路由器可用性的消息。</p>
+
+<h4 id="icmp-头">ICMP 头</h4>
+
+<p>ICMP是IP的一部分并依赖IP来传递消息。ICMP头相对较小并根据用途而改变。</p>
+
+<p><img src="/assets/img/posts/2018-04-30-network-icmp/1.jpg" alt="1.jpg" /></p>
+
+<ul>
+  <li>类型（Type）</li>
+</ul>
+
+<p>ICMP消息基于RFC规范的类型或分类。</p>
+
+<ul>
+  <li>代码（Code）</li>
+</ul>
+
+<p>ICMP消息基于RFC规范的子类型。</p>
+
+<ul>
+  <li>校验和（Checksum）</li>
+</ul>
+
+<p>用来保证ICMP头和数据在抵达目的地时的完整性。</p>
+
+<ul>
+  <li>可变域（Variable）</li>
+</ul>
+
+<p>依赖于类型和代码域的部分。</p>
+
+<h4 id="icmp类型和消息">ICMP类型和消息</h4>
+
+<p>ICMP数据包的结构取决于它由Type和Code域中的值所定义的用途。</p>
+
+<p>你可以将ICMP的类型域作为数据包的分类，而Code域作为它的子类。举例来说，Type域的值为3时意味着“目标不可达”。但只有这个信息不足以发现问题，当如果数据包在Code域中知名值为3，也就是“端口不可达”时，你就可以知道这应该是你试图进行通信的端口的问题。</p>
+
+<p>所有可用的ICMP类型和代码，可参考<a href="https://www.iana.org/assignments/icmp-parameters">https://www.iana.org/assignments/icmp-parameter</a></p>
+</section>
+   
+   <!-- Tag list -->
   
-  <div id="main" class="call-out"
-  style="background-image: url('/assets/img/pexels/triangular.jpeg')">
-    <p>一个小白的成长学习历程</p>
-
-  </div>
   
 
-  <div class="posts">
+
+<footer>
+  <div class="tag-list">
     
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/04/01/cryptography.html">
-                密码学
-              </a>
-            </h1>
-            <p class="meta">
-              April 1, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            对称加密
-
-加密  
-
-
-解密   
-
-
-优点  
-加解密效率高（速度快，空间占用小），加密强度高。
-
-缺点  
-安全性弱，密钥由多方管理，密钥容易泄露。
-
-常见加密算法  
-DES、3DES、Blowfish、RC2、AES以及国密的SM4。
-
-非对称加密
-
-加密  
-
-
-解密   
-
-
-优点  
-安全性高，公私钥分离。
-
-缺点  
-加解密效率低。
-
-常见加密算法  
-RSA、椭圆曲线算法
-
-同态加密
-
-是一种特殊的加密方法，允许对密文进行处理得到仍然是加密的结果，即对密文直接进行处理，...
-            <!--<a class="button" href="/2018/04/01/cryptography.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
+      <div class="meta">Tags</div>
     
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/03/23/agreement.html">
-                共识算法
-              </a>
-            </h1>
-            <p class="meta">
-              March 23, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            
 
-查看原图  
-drow.io源文件下载
-
-            <!--<a class="button" href="/2018/03/23/agreement.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
     
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/03/18/bitcoin-mining.html">
-                比特币挖矿
-              </a>
-            </h1>
-            <p class="meta">
-              March 18, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            
-
-查看原图  
-drow.io源文件下载
-
-            <!--<a class="button" href="/2018/03/18/bitcoin-mining.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/03/18/bitcoin-51attach.html">
-                比特币51攻击
-              </a>
-            </h1>
-            <p class="meta">
-              March 18, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            
-
-查看原图  
-drow.io源文件下载
-
-            <!--<a class="button" href="/2018/03/18/bitcoin-51attach.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/03/17/rsa.html">
-                RSA算法
-              </a>
-            </h1>
-            <p class="meta">
-              March 17, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            
-
-查看原图  
-drow.io源文件下载
-
-            <!--<a class="button" href="/2018/03/17/rsa.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-  </div>
-
-  
-  <div class="pagination">
-    
-    <a href="/blog/page4" class="button" >
-      <i class="fa fa-chevron-left"></i>
-      Prev
+    <a class="button" href="/tags#http">
+      <p><i class="fa fa-tag fa-fw"></i> http</p>
     </a>
     
+  </div>
+</footer>
+
     
-    <a href="/blog/page6" class="button" >
-      Next
-      <i class="fa fa-chevron-right"></i>
-    </a>
-    
+</article>
+
+<!-- Disqus -->
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+  
+  <div id="previous-post" class="post-nav-post">
+      <p>Previous post</p>
+      <a href="/2018/04/30/network-dns.html">
+        网络基础 - 域名系统(DNS)
+      </a>
+  </div>
+  
+  
+  <div id="next-post" class="post-nav-post">
+      <p>Next post</p>
+      <a href="/2018/04/30/network-ip.html">
+        网络基础 - IP协议
+      </a>
   </div>
   
 </div>

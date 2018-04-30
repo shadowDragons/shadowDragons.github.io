@@ -5,7 +5,47 @@
         <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
         <link>http://localhost:4000/</link>
         <description></description>
-        <pubDate>Mon, 30 Apr 2018 14:07:14 +0800</pubDate>
+        <pubDate>Mon, 30 Apr 2018 18:03:25 +0800</pubDate>
+        
+        <item>
+            <title>网络基础 - 用户数据报协议(UDP)</title>
+            <link>/2018/04/30/network-udp.html</link>
+            <guid isPermaLink="true">/2018/04/30/network-udp.html</guid>
+            <description>&lt;p&gt;用户数据报协议（User Datagram Protocol, UDP）是在现代网络中最常使用的另外一种第4层协议。如果说TCP是为了满足带有内在错误检测的可靠数据传输，那么UDP主要是为了提供高速的传输。处于这个原因，UDP是一种尽力服务，通常会被称为无连接协议。一个无连接协议并不会正式的建立和结束主机之前的连接，也不会像TCP那样存在握手和终止进程。&lt;/p&gt;
+
+&lt;p&gt;无连接协议意味着不可靠服务，这将使得UDP流量不稳定。依赖于UDP的协议通常都会有其内置的可靠性服务，或者使用ICMP的一些功能来保证连接更可靠一些。举例来说，应用层协议DNS和DHCP需要高度依赖数据包在网络上的传输速度，其使用UDP作为它们的传输层协议，但是它们自己进行错误检查以及重传计时。&lt;/p&gt;
+
+&lt;h4 id=&quot;udp-头&quot;&gt;UDP 头&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-04-30-network-udp/1.png&quot; alt=&quot;1.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;源端口&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;用来传输数据包的端口。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;目标端口&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;数据包将要被传输到的端口。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;数据包长度&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;数据包的字节长度。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;校验和&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;用来确保UDP头和数据到达时的完整性。&lt;/p&gt;
+
+</description>
+            <pubDate>Mon, 30 Apr 2018 00:00:00 +0800</pubDate>
+        </item>
         
         <item>
             <title>网络基础 - 传输控制协议(TCP)</title>
@@ -297,6 +337,341 @@ sequenceDiagram
 &lt;p&gt;它便知道这个报文已被分片，并随即将数据、标识符字段、分片偏移量和更多分片标志一起储存起来。&lt;/p&gt;
 
 &lt;p&gt;当接受者收到了更多分片标志未被设置的分片时，它便知道原始数据载荷的总长。一旦它收齐了所有的分片，它便可以将所有片按照正确的顺序（通过分片偏移量）组装起来，并交给上层协议栈。&lt;/p&gt;
+</description>
+            <pubDate>Mon, 30 Apr 2018 00:00:00 +0800</pubDate>
+        </item>
+        
+        <item>
+            <title>网络基础 - 互联网控制消息协议(ICMP)</title>
+            <link>/2018/04/30/network-icmp.html</link>
+            <guid isPermaLink="true">/2018/04/30/network-icmp.html</guid>
+            <description>&lt;p&gt;互联网控制消息协议（Internet Control Message Protocol, ICMP）是TCP/IP协议族中的一个效用协议，负责提供在TCP/IP网络上设备、服务以及路由器可用性的消息。&lt;/p&gt;
+
+&lt;h4 id=&quot;icmp-头&quot;&gt;ICMP 头&lt;/h4&gt;
+
+&lt;p&gt;ICMP是IP的一部分并依赖IP来传递消息。ICMP头相对较小并根据用途而改变。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-04-30-network-icmp/1.jpg&quot; alt=&quot;1.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;类型（Type）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ICMP消息基于RFC规范的类型或分类。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;代码（Code）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ICMP消息基于RFC规范的子类型。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;校验和（Checksum）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;用来保证ICMP头和数据在抵达目的地时的完整性。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;可变域（Variable）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;依赖于类型和代码域的部分。&lt;/p&gt;
+
+&lt;h4 id=&quot;icmp类型和消息&quot;&gt;ICMP类型和消息&lt;/h4&gt;
+
+&lt;p&gt;ICMP数据包的结构取决于它由Type和Code域中的值所定义的用途。&lt;/p&gt;
+
+&lt;p&gt;你可以将ICMP的类型域作为数据包的分类，而Code域作为它的子类。举例来说，Type域的值为3时意味着“目标不可达”。但只有这个信息不足以发现问题，当如果数据包在Code域中知名值为3，也就是“端口不可达”时，你就可以知道这应该是你试图进行通信的端口的问题。&lt;/p&gt;
+
+&lt;p&gt;所有可用的ICMP类型和代码，可参考&lt;a href=&quot;https://www.iana.org/assignments/icmp-parameters&quot;&gt;https://www.iana.org/assignments/icmp-parameter&lt;/a&gt;&lt;/p&gt;
+</description>
+            <pubDate>Mon, 30 Apr 2018 00:00:00 +0800</pubDate>
+        </item>
+        
+        <item>
+            <title>网络基础 - 域名系统(DNS)</title>
+            <link>/2018/04/30/network-dns.html</link>
+            <guid isPermaLink="true">/2018/04/30/network-dns.html</guid>
+            <description>&lt;p&gt;域名系统（英文：Domain Name System，缩写：DNS）是互联网的一项服务。它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。DNS使用TCP和UDP端口53。&lt;/p&gt;
+
+&lt;h4 id=&quot;dns数据包结构&quot;&gt;DNS数据包结构&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-04-30-network-dns/1.png&quot; alt=&quot;1.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;DNS ID号（DNS ID Numner）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;用来对应DNS查询和DNS响应。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;查询/响应（Query/Response, QR）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;用来指明这个数据包是DNS查询还是响应。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;操作代码（OpCode）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;用来定义消息中请求的类型。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;权威应答（Authoritative Answer, AA）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果响应数据包中设定了这个值，则说明这个响应是由域内权威域名服务器发出的。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;截断（Truncation, TC）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;用来指明这个响应由于太长，无法装入数据包而被截断。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;期望递归（Recursion Desired, RD）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;当请求中设定了这个值，则说明DNS客户端在目标域名服务器不含有所请求信息的情况下，要求进行递归查询。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;可用递归（Recursion Available, RA）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;当响应中设定了这个值，说明域名服务器支持递归查询。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;保留（Z）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在RFC1035的规定中被全设为0，但有时会被用来作为RCode域的扩展。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;响应代码（Response Code）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在DNS响应中用来指明错误。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;问题计数（Question Count）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在问题区段中的条目数。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;回答计数（Answer Count）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在回答区段中的条目数。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;域名服务器计数（Name Server Count）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在权威区段的域名资源记录数。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;额外记录计数（Additional Records Count）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在额外信息区段中其他资源记录数。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;问题区段（Question section）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;大小可变，包含有被发送到DNS服务器的一条或多条的信息查询部分。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;回答区段（Answer section）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;大小可变，含有用来回答查询的一条或多条资源记录。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;权威区段（Authority section）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;大小可变，包含指向权威域名服务器的资源记录，用以继续解析过程。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;额外信息区段（Additional Information section）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;包含资源记录且大小可变的区段。这些资源记录用来存储完全没有必要回答的查询相关的额外信息。&lt;/p&gt;
+
+&lt;h4 id=&quot;dns递归&quot;&gt;DNS递归&lt;/h4&gt;
+
+&lt;p&gt;由于互联网的DNS结构是层级式的，为了能有回答客户端提交的查询，DNS服务器必须能够彼此通信。我们的内部DNS服务器知道我们本地局域网服务器的名字和IP地址的映射，但不大可能知道谷歌的IP地址。&lt;/p&gt;
+
+&lt;p&gt;当DNS服务器需要查找一个IP地址时，它会代表发出请求的客户端向另一个DNS服务器查询。实际上，这个DNS服务器与客户端的行为相同。这个过程叫做&lt;strong&gt;递归查询&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;script src=&quot;https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.js&quot;&gt;&lt;/script&gt;
+&lt;div class=&quot;mermaid&quot;&gt;
+sequenceDiagram
+    participant A as DNS客户端
+    participant B as 本地DNS服务器
+    participant C as 外部DNS服务器
+    A-&amp;gt;&amp;gt;B: 递归查询
+    B-&amp;gt;&amp;gt;C: 递归查询
+    C-&amp;gt;&amp;gt;B: 查询响应
+    B-&amp;gt;&amp;gt;A: 查询响应
+&lt;/div&gt;
+
+&lt;h4 id=&quot;dns区域传送&quot;&gt;DNS区域传送&lt;/h4&gt;
+
+&lt;p&gt;DNS区域是一个DNS服务器所授权管理的名字空间（或是一组DNS名称）。&lt;/p&gt;
+
+&lt;p&gt;举例来说，baidu这个网站可能是由一个DNS服务器对baidu.com负责。这样，无论是baidu内部还是外部的设备，如果希望将baidu.com解析成IP地址，都需要和这个区域的权威，也就是这个DNS服务器联系。如果baidu发展壮大了，它可能会增加一个DNS服务器，专门用来处理其名字空间的email部分，如mail.baidu.com，那么这个服务器，就成为这个邮件子区域的权威。如果必要的话，还可以为子域名添加更多的DNS服务器。&lt;/p&gt;
+
+&lt;p&gt;区域传送指处于荣誉备份的需要，在两台设备之间传送区域数据。举例来说，在拥有多个DNS服务器的组织中，管理员通常都会配置一台备用DNS服务器，用来维护一份主服务器DNS信息的拷贝，以防止DNS服务器不可欧阳。主要存在两种区域传送。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;完整区域传送（AXFR）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这个类型的传送将整个区域在设备间进行传送。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;增量区域传送（IXFR）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这个类型的传送仅传送区域信息的一部分。&lt;/p&gt;
+</description>
+            <pubDate>Mon, 30 Apr 2018 00:00:00 +0800</pubDate>
+        </item>
+        
+        <item>
+            <title>网络基础 - 动态主机设置协议(DHCP)</title>
+            <link>/2018/04/30/network-dhcp.html</link>
+            <guid isPermaLink="true">/2018/04/30/network-dhcp.html</guid>
+            <description>&lt;p&gt;动态主机配置协议（Dynamic Host Configuration Protocol）是一个应用层协议，能够让设备自动获取IP地址（以及其他重要网络资源，比如DNS服务器和路由网关的地址）。大多数的DHCP服务器都向客户端提供一些其他的参数，比如网络上的默认网关和DNS服务器的地址。&lt;/p&gt;
+
+&lt;p&gt;通常被应用在大型的局域网络环境中，主要作用是集中的管理、分配IP地址，使网络环境中的主机动态的获得IP地址、Gateway地址、DNS服务器地址等信息，并能够提升地址的使用率。&lt;/p&gt;
+
+&lt;h4 id=&quot;dhcp-头结构&quot;&gt;DHCP 头结构&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-04-30-network-dhcp/1.png&quot; alt=&quot;1.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;操作码（OpCode）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;用来指出这个数据包是DHCP请求还是DHCP回复。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;硬件类型（Hardware Type）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;硬件地址类型&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;硬件长度（Hardware Length）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;硬件地址长度&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;跳数（Hops）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;中继代理用来帮助寻找DHCP服务器。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;事务ID（Transaction ID）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;用来匹配请求和响应的一个随机数。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;消耗时间（Seconds Elasped）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;客户端第一次向DHCP服务器发出地址请求后的时间。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;标记（Flags）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;DHCP客户端能够接受的流量类型（单播、广播以及其他）。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;客户端IP地址（Client IP Address）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;客户端的IP地址（由“你的”IP地址域派生）&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;“你的”IP地址（Your IP Address）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;DHCP服务器提供的IP地址（最终成为客户端的IP地址域的值）&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;服务器IP地址（Server IP Address）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;DHCP服务器的IP地址&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;网关IP地址（Gateway IP Address）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;网络默认网关的IP地址。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;客户端硬件地址（Client Hardware Address）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;客户端的MAC地址。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;服务器主机名（Server Host Name）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;服务器的主机名（可选）。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;启动文件（Boot File）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;DHCP所使用的启动文件（可选）。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;选项（Options）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;用来对DHCP数据包进行扩展，以提供更多功能。&lt;/p&gt;
+
+&lt;h4 id=&quot;dhcp-续租过程dora&quot;&gt;DHCP 续租过程（DORA）&lt;/h4&gt;
+
+&lt;p&gt;DCHP 最主要的任务就是在续租过程中向客户端分配IP地址。过程是在一个客户端和DHCP服务器之间进行，也成为DORA过程。&lt;/p&gt;
+
+&lt;script src=&quot;https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.js&quot;&gt;&lt;/script&gt;
+&lt;div class=&quot;mermaid&quot;&gt;
+sequenceDiagram
+    participant A as DHCP客户端
+    participant B as DHCP服务器
+    A-&amp;gt;&amp;gt;B: 发现（Discover）
+    B-&amp;gt;&amp;gt;A: 提供（Offer）
+    A-&amp;gt;&amp;gt;B: 请求（Request）
+    B-&amp;gt;&amp;gt;A: 确认（ACK）
+&lt;/div&gt;
+
+&lt;p&gt;当DCHP给一个设备分配了一个IP地址时，它同时给客户端定下了一个租约。就是说，客户端只能在有限时间内使用这个IP地址，否则就必须续约。&lt;/p&gt;
+
+&lt;p&gt;当一个拥有IP地址的客户端在租约内重新启动，它必须进行一个精简版的DORA过程来重新认领它的IP地址。这个过程称为租约内续租。&lt;/p&gt;
+
+&lt;p&gt;当租约内续租时，发现和提供数据包就没有必要了。考虑到其与租约过期时的DORA过程类似，可以发现在租约过续租并不需要这么做，而只是完成请求和确认两个步骤就可以了。&lt;/p&gt;
+
+&lt;script src=&quot;https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.js&quot;&gt;&lt;/script&gt;
+&lt;div class=&quot;mermaid&quot;&gt;
+sequenceDiagram
+    participant A as DHCP客户端
+    participant B as DHCP服务器
+    A-&amp;gt;&amp;gt;B: 请求（Request）
+    B-&amp;gt;&amp;gt;A: 确认（ACK）
+&lt;/div&gt;
 </description>
             <pubDate>Mon, 30 Apr 2018 00:00:00 +0800</pubDate>
         </item>
@@ -2483,388 +2858,6 @@ H(0)7 = 5be0cd19&lt;/p&gt;
 &lt;h3 id=&quot;输出值&quot;&gt;输出值&lt;/h3&gt;
 
 &lt;p&gt;256bit的二进制值或者64个16进制的ascii码。&lt;/p&gt;
-</description>
-            <pubDate>Thu, 05 Apr 2018 00:00:00 +0800</pubDate>
-        </item>
-        
-        <item>
-            <title>加密散列-sha1</title>
-            <link>/2018/04/05/sha1.html</link>
-            <guid isPermaLink="true">/2018/04/05/sha1.html</guid>
-            <description>&lt;p&gt;SHA-1（英语：Secure Hash Algorithm 1，中文名：安全散列算法1）是一种密码散列函数，美国国家安全局设计，并由美国国家标准技术研究所（NIST）发布为联邦数据处理标准（FIPS）[2]。SHA-1可以生成一个被称为消息摘要的160位（20字节）散列值，散列值通常的呈现形式为40个十六进制数。&lt;/p&gt;
-
-&lt;h3 id=&quot;算法步骤&quot;&gt;算法步骤&lt;/h3&gt;
-
-&lt;p&gt;原始消息分为N个512bit的消息块。每个消息块分成16个32bit。&lt;/p&gt;
-
-&lt;p&gt;1.补位  &lt;br /&gt;
-由于必须分成n个512bit块，所以必须进行补位。  &lt;br /&gt;
-最后还需要预留64bit记录消息块的长度，所以消息块的长度不能大于2^64。&lt;/p&gt;
-
-&lt;p&gt;补位使其长度 &lt;script type=&quot;math/tex&quot;&gt;l mod 512 = 448&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;先补一个1，然后再补0，直到长度满足对512取模后余数是448。总而言之，补位是至少补一位，最多补512位。以信息“abc”为例显示补位的过程。  &lt;br /&gt;
-原始信息：01100001 01100010 01100011  &lt;br /&gt;
-补位第一步：0110000101100010 01100011 1  &lt;br /&gt;
-首先补一个“1”  &lt;br /&gt;
-补位第二步：0110000101100010 01100011 10…..0  &lt;br /&gt;
-然后补423个“0”  &lt;br /&gt;
-我们可以把最后补位完成后的数据用16进制写成下面的样子  &lt;br /&gt;
-61626380 0000000000000000 00000000  &lt;br /&gt;
-00000000 0000000000000000 00000000  &lt;br /&gt;
-00000000 0000000000000000 00000000  &lt;br /&gt;
-00000000 00000000&lt;/p&gt;
-
-&lt;p&gt;2.补长度  &lt;br /&gt;
-所谓的补长度是将原始数据的长度补到已经进行了补位操作的消息后面。通常用一个64位的数据来表示原始消息的长度。如果消息长度不大于2^64，那么第一个字就是0。在进行了补长度的操作以后，整个消息就变成下面这样了（16进制格式）&lt;/p&gt;
-
-&lt;p&gt;61626380 0000000000000000 00000000  &lt;br /&gt;
-00000000 0000000000000000 00000000  &lt;br /&gt;
-00000000 0000000000000000 00000000  &lt;br /&gt;
-00000000 0000000000000000 00000018&lt;/p&gt;
-
-&lt;p&gt;如果原始的消息长度超过了512，我们需要将它补成512的倍数。然后我们把整个消息分成一个一个512位的数据块，分别处理每一个数据块，从而得到消息摘要。&lt;/p&gt;
-
-&lt;p&gt;3.哈希初值&lt;/p&gt;
-
-&lt;p&gt;h0 := 0x67452301
-h1 := 0xEFCDAB89
-h2 := 0x98BADCFE
-h3 := 0x10325476
-h4 := 0xC3D2E1F0&lt;/p&gt;
-
-&lt;h3 id=&quot;实现伪代码&quot;&gt;实现伪代码&lt;/h3&gt;
-
-&lt;p&gt;预处理&lt;/p&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;0&quot;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bits&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;until&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bits&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≡&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;448&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;mod&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;512&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;64&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;little&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;endian&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;integer&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;处理&lt;/p&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# 分割512块&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;512&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;chunk&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# 每块分割成16个32bit&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;chunk&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;into&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sixteen&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;little&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;endian&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;words&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;15&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;# 用16个32bit，扩展其他64个32bit&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;79&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;14&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;leftrotate&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;# 哈希初始值&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;e&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h4&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;# 主循环&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;79&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;19&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x5A827999&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;39&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x6ED9EBA1&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;40&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;59&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;or&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x8F1BBCDC&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;60&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;79&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0xCA62C1D6&lt;/span&gt;
- 
-        &lt;span class=&quot;nx&quot;&gt;temp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;leftrotate&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;e&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;e&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;leftrotate&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;30&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;temp&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;# 修改哈希值&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;h4&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h4&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;e&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# 输出结果&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;digest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;hash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h4&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;输出值&quot;&gt;输出值&lt;/h3&gt;
-
-&lt;p&gt;160bit的二进制值或者40个16进制的ascii码。&lt;/p&gt;
-</description>
-            <pubDate>Thu, 05 Apr 2018 00:00:00 +0800</pubDate>
-        </item>
-        
-        <item>
-            <title>加密散列-PIPEMD160</title>
-            <link>/2018/04/05/ripemd160.html</link>
-            <guid isPermaLink="true">/2018/04/05/ripemd160.html</guid>
-            <description>&lt;p&gt;RIPEMD (RACE原始完整性校验讯息摘要)是一种加密哈希函数，由 鲁汶大学 Hans Dobbertin,Antoon Bosselaers 和 Bart Prenee组成的COSIC 研究小组发布于1996年。 RIPEMD是以MD4为基础原则所设计的 ，而且其表现与更有名的SHA-1类似.&lt;/p&gt;
-
-&lt;p&gt;RIPEMD-160是以原始版RIPEMD所改进的160位元版本，而且是RIPEMD系列中最常见的版本。 RIPEMD-160是设计给学术社群所使用的，刚好相对于 国家安全局 所设计 SHA-1 和 SHA-2 算法。 另一方面，RIPEMD-160比SHA-1较少使用，所以可能造成RIPEMD-160比SHA还不常被审查。另外，RIPEMD-160并没有任何专利所限制。&lt;/p&gt;
-
-&lt;p&gt;同时也存在着128,256-320位元的这种算法，称为RIPEMD-128,RIPEMD-256和RIPEMD-320。 128位版本的用意仅是取代原始版RIPEMD，因为原版也同样是128位元，并且被发现有潜在的安全问题。 而256和320位版本只有减少碰撞发生的机率，但没有提升安全等级(以 preimage举例)。不过，RIPEMD的设计者们没有真正设计256和320位元这2种标准，他们只是在128位元和160位元的基础上，修改了初始参数和s-box来达到输出为256和320位元。所以，256位的强度和128相当，而320位的强度和160位相当。且RIPEMD建立在md的基础之上，所以其添加数据的方式和md5完全一样。&lt;/p&gt;
-
-&lt;h3 id=&quot;伪代码&quot;&gt;伪代码&lt;/h3&gt;
-
-&lt;p&gt;原始消息分为N个512bit的消息块。每个消息块分成16个32bit。&lt;/p&gt;
-
-&lt;p&gt;1.补位  &lt;br /&gt;
-由于必须分成n个512bit块，所以必须进行补位。  &lt;br /&gt;
-最后还需要预留64bit记录消息块的长度，所以消息块的长度不能大于2^64&lt;/p&gt;
-
-&lt;p&gt;补位使其长度 &lt;script type=&quot;math/tex&quot;&gt;l mod 512 = 448&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;先补一个1，然后再补0，直到长度满足对512取模后余数是448。总而言之，补位是至少补一位，最多补512位。以信息“abc”为例显示补位的过程。  &lt;br /&gt;
-原始信息：01100001 01100010 01100011  &lt;br /&gt;
-补位第一步：0110000101100010 01100011 1  &lt;br /&gt;
-首先补一个“1”  &lt;br /&gt;
-补位第二步：0110000101100010 01100011 10…..0  &lt;br /&gt;
-然后补423个“0”  &lt;br /&gt;
-我们可以把最后补位完成后的数据用16进制写成下面的样子  &lt;br /&gt;
-61626380 0000000000000000 00000000  &lt;br /&gt;
-00000000 0000000000000000 00000000  &lt;br /&gt;
-00000000 0000000000000000 00000000  &lt;br /&gt;
-00000000 00000000&lt;/p&gt;
-
-&lt;p&gt;2.补长度  &lt;br /&gt;
-所谓的补长度是将原始数据的长度补到已经进行了补位操作的消息后面。通常用一个64位的数据来表示原始消息的长度。如果消息长度不大于2^64，那么第一个字就是0。在进行了补长度的操作以后，整个消息就变成下面这样了（16进制格式）&lt;/p&gt;
-
-&lt;p&gt;61626380 0000000000000000 00000000  &lt;br /&gt;
-00000000 0000000000000000 00000000  &lt;br /&gt;
-00000000 0000000000000000 00000000  &lt;br /&gt;
-00000000 0000000000000000 00000018&lt;/p&gt;
-
-&lt;p&gt;如果原始的消息长度超过了512，我们需要将它补成512的倍数。然后我们把整个消息分成一个一个512位的数据块，分别处理每一个数据块，从而得到消息摘要。&lt;/p&gt;
-
-&lt;p&gt;2.函数定义&lt;/p&gt;
-
-&lt;p&gt;f(j, x, y, z) = x XOR y XOR z (0 &amp;lt;= j &amp;lt;= 15)   &lt;br /&gt;
-f(j, x, y, z) = (x AND y) OR (NOT(x) AND z) (16 &amp;lt;= j &amp;lt;= 31)   &lt;br /&gt;
-f(j, x, y, z) = (x OR NOT(y)) XOR z (32 &amp;lt;= j &amp;lt;= 47)   &lt;br /&gt;
-f(j, x, y, z) = (x AND z) OR (y AND NOT(z)) (48 &amp;lt;= j &amp;lt;= 63)   &lt;br /&gt;
-f(j, x, y, z) = x XOR (y OR NOT(z)) (64 &amp;lt;= j &amp;lt;= 79)&lt;/p&gt;
-
-&lt;p&gt;3.常量定义&lt;/p&gt;
-
-&lt;p&gt;added constants (hexadecimal)&lt;/p&gt;
-
-&lt;p&gt;K(j) = 0x00000000 (0 &amp;lt;= j &amp;lt;= 15)   &lt;br /&gt;
-K(j) = 0x5A827999 (16 &amp;lt;= j &amp;lt;= 31) int(2&lt;strong&gt;30 x sqrt(2))   &lt;br /&gt;
-K(j) = 0x6ED9EBA1 (32 &amp;lt;= j &amp;lt;= 47) int(2&lt;/strong&gt;30 x sqrt(3))   &lt;br /&gt;
-K(j) = 0x8F1BBCDC (48 &amp;lt;= j &amp;lt;= 63) int(2&lt;strong&gt;30 x sqrt(5))   &lt;br /&gt;
-K(j) = 0xA953FD4E (64 &amp;lt;= j &amp;lt;= 79) int(2&lt;/strong&gt;30 x sqrt(7))   &lt;br /&gt;
-K’(j) = 0x50A28BE6 (0 &amp;lt;= j &amp;lt;= 15) int(2&lt;strong&gt;30 x cbrt(2))   &lt;br /&gt;
-K’(j) = 0x5C4DD124 (16 &amp;lt;= j &amp;lt;= 31) int(2&lt;/strong&gt;30 x cbrt(3))   &lt;br /&gt;
-K’(j) = 0x6D703EF3 (32 &amp;lt;= j &amp;lt;= 47) int(2&lt;strong&gt;30 x cbrt(5))   &lt;br /&gt;
-K’(j) = 0x7A6D76E9 (48 &amp;lt;= j &amp;lt;= 63) int(2&lt;/strong&gt;30 x cbrt(7))   &lt;br /&gt;
-K’(j) = 0x00000000 (64 &amp;lt;= j &amp;lt;= 79)&lt;/p&gt;
-
-&lt;p&gt;selection of message word&lt;/p&gt;
-
-&lt;p&gt;r(j) = j (0 &amp;lt;= j &amp;lt;= 15)   &lt;br /&gt;
-r(16..31) = 7, 4, 13, 1, 10, 6, 15, 3, 12, 0, 9, 5, 2, 14, 11, 8   &lt;br /&gt;
-r(32..47) = 3, 10, 14, 4, 9, 15, 8, 1, 2, 7, 0, 6, 13, 11, 5, 12   &lt;br /&gt;
-r(48..63) = 1, 9, 11, 10, 0, 8, 12, 4, 13, 3, 7, 15, 14, 5, 6, 2   &lt;br /&gt;
-r(64..79) = 4, 0, 5, 9, 7, 12, 2, 10, 14, 1, 3, 8, 11, 6, 15, 13   &lt;br /&gt;
-r’(0..15) = 5, 14, 7, 0, 9, 2, 11, 4, 13, 6, 15, 8, 1, 10, 3, 12   &lt;br /&gt;
-r’(16..31)= 6, 11, 3, 7, 0, 13, 5, 10, 14, 15, 8, 12, 4, 9, 1, 2   &lt;br /&gt;
-r’(32..47)= 15, 5, 1, 3, 7, 14, 6, 9, 11, 8, 12, 2, 10, 0, 4, 13   &lt;br /&gt;
-r’(48..63)= 8, 6, 4, 1, 3, 11, 15, 0, 5, 12, 2, 13, 9, 7, 10, 14   &lt;br /&gt;
-r’(64..79)= 12, 15, 10, 4, 1, 5, 8, 7, 6, 2, 13, 14, 0, 3, 9, 11&lt;/p&gt;
-
-&lt;p&gt;amount for rotate left (rol)&lt;/p&gt;
-
-&lt;p&gt;s(0..15)  = 11, 14, 15, 12, 5, 8, 7, 9, 11, 13, 14, 15, 6, 7, 9, 8   &lt;br /&gt;
-s(16..31) = 7, 6, 8, 13, 11, 9, 7, 15, 7, 12, 15, 9, 11, 7, 13, 12   &lt;br /&gt;
-s(32..47) = 11, 13, 6, 7, 14, 9, 13, 15, 14, 8, 13, 6, 5, 12, 7, 5   &lt;br /&gt;
-s(48..63) = 11, 12, 14, 15, 14, 15, 9, 8, 9, 14, 5, 6, 8, 6, 5, 12   &lt;br /&gt;
-s(64..79) = 9, 15, 5, 11, 6, 8, 13, 12, 5, 12, 13, 14, 11, 8, 5, 6   &lt;br /&gt;
-s’(0..15) = 8, 9, 9, 11, 13, 15, 15, 5, 7, 7, 8, 11, 14, 14, 12, 6   &lt;br /&gt;
-s’(16..31)= 9, 13, 15, 7, 12, 8, 9, 11, 7, 7, 12, 7, 6, 15, 13, 11   &lt;br /&gt;
-s’(32..47)= 9, 7, 15, 11, 8, 6, 6, 14, 12, 13, 5, 14, 13, 13, 7, 5   &lt;br /&gt;
-s’(48..63)= 15, 5, 8, 11, 14, 14, 6, 14, 6, 9, 12, 9, 12, 5, 15, 8   &lt;br /&gt;
-s’(64..79)= 8, 5, 12, 9, 12, 5, 14, 6, 8, 13, 6, 5, 15, 13, 11, 11&lt;/p&gt;
-
-&lt;p&gt;4.哈希初值&lt;/p&gt;
-
-&lt;p&gt;这些初值是对自然数中前8个质数3、5、7、11等的平方根的小数部分取前32bit而来。&lt;/p&gt;
-
-&lt;p&gt;h0 = 0x67452301   &lt;br /&gt;
-h1 = 0xEFCDAB89   &lt;br /&gt;
-h2 = 0x98BADCFE   &lt;br /&gt;
-h3 = 0x10325476   &lt;br /&gt;
-h4 = 0xC3D2E1F0&lt;/p&gt;
-
-&lt;h3 id=&quot;实现伪代码&quot;&gt;实现伪代码&lt;/h3&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#It is assumed that the message after padding consists of t 16-word blocks&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#that will be denoted with X[i][j], with 0 &amp;lt;= i &amp;lt;= t-1 and 0 &amp;lt;= j &amp;lt;= 15. &lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#The symbol [+] denotes addition modulo 2**32 and rol_s denotes cyclic left&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#shift (rotate) over s positions.&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;B&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;C&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;D&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;' := h0; B'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;C&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;' := h2; D'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;' = h4;
-    for j := 0 to 79 {
-        T := rol_s(j)(A [+] f(j, B, C, D) [+] X[i][r(j)] [+] K(j)) [+] E;
-        A := E; E := D; D := rol_10(C); C := B; B := T;
-        T := rol_s'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;' [+] f(79-j, B'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;C&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;', D'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'(j)] [+] K'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;';
-        A'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'; E'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;D&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'; D'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;rol_10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;C&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'); C'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'; B'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;C&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;D&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'; h1 := h2 [+] D [+] E'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;';
-    h3 := h4 [+] A [+] B'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h4&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;B&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;C&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# 输出结果&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;digest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;hash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h4&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;输出值&quot;&gt;输出值&lt;/h3&gt;
-
-&lt;p&gt;160bit的二进制值或者40个16进制的ascii码。&lt;/p&gt;
-</description>
-            <pubDate>Thu, 05 Apr 2018 00:00:00 +0800</pubDate>
-        </item>
-        
-        <item>
-            <title>Merkle树</title>
-            <link>/2018/04/05/merkle-tree.html</link>
-            <guid isPermaLink="true">/2018/04/05/merkle-tree.html</guid>
-            <description>&lt;p&gt;Merkle树是一种哈希二叉树，它是一种用作快速归纳和校验大规模数据完整性的数据结构。  &lt;br /&gt;
-比特币校验区块交易数据就是使用这种算法。&lt;/p&gt;
-
-&lt;p&gt;Merkle树是自底向上构建的。如图所示&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-04-05-merkle-tree/1.png&quot; alt=&quot;1.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Merkle树一般用来进行完整性验证处理。在处理完整性验证的应用场景中，Merkle树会大大减少数据的传输量及计算的复杂度。&lt;/p&gt;
-
-&lt;p&gt;成如果想要证明一个确切的数据块是Merkle树中的一员。通常，只需要树根及这个区块和通向树根沿途的中间哈希值，就可以暂时忽略树的其他部分，这些就已经足以让我们验证到树根。  &lt;br /&gt;
-一个节点只需要计算log~2~(N)个32字节的哈希值，形成一条从特定交易到树根的认证路径或者Merkle路径即可。&lt;/p&gt;
-
-&lt;p&gt;如图所示，我们只要知道蓝色节点的hash值，就能验证 &lt;script type=&quot;math/tex&quot;&gt;H_K&lt;/script&gt; 是否在树中。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-04-05-merkle-tree/2.png&quot; alt=&quot;1.png&quot; /&gt;&lt;/p&gt;
-</description>
-            <pubDate>Thu, 05 Apr 2018 00:00:00 +0800</pubDate>
-        </item>
-        
-        <item>
-            <title>加密散列-md5</title>
-            <link>/2018/04/05/md5.html</link>
-            <guid isPermaLink="true">/2018/04/05/md5.html</guid>
-            <description>&lt;p&gt;MD5消息摘要算法（英语：MD5 Message-Digest Algorithm），一种被广泛使用的密码散列函数，可以产生出一个128位（16字节）的散列值（hash value），用于确保信息传输完整一致。&lt;/p&gt;
-
-&lt;h3 id=&quot;算法步骤&quot;&gt;算法步骤&lt;/h3&gt;
-
-&lt;p&gt;原始消息分为N个512bit的消息块。每个消息块分成16个32bit。&lt;/p&gt;
-
-&lt;p&gt;1.补位  &lt;br /&gt;
-由于必须分成n个512bit块，所以必须进行补位。  &lt;br /&gt;
-最后还需要预留64bit记录消息块的长度，所以消息块的长度不能大于2^64。&lt;/p&gt;
-
-&lt;p&gt;补位使其长度 &lt;script type=&quot;math/tex&quot;&gt;l mod 512 = 448&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;先补一个1，然后再补0，直到长度满足对512取模后余数是448。总而言之，补位是至少补一位，最多补512位。以信息“abc”为例显示补位的过程。  &lt;br /&gt;
-原始信息：01100001 01100010 01100011  &lt;br /&gt;
-补位第一步：0110000101100010 01100011 1  &lt;br /&gt;
-首先补一个“1”  &lt;br /&gt;
-补位第二步：0110000101100010 01100011 10…..0  &lt;br /&gt;
-然后补423个“0”  &lt;br /&gt;
-我们可以把最后补位完成后的数据用16进制写成下面的样子  &lt;br /&gt;
-61626380 0000000000000000 00000000  &lt;br /&gt;
-00000000 0000000000000000 00000000  &lt;br /&gt;
-00000000 0000000000000000 00000000  &lt;br /&gt;
-00000000 00000000&lt;/p&gt;
-
-&lt;p&gt;2.补长度  &lt;br /&gt;
-所谓的补长度是将原始数据的长度补到已经进行了补位操作的消息后面。通常用一个64位的数据来表示原始消息的长度。如果消息长度不大于2^64，那么第一个字就是0。在进行了补长度的操作以后，整个消息就变成下面这样了（16进制格式）&lt;/p&gt;
-
-&lt;p&gt;61626380 0000000000000000 00000000  &lt;br /&gt;
-00000000 0000000000000000 00000000  &lt;br /&gt;
-00000000 0000000000000000 00000000  &lt;br /&gt;
-00000000 0000000000000000 00000018&lt;/p&gt;
-
-&lt;p&gt;如果原始的消息长度超过了512，我们需要将它补成512的倍数。然后我们把整个消息分成一个一个512位的数据块，分别处理每一个数据块，从而得到消息摘要。&lt;/p&gt;
-
-&lt;p&gt;3.常量定义&lt;/p&gt;
-
-&lt;p&gt;r[ 0..15]：= {7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22}  &lt;br /&gt;
-r[16..31]：= {5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20}  &lt;br /&gt;
-r[32..47]：= {4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23}  &lt;br /&gt;
-r[48..63]：= {6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21}&lt;/p&gt;
-
-&lt;p&gt;4.哈希初值&lt;/p&gt;
-
-&lt;p&gt;h0 := 0x67452301
-h1 := 0xEFCDAB89
-h2 := 0x98BADCFE
-h3 := 0x10325476&lt;/p&gt;
-
-&lt;h3 id=&quot;实现伪代码&quot;&gt;实现伪代码&lt;/h3&gt;
-
-&lt;p&gt;预处理&lt;/p&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;0&quot;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bits&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;until&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bits&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≡&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;448&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;mod&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;512&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;64&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;little&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;endian&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;integer&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;处理&lt;/p&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# 分割512块&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;512&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;chunk&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# 每块分割成16个32bit&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;chunk&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;into&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sixteen&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;little&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;endian&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;words&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;15&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;# 哈希初始值&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;# 主循环&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;63&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;15&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;g&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;31&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;g&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;×&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;mod&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;47&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;g&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;×&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;mod&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;48&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;≤&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;63&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;xor&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;g&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;×&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;mod&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;
- 
-        &lt;span class=&quot;nx&quot;&gt;temp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;leftrotate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;g&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]),&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;temp&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;Next&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;# 修改哈希值&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;d&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;End&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ForEach&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# 输出结果&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;digest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h0&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h1&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h2&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;h3&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//(expressed as little-endian)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;输出值&quot;&gt;输出值&lt;/h3&gt;
-
-&lt;p&gt;128bit的二进制值或者32个16进制的ascii码。&lt;/p&gt;
 </description>
             <pubDate>Thu, 05 Apr 2018 00:00:00 +0800</pubDate>
         </item>
