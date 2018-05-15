@@ -155,6 +155,8 @@
         
         
         
+        
+        
          
         
         
@@ -201,19 +203,24 @@
       <span>
           <header>
             <h1>
-              <a class="post-link" href="/2018/04/30/network-udp.html">
-                网络基础 - 用户数据报协议(UDP)
+              <a class="post-link" href="/2018/05/13/hyperledger-fabric-5.html">
+                fabric入门（五）安装和实例化链码
               </a>
             </h1>
             <p class="meta">
-              April 30, 2018
+              May 13, 2018
             </p>
           </header>
           <div class="excerpt">
-            用户数据报协议（User Datagram Protocol, UDP）是在现代网络中最常使用的另外一种第4层协议。如果说TCP是为了满足带有内在错误检测的可靠数据传输，那么UDP主要是为了提供高速的传输。处于这个原因，UDP是一种尽力服务，通常会被称为无连接协议。一个无连接协议并不会正式的建立和结束主机之前的连接，也不会像TCP那样存在握手和终止进程。
+            安装启动链码
 
-无连接协议意味着不可靠服务，这将使得UDP流量不稳定。依赖于UDP的协议通常都会有其内置的可靠性服务，或者使用ICMP的一些功能来保证...
-            <!--<a class="button" href="/2018/04/30/network-udp.html">
+首先，在将示例代码安装到4个peer节点中的其中一个。这个命令将源代码放到peer节点的文件系统中。
+
+peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric-samples/chaincode/chaincode_example02/go/chaincode_example02
+
+
+接下来，在信道上实例化chaincode。这将初始化信道上的链码，设置链码的背书策略，为目标peer节点启...
+            <!--<a class="button" href="/2018/05/13/hyperledger-fabric-5.html">
               Continue reading
             </a>-->
           </div>
@@ -225,44 +232,28 @@
       <span>
           <header>
             <h1>
-              <a class="post-link" href="/2018/04/30/network-tcp.html">
-                网络基础 - 传输控制协议(TCP)
+              <a class="post-link" href="/2018/05/13/hyperledger-fabric-4.html">
+                fabric入门（四）启动网络
               </a>
             </h1>
             <p class="meta">
-              April 30, 2018
+              May 13, 2018
             </p>
           </header>
           <div class="excerpt">
-            传输控制协议（Transmission Control Protocol, TCP）的最终目的是为数据提供可靠的端到端传输。
+            启动网络
 
-TCP 头
+我们将利用docker-compose脚本来启动我们的区块链网络。
 
-数据结构如下图所示：
+在开始前，我们先注释掉docker-compose-cli.yml的一段command: /bin/bash代码，不然该脚本将在网络启动时执行所有命令.
 
-
-
-
-  源端口（Source Port）
-
-
-用来传输数据包的端口。
-
-
-  目的端口（Destination Port）
-
-
-数据包将要被发送到的端口。
-
-
-  序号（Sequence Number）
-
-
-这个数字用来表示一个TCP片段。这个域用来保证数据流的部分没有缺失。
-
-
-  确认号（Acknowledgment N...
-            <!--<a class="button" href="/2018/04/30/network-tcp.html">
+ cli:
+    container_name: cli
+    image: hyperledger/fabric-tools:$IMAGE_TAG
+    tty: true
+    stdin_open: true
+    environment:...
+            <!--<a class="button" href="/2018/05/13/hyperledger-fabric-4.html">
               Continue reading
             </a>-->
           </div>
@@ -274,21 +265,24 @@ TCP 头
       <span>
           <header>
             <h1>
-              <a class="post-link" href="/2018/04/30/network-ip.html">
-                网络基础 - IP协议
+              <a class="post-link" href="/2018/05/13/hyperledger-fabric-3.html">
+                fabric入门（三）加密&交易生成器
               </a>
             </h1>
             <p class="meta">
-              April 30, 2018
+              May 13, 2018
             </p>
           </header>
           <div class="excerpt">
-            IPv4
+            通过查看./byfn.sh这个shell启动脚本，我们知道一开始的执行流程。
 
-IP地址是一个32位的二进制数，通常被分割为4个“8位二进制数”（也就是4个字节）。IP地址通常用“点分十进制”表示成（a.b.c.d）的形式，其中，a,b,c,d都是0~255之间的十进制整数。例：点分十进IP地址（100.4.5.6），实际上是32位二进制数（01100100.00000100.00000101.00000110）。
-
-IP地址呗分成4个独立部分，是因为每个IP地址都包含有两个部分：网络地址和主机地址。网络地址用来标识设备所连接到的局域网，而主机地址则标识这...
-            <!--<a class="button" href="/2018/04/30/network-ip.html">
+#Create the network using docker compose
+if [ "${MODE}" == "up" ]; then
+  networkUp
+elif [ "${MODE}" == "down" ]; then ## Clear the network
+  networkDown
+elif [ "${MODE}" == "generate" ]; then ## Generate Ar...
+            <!--<a class="button" href="/2018/05/13/hyperledger-fabric-3.html">
               Continue reading
             </a>-->
           </div>
@@ -300,41 +294,35 @@ IP地址呗分成4个独立部分，是因为每个IP地址都包含有两个部
       <span>
           <header>
             <h1>
-              <a class="post-link" href="/2018/04/30/network-icmp.html">
-                网络基础 - 互联网控制消息协议(ICMP)
+              <a class="post-link" href="/2018/05/13/hyperledger-fabric-2.html">
+                fabric入门（二）启动&关闭网络
               </a>
             </h1>
             <p class="meta">
-              April 30, 2018
+              May 13, 2018
             </p>
           </header>
           <div class="excerpt">
-            互联网控制消息协议（Internet Control Message Protocol, ICMP）是TCP/IP协议族中的一个效用协议，负责提供在TCP/IP网络上设备、服务以及路由器可用性的消息。
+            进入官方示例
 
-ICMP 头
-
-ICMP是IP的一部分并依赖IP来传递消息。ICMP头相对较小并根据用途而改变。
+cd $GOPATH/src/github.com/hyperledger/fabric-samples/first-network
 
 
+第一步生成我们各种网络实体的所有证书和密钥，genesis block用于引导排序服务，以及配置Channel所需要的一组交易配置集合。  
+运行以下命令：
+
+./byfn.sh -m generate
 
 
-  类型（Type）
+接下来可以使用以下命令来启动整个网络。
+
+./byfn.sh -m up
 
 
-ICMP消息基于RFC规范的类型或分类。
+如果看到一个大大的END说明执行成功了。
 
-
-  代码（Code）
-
-
-ICMP消息基于RFC规范的子类型。
-
-
-  校验和（Checksum）
-
-
-用来保证...
-            <!--<a class="button" href="/2018/04/30/network-icmp.html">
+=====...
+            <!--<a class="button" href="/2018/05/13/hyperledger-fabric-2.html">
               Continue reading
             </a>-->
           </div>
@@ -346,42 +334,35 @@ ICMP消息基于RFC规范的子类型。
       <span>
           <header>
             <h1>
-              <a class="post-link" href="/2018/04/30/network-dns.html">
-                网络基础 - 域名系统(DNS)
+              <a class="post-link" href="/2018/05/13/hyperledger-fabric-1.html">
+                fabric入门（一）安装
               </a>
             </h1>
             <p class="meta">
-              April 30, 2018
+              May 13, 2018
             </p>
           </header>
           <div class="excerpt">
-            域名系统（英文：Domain Name System，缩写：DNS）是互联网的一项服务。它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。DNS使用TCP和UDP端口53。
+            安装镜像
 
-DNS数据包结构
+镜像可以自己安装，也可以借助官网的samples来帮我们实现。
 
+从官网可以看到，安装需要执行一个脚本：
 
-
-
-  DNS ID号（DNS ID Numner）
-
-
-用来对应DNS查询和DNS响应。
+curl -sSL https://goo.gl/6wtTN5 | bash -s 1.1.0
 
 
-  查询/响应（Query/Response, QR）
+不过这个需要翻墙，可以直接把文本下载下来。
 
+#!/bin/bash
+#
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 
-用来指明这个数据包是DNS查询还是响应。
-
-
-  操作代码（OpCode）
-
-
-用来定义消息中请求的类型。
-
-
-...
-            <!--<a class="button" href="/2018/04/30/network-dns.html">
+# if version n...
+            <!--<a class="button" href="/2018/05/13/hyperledger-fabric-1.html">
               Continue reading
             </a>-->
           </div>
