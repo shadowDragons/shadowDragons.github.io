@@ -158,6 +158,8 @@
         
         
         
+        
+        
          
         
         
@@ -198,6 +200,53 @@
   
 
   <div class="posts">
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2018/04/30/network-dns.html">
+                网络基础 - 域名系统(DNS)
+              </a>
+            </h1>
+            <p class="meta">
+              April 30, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            域名系统（英文：Domain Name System，缩写：DNS）是互联网的一项服务。它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。DNS使用TCP和UDP端口53。
+
+DNS数据包结构
+
+
+
+
+  DNS ID号（DNS ID Numner）
+
+
+用来对应DNS查询和DNS响应。
+
+
+  查询/响应（Query/Response, QR）
+
+
+用来指明这个数据包是DNS查询还是响应。
+
+
+  操作代码（OpCode）
+
+
+用来定义消息中请求的类型。
+
+
+...
+            <!--<a class="button" href="/2018/04/30/network-dns.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
     
     <div class="post-teaser">
       
@@ -320,46 +369,6 @@ TCP是分段、由IP分组传送
 
 TCP 的数据是通过名为 IP 分组（或 IP 数据报）的⼩数据块来发送的。这样的话...
             <!--<a class="button" href="/2018/04/29/http-connect.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/04/27/http-message-status.html">
-                HTTP - 报文 - 状态码
-              </a>
-            </h1>
-            <p class="meta">
-              April 27, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            本文对HTTP报文中常见的状态码做下说明。所有状态码参见HTTP状态码
-
-100~199 信息性状态码
-
-HTTP/1.1 向协议中引⼊了信息性状态码。这些状态码相对较新，关于其复杂性和感知价值存在⼀些争议。
-
-已定义的信息性状态码如下：
-
-
-  
-    
-      状态码
-      原因短语
-      含义
-    
-    
-      100
-      Continue
-      说明收到了请求的初始部分，请客户端继续。发送了这个状态码之后，服务器在收到请求之后必须进⾏响...
-            <!--<a class="button" href="/2018/04/27/http-message-status.html">
               Continue reading
             </a>-->
           </div>

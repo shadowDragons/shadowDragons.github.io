@@ -156,6 +156,8 @@
         
         
         
+        
+        
          
         
         
@@ -213,6 +215,16 @@
             resultsContainer: document.getElementById('results-container'),
             json: [
                     
+                     
+                        {
+                          "title"    : "搭建以太坊私有网络(ubuntn)",
+                          "category" : "",
+                          "tags"     : " 区块链, 以太坊",
+                          "url"      : "/2018/05/18/eth-private-network-ubuntu.html",
+                          "date"     : "May 18, 2018",
+                          "excerpt"  : "mac版请参考搭建以太坊私有网络安装node&amp;npmsudo apt-get install nodejs-legacysudo apt-get install npm# 升级npmsudo npm install npm@latest -g# 升级nodesudo npm i -g n# 安装最新版可执行# sudo n stable# 由于mist限制node不能大于9，所以只升级到9sudo n 9安装gogeth 需要1.9版本以上sudo add-apt-reposito...",
+                          "content"  : "mac版请参考搭建以太坊私有网络安装node&amp;npmsudo apt-get install nodejs-legacysudo apt-get install npm# 升级npmsudo npm install npm@latest -g# 升级nodesudo npm i -g n# 安装最新版可执行# sudo n stable# 由于mist限制node不能大于9，所以只升级到9sudo n 9安装gogeth 需要1.9版本以上sudo add-apt-repository ppa:longsleep/golang-backportssudo apt-get updatesudo apt-get install golang-go安装libiconvwget https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gztar zxvf libiconv-1.15.tar.gzcd libiconv-1.15sudo ./configure --prefix=/usr/localsudo makesudo make installsudo ldconfig // 刷新动态链接库缓存 安装Yarncurl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -echo \"deb https://dl.yarnpkg.com/debian/ stable main\" | sudo tee /etc/apt/sources.list.d/yarn.listsudo apt-get update &amp;&amp; sudo apt-get install yarn安装Electron v1.7.9yarn global add electron@1.7.9安装meteor JavaScript应用程序框架curl https://install.meteor.com/ | sh安装Gulpyarn global add gulp安装gethgit clone https://github.com/ethereum/go-ethereum.gitcd go-ethereummake geth把安装后的geth执行文件挪到/usr/bin安装Ganachewget https://github.com/trufflesuite/ganache/releases/download/v1.1.0/ganache-1.1.0-x86_64.AppImagechmod a+x ganache-1.1.0-x86_64.AppImage执行ganache-1.1.0-x86_64.AppImage安装Trufflesudo npm install -g truffle安装mist下载zip包https://github.com/ethereum/mist/releases/download/v0.10.0/Mist-linux64-0-10-0.zip解压unzip Mist-linux64-0-10-0.zip运行运行geth# 进入自定义指定目录cd $yourpath# 初始化geth init ./genesis.json --datadir ./chain# 进入后台geth --datadir ./chain --nodiscover console 2&gt;&gt; eth_output.logs运行mist./mist --rpc $yourpath/chain/geth.ipc --node-networkid 1234 --node-datadir $yourpath/chain/PS: 如果页面加载不出来，需要使用代理常见问题  安装geth报错build/env.sh go run build/ci.go install ./cmd/geth&gt;&gt;&gt; /usr/lib/go-1.10/bin/go install -ldflags -X main.gitCommit=4e7dc34ff1a7469b95eb16f5b4084c26a0ab3662 -v ./cmd/gethgithub.com/ethereum/go-ethereum/vendor/github.com/karalabe/hid# github.com/ethereum/go-ethereum/vendor/github.com/karalabe/hid/tmp/go-build654371927/b223/_x002.o：在函数‘get_usb_string’中：vendor/github.com/karalabe/hid/hidapi/libusb/hid.c:444：对‘libiconv_open’未定义的引用vendor/github.com/karalabe/hid/hidapi/libusb/hid.c:456：对‘libiconv’未定义的引用vendor/github.com/karalabe/hid/hidapi/libusb/hid.c:471：对‘libiconv_close’未定义的引用collect2: error: ld returned 1 exit statusutil.go:45: exit status 2exit status 1Makefile:15: recipe for target 'geth' failedmake: *** [geth] Error 1解决方案：根据提示找到对应文件sudo vim vendor/github.com/karalabe/hid/hid_enabled.go安装libiconv，并添加链接参数：-liconv#cgo linux,!android LDFLAGS: -lrt -liconv"
+                        } ,
                      
                         {
                           "title"    : "fabric入门（五）安装和实例化链码",
