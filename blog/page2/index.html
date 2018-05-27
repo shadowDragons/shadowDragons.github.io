@@ -206,6 +206,68 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2018/05/13/hyperledger-fabric-4.html">
+                fabric入门（四）启动网络
+              </a>
+            </h1>
+            <p class="meta">
+              May 13, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            启动网络
+
+我们将利用docker-compose脚本来启动我们的区块链网络。
+
+在开始前，我们先注释掉docker-compose-cli.yml的一段command: /bin/bash代码，不然该脚本将在网络启动时执行所有命令.
+
+ cli:
+    container_name: cli
+    image: hyperledger/fabric-tools:$IMAGE_TAG
+    tty: true
+    stdin_open: true
+    environment:...
+            <!--<a class="button" href="/2018/05/13/hyperledger-fabric-4.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2018/05/13/hyperledger-fabric-3.html">
+                fabric入门（三）加密&交易生成器
+              </a>
+            </h1>
+            <p class="meta">
+              May 13, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            通过查看./byfn.sh这个shell启动脚本，我们知道一开始的执行流程。
+
+#Create the network using docker compose
+if [ "${MODE}" == "up" ]; then
+  networkUp
+elif [ "${MODE}" == "down" ]; then ## Clear the network
+  networkDown
+elif [ "${MODE}" == "generate" ]; then ## Generate Ar...
+            <!--<a class="button" href="/2018/05/13/hyperledger-fabric-3.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2018/05/13/hyperledger-fabric-2.html">
                 fabric入门（二）启动&关闭网络
               </a>
@@ -299,81 +361,6 @@ curl -sSL https://goo.gl/6wtTN5 | bash -s 1.1.0
 
 无连接协议意味着不可靠服务，这将使得UDP流量不稳定。依赖于UDP的协议通常都会有其内置的可靠性服务，或者使用ICMP的一些功能来保证...
             <!--<a class="button" href="/2018/04/30/network-udp.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/04/30/network-tcp.html">
-                网络基础 - 传输控制协议(TCP)
-              </a>
-            </h1>
-            <p class="meta">
-              April 30, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            传输控制协议（Transmission Control Protocol, TCP）的最终目的是为数据提供可靠的端到端传输。
-
-TCP 头
-
-数据结构如下图所示：
-
-
-
-
-  源端口（Source Port）
-
-
-用来传输数据包的端口。
-
-
-  目的端口（Destination Port）
-
-
-数据包将要被发送到的端口。
-
-
-  序号（Sequence Number）
-
-
-这个数字用来表示一个TCP片段。这个域用来保证数据流的部分没有缺失。
-
-
-  确认号（Acknowledgment N...
-            <!--<a class="button" href="/2018/04/30/network-tcp.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/04/30/network-ip.html">
-                网络基础 - IP协议
-              </a>
-            </h1>
-            <p class="meta">
-              April 30, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            IPv4
-
-IP地址是一个32位的二进制数，通常被分割为4个“8位二进制数”（也就是4个字节）。IP地址通常用“点分十进制”表示成（a.b.c.d）的形式，其中，a,b,c,d都是0~255之间的十进制整数。例：点分十进IP地址（100.4.5.6），实际上是32位二进制数（01100100.00000100.00000101.00000110）。
-
-IP地址呗分成4个独立部分，是因为每个IP地址都包含有两个部分：网络地址和主机地址。网络地址用来标识设备所连接到的局域网，而主机地址则标识这...
-            <!--<a class="button" href="/2018/04/30/network-ip.html">
               Continue reading
             </a>-->
           </div>

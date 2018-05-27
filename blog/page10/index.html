@@ -206,6 +206,69 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2016/11/24/transaction-deal.html">
+                数据库的事务处理
+              </a>
+            </h1>
+            <p class="meta">
+              November 24, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            事务四个核心要素
+1.原子性  
+一组操作，要么都成功，要么都失败，不存在中间状态。  
+2.一致性  
+事务在提交或回滚时，对其他人来说，数据的状态是统一的，不存在其他状态。  
+最理想的状态是，数据提交后，所有的更改能立刻生效，但由于cpu运算，磁盘写入，内存写入需要时间，所以不可能达到立刻生效。  
+所以一般说的是逻辑上同时生效。  
+比如修改a，b两行数据，要保证一致性，对a，b加锁，修改数据，对a，b解锁。  
+3.隔离性  
+读未提交：什么锁也没有，别人可以读到中间状态（即为提...
+            <!--<a class="button" href="/2016/11/24/transaction-deal.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2016/11/24/consistency-highavailability.html">
+                数据库的一致性与高可用
+              </a>
+            </h1>
+            <p class="meta">
+              November 24, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            在给定多台计算机，他们相互之间由网络相互连通，能够做到  
+1.数据每次成功写入，数据不会丢失，并且按照写入的顺序排列  
+2.给定安全级别，保证服务可用性，并尽可能减少机器消耗。
+
+2PC
+
+所谓的两个阶段是指：第一阶段：准备阶段(投票阶段)和第二阶段：提交阶段（执行阶段）。
+
+准备阶段
+
+事务协调者(事务管理器)给每个参与者(资源管理器)发送Prepare消息，每个参与者要么直接返回失败(如权限验证失败)，要么在本地执行事务，写本地的redo和undo日志，但不提交，到达一种“万事俱备...
+            <!--<a class="button" href="/2016/11/24/consistency-highavailability.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2016/11/18/php-about-thred-safe.html">
                 php线程安全
               </a>
@@ -290,78 +353,6 @@ python实例
 import numpy as np
 import matplotlib.pyplot as p...
             <!--<a class="button" href="/2016/11/14/machinelearning-supervised.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/13/time-complexity.html">
-                时间复杂度计算
-              </a>
-            </h1>
-            <p class="meta">
-              November 13, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            用大写O()来体现算法时间复杂度，称之为大O记法。
-
-推导大O阶
-1.用常数1取代运行时间中的所有加法常数。  
-2.在修改后的运行次数函数中，只保留最高阶项。  
-3.如果最高阶项存在且不是1，则去除与这个项相乘的常数。  
-4.得出大O阶。
-
-算法分析
-1.计算所有情况的平均值，称为平均时间复杂度
-2.计算最坏情况下的时间复杂度，称为最坏时间复杂度
-
-计算实例
-
-常数阶 O(1)
-int sum = 0, n = 100; /*执行一次*/
-sum = (1 + n) * n / 2;...
-            <!--<a class="button" href="/2016/11/13/time-complexity.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/13/sort.html">
-                排序
-              </a>
-            </h1>
-            <p class="meta">
-              November 13, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            冒泡算法
-do
-  swapped = false
-  for i = 1 to indexOfLastUnsortedElement
-    if leftElement &gt; rightElement
-      swap(leftElement, rightElement)
-      swapped = true
-while swapped
-
-
-选择排序
-repeat (numOfElements - 1) times
-  set the first unsorted elem...
-            <!--<a class="button" href="/2016/11/13/sort.html">
               Continue reading
             </a>-->
           </div>
