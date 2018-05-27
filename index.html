@@ -205,6 +205,38 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2018/05/27/hyperledger-fabric.html">
+                fabric架构&执行流程
+              </a>
+            </h1>
+            <p class="meta">
+              May 27, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            本文简单讲述fabric架构&amp;执行流程，帮助同学快速理解&amp;入门。
+
+架构
+
+
+
+Identity
+
+Identity，也就是身份管理，Fabric是目前为止在设计上最贴近联盟链思想的区块链。联盟链考虑到商业应用对安全、隐私、监管、审计、性能的需求，提高准入门槛，成员必须被许可才能加入网络。Fabric成员管理服务为整个区块链网络提供身份管理、隐私、保密和可审计的服务。成员管理服务通过公钥基础设施PKI和去中心化共识机制使得非许可的区块链变成许可制的区块链。
+
+Smart C...
+            <!--<a class="button" href="/2018/05/27/hyperledger-fabric.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2018/05/18/eth-private-network-ubuntu.html">
                 搭建以太坊私有网络(ubuntn)
               </a>
@@ -328,46 +360,6 @@ elif [ "${MODE}" == "down" ]; then ## Clear the network
   networkDown
 elif [ "${MODE}" == "generate" ]; then ## Generate Ar...
             <!--<a class="button" href="/2018/05/13/hyperledger-fabric-3.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/05/13/hyperledger-fabric-2.html">
-                fabric入门（二）启动&关闭网络
-              </a>
-            </h1>
-            <p class="meta">
-              May 13, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            进入官方示例
-
-cd $GOPATH/src/github.com/hyperledger/fabric-samples/first-network
-
-
-第一步生成我们各种网络实体的所有证书和密钥，genesis block用于引导排序服务，以及配置Channel所需要的一组交易配置集合。  
-运行以下命令：
-
-./byfn.sh -m generate
-
-
-接下来可以使用以下命令来启动整个网络。
-
-./byfn.sh -m up
-
-
-如果看到一个大大的END说明执行成功了。
-
-=====...
-            <!--<a class="button" href="/2018/05/13/hyperledger-fabric-2.html">
               Continue reading
             </a>-->
           </div>
