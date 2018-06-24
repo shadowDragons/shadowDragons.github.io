@@ -206,6 +206,43 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2018/04/27/http-message-method.html">
+                HTTP - 报文 - 方法
+              </a>
+            </h1>
+            <p class="meta">
+              April 27, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            本文对HTTP报文中常见的方法做下说明。
+
+GET
+
+是最常⽤的⽅法。通常⽤于请求服务器发送某个资源。HTTP/1.1 要求服务器实现此⽅法。
+
+
+
+HEAD
+
+HEAD ⽅法与 GET ⽅法的⾏为很类似，但服务器在响应中只返回⾸部。不会返回实体的主体部分。这就允许客户端在未获取实际资源的情况下，对资源的⾸部进⾏检查。使⽤ HEAD，可以：
+
+
+  在不获取资源的情况下了解资源的情况（⽐如，判断其类型）；
+  通过查看响应中的状态码，看看某个对象是否存在；
+  通过查看⾸部，测试资源是否被...
+            <!--<a class="button" href="/2018/04/27/http-message-method.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2018/04/23/http-message.html">
                 HTTP - 报文
               </a>
@@ -327,36 +364,6 @@ contract MyToken {
 由于必须分成n个512bit块，所以必须进行补位。  
 最后还需要预留64bit记录消息块的长度，所以消息块的长度不能大于2^6...
             <!--<a class="button" href="/2018/04/05/sha256.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/04/05/sha1.html">
-                加密散列-sha1
-              </a>
-            </h1>
-            <p class="meta">
-              April 5, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            SHA-1（英语：Secure Hash Algorithm 1，中文名：安全散列算法1）是一种密码散列函数，美国国家安全局设计，并由美国国家标准技术研究所（NIST）发布为联邦数据处理标准（FIPS）[2]。SHA-1可以生成一个被称为消息摘要的160位（20字节）散列值，散列值通常的呈现形式为40个十六进制数。
-
-算法步骤
-
-原始消息分为N个512bit的消息块。每个消息块分成16个32bit。
-
-1.补位  
-由于必须分成n个512bit块，所以必须进行补位。  
-最后还需要预留64...
-            <!--<a class="button" href="/2018/04/05/sha1.html">
               Continue reading
             </a>-->
           </div>

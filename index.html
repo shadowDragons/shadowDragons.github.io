@@ -205,6 +205,58 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2018/06/23/mysql-innodb-lock.html">
+                mysql系列教程 - innodb锁
+              </a>
+            </h1>
+            <p class="meta">
+              June 23, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            lock和latch
+
+锁分为两种类型 lock 和 latch ，它们之间的差异如下表所示：
+
+
+  
+    
+      -
+      lock
+      latch
+    
+  
+  
+    
+      对象
+      事务
+      线程
+    
+    
+      保护
+      数据库内容
+      内存数据结构
+    
+    
+      持续时间
+      整个事务过程
+      临界资源
+    
+    
+      模式
+      行...
+            <!--<a class="button" href="/2018/06/23/mysql-innodb-lock.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2018/05/27/hyperledger-fabric.html">
                 fabric - 架构&执行流程
               </a>
@@ -338,35 +390,6 @@ sudo n 9
 
 geth 需要1.9版本以上...
             <!--<a class="button" href="/2018/05/18/eth-private-network-ubuntu.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/05/13/hyperledger-fabric-5.html">
-                fabric入门（五）安装和实例化链码
-              </a>
-            </h1>
-            <p class="meta">
-              May 13, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            安装启动链码
-
-首先，在将示例代码安装到4个peer节点中的其中一个。这个命令将源代码放到peer节点的文件系统中。
-
-peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric-samples/chaincode/chaincode_example02/go/chaincode_example02
-
-
-接下来，在信道上实例化chaincode。这将初始化信道上的链码，设置链码的背书策略，为目标peer节点启...
-            <!--<a class="button" href="/2018/05/13/hyperledger-fabric-5.html">
               Continue reading
             </a>-->
           </div>

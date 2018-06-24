@@ -206,6 +206,35 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2018/05/13/hyperledger-fabric-5.html">
+                fabric入门（五）安装和实例化链码
+              </a>
+            </h1>
+            <p class="meta">
+              May 13, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            安装启动链码
+
+首先，在将示例代码安装到4个peer节点中的其中一个。这个命令将源代码放到peer节点的文件系统中。
+
+peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric-samples/chaincode/chaincode_example02/go/chaincode_example02
+
+
+接下来，在信道上实例化chaincode。这将初始化信道上的链码，设置链码的背书策略，为目标peer节点启...
+            <!--<a class="button" href="/2018/05/13/hyperledger-fabric-5.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2018/05/13/hyperledger-fabric-4.html">
                 fabric入门（四）启动网络
               </a>
@@ -337,30 +366,6 @@ curl -sSL https://goo.gl/6wtTN5 | bash -s 1.1.0
 
 # if version n...
             <!--<a class="button" href="/2018/05/13/hyperledger-fabric-1.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/04/30/network-udp.html">
-                网络基础 - 用户数据报协议(UDP)
-              </a>
-            </h1>
-            <p class="meta">
-              April 30, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            用户数据报协议（User Datagram Protocol, UDP）是在现代网络中最常使用的另外一种第4层协议。如果说TCP是为了满足带有内在错误检测的可靠数据传输，那么UDP主要是为了提供高速的传输。处于这个原因，UDP是一种尽力服务，通常会被称为无连接协议。一个无连接协议并不会正式的建立和结束主机之前的连接，也不会像TCP那样存在握手和终止进程。
-
-无连接协议意味着不可靠服务，这将使得UDP流量不稳定。依赖于UDP的协议通常都会有其内置的可靠性服务，或者使用ICMP的一些功能来保证...
-            <!--<a class="button" href="/2018/04/30/network-udp.html">
               Continue reading
             </a>-->
           </div>

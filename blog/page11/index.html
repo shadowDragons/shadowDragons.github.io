@@ -206,6 +206,47 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2016/11/14/machinelearning-supervised.html">
+                监督学习与梯度下降
+              </a>
+            </h1>
+            <p class="meta">
+              November 14, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            假设一个问题有n个特征，线性函数为
+  
+其中   
+差值计算，其中m为训练数据  
+所以我们要求出当最小值时的特征参数值。
+
+主要有两种方式来求出  
+1.梯度下降  
+2.正则方程组
+
+梯度下降
+
+把计算结果与真实结果的差值比做山顶，通过找寻山的最大坡度下降，达到最快到达山脚，从而实现最小差值。
+
+对每个求导，得出最快下降梯度，然后沿着这梯度下降。学习速度或下降速度。
+
+
+python实例
+import numpy as np
+import matplotlib.pyplot as p...
+            <!--<a class="button" href="/2016/11/14/machinelearning-supervised.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2016/11/13/time-complexity.html">
                 时间复杂度计算
               </a>
@@ -339,40 +380,6 @@ while (--k!=0)
 Vertex temp2 = temp1.next
 Verte...
             <!--<a class="button" href="/2016/11/13/link.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/13/jsonp.html">
-                jsonp实现异步请求跨域
-              </a>
-            </h1>
-            <p class="meta">
-              November 13, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            ajax 和 jsonp的区别  
-ajax是通过XmlHttpRequest来获取非本页内容，而jsonp是通过动态添加
-
-为什么jsonp能够跨服  
-因为在web调用js文件是不受跨服影响的，不仅如此，凡是拥有src属性的都有跨服的能力。
-
-实现一
-www.b.com/remote.js
-alert(1)
-
-
-www.a.com/json.html
-&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "h...
-            <!--<a class="button" href="/2016/11/13/jsonp.html">
               Continue reading
             </a>-->
           </div>
