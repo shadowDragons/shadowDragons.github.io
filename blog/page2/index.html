@@ -160,6 +160,8 @@
         
         
         
+        
+        
          
         
         
@@ -200,6 +202,49 @@
   
 
   <div class="posts">
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2018/05/18/eth-private-network-ubuntu.html">
+                搭建以太坊私有网络(ubuntn)
+              </a>
+            </h1>
+            <p class="meta">
+              May 18, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            mac版请参考搭建以太坊私有网络
+
+安装node&amp;npm
+
+sudo apt-get install nodejs-legacy
+sudo apt-get install npm
+
+# 升级npm
+sudo npm install npm@latest -g
+
+# 升级node
+sudo npm i -g n
+
+# 安装最新版可执行
+# sudo n stable
+# 由于mist限制node不能大于9，所以只升级到9
+sudo n 9
+
+
+安装go
+
+geth 需要1.9版本以上...
+            <!--<a class="button" href="/2018/05/18/eth-private-network-ubuntu.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
     
     <div class="post-teaser">
       
@@ -326,46 +371,6 @@ cd $GOPATH/src/github.com/hyperledger/fabric-samples/first-network
 
 =====...
             <!--<a class="button" href="/2018/05/13/hyperledger-fabric-2.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/05/13/hyperledger-fabric-1.html">
-                fabric入门（一）安装
-              </a>
-            </h1>
-            <p class="meta">
-              May 13, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            安装镜像
-
-镜像可以自己安装，也可以借助官网的samples来帮我们实现。
-
-从官网可以看到，安装需要执行一个脚本：
-
-curl -sSL https://goo.gl/6wtTN5 | bash -s 1.1.0
-
-
-不过这个需要翻墙，可以直接把文本下载下来。
-
-#!/bin/bash
-#
-# Copyright IBM Corp. All Rights Reserved.
-#
-# SPDX-License-Identifier: Apache-2.0
-#
-
-# if version n...
-            <!--<a class="button" href="/2018/05/13/hyperledger-fabric-1.html">
               Continue reading
             </a>-->
           </div>

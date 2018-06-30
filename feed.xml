@@ -5,7 +5,95 @@
         <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
         <link>http://localhost:4000/</link>
         <description></description>
-        <pubDate>Sun, 24 Jun 2018 10:39:30 +0800</pubDate>
+        <pubDate>Sun, 01 Jul 2018 00:05:22 +0800</pubDate>
+        
+        <item>
+            <title>mysql系列教程 - B+Tree索引</title>
+            <link>/2018/06/30/mysql-innodb-index.html</link>
+            <guid isPermaLink="true">/2018/06/30/mysql-innodb-index.html</guid>
+            <description>&lt;p&gt;了解B+树前，我们先了解下二叉查找树、平衡二叉查找树、B-Tree。&lt;/p&gt;
+
+&lt;h3 id=&quot;二叉查找树&quot;&gt;二叉查找树&lt;/h3&gt;
+
+&lt;p&gt;二叉查找树具有以下性质：左子树的键值小于根的键值，右子树的键值大于根的键值。如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-06-30-mysql-innodb-index/1.png&quot; alt=&quot;1.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;由于它可以任意构造，所以也可以按照赢下方式构建二叉树。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-06-30-mysql-innodb-index/2.png&quot; alt=&quot;2.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我们知道，二叉树查找一个节点所需的最大时间取决于树高，所以如果像上图所示进行查找，效率会非常低。所以，要提高查找效率，需要这颗树是平衡的，从而引出了&lt;strong&gt;平衡二叉树&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h3 id=&quot;平衡二叉树avl树&quot;&gt;平衡二叉树（AVL树）&lt;/h3&gt;
+
+&lt;p&gt;平衡二叉树定义如下：首先符合二叉查找树的定义，其次必须满足任何节点的两个子树高最大差为1。如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-06-30-mysql-innodb-index/3.png&quot; alt=&quot;3.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;平衡树查询速度的确很快，不过维护一颗平衡二叉树需要一定的开销，需要做1次或多次左旋和右旋来得到插入或者更新后树的平衡性，不过多用于内存结构对象中，所以开销相对较小。如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-06-30-mysql-innodb-index/4.jpg&quot; alt=&quot;4.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;b-tree&quot;&gt;B-Tree&lt;/h3&gt;
+
+&lt;p&gt;B-Tree是为磁盘等外存储设备设计的一种平衡查找树。因此在讲B-Tree之前先了解下磁盘的相关知识。&lt;/p&gt;
+
+&lt;p&gt;系统从磁盘读取数据到内存时是以磁盘块（block）为基本单位的，位于同一个磁盘块中的数据会被一次性读取出来，而不是需要什么取什么。&lt;/p&gt;
+
+&lt;p&gt;InnoDB存储引擎中有页（Page）的概念，页是其磁盘管理的最小单位。InnoDB存储引擎中默认每个页的大小为16KB，可通过参数innodb_page_size将页的大小设置为4K、8K、16K，在MySQL中可通过如下命令查看页的大小：&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;show&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;variables&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;like&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'innodb_page_size'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;而系统一个磁盘块的存储空间往往没有这么大，因此InnoDB每次申请磁盘空间时都会是若干地址连续磁盘块来达到页的大小16KB。InnoDB在把磁盘数据读入到磁盘时会以页为基本单位，在查询数据时如果一个页中的每条数据都能有助于定位数据记录的位置，这将会减少磁盘I/O次数，提高查询效率。&lt;/p&gt;
+
+&lt;p&gt;B-Tree相对于平衡二叉树来说，减少了节点数，每层增加节点数，减少了树高，提高了查找效率。&lt;/p&gt;
+
+&lt;p&gt;如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-06-30-mysql-innodb-index/5.png&quot; alt=&quot;5.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;从上图中可以看到每个节点中不仅包含数据的key值，还有data值。由于每个节点存储一个页的数据，而每一个页的存储空间是有限的，如果data数据较大时将会导致每个节点（即一个页）能存储的key的数量很小，当存储的数据量很大时同样会导致B-Tree的深度较大，增大查询时的磁盘I/O次数，进而影响查询效率。&lt;/p&gt;
+
+&lt;h3 id=&quot;btree&quot;&gt;B+Tree&lt;/h3&gt;
+
+&lt;p&gt;B+Tree是在B-Tree基础上的一种优化，使其更适合实现外存储索引结构，InnoDB存储引擎就是用B+Tree实现其索引结构。&lt;/p&gt;
+
+&lt;p&gt;在B+Tree中，所有数据记录节点都是按照键值大小顺序存放在同一层的叶子节点上，而非叶子节点上只存储key值信息，这样可以大大加大每个节点存储的key值数量，降低B+Tree的高度。&lt;/p&gt;
+
+&lt;p&gt;B+Tree相对于B-Tree有几点不同：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;非叶子节点只存储键值信息。&lt;/li&gt;
+  &lt;li&gt;所有叶子节点之间都有一个链指针。&lt;/li&gt;
+  &lt;li&gt;数据记录都存放在叶子节点中。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;结构如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-06-30-mysql-innodb-index/6.png&quot; alt=&quot;6.png&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;聚集索引和辅助索引&quot;&gt;聚集索引和辅助索引&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;聚集索引&lt;/strong&gt;就是按照每张表的主键构造一颗B+树，同时叶子节点中存放的为整张表的行数据，也将聚集索引的叶子节点称为&lt;strong&gt;数据页&lt;/strong&gt;。一张表只能拥有一个聚集索引。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;辅助索引&lt;/strong&gt;的叶子节点并不包含行记录的全部数据，而是存储相应行数据的聚集索引键，即主键。当通过辅助索引来查询数据时，InnoDB存储引擎会遍历辅助索引找到主键，然后再通过主键在聚集索引中找到完整的行记录数据。&lt;/p&gt;
+
+&lt;p&gt;如果是多列索引（联合索引、覆盖索引），它的内部的结果。从本质上来说，联合索引也是一棵B+树，不同的是联合索引的键值的数量不是1，而是大于等于2。接着来讨论两个整型列组成的联合索引，假设两个键值的名称分别为a、b，如下图所示&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-06-30-mysql-innodb-index/7.jpg&quot; alt=&quot;7.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;从上图可以观察到多个键值的B+树情况，其实和单个键值的B+树并没有什么不同，键值都是排序的，通过叶子节点可以逻辑上顺序地读出所有数据，就上面的例子来说，即（1,1）、（1,2）、（2,1）、（2,4）、（3,1）、（3,2）。其数据按(a,b)的顺序进行了存放。&lt;/p&gt;
+
+&lt;p&gt;对于查询“SELECT * FROM TABLE WHERE a=xxx and b=xxx”，显然是可以使用（a,b）这个联合索引的。对于单个的a列查询“SELECT * FROM TABLE WHERE a=xxx”也是可以使用这个（a,b）这个联合索引的。但对于b列的查询“SELECT * FROM TABLE WHERE b=xxx”则不可以使用这棵B+树索引。可以发现叶子节点上的b值为1、2、1、4、1、2，显然不是排序的，而B+树的特性就是数据是排序的才能使用二分查找法，因此对于b列的查询使用不到（a,b）的索引。&lt;/p&gt;
+
+&lt;p&gt;联合索引的第二个好处是已经对第二个键值进行了排序处理。例如，在很多情况下应用程序都需要查询某个用户的购物情况，并按照时间进行排序，最后取出最近三次的购买记录，这时使用联合索引可以避免多一次的排序操作，因为索引本身在叶子节点已经排序了。&lt;/p&gt;
+
+&lt;p&gt;对于覆盖索引，由于可以从辅助索引中得到查询的记录信息，而不需要再去聚集索引获取记录信息，因此可以减少IO操作。&lt;/p&gt;
+</description>
+            <pubDate>Sat, 30 Jun 2018 00:00:00 +0800</pubDate>
+        </item>
         
         <item>
             <title>mysql系列教程 - innodb锁</title>
@@ -2435,159 +2523,6 @@ sequenceDiagram
 &lt;p&gt;你可以将ICMP的类型域作为数据包的分类，而Code域作为它的子类。举例来说，Type域的值为3时意味着“目标不可达”。但只有这个信息不足以发现问题，当如果数据包在Code域中知名值为3，也就是“端口不可达”时，你就可以知道这应该是你试图进行通信的端口的问题。&lt;/p&gt;
 
 &lt;p&gt;所有可用的ICMP类型和代码，可参考&lt;a href=&quot;https://www.iana.org/assignments/icmp-parameters&quot;&gt;https://www.iana.org/assignments/icmp-parameter&lt;/a&gt;&lt;/p&gt;
-</description>
-            <pubDate>Mon, 30 Apr 2018 00:00:00 +0800</pubDate>
-        </item>
-        
-        <item>
-            <title>网络基础 - 域名系统(DNS)</title>
-            <link>/2018/04/30/network-dns.html</link>
-            <guid isPermaLink="true">/2018/04/30/network-dns.html</guid>
-            <description>&lt;p&gt;域名系统（英文：Domain Name System，缩写：DNS）是互联网的一项服务。它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。DNS使用TCP和UDP端口53。&lt;/p&gt;
-
-&lt;h4 id=&quot;dns数据包结构&quot;&gt;DNS数据包结构&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-04-30-network-dns/1.png&quot; alt=&quot;1.png&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;DNS ID号（DNS ID Numner）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;用来对应DNS查询和DNS响应。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;查询/响应（Query/Response, QR）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;用来指明这个数据包是DNS查询还是响应。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;操作代码（OpCode）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;用来定义消息中请求的类型。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;权威应答（Authoritative Answer, AA）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;如果响应数据包中设定了这个值，则说明这个响应是由域内权威域名服务器发出的。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;截断（Truncation, TC）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;用来指明这个响应由于太长，无法装入数据包而被截断。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;期望递归（Recursion Desired, RD）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;当请求中设定了这个值，则说明DNS客户端在目标域名服务器不含有所请求信息的情况下，要求进行递归查询。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;可用递归（Recursion Available, RA）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;当响应中设定了这个值，说明域名服务器支持递归查询。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;保留（Z）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;在RFC1035的规定中被全设为0，但有时会被用来作为RCode域的扩展。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;响应代码（Response Code）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;在DNS响应中用来指明错误。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;问题计数（Question Count）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;在问题区段中的条目数。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;回答计数（Answer Count）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;在回答区段中的条目数。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;域名服务器计数（Name Server Count）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;在权威区段的域名资源记录数。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;额外记录计数（Additional Records Count）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;在额外信息区段中其他资源记录数。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;问题区段（Question section）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;大小可变，包含有被发送到DNS服务器的一条或多条的信息查询部分。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;回答区段（Answer section）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;大小可变，含有用来回答查询的一条或多条资源记录。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;权威区段（Authority section）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;大小可变，包含指向权威域名服务器的资源记录，用以继续解析过程。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;额外信息区段（Additional Information section）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;包含资源记录且大小可变的区段。这些资源记录用来存储完全没有必要回答的查询相关的额外信息。&lt;/p&gt;
-
-&lt;h4 id=&quot;dns递归&quot;&gt;DNS递归&lt;/h4&gt;
-
-&lt;p&gt;由于互联网的DNS结构是层级式的，为了能有回答客户端提交的查询，DNS服务器必须能够彼此通信。我们的内部DNS服务器知道我们本地局域网服务器的名字和IP地址的映射，但不大可能知道谷歌的IP地址。&lt;/p&gt;
-
-&lt;p&gt;当DNS服务器需要查找一个IP地址时，它会代表发出请求的客户端向另一个DNS服务器查询。实际上，这个DNS服务器与客户端的行为相同。这个过程叫做&lt;strong&gt;递归查询&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;script src=&quot;https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.js&quot;&gt;&lt;/script&gt;
-&lt;div class=&quot;mermaid&quot;&gt;
-sequenceDiagram
-    participant A as DNS客户端
-    participant B as 本地DNS服务器
-    participant C as 外部DNS服务器
-    A-&amp;gt;&amp;gt;B: 递归查询
-    B-&amp;gt;&amp;gt;C: 递归查询
-    C-&amp;gt;&amp;gt;B: 查询响应
-    B-&amp;gt;&amp;gt;A: 查询响应
-&lt;/div&gt;
-
-&lt;h4 id=&quot;dns区域传送&quot;&gt;DNS区域传送&lt;/h4&gt;
-
-&lt;p&gt;DNS区域是一个DNS服务器所授权管理的名字空间（或是一组DNS名称）。&lt;/p&gt;
-
-&lt;p&gt;举例来说，baidu这个网站可能是由一个DNS服务器对baidu.com负责。这样，无论是baidu内部还是外部的设备，如果希望将baidu.com解析成IP地址，都需要和这个区域的权威，也就是这个DNS服务器联系。如果baidu发展壮大了，它可能会增加一个DNS服务器，专门用来处理其名字空间的email部分，如mail.baidu.com，那么这个服务器，就成为这个邮件子区域的权威。如果必要的话，还可以为子域名添加更多的DNS服务器。&lt;/p&gt;
-
-&lt;p&gt;区域传送指处于荣誉备份的需要，在两台设备之间传送区域数据。举例来说，在拥有多个DNS服务器的组织中，管理员通常都会配置一台备用DNS服务器，用来维护一份主服务器DNS信息的拷贝，以防止DNS服务器不可欧阳。主要存在两种区域传送。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;完整区域传送（AXFR）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这个类型的传送将整个区域在设备间进行传送。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;增量区域传送（IXFR）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这个类型的传送仅传送区域信息的一部分。&lt;/p&gt;
 </description>
             <pubDate>Mon, 30 Apr 2018 00:00:00 +0800</pubDate>
         </item>

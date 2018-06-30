@@ -159,6 +159,8 @@
         
         
         
+        
+        
          
         
         
@@ -199,6 +201,44 @@
   
 
   <div class="posts">
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2018/06/30/mysql-innodb-index.html">
+                mysql系列教程 - B+Tree索引
+              </a>
+            </h1>
+            <p class="meta">
+              June 30, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            了解B+树前，我们先了解下二叉查找树、平衡二叉查找树、B-Tree。
+
+二叉查找树
+
+二叉查找树具有以下性质：左子树的键值小于根的键值，右子树的键值大于根的键值。如下图所示：
+
+
+
+由于它可以任意构造，所以也可以按照赢下方式构建二叉树。
+
+
+
+我们知道，二叉树查找一个节点所需的最大时间取决于树高，所以如果像上图所示进行查找，效率会非常低。所以，要提高查找效率，需要这颗树是平衡的，从而引出了平衡二叉树。
+
+平衡二叉树（AVL树）
+
+平衡二叉树定义如下：首先符合二叉查找树的定义，其次必须满足任...
+            <!--<a class="button" href="/2018/06/30/mysql-innodb-index.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
     
     <div class="post-teaser">
       
@@ -347,49 +387,6 @@ npm install
 
 一段chaincode通常处理由网络中的成员一致认可的业务逻辑，故我们很可能用“智能合约”来代指chaincode。一段chiancode创建的（账本）状态是与其他chaincode互相隔离的，故而不能被其他chaincode直接访问。不过，...
             <!--<a class="button" href="/2018/05/27/hyperledger-fabric-chaincode.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/05/18/eth-private-network-ubuntu.html">
-                搭建以太坊私有网络(ubuntn)
-              </a>
-            </h1>
-            <p class="meta">
-              May 18, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            mac版请参考搭建以太坊私有网络
-
-安装node&amp;npm
-
-sudo apt-get install nodejs-legacy
-sudo apt-get install npm
-
-# 升级npm
-sudo npm install npm@latest -g
-
-# 升级node
-sudo npm i -g n
-
-# 安装最新版可执行
-# sudo n stable
-# 由于mist限制node不能大于9，所以只升级到9
-sudo n 9
-
-
-安装go
-
-geth 需要1.9版本以上...
-            <!--<a class="button" href="/2018/05/18/eth-private-network-ubuntu.html">
               Continue reading
             </a>-->
           </div>
