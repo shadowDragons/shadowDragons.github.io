@@ -208,6 +208,78 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2017/06/25/php-remember-login.html">
+                php实现记住登录
+              </a>
+            </h1>
+            <p class="meta">
+              June 25, 2017
+            </p>
+          </header>
+          <div class="excerpt">
+            流程
+
+1.用户通过点击“记住密码”，提交登陆表单传递给服务器。  
+2.服务器生成唯一标识token，保存到数据库  
+3.写cookie，设置失效时间（这样token就保存到了客户端）  
+4.如果用户登陆失效，服务器取客户端token进行校验  
+5.token与服务器保存的token一致，且没有失效，则判定用户登录成功  
+6.token与服务器保存的token不一致或超过失效时间，则判定用户需要重新登录
+
+方案一
+
+用用户id来作为token，如remember_user=133...
+            <!--<a class="button" href="/2017/06/25/php-remember-login.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2017/06/11/php-websocket.html">
+                php实现webSocket
+              </a>
+            </h1>
+            <p class="meta">
+              June 11, 2017
+            </p>
+          </header>
+          <div class="excerpt">
+            socket
+
+Socket是应用层与TCP/IP协议族通信的中间软件抽象层，它是一组接口。在设计模式中，Socket其实就是一个门面模式，它把复杂的TCP/IP协议族隐藏在Socket接口后面，对用户来说，一组简单的接口就是全部，让Socket去组织数据，以符合指定的协议。
+
+执行流程
+
+
+
+服务器端  
+1.初始化  
+2.绑定端口(bind)  
+3.进入监听(listen)  
+4.阻塞(accept),等待用户连接  
+5.接收，发送客户端数据
+
+客户端  
+1.初始化  
+2....
+            <!--<a class="button" href="/2017/06/11/php-websocket.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2017/02/05/php-daemon.html">
                 php实现守护进程
               </a>
@@ -300,64 +372,6 @@ address =...
 3.隔离性  
 读未提交：什么锁也没有，别人可以读到中间状态（即为提...
             <!--<a class="button" href="/2016/11/24/transaction-deal.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/24/consistency-highavailability.html">
-                数据库的一致性与高可用
-              </a>
-            </h1>
-            <p class="meta">
-              November 24, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            在给定多台计算机，他们相互之间由网络相互连通，能够做到  
-1.数据每次成功写入，数据不会丢失，并且按照写入的顺序排列  
-2.给定安全级别，保证服务可用性，并尽可能减少机器消耗。
-
-2PC
-
-所谓的两个阶段是指：第一阶段：准备阶段(投票阶段)和第二阶段：提交阶段（执行阶段）。
-
-准备阶段
-
-事务协调者(事务管理器)给每个参与者(资源管理器)发送Prepare消息，每个参与者要么直接返回失败(如权限验证失败)，要么在本地执行事务，写本地的redo和undo日志，但不提交，到达一种“万事俱备...
-            <!--<a class="button" href="/2016/11/24/consistency-highavailability.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/18/php-about-thred-safe.html">
-                php线程安全
-              </a>
-            </h1>
-            <p class="meta">
-              November 18, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            线程不安全
-线程不安全就是不提供数据访问保护，有可能出现多个线程先后更改数据造成所得到的数据是脏数据。  
-比如一个 ArrayList 类，在添加一个元素的时候，它可能会有两步来完成：1. 在 Items[Size] 的位置存放此元素；2. 增大 Size 的值。  
-在单线程运行的情况下，如果 Size = 0，添加一个元素后，此元素在位置 0，而且 Size=1；  
-而如果是在多线程情况下，比如有两个线程，线程 A 先将元素1存放在位置 0。但是此时 CPU 调度线程A暂停，线程 ...
-            <!--<a class="button" href="/2016/11/18/php-about-thred-safe.html">
               Continue reading
             </a>-->
           </div>

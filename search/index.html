@@ -219,6 +219,26 @@
                     
                      
                         {
+                          "title"    : "PerconaToolkit工具集合",
+                          "category" : "",
+                          "tags"     : " MYSQL",
+                          "url"      : "/2018/07/14/perconaToolkit.html",
+                          "date"     : "July 14, 2018",
+                          "excerpt"  : "pt-align将其它工具的输出按列对齐。pt-archiver将数据归档到另一张表或者文件。pt-config-diff对比数据库配置、环境变量差异pt-deadlock-logger记录死锁日志，并保存到文件或者数据表pt-diskstats功能和iostat类似，给出磁盘的I/O统计信息pt-duplicate-key-checker检测表中重复多余的索引或者主键pt-fifo-split文件分割pt-find按条件查找、排序数据库表pt-fingerprint将sql转为绑定形式p...",
+                          "content"  : "pt-align将其它工具的输出按列对齐。pt-archiver将数据归档到另一张表或者文件。pt-config-diff对比数据库配置、环境变量差异pt-deadlock-logger记录死锁日志，并保存到文件或者数据表pt-diskstats功能和iostat类似，给出磁盘的I/O统计信息pt-duplicate-key-checker检测表中重复多余的索引或者主键pt-fifo-split文件分割pt-find按条件查找、排序数据库表pt-fingerprint将sql转为绑定形式pt-fk-error-logger记录外键错误pt-heartbeat监控备库延迟pt-index-usage能够从日志当中分析索引的使用情况pt-kill杀死mysql会话pt-summary查看系统摘要报告打印出来的信息包括：CPU、内存、硬盘、网卡等信息，还包括文件系统、磁盘调度和队列大小、LVM、RAID、网络链接信息、netstat 的统计，以及前10的负载占用信息和vmstat信息。pt-online-schema-change可以在执行ALTER语句中，不堵塞数据库表格的写操作。pt-pmp获取MySQL的堆栈信息pt-query-digest分析mysql慢查询的一个工具，它可以分析binlog、General log、slowlog，也可以通过SHOWPROCESSLIST或者通过tcpdump抓取的MySQL协议数据来进行分析。pt-show-grants格式化打印输出MySQL上的赋权，以便你可以有效地复制、比较以及版本控制。pt-slave-delay让主库的操作延迟写入到从库pt-slave-find查找和打印MySQL从库的复制层次树# pt-slave-restart监控一个或者多个MySQL复制slave的错误，然后当复制停止时试图重启。pt-stalkmysql 性能瓶颈是值得关注的，但往往出现问题的时候，总是持续那么一点时间，没能抓住事故现场，从而无法分析.pt-stalk 是一款当条件触发时,记录相关系统信息的mysql监控工具.这款工具帮助我们设定自己的条件与阀值，当触发条件时可以提供邮件报警，采集回来的信息会存储在文件里，诸如 ps/netstat/vmstat/iostat/processlist/innodbstat 全部一览无余. 就算在认为mysql性能没什么问题时，也可以跑起这款工具，以防不测pt-table-checksum检查主从数据是否一致pt-table-sync同步两张表之间的数据差异pt-table-usage分析日志中查询并分析表使用情况pt-upgrade验证不同服务器上的查询结果是否相同pt-variable-advisor分析mysql参数，并且给出参数设置建议的一款PT工具pt-visual-explain格式化explain输出结果为树结构"
+                        } ,
+                     
+                        {
+                          "title"    : "【构建高性能web站点】网络传输",
+                          "category" : "",
+                          "tags"     : " web",
+                          "url"      : "/2018/07/14/bhpws-network.html",
+                          "date"     : "July 14, 2018",
+                          "excerpt"  : "OSI七层网络协议&amp;四层协议每层功能如下表所示：            层      功能      典型设备      典型协议、标准和应用                  应用层      用户接口、应用程序      网关      TELNET, FTP, HTTP              表示层      数据的表示、压缩和加密      网关      ASCLL、PICT、TIFF、JPEG、 MIDI、MPEG              会话层      会话的...",
+                          "content"  : "OSI七层网络协议&amp;四层协议每层功能如下表所示：            层      功能      典型设备      典型协议、标准和应用                  应用层      用户接口、应用程序      网关      TELNET, FTP, HTTP              表示层      数据的表示、压缩和加密      网关      ASCLL、PICT、TIFF、JPEG、 MIDI、MPEG              会话层      会话的建立和结束      网关      RPC、SQL、NFS 、X WINDOWS、ASP              传输层      端到端控制      网关      TCP、UDP、SPX              网络层      路由，寻址      路由器      IP、IPX、APPLETALK、ICMP              数据链路层      保证误差错的数据链路data link      交换机、网桥、网卡      802.2、802.3ATM、HDLC、FRAME RELAY              物理层      传输比特流      集线器、中继器      V.35、EIA/TIA-232      TCP网络传输过程以火车货物类比如下图：数据封装/解封装如下图：sequenceDiagram    http应用层-&gt;&gt; 传输层: http应用层协议    传输层-&gt;&gt; 网络层:分段    网络层-&gt;&gt; 数据链路层:IP报文    Note right of 传输层: 分成TCP分段并被打上标签，称为头(header)，指定接收方哪一进程接收此消息，并包含能够让接收方重组数据的信息。    Note right of 网络层:将整个TCP分段封装成IP报文(添上IP头标签)。包括源和目的IP地址，以及发送报文到目的地址所需信息。    Note right of 数据链路层:封装帧头(源和目的物理地址)和帧尾(差错纠正信息)    数据链路层-&gt;&gt; 网络层:移除协议头    网络层-&gt;&gt; 传输层:移除协议头    传输层-&gt;&gt; http应用层:移除协议头"
+                        } ,
+                     
+                        {
                           "title"    : "mysql系列教程 - B+Tree索引",
                           "category" : "",
                           "tags"     : " MYSQL",

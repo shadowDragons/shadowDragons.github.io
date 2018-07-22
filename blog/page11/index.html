@@ -208,6 +208,64 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2016/11/24/consistency-highavailability.html">
+                数据库的一致性与高可用
+              </a>
+            </h1>
+            <p class="meta">
+              November 24, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            在给定多台计算机，他们相互之间由网络相互连通，能够做到  
+1.数据每次成功写入，数据不会丢失，并且按照写入的顺序排列  
+2.给定安全级别，保证服务可用性，并尽可能减少机器消耗。
+
+2PC
+
+所谓的两个阶段是指：第一阶段：准备阶段(投票阶段)和第二阶段：提交阶段（执行阶段）。
+
+准备阶段
+
+事务协调者(事务管理器)给每个参与者(资源管理器)发送Prepare消息，每个参与者要么直接返回失败(如权限验证失败)，要么在本地执行事务，写本地的redo和undo日志，但不提交，到达一种“万事俱备...
+            <!--<a class="button" href="/2016/11/24/consistency-highavailability.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2016/11/18/php-about-thred-safe.html">
+                php线程安全
+              </a>
+            </h1>
+            <p class="meta">
+              November 18, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            线程不安全
+线程不安全就是不提供数据访问保护，有可能出现多个线程先后更改数据造成所得到的数据是脏数据。  
+比如一个 ArrayList 类，在添加一个元素的时候，它可能会有两步来完成：1. 在 Items[Size] 的位置存放此元素；2. 增大 Size 的值。  
+在单线程运行的情况下，如果 Size = 0，添加一个元素后，此元素在位置 0，而且 Size=1；  
+而如果是在多线程情况下，比如有两个线程，线程 A 先将元素1存放在位置 0。但是此时 CPU 调度线程A暂停，线程 ...
+            <!--<a class="button" href="/2016/11/18/php-about-thred-safe.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2016/11/14/system-thread-cpu.html">
                 线程与cpu核
               </a>
@@ -304,73 +362,6 @@ import matplotlib.pyplot as p...
 int sum = 0, n = 100; /*执行一次*/
 sum = (1 + n) * n / 2;...
             <!--<a class="button" href="/2016/11/13/time-complexity.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/13/sort.html">
-                排序
-              </a>
-            </h1>
-            <p class="meta">
-              November 13, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            冒泡算法
-do
-  swapped = false
-  for i = 1 to indexOfLastUnsortedElement
-    if leftElement &gt; rightElement
-      swap(leftElement, rightElement)
-      swapped = true
-while swapped
-
-
-选择排序
-repeat (numOfElements - 1) times
-  set the first unsorted elem...
-            <!--<a class="button" href="/2016/11/13/sort.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/13/php-session.html">
-                php实现session跨域
-              </a>
-            </h1>
-            <p class="meta">
-              November 13, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            session跨域
-在*.a.com上保存session，在客户端浏览器中会生成一个sessionID，作用范围仅仅是在a.com这个域名下，这个sessionID就是对应该服务器存储session文件的文件名，在用户打开浏览器访问a.com，浏览器会发送该sessionID去服务器找到该文件名，然后获取session。
-
-同服务器
-跨主域  
-由于sessionID只会在一个主域下面有效，所以要在另外一个域名下生成相应的sessionID。
-
-实现
-
-a.com
-&lt;?php
-ses...
-            <!--<a class="button" href="/2016/11/13/php-session.html">
               Continue reading
             </a>-->
           </div>
