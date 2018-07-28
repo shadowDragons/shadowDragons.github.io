@@ -302,7 +302,7 @@
 
 <p>DCHP 最主要的任务就是在续租过程中向客户端分配IP地址。过程是在一个客户端和DHCP服务器之间进行，也成为DORA过程。</p>
 
-<script src="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.js"></script>
+<script src="/assets/js/mermaid.js"></script>
 <div class="mermaid">
 sequenceDiagram
     participant A as DHCP客户端
@@ -319,7 +319,7 @@ sequenceDiagram
 
 <p>当租约内续租时，发现和提供数据包就没有必要了。考虑到其与租约过期时的DORA过程类似，可以发现在租约过续租并不需要这么做，而只是完成请求和确认两个步骤就可以了。</p>
 
-<script src="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.js"></script>
+<script src="/assets/js/mermaid.js"></script>
 <div class="mermaid">
 sequenceDiagram
     participant A as DHCP客户端
