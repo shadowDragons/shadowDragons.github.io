@@ -5,7 +5,7 @@
         <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
         <link>http://localhost:4000/</link>
         <description></description>
-        <pubDate>Sat, 28 Jul 2018 12:55:17 +0800</pubDate>
+        <pubDate>Sat, 28 Jul 2018 12:59:37 +0800</pubDate>
         
         <item>
             <title>PerconaToolkit工具集合</title>
@@ -93,7 +93,7 @@
 
 &lt;p&gt;查找和打印MySQL从库的复制层次树&lt;/p&gt;
 
-&lt;p&gt;# pt-slave-restart&lt;/p&gt;
+&lt;h1 id=&quot;pt-slave-restart&quot;&gt;pt-slave-restart&lt;/h1&gt;
 
 &lt;p&gt;监控一个或者多个MySQL复制slave的错误，然后当复制停止时试图重启。&lt;/p&gt;
 
