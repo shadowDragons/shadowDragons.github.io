@@ -5,7 +5,7 @@
         <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
         <link>http://localhost:4000/</link>
         <description></description>
-        <pubDate>Sun, 22 Jul 2018 09:01:57 +0800</pubDate>
+        <pubDate>Sat, 28 Jul 2018 12:25:47 +0800</pubDate>
         
         <item>
             <title>PerconaToolkit工具集合</title>
@@ -199,6 +199,8 @@
 
 &lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-07-14-bhpws-network/1.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-07-14-bhpws-network/1.png&quot; alt=&quot;1.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 
+&lt;p&gt;drawio源文件&lt;a href=&quot;/assets/img/posts/2018-07-14-bhpws-network/drawio1&quot;&gt;下载&lt;/a&gt;&lt;/p&gt;
+
 &lt;p&gt;数据封装/解封装如下图：&lt;/p&gt;
 
 &lt;script src=&quot;https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.js&quot;&gt;&lt;/script&gt;
@@ -214,6 +216,63 @@ sequenceDiagram
     网络层-&amp;gt;&amp;gt; 传输层:移除协议头
     传输层-&amp;gt;&amp;gt; http应用层:移除协议头
 &lt;/div&gt;
+
+&lt;h3 id=&quot;带宽&quot;&gt;带宽&lt;/h3&gt;
+
+&lt;p&gt;首先了解数据发送过程，如下图所示&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-07-14-bhpws-network/3.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-07-14-bhpws-network/3.png&quot; alt=&quot;1.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;drawio源文件&lt;a href=&quot;/assets/img/posts/2018-07-14-bhpws-network/drawio2&quot;&gt;下载&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;约定
+比特(bit)单位缩写为b，字节(byte)缩写位B。  &lt;br /&gt;
+1B = 8b  &lt;br /&gt;
+1KB = 2^10B = 1024B ~ 1000B  &lt;br /&gt;
+1MB = 2^10KB = 1024KB ~ 1000KB&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;我们常说的100M带宽，就是100Mbit/s，或者100Mbps  &lt;br /&gt;
+铜线中的电信号传播速度约为2.3&lt;em&gt;10^8m/s, 光纤中的光信号约为2.0×10^8m/s（因为光纤传播光信号是利用了光的全反射原理，所以传播距离要大于光纤长度，不过我们计算还是以光纤长度来计算，这也导致了数值小于实际光传播速度3&lt;/em&gt;10^8m/s）&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;独享&amp;amp;共享&lt;/strong&gt;  &lt;br /&gt;
+用个例子来解释，假设交换机出口带宽为100M，主机独享10M，表示该主机任何时刻都是以10Mbps在发送数据，这也导致了交换机必须保证其他主机数据发送速度不能超过90M。如果主机共享10M，则表示该主机发送数据的最大值可以达到10Mbps,但如果该交换机有同时50台共享10M带宽的主机，并且同时在发送数据，则那个时刻只能有2Mbps速度。&lt;/p&gt;
+
+&lt;h2 id=&quot;响应时间&quot;&gt;响应时间&lt;/h2&gt;
+
+&lt;p&gt;响应时间 = 发送时间(数据量比特数b/带宽) + 传播时间(传播距离/传播速度) + 处理时间(节点数据转发处理\队列排队的时间)
+下载速度 = 数据量字节数B/响应时间&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;主机1 - 交换机1/路由器1 - 节点1 - 节点2 - ... - 节点n - 路由器2/交换机2 - 主机2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;traceroute&lt;/code&gt;我们可以知道信息从你的计算机到互联网另一端的主机是走的什么路径。当然每次数据包由某一同样的出发点（source）到达某一同样的目的地(destination)走的路径可能会不一样，但基本上来说大部分时候所走的路由是相同的。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;实例计算下载速度&lt;/strong&gt; - 西安用户下载服务器在北京的100M文件&lt;/p&gt;
+
+&lt;p&gt;前提:这里忽略处理时间，且假设中间只有1个节点（国家主干网）&lt;/p&gt;
+
+&lt;p&gt;[发送时间]主机1(网卡1000Mbps) 800Mbit/1000Mbps = 0.8s  &lt;br /&gt;
+[发送时间]交换机1(10Mbps独享带宽) 800Mbit/10Mbps = 80s  &lt;br /&gt;
+[发送时间]国家骨干网（40Gbps共享带宽）800Mbit/40Gbps = 0.02s  &lt;br /&gt;
+[发送时间]交换机2(1Mbps独享带宽) 800Mbit/1Mbps = 800s  &lt;br /&gt;
+[发送时间]主机2(网卡100Mbps) 800Mbit/100Mbps = 8s  &lt;br /&gt;
+[传输时间]北京-西安(1000km) 1000km/(2*10^8m/s) = 0.005s&lt;/p&gt;
+
+&lt;p&gt;响应时间 = 800s + 0.005s = 800.005s&lt;/p&gt;
+
+&lt;p&gt;下载速度 = 100MB / 800.005s = 124.999KB/s&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;误差&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;100MB数据在传输过程中，并不是完全通过一个节点，才进入下一个节点,而是拆分成每个数据包。&lt;/li&gt;
+  &lt;li&gt;节点不止1个，但如果这些节点带宽足够大，可忽略。&lt;/li&gt;
+  &lt;li&gt;下载基于TCP协议，会有网络协议附加信息，所以实际传输的数据比100MB要大。&lt;/li&gt;
+  &lt;li&gt;忽略了处理时间。&lt;/li&gt;
+  &lt;li&gt;长距离传输需要设置中继器来加强信号，它的接收转发也需要时间。&lt;/li&gt;
+&lt;/ul&gt;
 </description>
             <pubDate>Sat, 14 Jul 2018 00:00:00 +0800</pubDate>
         </item>
