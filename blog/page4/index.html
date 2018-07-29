@@ -208,6 +208,79 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2018/04/30/network-udp.html">
+                网络基础 - 用户数据报协议(UDP)
+              </a>
+            </h1>
+            <p class="meta">
+              April 30, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            用户数据报协议（User Datagram Protocol, UDP）是在现代网络中最常使用的另外一种第4层协议。如果说TCP是为了满足带有内在错误检测的可靠数据传输，那么UDP主要是为了提供高速的传输。处于这个原因，UDP是一种尽力服务，通常会被称为无连接协议。一个无连接协议并不会正式的建立和结束主机之前的连接，也不会像TCP那样存在握手和终止进程。
+
+无连接协议意味着不可靠服务，这将使得UDP流量不稳定。依赖于UDP的协议通常都会有其内置的可靠性服务，或者使用ICMP的一些功能来保证...
+            <!--<a class="button" href="/2018/04/30/network-udp.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2018/04/30/network-tcp.html">
+                网络基础 - 传输控制协议(TCP)
+              </a>
+            </h1>
+            <p class="meta">
+              April 30, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            传输控制协议（Transmission Control Protocol, TCP）的最终目的是为数据提供可靠的端到端传输。
+
+TCP 头
+
+数据结构如下图所示：
+
+
+
+
+  源端口（Source Port）
+
+
+用来传输数据包的端口。
+
+
+  目的端口（Destination Port）
+
+
+数据包将要被发送到的端口。
+
+
+  序号（Sequence Number）
+
+
+这个数字用来表示一个TCP片段。这个域用来保证数据流的部分没有缺失。
+
+
+  确认号（Acknowledgment N...
+            <!--<a class="button" href="/2018/04/30/network-tcp.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2018/04/30/network-ip.html">
                 网络基础 - IP协议
               </a>
@@ -316,59 +389,6 @@ DNS数据包结构
 
 ...
             <!--<a class="button" href="/2018/04/30/network-dns.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/04/30/network-dhcp.html">
-                网络基础 - 动态主机设置协议(DHCP)
-              </a>
-            </h1>
-            <p class="meta">
-              April 30, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            动态主机配置协议（Dynamic Host Configuration Protocol）是一个应用层协议，能够让设备自动获取IP地址（以及其他重要网络资源，比如DNS服务器和路由网关的地址）。大多数的DHCP服务器都向客户端提供一些其他的参数，比如网络上的默认网关和DNS服务器的地址。
-
-通常被应用在大型的局域网络环境中，主要作用是集中的管理、分配IP地址，使网络环境中的主机动态的获得IP地址、Gateway地址、DNS服务器地址等信息，并能够提升地址的使用率。
-
-DHCP 头结构
-
-
-...
-            <!--<a class="button" href="/2018/04/30/network-dhcp.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/04/29/network-arp.html">
-                网络基础 - 地址解析协议(ARP)
-              </a>
-            </h1>
-            <p class="meta">
-              April 29, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            在以太网协议中规定，同一局域网中的一台主机要和另一台主机进行直接通信，必须要知道目标主机的MAC地址。而在TCP/IP协议中，网络层和传输层只关心目标主机的IP地址。这就导致在以太网中使用IP协议时，数据链路层的以太网协议接到上层IP协议提供的数据中，只包含目的主机的IP地址。于是需要一种方法，根据目的主机的IP地址，获得其MAC地址。这就是ARP协议要做的事情。所谓地址解析（address resolution）就是主机在发送帧前将目标IP地址转换成目标MAC地址的过程。
-
-另外，当发送...
-            <!--<a class="button" href="/2018/04/29/network-arp.html">
               Continue reading
             </a>-->
           </div>

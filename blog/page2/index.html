@@ -208,6 +208,90 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2018/06/23/mysql-innodb-lock.html">
+                mysql系列教程 - innodb锁
+              </a>
+            </h1>
+            <p class="meta">
+              June 23, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            lock和latch
+
+锁分为两种类型 lock 和 latch ，它们之间的差异如下表所示：
+
+
+  
+    
+      -
+      lock
+      latch
+    
+  
+  
+    
+      对象
+      事务
+      线程
+    
+    
+      保护
+      数据库内容
+      内存数据结构
+    
+    
+      持续时间
+      整个事务过程
+      临界资源
+    
+    
+      模式
+      行...
+            <!--<a class="button" href="/2018/06/23/mysql-innodb-lock.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2018/05/27/hyperledger-fabric.html">
+                fabric - 架构&执行流程
+              </a>
+            </h1>
+            <p class="meta">
+              May 27, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            本文简单讲述fabric架构&amp;执行流程，帮助同学快速理解&amp;入门。
+
+架构
+
+
+
+Identity
+
+Identity，也就是身份管理，Fabric是目前为止在设计上最贴近联盟链思想的区块链。联盟链考虑到商业应用对安全、隐私、监管、审计、性能的需求，提高准入门槛，成员必须被许可才能加入网络。Fabric成员管理服务为整个区块链网络提供身份管理、隐私、保密和可审计的服务。成员管理服务通过公钥基础设施PKI和去中心化共识机制使得非许可的区块链变成许可制的区块链。
+
+Smart C...
+            <!--<a class="button" href="/2018/05/27/hyperledger-fabric.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2018/05/27/hyperledger-fabric-sdk.html">
                 fabric - Node.js SDK
               </a>
@@ -309,68 +393,6 @@ sudo n 9
 
 geth 需要1.9版本以上...
             <!--<a class="button" href="/2018/05/18/eth-private-network-ubuntu.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/05/13/hyperledger-fabric-5.html">
-                fabric入门（五）安装和实例化链码
-              </a>
-            </h1>
-            <p class="meta">
-              May 13, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            安装启动链码
-
-首先，在将示例代码安装到4个peer节点中的其中一个。这个命令将源代码放到peer节点的文件系统中。
-
-peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric-samples/chaincode/chaincode_example02/go/chaincode_example02
-
-
-接下来，在信道上实例化chaincode。这将初始化信道上的链码，设置链码的背书策略，为目标peer节点启...
-            <!--<a class="button" href="/2018/05/13/hyperledger-fabric-5.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/05/13/hyperledger-fabric-4.html">
-                fabric入门（四）启动网络
-              </a>
-            </h1>
-            <p class="meta">
-              May 13, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            启动网络
-
-我们将利用docker-compose脚本来启动我们的区块链网络。
-
-在开始前，我们先注释掉docker-compose-cli.yml的一段command: /bin/bash代码，不然该脚本将在网络启动时执行所有命令.
-
- cli:
-    container_name: cli
-    image: hyperledger/fabric-tools:$IMAGE_TAG
-    tty: true
-    stdin_open: true
-    environment:...
-            <!--<a class="button" href="/2018/05/13/hyperledger-fabric-4.html">
               Continue reading
             </a>-->
           </div>

@@ -207,6 +207,82 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2018/07/29/computer-thread.html">
+                进程与线程
+              </a>
+            </h1>
+            <p class="meta">
+              July 29, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            先理解一下，什么是进程和线程：
+
+在现代操作系统中，进程支持多线程。
+
+
+  进程是资源管理的最小单元；
+  线程是程序执行的最小单元。
+
+
+它们之间的关系如下图所示：
+
+
+
+那么什么是程序执行的最小单位呢？
+
+线程作为调度和分配的基本单位（也被称为轻量级进程），这是因为他们共享进程的资源，所以没有太多的内存消耗。
+
+当多个程序同时在执行的时候，我们的cpu（当cpu数小于程序数）并不能同时处理，cpu将会按照自己的逻辑排优先级，每次分配一定数量的时间片（1时间片=10ms），执行完时间片...
+            <!--<a class="button" href="/2018/07/29/computer-thread.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2018/07/27/bhpws-service.html">
+                【构建高性能web站点】服务器并发
+              </a>
+            </h1>
+            <p class="meta">
+              July 27, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            吞吐率
+单位时间内服务器处理的请求数 reqs/s
+
+用户并发数
+服务器最大并发数是有一定的利益前提的，就是服务器和用户双方所能接受的最大利益下。
+每个用户可以在同一时间发起不止一个请求（与浏览器、http版本有关），所以用户并发数 &gt; 请求并发数。
+
+请求等待时间
+分为以下两种
+
+
+  用户平均请求等待时间。
+  服务器平均请求处理时间（等于吞吐率的倒数）。
+
+
+
+            <!--<a class="button" href="/2018/07/27/bhpws-service.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2018/07/14/perconaToolkit.html">
                 PerconaToolkit工具集合
               </a>
@@ -334,90 +410,6 @@ pt-find
 
 平衡二叉树定义如下：首先符合二叉查找树的定义，其次必须满足任...
             <!--<a class="button" href="/2018/06/30/mysql-innodb-index.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/06/23/mysql-innodb-lock.html">
-                mysql系列教程 - innodb锁
-              </a>
-            </h1>
-            <p class="meta">
-              June 23, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            lock和latch
-
-锁分为两种类型 lock 和 latch ，它们之间的差异如下表所示：
-
-
-  
-    
-      -
-      lock
-      latch
-    
-  
-  
-    
-      对象
-      事务
-      线程
-    
-    
-      保护
-      数据库内容
-      内存数据结构
-    
-    
-      持续时间
-      整个事务过程
-      临界资源
-    
-    
-      模式
-      行...
-            <!--<a class="button" href="/2018/06/23/mysql-innodb-lock.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/05/27/hyperledger-fabric.html">
-                fabric - 架构&执行流程
-              </a>
-            </h1>
-            <p class="meta">
-              May 27, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            本文简单讲述fabric架构&amp;执行流程，帮助同学快速理解&amp;入门。
-
-架构
-
-
-
-Identity
-
-Identity，也就是身份管理，Fabric是目前为止在设计上最贴近联盟链思想的区块链。联盟链考虑到商业应用对安全、隐私、监管、审计、性能的需求，提高准入门槛，成员必须被许可才能加入网络。Fabric成员管理服务为整个区块链网络提供身份管理、隐私、保密和可审计的服务。成员管理服务通过公钥基础设施PKI和去中心化共识机制使得非许可的区块链变成许可制的区块链。
-
-Smart C...
-            <!--<a class="button" href="/2018/05/27/hyperledger-fabric.html">
               Continue reading
             </a>-->
           </div>

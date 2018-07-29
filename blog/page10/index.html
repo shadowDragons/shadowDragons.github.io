@@ -208,6 +208,63 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2018/02/21/bitcoin-address.html">
+                比特币地址&密钥
+              </a>
+            </h1>
+            <p class="meta">
+              February 21, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            
+
+查看原图  
+drow.io源文件下载
+
+            <!--<a class="button" href="/2018/02/21/bitcoin-address.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2017/12/11/shadowsock.html">
+                shadowsock部署
+              </a>
+            </h1>
+            <p class="meta">
+              December 11, 2017
+            </p>
+          </header>
+          <div class="excerpt">
+            部署
+
+我是选了网上大多数人推荐的vultr，性价比高，而且还有很骚的操作，后面讲。  
+1.选服务器，直接选最便宜的，因为我只是拿来当ss用。  
+2.安装ss
+
+参考文章
+
+以root用户进入该服务器终端，执行一下命令
+wget --no-check-certificate -O shadowsocks-all.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-a...
+            <!--<a class="button" href="/2017/12/11/shadowsock.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2017/06/25/php-remember-login.html">
                 php实现记住登录
               </a>
@@ -305,73 +362,6 @@ $pid = pcntl_fork();
 // 如果是父进程，退出
 if ($pi...
             <!--<a class="button" href="/2017/02/05/php-daemon.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2017/02/02/mac-rsync-fswatch.html">
-                mac使用rsync+fswatch实现目录文件实时同步
-              </a>
-            </h1>
-            <p class="meta">
-              February 2, 2017
-            </p>
-          </header>
-          <div class="excerpt">
-            安装rsync
-brew install rsync
-
-
-创建用户
-创建用户配置文件\etc\rsyncd.secrets  
-添加用户名:密码  
-这里我们设置用户名为root，密码123456，即root:123456
-
-配置
-创建配置文件 \etc\rsyncd.conf
-uid = root                   #守护进程的用户权限
-gid = root
-port = 873                   #rsync使用的端口，默认873
-address =...
-            <!--<a class="button" href="/2017/02/02/mac-rsync-fswatch.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/24/transaction-deal.html">
-                数据库的事务处理
-              </a>
-            </h1>
-            <p class="meta">
-              November 24, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            事务四个核心要素
-1.原子性  
-一组操作，要么都成功，要么都失败，不存在中间状态。  
-2.一致性  
-事务在提交或回滚时，对其他人来说，数据的状态是统一的，不存在其他状态。  
-最理想的状态是，数据提交后，所有的更改能立刻生效，但由于cpu运算，磁盘写入，内存写入需要时间，所以不可能达到立刻生效。  
-所以一般说的是逻辑上同时生效。  
-比如修改a，b两行数据，要保证一致性，对a，b加锁，修改数据，对a，b解锁。  
-3.隔离性  
-读未提交：什么锁也没有，别人可以读到中间状态（即为提...
-            <!--<a class="button" href="/2016/11/24/transaction-deal.html">
               Continue reading
             </a>-->
           </div>

@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
 
     <!-- Canonical -->
-    <link rel="canonical" href="http://localhost:4000/2018/07/14/perconaToolkit.html">
+    <link rel="canonical" href="http://localhost:4000/2018/07/29/computer-thread.html">
 
     <!-- RSS -->
     <link rel="alternate" type="application/atom+xml" title="小白" href="http://localhost:4000///feed.xml"/>
@@ -78,25 +78,25 @@
     
     <!-- seo tags -->
     <!-- Begin Jekyll SEO tag v2.4.0 -->
-<title>PerconaToolkit工具集合 | 小白成长史</title>
+<title>进程与线程 | 小白成长史</title>
 <meta name="generator" content="Jekyll v3.7.3" />
-<meta property="og:title" content="PerconaToolkit工具集合" />
+<meta property="og:title" content="进程与线程" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="pt-align" />
-<meta property="og:description" content="pt-align" />
-<link rel="canonical" href="http://localhost:4000/2018/07/14/perconaToolkit.html" />
-<meta property="og:url" content="http://localhost:4000/2018/07/14/perconaToolkit.html" />
+<meta name="description" content="先理解一下，什么是进程和线程：" />
+<meta property="og:description" content="先理解一下，什么是进程和线程：" />
+<link rel="canonical" href="http://localhost:4000/2018/07/29/computer-thread.html" />
+<meta property="og:url" content="http://localhost:4000/2018/07/29/computer-thread.html" />
 <meta property="og:site_name" content="小白成长史" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2018-07-14T00:00:00+08:00" />
+<meta property="article:published_time" content="2018-07-29T00:00:00+08:00" />
 <script type="application/ld+json">
-{"description":"pt-align","@type":"BlogPosting","url":"http://localhost:4000/2018/07/14/perconaToolkit.html","headline":"PerconaToolkit工具集合","dateModified":"2018-07-14T00:00:00+08:00","datePublished":"2018-07-14T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2018/07/14/perconaToolkit.html"},"@context":"http://schema.org"}</script>
+{"description":"先理解一下，什么是进程和线程：","@type":"BlogPosting","url":"http://localhost:4000/2018/07/29/computer-thread.html","headline":"进程与线程","dateModified":"2018-07-29T00:00:00+08:00","datePublished":"2018-07-29T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2018/07/29/computer-thread.html"},"@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
     <!-- Manual seo tags -->
     <!--
-    <title>PerconaToolkit工具集合 | 小白</title>
-    <meta name="description" content="pt-align">
+    <title>进程与线程 | 小白</title>
+    <meta name="description" content="先理解一下，什么是进程和线程：">
     -->
 </head>
 
@@ -194,125 +194,46 @@
     <div class="content">
       <article >
   <header id="main" style="background-image: url('/')">
-    <h1 id="PerconaToolkit%E5%B7%A5%E5%85%B7%E9%9B%86%E5%90%88" class="title">PerconaToolkit工具集合</h1>
+    <h1 id="%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B" class="title">进程与线程</h1>
     <p class="meta">
-    July 14, 2018
+    July 29, 2018
     
     </p>
   </header>
-  <section class="post-content"><h1 id="pt-align">pt-align</h1>
+  <section class="post-content"><p>先理解一下，什么是进程和线程：</p>
 
-<p>将其它工具的输出按列对齐。</p>
+<p>在现代操作系统中，进程支持多线程。</p>
 
-<h1 id="pt-archiver">pt-archiver</h1>
+<ul>
+  <li>进程是资源管理的最小单元；</li>
+  <li>线程是程序执行的最小单元。</li>
+</ul>
 
-<p>将数据归档到另一张表或者文件。</p>
+<p>它们之间的关系如下图所示：</p>
 
-<h1 id="pt-config-diff">pt-config-diff</h1>
+<p><a href="/assets/img/posts/2018-07-29-computer-thread/1.png"><img src="/assets/img/posts/2018-07-29-computer-thread/1.png" alt="1.png" title="点击查看原图" /></a></p>
 
-<p>对比数据库配置、环境变量差异</p>
+<p>那么什么是程序执行的最小单位呢？</p>
 
-<h1 id="pt-deadlock-logger">pt-deadlock-logger</h1>
+<p>线程作为调度和分配的基本单位（也被称为轻量级进程），这是因为他们共享进程的资源，所以没有太多的内存消耗。</p>
 
-<p>记录死锁日志，并保存到文件或者数据表</p>
+<p>当多个程序同时在执行的时候，我们的cpu（当cpu数小于程序数）并不能同时处理，cpu将会按照自己的逻辑排优先级，每次分配一定数量的时间片（1时间片=10ms），执行完时间片时间，就必须挂起等待，轮到其他程序执行，以此类推，如下图所示：</p>
 
-<h1 id="pt-diskstats">pt-diskstats</h1>
+<p><a href="/assets/img/posts/2018-07-29-computer-thread/2.png"><img src="/assets/img/posts/2018-07-29-computer-thread/2.png" alt="2.png" title="点击查看原图" /></a></p>
 
-<p>功能和iostat类似，给出磁盘的I/O统计信息</p>
+<p>当然cpu并不认识我们的程序，它只认进程里面的线程，所以是分配时间片给线程。</p>
 
-<h1 id="pt-duplicate-key-checker">pt-duplicate-key-checker</h1>
+<p>我们上面所说的线程都是指内核级线程，即系统知道该线程的存在。  <br />
+还有一种是<strong>用户级线程</strong>，由程序的线程库产生的，这种是系统不知道该线程存在的，所以可以认为是程序自己实现的虚拟线程。如下图所示：</p>
 
-<p>检测表中重复多余的索引或者主键</p>
+<p><a href="/assets/img/posts/2018-07-29-computer-thread/3.png"><img src="/assets/img/posts/2018-07-29-computer-thread/3.png" alt="3.png" title="点击查看原图" /></a></p>
 
-<h1 id="pt-fifo-split">pt-fifo-split</h1>
+<p>用户级线程与内核级线程的区别：</p>
 
-<p>文件分割</p>
-
-<h1 id="pt-find">pt-find</h1>
-
-<p>按条件查找、排序数据库表</p>
-
-<h1 id="pt-fingerprint">pt-fingerprint</h1>
-
-<p>将sql转为绑定形式</p>
-
-<h1 id="pt-fk-error-logger">pt-fk-error-logger</h1>
-
-<p>记录外键错误</p>
-
-<h1 id="pt-heartbeat">pt-heartbeat</h1>
-
-<p>监控备库延迟</p>
-
-<h1 id="pt-index-usage">pt-index-usage</h1>
-
-<p>能够从日志当中分析索引的使用情况</p>
-
-<h1 id="pt-kill">pt-kill</h1>
-
-<p>杀死mysql会话</p>
-
-<h1 id="pt-summary">pt-summary</h1>
-
-<p>查看系统摘要报告</p>
-
-<p>打印出来的信息包括：CPU、内存、硬盘、网卡等信息，还包括文件系统、磁盘调度和队列大小、LVM、RAID、网络链接信息、netstat 的统计，以及前10的负载占用信息和vmstat信息。</p>
-
-<h1 id="pt-online-schema-change">pt-online-schema-change</h1>
-
-<p>可以在执行ALTER语句中，不堵塞数据库表格的写操作。</p>
-
-<h1 id="pt-pmp">pt-pmp</h1>
-
-<p>获取MySQL的堆栈信息</p>
-
-<h1 id="pt-query-digest">pt-query-digest</h1>
-
-<p>分析mysql慢查询的一个工具，它可以分析binlog、General log、slowlog，也可以通过SHOWPROCESSLIST或者通过tcpdump抓取的MySQL协议数据来进行分析。</p>
-
-<h1 id="pt-show-grants">pt-show-grants</h1>
-
-<p>格式化打印输出MySQL上的赋权，以便你可以有效地复制、比较以及版本控制。</p>
-
-<h1 id="pt-slave-delay">pt-slave-delay</h1>
-
-<p>让主库的操作延迟写入到从库</p>
-
-<h1 id="pt-slave-find">pt-slave-find</h1>
-
-<p>查找和打印MySQL从库的复制层次树</p>
-
-<h1 id="pt-slave-restart">pt-slave-restart</h1>
-
-<p>监控一个或者多个MySQL复制slave的错误，然后当复制停止时试图重启。</p>
-
-<h1 id="pt-stalk">pt-stalk</h1>
-
-<p>mysql 性能瓶颈是值得关注的，但往往出现问题的时候，总是持续那么一点时间，没能抓住事故现场，从而无法分析.pt-stalk 是一款当条件触发时,记录相关系统信息的mysql监控工具.这款工具帮助我们设定自己的条件与阀值，当触发条件时可以提供邮件报警，采集回来的信息会存储在文件里，诸如 ps/netstat/vmstat/iostat/processlist/innodbstat 全部一览无余. 就算在认为mysql性能没什么问题时，也可以跑起这款工具，以防不测</p>
-
-<h1 id="pt-table-checksum">pt-table-checksum</h1>
-
-<p>检查主从数据是否一致</p>
-
-<h1 id="pt-table-sync">pt-table-sync</h1>
-
-<p>同步两张表之间的数据差异</p>
-
-<h1 id="pt-table-usage">pt-table-usage</h1>
-
-<p>分析日志中查询并分析表使用情况</p>
-
-<h1 id="pt-upgrade">pt-upgrade</h1>
-
-<p>验证不同服务器上的查询结果是否相同</p>
-
-<h1 id="pt-variable-advisor">pt-variable-advisor</h1>
-
-<p>分析mysql参数，并且给出参数设置建议的一款PT工具</p>
-
-<h1 id="pt-visual-explain">pt-visual-explain</h1>
-
-<p>格式化explain输出结果为树结构</p>
+<ul>
+  <li>用户级线程是共享进程资源的，切换不需要有上下文切换的消耗，这是因为内核级线程切换通常会跨进程，所以需要把资源存储到其他地方，等轮到它执行时，再把资源拿回来。</li>
+  <li>用户级线程如果其中一个处于阻塞，则派生它的内核级线程也会被阻塞，因为系统不知道这个线程存在。而内核级别线程不会有这个问题。</li>
+</ul>
 </section>
    
    <!-- Tag list -->
@@ -327,8 +248,8 @@
     
 
     
-    <a class="button" href="/tags#MYSQL">
-      <p><i class="fa fa-tag fa-fw"></i> MYSQL</p>
+    <a class="button" href="/tags#计算机">
+      <p><i class="fa fa-tag fa-fw"></i> 计算机</p>
     </a>
     
   </div>
@@ -346,18 +267,11 @@
   
   <div id="previous-post" class="post-nav-post">
       <p>Previous post</p>
-      <a href="/2018/07/14/bhpws-network.html">
-        【构建高性能web站点】网络传输
-      </a>
-  </div>
-  
-  
-  <div id="next-post" class="post-nav-post">
-      <p>Next post</p>
       <a href="/2018/07/27/bhpws-service.html">
         【构建高性能web站点】服务器并发
       </a>
   </div>
+  
   
 </div>
 

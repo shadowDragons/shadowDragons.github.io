@@ -5,7 +5,72 @@
         <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
         <link>http://localhost:4000/</link>
         <description></description>
-        <pubDate>Sat, 28 Jul 2018 12:59:37 +0800</pubDate>
+        <pubDate>Sun, 29 Jul 2018 17:10:17 +0800</pubDate>
+        
+        <item>
+            <title>进程与线程</title>
+            <link>/2018/07/29/computer-thread.html</link>
+            <guid isPermaLink="true">/2018/07/29/computer-thread.html</guid>
+            <description>&lt;p&gt;先理解一下，什么是进程和线程：&lt;/p&gt;
+
+&lt;p&gt;在现代操作系统中，进程支持多线程。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;进程是资源管理的最小单元；&lt;/li&gt;
+  &lt;li&gt;线程是程序执行的最小单元。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;它们之间的关系如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-07-29-computer-thread/1.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-07-29-computer-thread/1.png&quot; alt=&quot;1.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;那么什么是程序执行的最小单位呢？&lt;/p&gt;
+
+&lt;p&gt;线程作为调度和分配的基本单位（也被称为轻量级进程），这是因为他们共享进程的资源，所以没有太多的内存消耗。&lt;/p&gt;
+
+&lt;p&gt;当多个程序同时在执行的时候，我们的cpu（当cpu数小于程序数）并不能同时处理，cpu将会按照自己的逻辑排优先级，每次分配一定数量的时间片（1时间片=10ms），执行完时间片时间，就必须挂起等待，轮到其他程序执行，以此类推，如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-07-29-computer-thread/2.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-07-29-computer-thread/2.png&quot; alt=&quot;2.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;当然cpu并不认识我们的程序，它只认进程里面的线程，所以是分配时间片给线程。&lt;/p&gt;
+
+&lt;p&gt;我们上面所说的线程都是指内核级线程，即系统知道该线程的存在。  &lt;br /&gt;
+还有一种是&lt;strong&gt;用户级线程&lt;/strong&gt;，由程序的线程库产生的，这种是系统不知道该线程存在的，所以可以认为是程序自己实现的虚拟线程。如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-07-29-computer-thread/3.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-07-29-computer-thread/3.png&quot; alt=&quot;3.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;用户级线程与内核级线程的区别：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;用户级线程是共享进程资源的，切换不需要有上下文切换的消耗，这是因为内核级线程切换通常会跨进程，所以需要把资源存储到其他地方，等轮到它执行时，再把资源拿回来。&lt;/li&gt;
+  &lt;li&gt;用户级线程如果其中一个处于阻塞，则派生它的内核级线程也会被阻塞，因为系统不知道这个线程存在。而内核级别线程不会有这个问题。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+            <pubDate>Sun, 29 Jul 2018 00:00:00 +0800</pubDate>
+        </item>
+        
+        <item>
+            <title>【构建高性能web站点】服务器并发</title>
+            <link>/2018/07/27/bhpws-service.html</link>
+            <guid isPermaLink="true">/2018/07/27/bhpws-service.html</guid>
+            <description>&lt;p&gt;&lt;strong&gt;吞吐率&lt;/strong&gt;&lt;br /&gt;
+单位时间内服务器处理的请求数 reqs/s&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;用户并发数&lt;/strong&gt;
+服务器最大并发数是有一定的利益前提的，就是服务器和用户双方所能接受的最大利益下。&lt;br /&gt;
+每个用户可以在同一时间发起不止一个请求（与浏览器、http版本有关），所以用户并发数 &amp;gt; 请求并发数。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;请求等待时间&lt;/strong&gt;
+分为以下两种&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;用户平均请求等待时间。&lt;/li&gt;
+  &lt;li&gt;服务器平均请求处理时间（等于吞吐率的倒数）。&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+            <pubDate>Fri, 27 Jul 2018 00:00:00 +0800</pubDate>
+        </item>
         
         <item>
             <title>PerconaToolkit工具集合</title>
@@ -2414,181 +2479,6 @@ if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&q
 &lt;p&gt;3.把&lt;strong&gt;$GOPATH/src/github.com/hyperledger/fabric/bin&lt;/strong&gt;添加到环境变量&lt;/p&gt;
 </description>
             <pubDate>Sun, 13 May 2018 00:00:00 +0800</pubDate>
-        </item>
-        
-        <item>
-            <title>网络基础 - 用户数据报协议(UDP)</title>
-            <link>/2018/04/30/network-udp.html</link>
-            <guid isPermaLink="true">/2018/04/30/network-udp.html</guid>
-            <description>&lt;p&gt;用户数据报协议（User Datagram Protocol, UDP）是在现代网络中最常使用的另外一种第4层协议。如果说TCP是为了满足带有内在错误检测的可靠数据传输，那么UDP主要是为了提供高速的传输。处于这个原因，UDP是一种尽力服务，通常会被称为无连接协议。一个无连接协议并不会正式的建立和结束主机之前的连接，也不会像TCP那样存在握手和终止进程。&lt;/p&gt;
-
-&lt;p&gt;无连接协议意味着不可靠服务，这将使得UDP流量不稳定。依赖于UDP的协议通常都会有其内置的可靠性服务，或者使用ICMP的一些功能来保证连接更可靠一些。举例来说，应用层协议DNS和DHCP需要高度依赖数据包在网络上的传输速度，其使用UDP作为它们的传输层协议，但是它们自己进行错误检查以及重传计时。&lt;/p&gt;
-
-&lt;h4 id=&quot;udp-头&quot;&gt;UDP 头&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-04-30-network-udp/1.png&quot; alt=&quot;1.png&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;源端口&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;用来传输数据包的端口。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;目标端口&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;数据包将要被传输到的端口。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;数据包长度&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;数据包的字节长度。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;校验和&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;用来确保UDP头和数据到达时的完整性。&lt;/p&gt;
-
-</description>
-            <pubDate>Mon, 30 Apr 2018 00:00:00 +0800</pubDate>
-        </item>
-        
-        <item>
-            <title>网络基础 - 传输控制协议(TCP)</title>
-            <link>/2018/04/30/network-tcp.html</link>
-            <guid isPermaLink="true">/2018/04/30/network-tcp.html</guid>
-            <description>&lt;p&gt;传输控制协议（Transmission Control Protocol, TCP）的最终目的是为数据提供可靠的端到端传输。&lt;/p&gt;
-
-&lt;h4 id=&quot;tcp-头&quot;&gt;TCP 头&lt;/h4&gt;
-
-&lt;p&gt;数据结构如下图所示：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-04-30-network-tcp/1.png&quot; alt=&quot;1.png&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;源端口（Source Port）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;用来传输数据包的端口。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;目的端口（Destination Port）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;数据包将要被发送到的端口。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;序号（Sequence Number）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这个数字用来表示一个TCP片段。这个域用来保证数据流的部分没有缺失。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;确认号（Acknowledgment Number）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这个数字是通信中希望从另一设备得到的下一个数据包的序号。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;标记（Flags）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;URG、ACK、PSH、RST、SYN 和 FIN 标记都是用来表示所传输的TCP数据包的类型。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;窗口大小（Window Size）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;TCP接收者缓冲的字节大小。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;校验和（Checksum）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;用来保证TCP头和数据的内容在抵达目的地时的完整性。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;紧急指针（Urgent Pointer）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;如果设置了URG位，这个域将被检查作为额外的指令，告诉CPU从数据包的哪里开始读取数据。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;选项（Options）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;各种可选的域，可以在TCP数据包中进行指定。&lt;/p&gt;
-
-&lt;h4 id=&quot;tcp端口&quot;&gt;TCP端口&lt;/h4&gt;
-
-&lt;p&gt;在使用TCP进行通信时，我们有65535个端口可以使用，并通常将这些端口分成两个部分。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;1~1023 是标准端口组，特定服务会用到这些通常位于标准端口分组中的标准端口。&lt;/li&gt;
-  &lt;li&gt;1024~65535 是临时端口组，当一个服务想在任意时间使用端口进行通信时，现代操作系统都会随机的选择一个源端口，让这个通信使用唯一源端口。这些源端口通常就位于临时端口组。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;三次握手&quot;&gt;三次握手&lt;/h4&gt;
-
-&lt;p&gt;主要达到的目的：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;保证源主机确定目标主机在线，并且可以进行通信。&lt;/li&gt;
-  &lt;li&gt;让源主机检查它是否正在监听试图去连接的端口。&lt;/li&gt;
-  &lt;li&gt;允许源主机向接收者发送它的起始序列号，是的两台主机可以将数据包流保持有序。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;具体步骤如下：&lt;/p&gt;
-
-&lt;script src=&quot;/assets/js/mermaid.js&quot;&gt;&lt;/script&gt;
-&lt;div class=&quot;mermaid&quot;&gt;
-sequenceDiagram
-    participant A as 主机A
-    participant B as 主机B
-    A-&amp;gt;&amp;gt;B: SYN
-    B-&amp;gt;&amp;gt;A: SYN/ACK
-    A-&amp;gt;&amp;gt;B: ACK
-&lt;/div&gt;
-
-&lt;p&gt;具体说明：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;请求新的 TCP 连接时，客户端要向服务器发送⼀个⼩的 TCP 分组（通常是 40 ～ 60 个字节）。这个分组中设置了⼀个特殊的 SYN 标记，说明这是⼀个连接请求。（如上图a）。&lt;/li&gt;
-  &lt;li&gt;如果服务器接受了连接，就会对⼀些连接参数进⾏计算，并向客户端回送⼀个 TCP 分组，这个分组中的 SYN 和 ACK 标记都被置位，说明连接请求已被接受（如上图b）。&lt;/li&gt;
-  &lt;li&gt;最后，客户端向服务器回送⼀条确认信息，通知它连接已成功建⽴（如上图c）。现代的 TCP 栈都允许客户端在这个确认分组中发送数据。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&quot;tcp终止&quot;&gt;TCP终止&lt;/h4&gt;
-
-&lt;p&gt;具体步骤如下：&lt;/p&gt;
-
-&lt;script src=&quot;/assets/js/mermaid.js&quot;&gt;&lt;/script&gt;
-&lt;div class=&quot;mermaid&quot;&gt;
-sequenceDiagram
-    participant A as 主机A
-    participant B as 主机B
-    A-&amp;gt;&amp;gt;B: FIN/ACK
-    B-&amp;gt;&amp;gt;A: ACK
-    B-&amp;gt;&amp;gt;A: FIN/ACK
-    A-&amp;gt;&amp;gt;B: ACK
-&lt;/div&gt;
-
-&lt;p&gt;具体说明：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;主机A通过发送一个设置了FIN和ACK标志的TCP数据包，告诉主机B通信的完成。&lt;/li&gt;
-  &lt;li&gt;主机B以一个ACK数据包响应，并传输自己的FIN/ACK数据包。&lt;/li&gt;
-  &lt;li&gt;主机A响应一个ACK数据包，然后结束通信过程。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&quot;tcp重置&quot;&gt;TCP重置&lt;/h4&gt;
-
-&lt;p&gt;在理想情况中，每一个连接都会以TCP终止来正常的结束。但在现实中，连接经常会突然断掉。举例来说，者可能由于一个潜在的攻击者正在进行端口扫描，或者仅仅是主机配置错误。在这种情况下，就需要使用设置了RST标志的TCP数据包。RST标志用来表示连接被异常中止或拒绝连接请求。&lt;/p&gt;
-</description>
-            <pubDate>Mon, 30 Apr 2018 00:00:00 +0800</pubDate>
         </item>
         
     </channel>
