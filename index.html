@@ -161,6 +161,8 @@
         
         
         
+        
+        
          
         
         
@@ -201,6 +203,78 @@
   
 
   <div class="posts">
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2018/08/05/computer-select-poll-epoll.html">
+                【转载】select、poll与epoll
+              </a>
+            </h1>
+            <p class="meta">
+              August 5, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            转载自大话 Select、Poll、Epoll
+
+Linux的socket 事件wakeup callback机制
+
+言归正传，在介绍select、poll、epoll前，有必要说说linux(2.6+)内核的事件wakeup callback机制，这是IO多路复用机制存在的本质。Linux通过socket睡眠队列来管理所有等待socket的某个事件的process，同时通过wakeup机制来异步唤醒整个睡眠队列上等待事件的process，通知process相关事件发生。通常情况，sock...
+            <!--<a class="button" href="/2018/08/05/computer-select-poll-epoll.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2018/08/04/computer-io.html">
+                I/O模型
+              </a>
+            </h1>
+            <p class="meta">
+              August 4, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            I/O发生过程涉及的对象：
+
+
+  调用该IO的线程(thread)
+  系统内核(kernel)
+
+
+I/O发生过程步骤：
+
+
+  等待数据准备
+  将数据从内核拷贝到用户的进程空间。
+
+
+阻塞型I/O（blocking I/O）
+
+
+
+用户thread在整个过程当中，都需要等待kernel返回数据，所以整个过程都是被block的。
+
+非阻塞型I/O（non-blocking I/O）
+
+
+
+等待数据阶段，如果请求的数据没准备好，kernel会返回失败，用户thread是采用轮询方式进行...
+            <!--<a class="button" href="/2018/08/04/computer-io.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
     
     <div class="post-teaser">
       
@@ -270,6 +344,9 @@
   服务器平均请求处理时间（等于吞吐率的倒数）。
 
 
+线程与进程
+如果对线程与进程不熟悉，请参考这篇文章
+
 
             <!--<a class="button" href="/2018/07/27/bhpws-service.html">
               Continue reading
@@ -324,92 +401,6 @@ pt-find
 
 按条件查找、排...
             <!--<a class="button" href="/2018/07/14/perconaToolkit.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/07/14/bhpws-network.html">
-                【构建高性能web站点】网络传输
-              </a>
-            </h1>
-            <p class="meta">
-              July 14, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            OSI七层网络协议&amp;四层协议
-
-
-
-每层功能如下表所示：
-
-
-  
-    
-      层
-      功能
-      典型设备
-      典型协议、标准和应用
-    
-  
-  
-    
-      应用层
-      用户接口、应用程序
-      网关
-      TELNET, FTP, HTTP
-    
-    
-      表示层
-      数据的表示、压缩和加密
-      网关
-      ASCLL、PICT、TIFF、JPEG、 MIDI、MPEG...
-            <!--<a class="button" href="/2018/07/14/bhpws-network.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/06/30/mysql-innodb-index.html">
-                mysql系列教程 - B+Tree索引
-              </a>
-            </h1>
-            <p class="meta">
-              June 30, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            了解B+树前，我们先了解下二叉查找树、平衡二叉查找树、B-Tree。
-
-二叉查找树
-
-二叉查找树具有以下性质：左子树的键值小于根的键值，右子树的键值大于根的键值。如下图所示：
-
-
-
-由于它可以任意构造，所以也可以按照赢下方式构建二叉树。
-
-
-
-我们知道，二叉树查找一个节点所需的最大时间取决于树高，所以如果像上图所示进行查找，效率会非常低。所以，要提高查找效率，需要这颗树是平衡的，从而引出了平衡二叉树。
-
-平衡二叉树（AVL树）
-
-平衡二叉树定义如下：首先符合二叉查找树的定义，其次必须满足任...
-            <!--<a class="button" href="/2018/06/30/mysql-innodb-index.html">
               Continue reading
             </a>-->
           </div>

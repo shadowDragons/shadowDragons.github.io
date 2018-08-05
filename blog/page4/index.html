@@ -162,6 +162,8 @@
         
         
         
+        
+        
          
         
         
@@ -202,6 +204,86 @@
   
 
   <div class="posts">
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2018/05/13/hyperledger-fabric-2.html">
+                fabric入门（二）启动&关闭网络
+              </a>
+            </h1>
+            <p class="meta">
+              May 13, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            进入官方示例
+
+cd $GOPATH/src/github.com/hyperledger/fabric-samples/first-network
+
+
+第一步生成我们各种网络实体的所有证书和密钥，genesis block用于引导排序服务，以及配置Channel所需要的一组交易配置集合。  
+运行以下命令：
+
+./byfn.sh -m generate
+
+
+接下来可以使用以下命令来启动整个网络。
+
+./byfn.sh -m up
+
+
+如果看到一个大大的END说明执行成功了。
+
+=====...
+            <!--<a class="button" href="/2018/05/13/hyperledger-fabric-2.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2018/05/13/hyperledger-fabric-1.html">
+                fabric入门（一）安装
+              </a>
+            </h1>
+            <p class="meta">
+              May 13, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            安装镜像
+
+镜像可以自己安装，也可以借助官网的samples来帮我们实现。
+
+从官网可以看到，安装需要执行一个脚本：
+
+curl -sSL https://goo.gl/6wtTN5 | bash -s 1.1.0
+
+
+不过这个需要翻墙，可以直接把文本下载下来。
+
+#!/bin/bash
+#
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+# if version n...
+            <!--<a class="button" href="/2018/05/13/hyperledger-fabric-1.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
     
     <div class="post-teaser">
       
@@ -296,99 +378,6 @@ IP地址是一个32位的二进制数，通常被分割为4个“8位二进制�
 
 IP地址呗分成4个独立部分，是因为每个IP地址都包含有两个部分：网络地址和主机地址。网络地址用来标识设备所连接到的局域网，而主机地址则标识这...
             <!--<a class="button" href="/2018/04/30/network-ip.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/04/30/network-icmp.html">
-                网络基础 - 互联网控制消息协议(ICMP)
-              </a>
-            </h1>
-            <p class="meta">
-              April 30, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            互联网控制消息协议（Internet Control Message Protocol, ICMP）是TCP/IP协议族中的一个效用协议，负责提供在TCP/IP网络上设备、服务以及路由器可用性的消息。
-
-ICMP 头
-
-ICMP是IP的一部分并依赖IP来传递消息。ICMP头相对较小并根据用途而改变。
-
-
-
-
-  类型（Type）
-
-
-ICMP消息基于RFC规范的类型或分类。
-
-
-  代码（Code）
-
-
-ICMP消息基于RFC规范的子类型。
-
-
-  校验和（Checksum）
-
-
-用来保证...
-            <!--<a class="button" href="/2018/04/30/network-icmp.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/04/30/network-dns.html">
-                网络基础 - 域名系统(DNS)
-              </a>
-            </h1>
-            <p class="meta">
-              April 30, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            域名系统（英文：Domain Name System，缩写：DNS）是互联网的一项服务。它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。DNS使用TCP和UDP端口53。
-
-DNS数据包结构
-
-
-
-
-  DNS ID号（DNS ID Numner）
-
-
-用来对应DNS查询和DNS响应。
-
-
-  查询/响应（Query/Response, QR）
-
-
-用来指明这个数据包是DNS查询还是响应。
-
-
-  操作代码（OpCode）
-
-
-用来定义消息中请求的类型。
-
-
-...
-            <!--<a class="button" href="/2018/04/30/network-dns.html">
               Continue reading
             </a>-->
           </div>

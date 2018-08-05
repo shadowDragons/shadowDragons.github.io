@@ -88,6 +88,7 @@
 <meta property="og:url" content="http://localhost:4000/blog/page13/" />
 <meta property="og:site_name" content="小白成长史" />
 <link rel="prev" href="http://localhost:4000/blog/page12" />
+<link rel="next" href="http://localhost:4000/blog/page14" />
 <script type="application/ld+json">
 {"description":"php mysql 分布式 区块链","@type":"WebPage","url":"http://localhost:4000/blog/page13/","headline":"小白成长史","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
@@ -121,6 +122,8 @@
     
     <!-- Menu -->
     <ul>
+        
+        
         
         
         
@@ -201,6 +204,78 @@
   
 
   <div class="posts">
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2016/11/13/php-session.html">
+                php实现session跨域
+              </a>
+            </h1>
+            <p class="meta">
+              November 13, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            session跨域
+在*.a.com上保存session，在客户端浏览器中会生成一个sessionID，作用范围仅仅是在a.com这个域名下，这个sessionID就是对应该服务器存储session文件的文件名，在用户打开浏览器访问a.com，浏览器会发送该sessionID去服务器找到该文件名，然后获取session。
+
+同服务器
+跨主域  
+由于sessionID只会在一个主域下面有效，所以要在另外一个域名下生成相应的sessionID。
+
+实现
+
+a.com
+&lt;?php
+ses...
+            <!--<a class="button" href="/2016/11/13/php-session.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2016/11/13/link.html">
+                链表
+              </a>
+            </h1>
+            <p class="meta">
+              November 13, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            单链表
+查找
+temp = head, index = 0
+while (temp.data != input)
+  temp = temp.next , index++
+  if temp == null
+    return -1
+return index;
+
+
+插入  
+1.指定位置
+v = 90, k = 2
+Vertex temp1 = head
+while (--k!=0)
+  temp1 = temp1.next
+Vertex temp2 = temp1.next
+Verte...
+            <!--<a class="button" href="/2016/11/13/link.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
     
     <div class="post-teaser">
       
@@ -314,74 +389,6 @@ j = NOT...
       </span>
     </div>
     
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/12/php-async.html">
-                php实现异步
-              </a>
-            </h1>
-            <p class="meta">
-              November 12, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            php在处理异步执行主要有以下四种方式来处理，其中第四种方式是最好的，推荐使用。
-
-1.ajax或嵌入img标签，在src中指向异步地址。  
-缺点 不能算是真正异步，主要用户关闭浏览器，异步脚本也就被终止掉了
-
-&lt;html&gt;
-&lt;head&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;img src="b.php"&gt; 
-&lt;script src="jquery.js"&gt;&lt;/script&gt;
-&lt;script&gt;
-$...
-            <!--<a class="button" href="/2016/11/12/php-async.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2016/11/11/php-nginx.html">
-                NGINX+PHP运行原理
-              </a>
-            </h1>
-            <p class="meta">
-              November 11, 2016
-            </p>
-          </header>
-          <div class="excerpt">
-            前向代理与反向代理
-
-前向代理作为客户端的代理，将从互联网上获取的资源返回给一个或多个的客户端，服务器端（如Web服务器）只知道代理的IP地址而不知道客户端的IP地址。
-
-
-
-而反向代理是作为服务器端（如Web服务器）的代理使用，而不是客户端。客户端借由前向代理可以间接访问很多不同互联网服务器（簇）的资源，而反向代理是供很多客户端都通过它间接访问不同后端服务器上的资源，而不需要知道这些后端服务器的存在，而以为所有资源都来自于这个反向代理服务器。
-
-
-
-CGI
-
-通用网关接口（Common ...
-            <!--<a class="button" href="/2016/11/11/php-nginx.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
   </div>
 
   
@@ -392,6 +399,11 @@ CGI
       Prev
     </a>
     
+    
+    <a href="/blog/page14" class="button" >
+      Next
+      <i class="fa fa-chevron-right"></i>
+    </a>
     
   </div>
   

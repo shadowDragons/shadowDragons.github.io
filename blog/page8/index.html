@@ -162,6 +162,8 @@
         
         
         
+        
+        
          
         
         
@@ -202,6 +204,84 @@
   
 
   <div class="posts">
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2018/04/05/md5.html">
+                加密散列-md5
+              </a>
+            </h1>
+            <p class="meta">
+              April 5, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            MD5消息摘要算法（英语：MD5 Message-Digest Algorithm），一种被广泛使用的密码散列函数，可以产生出一个128位（16字节）的散列值（hash value），用于确保信息传输完整一致。
+
+算法步骤
+
+原始消息分为N个512bit的消息块。每个消息块分成16个32bit。
+
+1.补位  
+由于必须分成n个512bit块，所以必须进行补位。  
+最后还需要预留64bit记录消息块的长度，所以消息块的长度不能大于2^64。
+
+补位使其长度 
+
+先补一个1，然后再补0，直...
+            <!--<a class="button" href="/2018/04/05/md5.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
+              <a class="post-link" href="/2018/04/01/ether-private-network.html">
+                搭建以太坊私有网络
+              </a>
+            </h1>
+            <p class="meta">
+              April 1, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            Geth
+
+可以通过命令行方式实现以太坊的各种功能,如账户的新建编辑删除，开启挖矿，ether币的转移，智能合约的部署和执行等等。
+
+安装
+
+brew tap ethereum/ethereum
+brew install ethereum
+
+
+安装完成后检查，输入geth version
+
+
+
+创建私有网络
+
+1.创建一个目录，如geth-private-test
+
+2.进入该目录下，创建文件genesis.json，并写入以下内容
+
+{
+  "config": {
+        "ch...
+            <!--<a class="button" href="/2018/04/01/ether-private-network.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
     
     <div class="post-teaser">
       
@@ -307,58 +387,6 @@ drow.io源文件下载
 drow.io源文件下载
 
             <!--<a class="button" href="/2018/03/18/bitcoin-mining.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/03/18/bitcoin-51attach.html">
-                比特币51攻击
-              </a>
-            </h1>
-            <p class="meta">
-              March 18, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            
-
-查看原图  
-drow.io源文件下载
-
-            <!--<a class="button" href="/2018/03/18/bitcoin-51attach.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/03/17/rsa.html">
-                RSA算法
-              </a>
-            </h1>
-            <p class="meta">
-              March 17, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            
-
-查看原图  
-drow.io源文件下载
-
-            <!--<a class="button" href="/2018/03/17/rsa.html">
               Continue reading
             </a>-->
           </div>

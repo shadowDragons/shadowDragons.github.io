@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <!-- JQuery (used for bootstrap and jekyll search) -->
+    <script src="/assets/js/jquery-3.2.1.min.js" ></script>
+    
+    <!-- Main JS (navbar.js and katex_init.js)-->
+    <script defer=true src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <link rel="stylesheet" href="/assets/css/mermaid.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="http://localhost:4000/2018/08/04/computer-io.html">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="小白" href="http://localhost:4000///feed.xml"/>
+
+    <!-- Font Awesome -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css">
+
+    <!-- Google Fonts -->
+    
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,700italic,400italic" rel="stylesheet" type="text/css"> 
+    
+
+    <!-- KaTeX 0.8.3 -->
+    
+    <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/katex.min.css">
+    <script src="/assets/js/katex.min.js">
+    </script>
+    
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-89143952-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+    
+
+    <!-- Baidu Analytics -->
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = 'https://hm.baidu.com/hm.js?2a8326534823f90fa4eef816aea2ef08';
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+    </script>        
+    
+    
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>I/O模型 | 小白成长史</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="I/O模型" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="I/O发生过程涉及的对象：" />
+<meta property="og:description" content="I/O发生过程涉及的对象：" />
+<link rel="canonical" href="http://localhost:4000/2018/08/04/computer-io.html" />
+<meta property="og:url" content="http://localhost:4000/2018/08/04/computer-io.html" />
+<meta property="og:site_name" content="小白成长史" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-08-04T00:00:00+08:00" />
+<script type="application/ld+json">
+{"description":"I/O发生过程涉及的对象：","@type":"BlogPosting","url":"http://localhost:4000/2018/08/04/computer-io.html","headline":"I/O模型","dateModified":"2018-08-04T00:00:00+08:00","datePublished":"2018-08-04T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2018/08/04/computer-io.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- Manual seo tags -->
+    <!--
+    <title>I/O模型 | 小白</title>
+    <meta name="description" content="I/O发生过程涉及的对象：">
+    -->
+</head>
+
+  <body>
+    <header class="site-header">
+    
+    <!-- Logo and title -->
+	<div class="branding">
+		<a href="/">
+			<img class="avatar" src="/assets/img/photo.jpeg" alt=""/>
+		</a>
+
+		<h1 class="site-title">
+			<a href="/">小白</a>
+		</h1>
+	</div>
+    
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+    
+    <!-- Menu -->
+    <ul>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+         
+        
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="/search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="/tags">
+                <i class="fa fa-tags" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+    </ul>
+        
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="background-image: url('/')">
+    <h1 id="I%2FO%E6%A8%A1%E5%9E%8B" class="title">I/O模型</h1>
+    <p class="meta">
+    August 4, 2018
+    
+    </p>
+  </header>
+  <section class="post-content"><p>I/O发生过程涉及的对象：</p>
+
+<ul>
+  <li>调用该IO的线程(thread)</li>
+  <li>系统内核(kernel)</li>
+</ul>
+
+<p>I/O发生过程步骤：</p>
+
+<ol>
+  <li>等待数据准备</li>
+  <li>将数据从内核拷贝到用户的进程空间。</li>
+</ol>
+
+<h4 id="阻塞型ioblocking-io">阻塞型I/O（blocking I/O）</h4>
+
+<p><a href="/assets/img/posts/2018-08-04-computer-io/1.jpg"><img src="/assets/img/posts/2018-08-04-computer-io/1.jpg" alt="1.jpg" title="点击查看原图" /></a></p>
+
+<p>用户thread在整个过程当中，都需要等待kernel返回数据，所以整个过程都是被block的。</p>
+
+<h4 id="非阻塞型ionon-blocking-io">非阻塞型I/O（non-blocking I/O）</h4>
+
+<p><a href="/assets/img/posts/2018-08-04-computer-io/2.jpg"><img src="/assets/img/posts/2018-08-04-computer-io/2.jpg" alt="2.jpg" title="点击查看原图" /></a></p>
+
+<p>等待数据阶段，如果请求的数据没准备好，kernel会返回失败，用户thread是采用轮询方式进行的，所以在这个阶段不会被block。<br />
+拷贝数据阶段，当kernel返回成功，则发送拷贝数据请求，等待kennel把数据从内核拷贝到用户空间，所以这个阶段是被block的。</p>
+
+<h4 id="io复用io-multiplexing">I/O复用（IO multiplexing）</h4>
+
+<p><a href="/assets/img/posts/2018-08-04-computer-io/3.jpg"><img src="/assets/img/posts/2018-08-04-computer-io/3.jpg" alt="3.jpg" title="点击查看原图" /></a></p>
+
+<p>我们常用的select、epoll都是使用这种模型。<br />
+等待数据阶段，用户调用了select，并等待select返回结果，这个阶段是被block的。<br />
+读取数据阶段，当select返回了可读结果，则发送拷贝数据请求，等待kennel把数据从内核拷贝到用户空间，这个阶段也是被block的。</p>
+
+<p>这么看来其实I/O复用还不如阻塞I/O，虽然整个过程同样都是被block的，但需要发送两次系统请求，性能会有所下降。<br />
+用select的优势在于它可以同时处理多个connection。（多说一句。所以，如果处理的连接数不是很高的话，使用select/epoll的web server不一定比使用multi-threading + blocking IO的web server性能更好，可能延迟还更大。select/epoll的优势并不是对于单个连接能处理得更快，而是在于能处理更多的连接。</p>
+
+<h4 id="异步ioasynchronous-io">异步I/O（asynchronous I/O）</h4>
+
+<p><a href="/assets/img/posts/2018-08-04-computer-io/4.jpg"><img src="/assets/img/posts/2018-08-04-computer-io/4.jpg" alt="4.jpg" title="点击查看原图" /></a></p>
+
+<p>等待数据阶段，用户发送请求之后kernel会立即返回结果，之后用户进程就可以去处理其他事情了，这个阶段不会被block。  <br />
+拷贝数据阶段，用户也不需要感知，kernel在数据准备好之后，会立刻被数据拷贝到用户进程空间，然后给用户进程发信号去读取，这个阶段也不会被block。</p>
+
+<h4 id="信号驱动io-signal-driven-io">信号驱动I/O (signal-driven I/O）</h4>
+
+<p><a href="/assets/img/posts/2018-08-04-computer-io/5.jpg"><img src="/assets/img/posts/2018-08-04-computer-io/5.jpg" alt="5.jpg" title="点击查看原图" /></a></p>
+
+<h4 id="对比">对比</h4>
+
+<p><a href="/assets/img/posts/2018-08-04-computer-io/.jpg"><img src="/assets/img/posts/2018-08-04-computer-io/6.jpg" alt="6.jpg" title="点击查看原图" /></a></p>
+
+<p>同步和异步<br />
+其实只要判断在整个过程中，用户能不能去处理其他事情，如果能，就是异步，不能，就是同步。</p>
+
+<p>阻塞与非阻塞  <br />
+如果需要等待kernel返回结果，这个进程就会被block。所以主要判断用户是否需要等待kernel返回结果。<br />
+从这个点看，其实非阻塞I/O并不能完全算是非阻塞，毕竟拷贝数据阶段也是被block的。</p>
+</section>
+   
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list">
+    
+      <div class="meta">Tags</div>
+    
+
+    
+    <a class="button" href="/tags#计算机">
+      <p><i class="fa fa-tag fa-fw"></i> 计算机</p>
+    </a>
+    
+  </div>
+</footer>
+
+    
+</article>
+
+<!-- Disqus -->
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+  
+  <div id="previous-post" class="post-nav-post">
+      <p>Previous post</p>
+      <a href="/2018/07/29/computer-thread.html">
+        进程与线程
+      </a>
+  </div>
+  
+  
+  <div id="next-post" class="post-nav-post">
+      <p>Next post</p>
+      <a href="/2018/08/05/computer-select-poll-epoll.html">
+        【转载】select、poll与epoll
+      </a>
+  </div>
+  
+</div>
+
+    </div>
+    
+<footer class="site-footer">
+    <p class="text">Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+	<a href="http://localhost:4000/feed.xml" title="Follow RSS feed">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+	<a href="https://github.com/shadowdragons" title="Follow on GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+
+  </body>
+</html>
