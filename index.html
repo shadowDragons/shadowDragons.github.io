@@ -209,6 +209,43 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2018/08/11/php-nginx-connect.html">
+                nginx与php-fpm 连接数
+              </a>
+            </h1>
+            <p class="meta">
+              August 11, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            Apache连接请求机制
+
+
+
+Apache的处理机制是每有一个请求就会去fork一个子进程来处理请求。
+这样带来的缺点很明显：
+当请求量大的时候，需要开启一样数量的进程，这样一来系统内存的消耗，二来cpu执行切换带来的上下文切换消耗非常大。
+
+Nginx是如何解决这些问题的呢？答案是使用I/O复用技术。
+下面只是简单讲解什么是I/O复用，有兴趣的同学可以参考I/O模型
+
+Nginx使用的I/O复用技术
+
+初级I/O复用
+
+采用非阻塞的模式，当一个连接过来时，我们不阻塞住，这样一个进程可以...
+            <!--<a class="button" href="/2018/08/11/php-nginx-connect.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2018/08/05/computer-select-poll-epoll.html">
                 【转载】select、poll与epoll
               </a>
@@ -349,58 +386,6 @@ I/O发生过程步骤：
 
 
             <!--<a class="button" href="/2018/07/27/bhpws-service.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/07/14/perconaToolkit.html">
-                PerconaToolkit工具集合
-              </a>
-            </h1>
-            <p class="meta">
-              July 14, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            pt-align
-
-将其它工具的输出按列对齐。
-
-pt-archiver
-
-将数据归档到另一张表或者文件。
-
-pt-config-diff
-
-对比数据库配置、环境变量差异
-
-pt-deadlock-logger
-
-记录死锁日志，并保存到文件或者数据表
-
-pt-diskstats
-
-功能和iostat类似，给出磁盘的I/O统计信息
-
-pt-duplicate-key-checker
-
-检测表中重复多余的索引或者主键
-
-pt-fifo-split
-
-文件分割
-
-pt-find
-
-按条件查找、排...
-            <!--<a class="button" href="/2018/07/14/perconaToolkit.html">
               Continue reading
             </a>-->
           </div>

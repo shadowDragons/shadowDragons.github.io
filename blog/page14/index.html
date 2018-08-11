@@ -209,6 +209,51 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2016/11/13/bit-cal.html">
+                位运算
+              </a>
+            </h1>
+            <p class="meta">
+              November 13, 2016
+            </p>
+          </header>
+          <div class="excerpt">
+            以S = 1001011,j = 0000000为例。
+
+获取第 i 标志位
+j = 0000001
+(shift left j) * i
+S AND j
+
+
+切换第 i 标志位
+j = 0000001
+(shift left j) * i
+S XOR j
+(XOR: 11 = 0 10 = 1 01 = 1 00 = 0)
+
+
+清除第 i 标志位
+j = 0000001
+(shift left j) * i
+invert j(反转)
+S AND j
+
+
+获取最后一个有效位
+j = NOT...
+            <!--<a class="button" href="/2016/11/13/bit-cal.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2016/11/12/php-async.html">
                 php实现异步
               </a>

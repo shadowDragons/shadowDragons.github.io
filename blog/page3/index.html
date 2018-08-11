@@ -210,6 +210,51 @@
       <span>
           <header>
             <h1>
+              <a class="post-link" href="/2018/05/27/hyperledger-fabric-sdk.html">
+                fabric - Node.js SDK
+              </a>
+            </h1>
+            <p class="meta">
+              May 27, 2018
+            </p>
+          </header>
+          <div class="excerpt">
+            这里使用官方示例。
+
+如果之前没有部署过环境，先按照fabric入门（一）安装进行环境部署。
+
+安装
+
+首先进入示例目录
+
+cd fabric-samples/balance-transfer/
+
+
+有两种方法可以运行示例：
+
+方法一（推荐）
+
+1.通过docker启动网络
+
+docker-compose -f artifacts/docker-compose.yaml up
+
+
+2.安装fabric-client和fabric-ca-client的node模块
+
+npm install
+...
+            <!--<a class="button" href="/2018/05/27/hyperledger-fabric-sdk.html">
+              Continue reading
+            </a>-->
+          </div>
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+      
+      <span>
+          <header>
+            <h1>
               <a class="post-link" href="/2018/05/27/hyperledger-fabric-chaincode.html">
                 fabric - chaincode(链码)
               </a>
@@ -328,35 +373,6 @@ peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric-samples/c
     stdin_open: true
     environment:...
             <!--<a class="button" href="/2018/05/13/hyperledger-fabric-4.html">
-              Continue reading
-            </a>-->
-          </div>
-      </span>
-    </div>
-    
-    <div class="post-teaser">
-      
-      <span>
-          <header>
-            <h1>
-              <a class="post-link" href="/2018/05/13/hyperledger-fabric-3.html">
-                fabric入门（三）加密&交易生成器
-              </a>
-            </h1>
-            <p class="meta">
-              May 13, 2018
-            </p>
-          </header>
-          <div class="excerpt">
-            通过查看./byfn.sh这个shell启动脚本，我们知道一开始的执行流程。
-
-#Create the network using docker compose
-if [ "${MODE}" == "up" ]; then
-  networkUp
-elif [ "${MODE}" == "down" ]; then ## Clear the network
-  networkDown
-elif [ "${MODE}" == "generate" ]; then ## Generate Ar...
-            <!--<a class="button" href="/2018/05/13/hyperledger-fabric-3.html">
               Continue reading
             </a>-->
           </div>

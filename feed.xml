@@ -5,7 +5,169 @@
         <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
         <link>http://localhost:4000/</link>
         <description></description>
-        <pubDate>Sun, 05 Aug 2018 16:36:22 +0800</pubDate>
+        <pubDate>Sat, 11 Aug 2018 14:14:33 +0800</pubDate>
+        
+        <item>
+            <title>nginx与php-fpm 连接数</title>
+            <link>/2018/08/11/php-nginx-connect.html</link>
+            <guid isPermaLink="true">/2018/08/11/php-nginx-connect.html</guid>
+            <description>&lt;h3 id=&quot;apache连接请求机制&quot;&gt;Apache连接请求机制&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-08-11-php-nginx-connect/1.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-08-11-php-nginx-connect/1.png&quot; alt=&quot;1.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Apache的处理机制是每有一个请求就会去fork一个子进程来处理请求。&lt;br /&gt;
+这样带来的缺点很明显：
+当请求量大的时候，需要开启一样数量的进程，这样一来系统内存的消耗，二来cpu执行切换带来的上下文切换消耗非常大。&lt;/p&gt;
+
+&lt;p&gt;Nginx是如何解决这些问题的呢？答案是使用I/O复用技术。
+下面只是简单讲解什么是I/O复用，有兴趣的同学可以参考&lt;a href=&quot;/2018/08/04/computer-io.html&quot;&gt;I/O模型&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;nginx使用的io复用技术&quot;&gt;Nginx使用的I/O复用技术&lt;/h3&gt;
+
+&lt;p&gt;初级I/O复用&lt;/p&gt;
+
+&lt;p&gt;采用非阻塞的模式，当一个连接过来时，我们不阻塞住，这样一个进程可以同时处理多个连接了。
+比如一个进程接受了10000个连接，这个进程每次从头到尾的问一遍这10000个连接：“有I/O事件没？有的话就交给我处理，没有的话我一会再来问一遍。”
+然后进程就一直从头到尾问这10000个连接，如果这1000个连接都没有I/O事件，就会造成CPU的空转，并且效率也很低，不好不好。&lt;/p&gt;
+
+&lt;p&gt;升级I/O复用（select、poll）&lt;/p&gt;
+
+&lt;p&gt;我们能不能引入一个代理，这个代理可以同时观察许多I/O流事件呢？&lt;br /&gt;
+当没有I/O事件的时候，这个进程处于阻塞状态。当连接有I/O流事件产生的时候，就会去唤醒进程去处理。&lt;/p&gt;
+
+&lt;p&gt;但是唤醒之后，因为不知道是哪个连接产生的I/O流事件，于是进程就挨个去问：“请问是你有事要处理吗？”。&lt;/p&gt;
+
+&lt;p&gt;ps: select与poll原理是一样的，只不过select只能观察1024个连接，poll可以观察无限个连接。&lt;/p&gt;
+
+&lt;p&gt;超级升级I/O复用（epoll）&lt;/p&gt;
+
+&lt;p&gt;有了epoll，可以知道是哪个连接产生的I/O流事件。理论上1个进程就可以无限数量的连接，而且无需轮询，真正解决了c10k的问题。&lt;/p&gt;
+
+&lt;p&gt;nginx就是采用基于epoll的异步非阻塞服务器程序。&lt;/p&gt;
+
+&lt;h3 id=&quot;nginx与php-fprm的连接处理&quot;&gt;nginx与php-fprm的连接处理&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-08-11-php-nginx-connect/2.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-08-11-php-nginx-connect/2.png&quot; alt=&quot;2.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;nginx&lt;/p&gt;
+
+&lt;p&gt;worker为epoll异步处理请求。&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;worker_processes&lt;/td&gt;
+      &lt;td&gt;worker数量&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;worker_connections&lt;/td&gt;
+      &lt;td&gt;每个worker能处理的最大并发连接请求&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;php-fpm&lt;/p&gt;
+
+&lt;p&gt;worker为poll异步处理请求。众多的 worker 进程组成了进程池，等待 master 进程分配任务，而且每个 worker 进程只能同时处理单个任务，前一个处理结束，才能为下一个服务。&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;pm&lt;/td&gt;
+      &lt;td&gt;分为静态(static)和动态(dynamic)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;pm.max_children&lt;/td&gt;
+      &lt;td&gt;static模式下创建的子进程数(固定)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;pm.start_servers&lt;/td&gt;
+      &lt;td&gt;动态方式下的起始worker进程数量&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;pm.min_spare_servers&lt;/td&gt;
+      &lt;td&gt;动态方式下服务器空闲时最小worker进程数量&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;pm.max_spare_servers&lt;/td&gt;
+      &lt;td&gt;动态方式下服务器空闲时最大worker进程数量&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;超时设置&quot;&gt;超时设置&lt;/h3&gt;
+
+&lt;p&gt;nginx&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;fastcgi_connect_timeout&lt;/td&gt;
+      &lt;td&gt;后端链接时间&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;fastcgi_send_timeout&lt;/td&gt;
+      &lt;td&gt;数据发送时间，两次成功发送时间差，不是整个发送时间&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;fastcgi_read_timeout&lt;/td&gt;
+      &lt;td&gt;数据接收时间，两次成功接收时间差，不是整个接收时间&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;php-fpm&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;request_terminate_timeout&lt;/td&gt;
+      &lt;td&gt;PHP脚本的最大执行时间&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;php&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;max_execution_time&lt;/td&gt;
+      &lt;td&gt;PHP脚本的最大执行时间&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;ps:一些版本中php-fpm的配置会覆盖php.ini的配置，使php.ini的配置不起作用&lt;/p&gt;
+
+&lt;h3 id=&quot;常见错误&quot;&gt;常见错误&lt;/h3&gt;
+
+&lt;p&gt;1.502 Connection reset by peer&lt;/p&gt;
+
+&lt;p&gt;php-fpm的worker进程执行php程序脚本时，超过了配置的最长执行时间，master进程将worker进程杀掉，直接返回502。&lt;/p&gt;
+
+&lt;p&gt;2.502 Connection refused&lt;/p&gt;
+
+&lt;p&gt;连接请求数(accpet之前)超出了端口所能监听的tcp连接的最大值(backlog的值)，进不了fpm等待accept的链接队列，直接返回502，这里可能会产生tcp重传。&lt;/p&gt;
+
+&lt;p&gt;backlog的值是半连接和全连接的总和，他的存在也有短时间缓冲解耦nginx请求与fpm处理的作用，半连接指收到了syn请求，3次握手尚未建立，全连接指的是3次握手已经成功，不过尚未被accpet的请求，fpm里面有调节的参数，如果fpm的参数设置为-1，则默认走的是系统内核参数net.core.somaxconn的设置值，如果不设置可以在/proc/sys/net/core/somaxconn里查看，默认值是128，所以在连接请求较高的业务里要增大这个值。&lt;/p&gt;
+
+&lt;p&gt;3.504 Connection timed out&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;php的worker进程池处理慢，无法尽快处理等待accept的链接队列，导致3次握手后的链接队列长时间没有被accept，nginx链接等待超时;&lt;/li&gt;
+  &lt;li&gt;后端php-fpm执行脚本的时间太长，超过了nginx配置的超时机制，这个时候也是会报出504错误的。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;参考&quot;&gt;参考&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://segmentfault.com/a/1190000007614502&quot;&gt;nginx、swoole高并发原理初探&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.2cto.com/net/201609/546064.html&quot;&gt;WebService之nginx+(php-fpm)结构模型剖析及优化&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+            <pubDate>Sat, 11 Aug 2018 00:00:00 +0800</pubDate>
+        </item>
         
         <item>
             <title>【转载】select、poll与epoll</title>
@@ -2224,161 +2386,6 @@ peer channel &lt;span class=&quot;nb&quot;&gt;join&lt;/span&gt; &lt;span class=&
 &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_LOCALMSPID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Org2MSP&quot;&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_TLS_ROOTCERT_FILE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/ca.crt
 peer channel &lt;span class=&quot;nb&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; mychannel.block
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-            <pubDate>Sun, 13 May 2018 00:00:00 +0800</pubDate>
-        </item>
-        
-        <item>
-            <title>fabric入门（三）加密&amp;交易生成器</title>
-            <link>/2018/05/13/hyperledger-fabric-3.html</link>
-            <guid isPermaLink="true">/2018/05/13/hyperledger-fabric-3.html</guid>
-            <description>&lt;p&gt;通过查看&lt;strong&gt;./byfn.sh&lt;/strong&gt;这个shell启动脚本，我们知道一开始的执行流程。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#Create the network using docker compose&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;MODE&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;up&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
-  &lt;/span&gt;networkUp
-&lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;MODE&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;down&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;## Clear the network&lt;/span&gt;
-  networkDown
-&lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;MODE&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;generate&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;## Generate Artifacts&lt;/span&gt;
-  generateCerts
-  replacePrivateKey
-  generateChannelArtifacts
-&lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;MODE&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;restart&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;## Restart the network&lt;/span&gt;
-  networkDown
-  networkUp
-&lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;MODE&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;upgrade&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;## Upgrade the network from v1.0.x to v1.1&lt;/span&gt;
-  upgradeNetwork
-&lt;span class=&quot;k&quot;&gt;else
-  &lt;/span&gt;printHelp
-  &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
-&lt;span class=&quot;k&quot;&gt;fi&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;首先是&lt;strong&gt;generateCerts&lt;/strong&gt;这个方法&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;generateCerts &lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
-  which cryptogen
-  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$?&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-ne&lt;/span&gt; 0 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
-    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;cryptogen tool not found. exiting&quot;&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
-  &lt;span class=&quot;k&quot;&gt;fi
-  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo
-  echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;##########################################################&quot;&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;##### Generate certificates using cryptogen tool #########&quot;&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;##########################################################&quot;&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;crypto-config&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
-    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-Rf&lt;/span&gt; crypto-config
-  &lt;span class=&quot;k&quot;&gt;fi
-  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-x&lt;/span&gt;
-  cryptogen generate &lt;span class=&quot;nt&quot;&gt;--config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;./crypto-config.yaml
-  &lt;span class=&quot;nv&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$?&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; +x
-  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$res&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-ne&lt;/span&gt; 0 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
-    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Failed to generate certificates...&quot;&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
-  &lt;span class=&quot;k&quot;&gt;fi
-  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;里面用到的&lt;strong&gt;cryptogen&lt;/strong&gt;用来为我们生成各种网络实体的加密材料（x509证书）。这些证书是身份的代表，它们允许在我们的网络实体进行交流和交易时进行签名/验证身份验证。&lt;/p&gt;
-
-&lt;p&gt;Cryptogen消费一个包含网络拓扑的crypto-config.yaml，并允许我们为组织和属于这些组织的组件生成一组证书和密钥。每个组织都配置了唯一的根证书(ca-cert),它将特定组件（peers和orders）绑定到该组织。通过为每一个组织分配唯一的CA证书，我们正在模仿一个经典的网络，这个网络中的成员将使用自己的证书颁发机构。Hyperledger Fabric中的交易和通信是通过存储在keystore中的实体的私钥签名，然后通过公钥手段进行验证（signcerts）。&lt;/p&gt;
-
-&lt;p&gt;所以我们第一步运行以下命令，生成的证书和密钥将被保存到名为crypto-config的文件夹中。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cryptogen generate &lt;span class=&quot;nt&quot;&gt;--config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;./crypto-config.yaml
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;接下来的&lt;strong&gt;replacePrivateKey&lt;/strong&gt;方法主要用于e2e网络，我们暂时用不到，先跳过。&lt;/p&gt;
-
-&lt;p&gt;接下来是&lt;strong&gt;generateChannelArtifacts&lt;/strong&gt;这个方法，用来生成order的创世区块，信道的交易配置以及两个anchor peer transactions一个对应一个Peer组织。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;generateChannelArtifacts&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  which configtxgen
-  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$?&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-ne&lt;/span&gt; 0 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
-    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;configtxgen tool not found. exiting&quot;&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
-  &lt;span class=&quot;k&quot;&gt;fi
-
-  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;##########################################################&quot;&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;#########  Generating Orderer Genesis block ##############&quot;&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;##########################################################&quot;&lt;/span&gt;
-  &lt;span class=&quot;c&quot;&gt;# Note: For some unknown reason (at least for now) the block file can't be&lt;/span&gt;
-  &lt;span class=&quot;c&quot;&gt;# named orderer.genesis.block or the orderer will fail to launch!&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-x&lt;/span&gt;
-  configtxgen &lt;span class=&quot;nt&quot;&gt;-profile&lt;/span&gt; TwoOrgsOrdererGenesis &lt;span class=&quot;nt&quot;&gt;-outputBlock&lt;/span&gt; ./channel-artifacts/genesis.block
-  &lt;span class=&quot;nv&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$?&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; +x
-  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$res&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-ne&lt;/span&gt; 0 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
-    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Failed to generate orderer genesis block...&quot;&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
-  &lt;span class=&quot;k&quot;&gt;fi
-  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo
-  echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;#################################################################&quot;&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;### Generating channel configuration transaction 'channel.tx' ###&quot;&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;#################################################################&quot;&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-x&lt;/span&gt;
-  configtxgen &lt;span class=&quot;nt&quot;&gt;-profile&lt;/span&gt; TwoOrgsChannel &lt;span class=&quot;nt&quot;&gt;-outputCreateChannelTx&lt;/span&gt; ./channel-artifacts/channel.tx &lt;span class=&quot;nt&quot;&gt;-channelID&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CHANNEL_NAME&lt;/span&gt;
-  &lt;span class=&quot;nv&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$?&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; +x
-  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$res&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-ne&lt;/span&gt; 0 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
-    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Failed to generate channel configuration transaction...&quot;&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
-  &lt;span class=&quot;k&quot;&gt;fi
-
-  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo
-  echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;#################################################################&quot;&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;#######    Generating anchor peer update for Org1MSP   ##########&quot;&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;#################################################################&quot;&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-x&lt;/span&gt;
-  configtxgen &lt;span class=&quot;nt&quot;&gt;-profile&lt;/span&gt; TwoOrgsChannel &lt;span class=&quot;nt&quot;&gt;-outputAnchorPeersUpdate&lt;/span&gt; ./channel-artifacts/Org1MSPanchors.tx &lt;span class=&quot;nt&quot;&gt;-channelID&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CHANNEL_NAME&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-asOrg&lt;/span&gt; Org1MSP
-  &lt;span class=&quot;nv&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$?&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; +x
-  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$res&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-ne&lt;/span&gt; 0 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
-    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Failed to generate anchor peer update for Org1MSP...&quot;&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
-  &lt;span class=&quot;k&quot;&gt;fi
-
-  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo
-  echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;#################################################################&quot;&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;#######    Generating anchor peer update for Org2MSP   ##########&quot;&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;#################################################################&quot;&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-x&lt;/span&gt;
-  configtxgen &lt;span class=&quot;nt&quot;&gt;-profile&lt;/span&gt; TwoOrgsChannel &lt;span class=&quot;nt&quot;&gt;-outputAnchorPeersUpdate&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  ./channel-artifacts/Org2MSPanchors.tx &lt;span class=&quot;nt&quot;&gt;-channelID&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CHANNEL_NAME&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-asOrg&lt;/span&gt; Org2MSP
-  &lt;span class=&quot;nv&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$?&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; +x
-  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$res&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-ne&lt;/span&gt; 0 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
-    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Failed to generate anchor peer update for Org2MSP...&quot;&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
-  &lt;span class=&quot;k&quot;&gt;fi
-  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;首先，我们需要设置一个环境变量来告诉configtxgen哪里去寻找configtx.yaml。然后，我们将调用configtxgen工具去创建orderer genesis block：&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;FABRIC_CFG_PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$PWD&lt;/span&gt;
-configtxgen &lt;span class=&quot;nt&quot;&gt;-profile&lt;/span&gt; TwoOrgsOrdererGenesis &lt;span class=&quot;nt&quot;&gt;-outputBlock&lt;/span&gt; ./channel-artifacts/genesis.block
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;接下来，我们需要创建channel transaction配置。请确保替换$CHANNEL_NAME或者将CHANNEL_NAME设置为整个说明中可以使用的环境变量：&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CHANNEL_NAME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;mychannel
-configtxgen &lt;span class=&quot;nt&quot;&gt;-profile&lt;/span&gt; TwoOrgsChannel &lt;span class=&quot;nt&quot;&gt;-outputCreateChannelTx&lt;/span&gt; ./channel-artifacts/channel.tx &lt;span class=&quot;nt&quot;&gt;-channelID&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CHANNEL_NAME&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;接下来，我们将在正在构建的通道上定义Org1的anchor peer。请再次确认$CHANNEL_NAME已被替换或者为以下命令设置了环境变量：&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;configtxgen &lt;span class=&quot;nt&quot;&gt;-profile&lt;/span&gt; TwoOrgsChannel &lt;span class=&quot;nt&quot;&gt;-outputAnchorPeersUpdate&lt;/span&gt; ./channel-artifacts/Org1MSPanchors.tx &lt;span class=&quot;nt&quot;&gt;-channelID&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CHANNEL_NAME&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-asOrg&lt;/span&gt; Org1MSP
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;现在，我们将在同一个通道定义Org2的anchor peer：&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;configtxgen &lt;span class=&quot;nt&quot;&gt;-profile&lt;/span&gt; TwoOrgsChannel &lt;span class=&quot;nt&quot;&gt;-outputAnchorPeersUpdate&lt;/span&gt; ./channel-artifacts/Org2MSPanchors.tx &lt;span class=&quot;nt&quot;&gt;-channelID&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CHANNEL_NAME&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-asOrg&lt;/span&gt; Org2MSP
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </description>
             <pubDate>Sun, 13 May 2018 00:00:00 +0800</pubDate>
