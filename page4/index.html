@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一个小白的成长学习历程">
+    <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
+    <meta name="theme-color" content="#000000">
+    
+    <title>ben blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/page4/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- mermaid CSS -->
+    <link rel="stylesheet" href="/assets/css/mermaid.css">
+
+    <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Ben Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/">Tags</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
+                <div class="site-heading">
+                    <h1>Ben Blog</h1>
+                    <!--<hr class="small">-->
+                    <span class="subheading">一个小白的成长学习历程</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+	<div class="row">
+        
+
+<!-- USE SIDEBAR -->
+    <!-- PostList Container -->
+    		<div class="
+                col-lg-8 col-lg-offset-1
+                col-md-8 col-md-offset-1
+                col-sm-12
+                col-xs-12
+                postlist-container
+            ">
+    			
+<div class="post-preview">
+    <a href="/2018/04/10/ethereum-crypto-currency-2/">
+        <h2 class="post-title">
+            以太坊发行代币(二)
+        </h2>
+        
+        <div class="post-content-preview">
+            在上一节中，已经讲了如何去发行一个简单的代币，如果没看过的同学，请先去阅读以太坊发行代币(一)
+
+这一节，我们将对之前的代币做一次升级。
+
+如果你想把你的代币卖给一个交易所，只是发送到一个其他合约的以太坊地址是不够的，因为它不会意识到这个新代币或者谁发送给它的，因为这个合约没有发布一些事件或者接口。所以对于合约，你应该首先批准它们可以从你账号转出代币，然后让它们知道它们应该怎么去做。
+
+由于...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 10, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/07/ethereum-crypto-currency-1/">
+        <h2 class="post-title">
+            以太坊发行代币(一)
+        </h2>
+        
+        <div class="post-content-preview">
+            本文使用到的工具geth、Mist，并通过私有链来做测试。
+如果你不知道还不了解，请先阅读这篇文章《搭建以太坊私有网络》
+
+创建合约
+
+先从最基本的开始，打开Mist，进入到 Contract 标签页，然后点击 Deploy New Contract
+
+
+
+在Solidity Contract Source code输入框，输入以下代码：
+
+contract MyToken {
+    /*...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 7, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/05/sha256/">
+        <h2 class="post-title">
+            加密散列-sha256
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  SHA256是安全散列算法SHA（Secure Hash Algorithm）系列算法之一，其摘要长度为256bits，即32个字节，故称SHA256（1个字节=8位）。
+
+
+算法步骤
+
+原始消息分为N个512bit的消息块。每个消息块分成16个32bit，标记为M(i)0、M(i)1、M(i)2、…、M(i)15然后对这N个消息块依次进行处理。
+
+1.补位  
+由于必须分成n个51...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 5, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/05/sha1/">
+        <h2 class="post-title">
+            加密散列-sha1
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  SHA-1（英语：Secure Hash Algorithm 1，中文名：安全散列算法1）是一种密码散列函数，美国国家安全局设计，并由美国国家标准技术研究所（NIST）发布为联邦数据处理标准（FIPS）[2]。SHA-1可以生成一个被称为消息摘要的160位（20字节）散列值，散列值通常的呈现形式为40个十六进制数。
+
+
+算法步骤
+
+原始消息分为N个512bit的消息块。每个消息块分成1...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 5, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/05/ripemd160/">
+        <h2 class="post-title">
+            加密散列-PIPEMD160
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  RIPEMD (RACE原始完整性校验讯息摘要)是一种加密哈希函数，由 鲁汶大学 Hans Dobbertin,Antoon Bosselaers 和 Bart Prenee组成的COSIC 研究小组发布于1996年。 RIPEMD是以MD4为基础原则所设计的 ，而且其表现与更有名的SHA-1类似.
+
+
+RIPEMD-160是以原始版RIPEMD所改进的160位元版本，而且是RIPEM...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 5, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/05/merkle-tree/">
+        <h2 class="post-title">
+            Merkle树
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  Merkle树是一种哈希二叉树，它是一种用作快速归纳和校验大规模数据完整性的数据结构。
+
+
+比特币校验区块交易数据就是使用这种算法。
+
+Merkle树是自底向上构建的。如图所示
+
+
+
+Merkle树一般用来进行完整性验证处理。在处理完整性验证的应用场景中，Merkle树会大大减少数据的传输量及计算的复杂度。
+
+成如果想要证明一个确切的数据块是Merkle树中的一员。通常，只需要树根及这...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 5, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/05/md5/">
+        <h2 class="post-title">
+            加密散列-md5
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  MD5消息摘要算法（英语：MD5 Message-Digest Algorithm），一种被广泛使用的密码散列函数，可以产生出一个128位（16字节）的散列值（hash value），用于确保信息传输完整一致。
+
+
+算法步骤
+
+原始消息分为N个512bit的消息块。每个消息块分成16个32bit。
+
+1.补位  
+由于必须分成n个512bit块，所以必须进行补位。  
+最后还需要预留6...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 5, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/01/ether-private-network/">
+        <h2 class="post-title">
+            搭建以太坊私有网络
+        </h2>
+        
+        <div class="post-content-preview">
+            Geth
+
+可以通过命令行方式实现以太坊的各种功能,如账户的新建编辑删除，开启挖矿，ether币的转移，智能合约的部署和执行等等。
+
+安装
+
+brew tap ethereum/ethereum
+brew install ethereum
+
+
+安装完成后检查，输入geth version
+
+
+
+创建私有网络
+
+1.创建一个目录，如geth-private-test
+
+2.进入该目录下，创建文...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 1, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/01/cryptography/">
+        <h2 class="post-title">
+            密码学
+        </h2>
+        
+        <div class="post-content-preview">
+            对称加密
+
+加密 
+
+解密 
+
+优点  
+加解密效率高（速度快，空间占用小），加密强度高。
+
+缺点  
+安全性弱，密钥由多方管理，密钥容易泄露。
+
+常见加密算法  
+DES、3DES、Blowfish、RC2、AES以及国密的SM4。
+
+非对称加密
+
+加密 
+
+解密 
+
+优点  
+安全性高，公私钥分离。
+
+缺点  
+加解密效率低。
+
+常见加密算法  
+RSA、椭圆曲线算法
+
+同态加密
+
+是一...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 1, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/03/23/agreement/">
+        <h2 class="post-title">
+            共识算法
+        </h2>
+        
+        <div class="post-content-preview">
+            
+
+drow.io源文件下载
+
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on March 23, 2018
+    </p>
+</div>
+<hr>
+
+
+<!-- Pager -->
+
+<ul class="pager">
+    
+    <li class="previous">
+        <a href="/page3">&larr; Newer Posts</a>
+    </li>
+    
+    
+    <li class="next">
+        <a href="/page5">Older Posts &rarr;</a>
+    </li>
+    
+</ul>
+
+
+    		</div>
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-3 col-lg-offset-0
+                col-md-3 col-md-offset-0
+                col-sm-12
+                col-xs-12
+                sidebar-container
+            ">
+                <!-- Featured Tags -->
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                            
+                                <a href="/tags/#php" title="php" rel="8">
+                                    php
+                                </a>
+                            
+                        
+                            
+                        
+                            
+                                <a href="/tags/#算法" title="算法" rel="6">
+                                    算法
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#数据结构" title="数据结构" rel="2">
+                                    数据结构
+                                </a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                                <a href="/tags/#分布式" title="分布式" rel="2">
+                                    分布式
+                                </a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                                <a href="/tags/#区块链" title="区块链" rel="18">
+                                    区块链
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#比特币" title="比特币" rel="7">
+                                    比特币
+                                </a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                                <a href="/tags/#密码学" title="密码学" rel="6">
+                                    密码学
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#以太坊" title="以太坊" rel="4">
+                                    以太坊
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#http" title="http" rel="12">
+                                    http
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#超级账本" title="超级账本" rel="8">
+                                    超级账本
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#fabric" title="fabric" rel="8">
+                                    fabric
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#MYSQL" title="MYSQL" rel="3">
+                                    MYSQL
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#web" title="web" rel="2">
+                                    web
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#计算机" title="计算机" rel="3">
+                                    计算机
+                                </a>
+                            
+                        
+                            
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Short About -->
+                <section class="visible-md visible-lg">
+                    <hr><h5><a href="/about/">ABOUT ME</a></h5>
+                    <div class="short-about">
+                        
+                            <img src="/img/avatar.jpg" />
+                        
+                        
+                            <p>最美的风景往往在没有路的地方</p>
+                        
+                        <!-- SNS Link -->
+                        <ul class="list-inline">
+                            
+                            
+                            
+                            
+                            
+                            
+                            <li>
+                                <a target="_blank" href="https://github.com/shadowdragons">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            
+                            
+                        </ul>
+                    </div>
+                </section>
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                </ul>
+                
+    		</div>
+        
+	</div>
+</div>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    
+
+
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/shadowdragons">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Ben Blog 2018
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async('/js/jquery.tagcloud.js',function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-89143952-2';
+    var _gaDomain = 'shadowdragons.github.io';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '2a8326534823f90fa4eef816aea2ef08';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+<!-- Side Catalog -->
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

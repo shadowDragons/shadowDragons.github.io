@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一个小白的成长学习历程">
+    <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
+    <meta name="theme-color" content="#000000">
+    
+    <title>密码学 - ben blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2018/04/01/cryptography/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- mermaid CSS -->
+    <link rel="stylesheet" href="/assets/css/mermaid.css">
+
+    <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Ben Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/">Tags</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg.jpg')
+    }
+
+    
+</style>
+<header class="intro-header" >
+    <div class="header-mask"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#区块链" title="区块链">区块链</a>
+                        
+                        <a class="tag" href="/tags/#密码学" title="密码学">密码学</a>
+                        
+                    </div>
+                    <h1>密码学</h1>
+                    
+                    
+                    <h2 class="subheading"></h2>
+                    
+                    <span class="meta">Posted by Ben Blog on April 1, 2018</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<h3 id="对称加密">对称加密</h3>
+
+<p>加密 <script type="math/tex">{E_k}(P) = C</script></p>
+
+<p>解密 <script type="math/tex">{D_k}(C) = P</script></p>
+
+<p>优点  <br />
+加解密效率高（速度快，空间占用小），加密强度高。</p>
+
+<p>缺点  <br />
+安全性弱，密钥由多方管理，密钥容易泄露。</p>
+
+<p>常见加密算法  <br />
+DES、3DES、Blowfish、RC2、AES以及国密的SM4。</p>
+
+<h3 id="非对称加密">非对称加密</h3>
+
+<p>加密 <script type="math/tex">{E_\text{公钥}}(P)=C</script></p>
+
+<p>解密 <script type="math/tex">{D_\text{私钥}}(C)=P</script></p>
+
+<p>优点  <br />
+安全性高，公私钥分离。</p>
+
+<p>缺点  <br />
+加解密效率低。</p>
+
+<p>常见加密算法  <br />
+<a href="/2018/03/17/rsa.html">RSA</a>、椭圆曲线算法</p>
+
+<h3 id="同态加密">同态加密</h3>
+
+<p>是一种特殊的加密方法，允许对密文进行处理得到仍然是加密的结果，即对密文直接进行处理，跟对明文进行处理再加密，得到的结果相同。从代数的角度讲，即同态性。</p>
+
+<p>如果定义一个运算符 ，对加密算法 E 和 解密算法 D，满足 <script type="math/tex">E(X) = E(X) \Delta E(Y)</script></p>
+
+<p>则意味着对于该运算满足同态性。</p>
+
+<p>同态性在代数上包括：加法同态、乘法同态、减法同态和除法同态。同时满足加法同态和乘法同态，则意味着是 代数同态，即 全同态。同时满足四种同态性，则被称为 算数同态。</p>
+
+<h3 id="函数加密">函数加密</h3>
+
+<p>与同态加密相关的一个问题是函数加密。</p>
+
+<p>同态加密保护的是数据本身，而函数加密顾名思义保护的是处理函数本身，即让第三方看不到处理过程的前提下，对数据进行处理。</p>
+
+<p>该问题已被证明是不存在对多个通用函数的任意多 key 的方案，目前仅能做到对某个特定函数的一个 key 的方案。</p>
+
+<h3 id="hash算法">Hash算法</h3>
+
+<p>公式 <script type="math/tex">h = H(m)</script></p>
+
+<p>公式说明  <br />
+m：任意长度消息（实际上有长度限制的，但因为长度可以非常大，这里可以认为是任意长度消息） <br />
+H：哈希函数  <br />
+h：固定长度的哈希值</p>
+
+<p>一个优秀的 hash 算法，将能实现：  <br />
+正向快速：给定明文和 hash 算法，在有限时间和有限资源内能计算出 hash 值。  <br />
+逆向困难：给定（若干） hash 值，在有限时间内很难（基本不可能）逆推出明文。  <br />
+输入敏感：原始输入信息修改一点信息，产生的 hash 值看起来应该都有很大不同。  <br />
+冲突避免：很难找到两段内容不同的明文，使得它们的 hash 值一致（发生冲突），又称抗碰撞性。</p>
+
+<p>抗碰撞性  <br />
+哈希函数的抗碰撞性是指寻找两个能够产生碰撞的消息在计算上是不可行的。但找到两个碰撞的消息在计算上不可行，并不意味着不存在两个碰撞的消息。哈希函数是把大空间上的消息压缩到小空间上，碰撞肯定存在。只是计算上是不可行的。</p>
+
+<p>主流hash算法  <br />
+<a href="/2018/04/05/md5.html">MD5</a>(安全性不足应用于商业场景)  <br />
+<a href="/2018/04/05/sha1.html">SHA-1</a>(安全性不足应用于商业场景)  <br />
+<a href="/2018/04/05/sha256.html">SHA-2</a>   <br />
+<a href="/2018/04/05/ripemd.html">PIPEMD</a></p>
+
+<h3 id="其他流行加密算法">其他流行加密算法</h3>
+
+<p><a href="/2018/04/05/merkle-tree.html">Merkle树</a></p>
+
+<h3 id="数字摘要">数字摘要</h3>
+
+<p>对数字内容进行 Hash 运算，获取唯一的摘要值来指代原始数字内容。</p>
+
+<p>数字摘要是解决确保内容没被篡改过的问题（利用 Hash 函数的抗碰撞性特点）。</p>
+
+<p>数字摘要是 Hash 算法最重要的一个用途。在网络上下载软件或文件时，往往同时会提供一个数字摘要值，用户下载下来原始文件可以自行进行计算，并同提供的摘要值进行比对，以确保内容没有被修改过。</p>
+
+<h3 id="数字签名">数字签名</h3>
+
+<p>乙方收到甲方传过来的一串信息，怎么能够确定确实是甲方而不是有人伪造呢？</p>
+
+<p>我们把非对称加密反过来做就可以了，因为只有甲方自己才持有一份秘密的私钥，他拿这个私钥对数据进行加密得到密文 <code class="highlighter-rouge">C = EA私(M)</code>，乙方持有甲方的公钥，解密明文<code class="highlighter-rouge">P = DA公(C)</code>，如果能够解密成功就证明信息确实是甲方所发。</p>
+
+<p>不过通常不需要对发送信息的整个内容都加密，那样太慢。只需要计算一个信息的唯一信息摘要并对信息摘要加密解密即可，下面就会讲到数据摘要算法（俗称HASH算法），这也是数字签名的算法名称，很多时候是一个摘要算法+非对称算法，例如SHA1RSA, SHA256RSA等。</p>
+
+<h3 id="数字证书">数字证书</h3>
+
+<p>数字证书用来证明某个公钥是谁的，并且内容是正确的。</p>
+
+<p>对于非对称加密算法和数字签名来说，很重要的一点就是公钥的分发。一旦公钥被人替换（典型的如中间人攻击），则整个安全体系将被破坏掉。</p>
+
+<p>怎么确保一个公钥确实是某个人的原始公钥？</p>
+
+<p>这就需要数字证书机制。</p>
+
+<p>顾名思义，数字证书就是像一个证书一样，证明信息和合法性。由证书认证机构（Certification Authority，CA）来签发，权威的 CA 包括 verisign 等。</p>
+
+<p>数字证书内容可能包括版本、序列号、签名算法类型、签发者信息、有效期、被签发人、<strong>签发的公开密钥</strong>、<strong>CA 数字签名</strong>、其它信息等等，一般使用最广泛的标准为 ITU 和 ISO 联合制定的 X.509 规范。</p>
+
+<p>其中，最重要的包括 签发的公开密钥、CA 数字签名 两个信息。因此，只要通过这个证书就能证明某个公钥是合法的，因为带有 CA 的数字签名。</p>
+
+<p>更进一步地，怎么证明 CA 的签名合法不合法呢？</p>
+
+<p>类似的，CA 的数字签名合法不合法也是通过 CA 的证书来证明的。主流操作系统和浏览器里面会提前预置一些 CA 的证书（承认这些是合法的证书），然后所有基于他们认证的签名都会自然被认为合法。</p>
+
+<h3 id="pki体系">PKI体系</h3>
+
+<p>在非对称加密中，公钥则可以通过证书机制来进行保护，如何管理和分发证书则可以通过 PKI（Public Key Infrastructure）来保障。</p>
+
+<p>顾名思义，PKI 体系在现代密码学应用领域处于十分基础的地位，解决了十分核心的证书管理问题。</p>
+
+<p>PKI 并不代表某个特定的密码学技术和流程，PKI 是建立在公私钥基础上实现安全可靠传递消息和身份确认的一个通用框架。实现了 PKI 的平台可以安全可靠地管理网络中用户的密钥和证书，包括多个实现和变种，知名的有 RSA 公司的 PKCS（Public Key Cryptography Standards）标准和 X.509 规范等。</p>
+
+<p>一般情况下，PKI 至少包括如下组件：</p>
+
+<p>CA（Certification Authority）：负责证书的颁发和作废，接收来自 RA 的请求，是最核心的部分；
+RA（Registration Authority）：对用户身份进行验证，校验数据合法性，负责登记，审核过了就发给 CA；
+证书数据库：存放证书，一般采用 LDAP 目录服务，标准格式采用 X.500 系列。
+CA 是最核心的组件，主要完成对证书的管理。</p>
+
+<p>常见的流程为，用户通过 RA 登记申请证书，CA 完成证书的制造，颁发给用户。用户需要撤销证书则向 CA 发出申请。</p>
+
+<p>之前章节内容介绍过，密钥有两种类型：用于签名和用于加解密，对应称为 签名密钥对 和 加密密钥对。</p>
+
+<p>用户证书可以有两种方式。一般可以由 CA 来生成证书和私钥；也可以自己生成公钥和私钥，然后由 CA 来对公钥进行签发。后者情况下，当用户私钥丢失后，CA 无法完成恢复。</p>
+
+
+                <hr style="visibility: hidden;">
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2018/03/23/agreement/" data-toggle="tooltip" data-placement="top" title="共识算法">
+                        Previous<br>
+                        <span>共识算法</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2018/04/01/ether-private-network/" data-toggle="tooltip" data-placement="top" title="搭建以太坊私有网络">
+                        Next<br>
+                        <span>搭建以太坊私有网络</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+
+
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+        				
+                            
+                				<a href="/tags/#php" title="php" rel="8">
+                                    php
+                                </a>
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#算法" title="算法" rel="6">
+                                    算法
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#数据结构" title="数据结构" rel="2">
+                                    数据结构
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#分布式" title="分布式" rel="2">
+                                    分布式
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#区块链" title="区块链" rel="18">
+                                    区块链
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#比特币" title="比特币" rel="7">
+                                    比特币
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#密码学" title="密码学" rel="6">
+                                    密码学
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#以太坊" title="以太坊" rel="4">
+                                    以太坊
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#http" title="http" rel="12">
+                                    http
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#超级账本" title="超级账本" rel="8">
+                                    超级账本
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#fabric" title="fabric" rel="8">
+                                    fabric
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#MYSQL" title="MYSQL" rel="3">
+                                    MYSQL
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#web" title="web" rel="2">
+                                    web
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#计算机" title="计算机" rel="3">
+                                    计算机
+                                </a>
+                            
+        				
+                            
+        				
+        			</div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    
+
+
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/shadowdragons">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Ben Blog 2018
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async('/js/jquery.tagcloud.js',function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-89143952-2';
+    var _gaDomain = 'shadowdragons.github.io';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '2a8326534823f90fa4eef816aea2ef08';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

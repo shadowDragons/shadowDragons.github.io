@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-    <channel>
-        <title>小白</title>
-        <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-        <link>http://localhost:4000/</link>
-        <description></description>
-        <pubDate>Sat, 11 Aug 2018 14:14:33 +0800</pubDate>
-        
-        <item>
-            <title>nginx与php-fpm 连接数</title>
-            <link>/2018/08/11/php-nginx-connect.html</link>
-            <guid isPermaLink="true">/2018/08/11/php-nginx-connect.html</guid>
-            <description>&lt;h3 id=&quot;apache连接请求机制&quot;&gt;Apache连接请求机制&lt;/h3&gt;
+  <channel>
+    <title>Ben Blog</title>
+    <description>一个小白的成长学习历程</description>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Sun, 19 Aug 2018 20:31:29 +0800</pubDate>
+    <lastBuildDate>Sun, 19 Aug 2018 20:31:29 +0800</lastBuildDate>
+    <generator>Jekyll v3.8.3</generator>
+    
+      <item>
+        <title>nginx与php-fpm 连接数</title>
+        <description>&lt;h2 id=&quot;apache连接请求机制&quot;&gt;Apache连接请求机制&lt;/h2&gt;
 
 &lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-08-11-php-nginx-connect/1.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-08-11-php-nginx-connect/1.png&quot; alt=&quot;1.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 
@@ -22,15 +22,15 @@
 &lt;p&gt;Nginx是如何解决这些问题的呢？答案是使用I/O复用技术。
 下面只是简单讲解什么是I/O复用，有兴趣的同学可以参考&lt;a href=&quot;/2018/08/04/computer-io.html&quot;&gt;I/O模型&lt;/a&gt;&lt;/p&gt;
 
-&lt;h3 id=&quot;nginx使用的io复用技术&quot;&gt;Nginx使用的I/O复用技术&lt;/h3&gt;
+&lt;h2 id=&quot;nginx使用的io复用技术&quot;&gt;Nginx使用的I/O复用技术&lt;/h2&gt;
 
-&lt;p&gt;初级I/O复用&lt;/p&gt;
+&lt;h4 id=&quot;初级io复用&quot;&gt;初级I/O复用&lt;/h4&gt;
 
 &lt;p&gt;采用非阻塞的模式，当一个连接过来时，我们不阻塞住，这样一个进程可以同时处理多个连接了。
 比如一个进程接受了10000个连接，这个进程每次从头到尾的问一遍这10000个连接：“有I/O事件没？有的话就交给我处理，没有的话我一会再来问一遍。”
 然后进程就一直从头到尾问这10000个连接，如果这1000个连接都没有I/O事件，就会造成CPU的空转，并且效率也很低，不好不好。&lt;/p&gt;
 
-&lt;p&gt;升级I/O复用（select、poll）&lt;/p&gt;
+&lt;h4 id=&quot;升级io复用selectpoll&quot;&gt;升级I/O复用（select、poll）&lt;/h4&gt;
 
 &lt;p&gt;我们能不能引入一个代理，这个代理可以同时观察许多I/O流事件呢？&lt;br /&gt;
 当没有I/O事件的时候，这个进程处于阻塞状态。当连接有I/O流事件产生的时候，就会去唤醒进程去处理。&lt;/p&gt;
@@ -39,17 +39,17 @@
 
 &lt;p&gt;ps: select与poll原理是一样的，只不过select只能观察1024个连接，poll可以观察无限个连接。&lt;/p&gt;
 
-&lt;p&gt;超级升级I/O复用（epoll）&lt;/p&gt;
+&lt;h4 id=&quot;超级升级io复用epoll&quot;&gt;超级升级I/O复用（epoll）&lt;/h4&gt;
 
 &lt;p&gt;有了epoll，可以知道是哪个连接产生的I/O流事件。理论上1个进程就可以无限数量的连接，而且无需轮询，真正解决了c10k的问题。&lt;/p&gt;
 
 &lt;p&gt;nginx就是采用基于epoll的异步非阻塞服务器程序。&lt;/p&gt;
 
-&lt;h3 id=&quot;nginx与php-fprm的连接处理&quot;&gt;nginx与php-fprm的连接处理&lt;/h3&gt;
+&lt;h2 id=&quot;nginx与php-fprm的连接处理&quot;&gt;nginx与php-fprm的连接处理&lt;/h2&gt;
 
 &lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-08-11-php-nginx-connect/2.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-08-11-php-nginx-connect/2.png&quot; alt=&quot;2.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;nginx&lt;/p&gt;
+&lt;h4 id=&quot;nginx&quot;&gt;nginx&lt;/h4&gt;
 
 &lt;p&gt;worker为epoll异步处理请求。&lt;/p&gt;
 
@@ -66,7 +66,7 @@
   &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;p&gt;php-fpm&lt;/p&gt;
+&lt;h4 id=&quot;php-fpm&quot;&gt;php-fpm&lt;/h4&gt;
 
 &lt;p&gt;worker为poll异步处理请求。众多的 worker 进程组成了进程池，等待 master 进程分配任务，而且每个 worker 进程只能同时处理单个任务，前一个处理结束，才能为下一个服务。&lt;/p&gt;
 
@@ -95,9 +95,9 @@
   &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;h3 id=&quot;超时设置&quot;&gt;超时设置&lt;/h3&gt;
+&lt;h2 id=&quot;超时设置&quot;&gt;超时设置&lt;/h2&gt;
 
-&lt;p&gt;nginx&lt;/p&gt;
+&lt;h4 id=&quot;nginx-1&quot;&gt;nginx&lt;/h4&gt;
 
 &lt;table&gt;
   &lt;tbody&gt;
@@ -116,7 +116,7 @@
   &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;p&gt;php-fpm&lt;/p&gt;
+&lt;h4 id=&quot;php-fpm-1&quot;&gt;php-fpm&lt;/h4&gt;
 
 &lt;table&gt;
   &lt;tbody&gt;
@@ -127,7 +127,7 @@
   &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;p&gt;php&lt;/p&gt;
+&lt;h4 id=&quot;php&quot;&gt;php&lt;/h4&gt;
 
 &lt;table&gt;
   &lt;tbody&gt;
@@ -140,7 +140,7 @@
 
 &lt;p&gt;ps:一些版本中php-fpm的配置会覆盖php.ini的配置，使php.ini的配置不起作用&lt;/p&gt;
 
-&lt;h3 id=&quot;常见错误&quot;&gt;常见错误&lt;/h3&gt;
+&lt;h2 id=&quot;常见错误&quot;&gt;常见错误&lt;/h2&gt;
 
 &lt;p&gt;1.502 Connection reset by peer&lt;/p&gt;
 
@@ -159,23 +159,29 @@
   &lt;li&gt;后端php-fpm执行脚本的时间太长，超过了nginx配置的超时机制，这个时候也是会报出504错误的。&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;参考&quot;&gt;参考&lt;/h3&gt;
+&lt;h2 id=&quot;参考&quot;&gt;参考&lt;/h2&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://segmentfault.com/a/1190000007614502&quot;&gt;nginx、swoole高并发原理初探&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.2cto.com/net/201609/546064.html&quot;&gt;WebService之nginx+(php-fpm)结构模型剖析及优化&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-            <pubDate>Sat, 11 Aug 2018 00:00:00 +0800</pubDate>
-        </item>
+        <pubDate>Sat, 11 Aug 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/08/11/php-nginx-connect/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/08/11/php-nginx-connect/</guid>
         
-        <item>
-            <title>【转载】select、poll与epoll</title>
-            <link>/2018/08/05/computer-select-poll-epoll.html</link>
-            <guid isPermaLink="true">/2018/08/05/computer-select-poll-epoll.html</guid>
-            <description>&lt;p&gt;转载自&lt;a href=&quot;https://cloud.tencent.com/developer/article/1005481&quot;&gt;大话 Select、Poll、Epoll&lt;/a&gt;&lt;/p&gt;
+        <category>php</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>「转载」select、poll与epoll</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;转载自&lt;a href=&quot;https://cloud.tencent.com/developer/article/1005481&quot;&gt;大话 Select、Poll、Epoll&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;h3 id=&quot;linux的socket-事件wakeup-callback机制&quot;&gt;Linux的socket 事件wakeup callback机制&lt;/h3&gt;
+&lt;h2 id=&quot;linux的socket-事件wakeup-callback机制&quot;&gt;Linux的socket 事件wakeup callback机制&lt;/h2&gt;
 
 &lt;p&gt;言归正传，在介绍select、poll、epoll前，有必要说说linux(2.6+)内核的事件wakeup callback机制，这是IO多路复用机制存在的本质。Linux通过socket睡眠队列来管理所有等待socket的某个事件的process，同时通过wakeup机制来异步唤醒整个睡眠队列上等待事件的process，通知process相关事件发生。通常情况，socket的事件发生的时候，其会顺序遍历socket睡眠队列上的每个process节点，调用每个process节点挂载的callback函数。在遍历的过程中，如果遇到某个节点是排他的，那么就终止遍历，总体上会涉及两大逻辑：（1）睡眠等待逻辑；（2）唤醒逻辑。&lt;/p&gt;
 
@@ -197,7 +203,8 @@
 
 &lt;p&gt;下面就上面的两大逻辑，分别阐述select、poll、epoll的异同，为什么epoll能够比select、poll高效。&lt;/p&gt;
 
-&lt;h3 id=&quot;select&quot;&gt;Select&lt;/h3&gt;
+&lt;h2 id=&quot;select&quot;&gt;Select&lt;/h2&gt;
+
 &lt;p&gt;在一个高性能的网络服务上，大多情况下一个服务进程(线程)process需要同时处理多个socket，我们需要公平对待所有socket，对于read而言，那个socket有数据可读，process就去读取该socket的数据来处理。于是对于read，一个朴素的需求就是关心的N个socket是否有数据”可读”，也就是我们期待”可读”事件的通知，而不是盲目地对每个socket调用recv/recvfrom来尝试接收数据。我们应该block在等待事件的发生上，这个事件简单点就是”关心的N个socket中一个或多个socket有数据可读了”，当block解除的时候，就意味着，我们一定可以找到一个或多个socket上有可读的数据。另一方面，根据上面的socket wakeup callback机制，我们不知道什么时候，哪个socket会有读事件发生，于是，process需要同时插入到这N个socket的sleep_list上等待任意一个socket可读事件发生而被唤醒，当时process被唤醒的时候，其callback里面应该有个逻辑去检查具体那些socket可读了。&lt;/p&gt;
 
 &lt;p&gt;于是，select的多路复用逻辑就清晰了，select为每个socket引入一个poll逻辑，该poll逻辑用于收集socket发生的事件，对于可读事件来说，简单伪码如下：&lt;/p&gt;
@@ -247,14 +254,14 @@
 
 &lt;p&gt;通知中得到有可读事件的fds列表，而不是需要遍历整个fds来收集。&lt;/p&gt;
 
-&lt;h3 id=&quot;poll&quot;&gt;poll&lt;/h3&gt;
+&lt;h2 id=&quot;poll&quot;&gt;poll&lt;/h2&gt;
 
 &lt;p&gt;select遗留的三个问题中，问题(1)是用法限制问题，问题(2)和(3)则是性能问题。poll和select非常相似，poll并没着手解决性能问题，poll只是解决了select的问题(1)fds集合大小1024限制问题。下面是poll的函数原型，poll改变了fds集合的描述方式，使用了pollfd结构而不是select的fd_set结构，使得poll支持的fds集合限制远大于select的1024。poll虽然解决了fds集合大小1024的限制问题，但是，它并没改变大量描述符数组被整体复制于用户态和内核态的地址空间之间，以及个别描述符就绪触发整体描述符集合的遍历的低效问题。poll随着监控的socket集合的增加性能线性下降，poll不适合用于大并发场景。&lt;/p&gt;
 
 &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;int poll&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;struct pollfd &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;fds, nfds_t nfds, int &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;epoll&quot;&gt;epoll&lt;/h3&gt;
+&lt;h2 id=&quot;epoll&quot;&gt;epoll&lt;/h2&gt;
 
 &lt;p&gt;select遗留的三个问题，问题(1)是比较好解决，poll简单两三下就解决掉了，但是poll的解决有点鸡肋。要解决问题(2)和(3)似乎比较棘手，要怎么解决呢？我们知道，在计算机行业中，有两种解决问题的思想：&lt;/p&gt;
 
@@ -323,14 +330,20 @@ epoll_wait的process睡眠。  &lt;br /&gt;
 
 &lt;p&gt;epoll巧妙的引入一个中间层解决了大量监控socket的无效遍历问题。细心的同学会发现，epoll在中间层上为每个监控的socket准备了一个单独的回调函数epoll_callback_sk，而对于select/poll，所有的socket都公用一个相同的回调函数。正是这个单独的回调epoll_callback_sk使得每个socket都能单独处理自身，当自己就绪的时候将自身socket挂入epoll的ready_list。同时，epoll引入了一个睡眠队列single_epoll_wait_list，分割了两类睡眠等待。process不再睡眠在所有的socket的睡眠队列上，而是睡眠在epoll的睡眠队列上，在等待”任意一个socket可读就绪”事件。而中间wait_entry_sk则代替process睡眠在具体的socket上，当socket就绪的时候，它就可以处理自身了。&lt;/p&gt;
 </description>
-            <pubDate>Sun, 05 Aug 2018 00:00:00 +0800</pubDate>
-        </item>
+        <pubDate>Sun, 05 Aug 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/08/05/computer-select-poll-epoll/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/08/05/computer-select-poll-epoll/</guid>
         
-        <item>
-            <title>I/O模型</title>
-            <link>/2018/08/04/computer-io.html</link>
-            <guid isPermaLink="true">/2018/08/04/computer-io.html</guid>
-            <description>&lt;p&gt;I/O发生过程涉及的对象：&lt;/p&gt;
+        <category>计算机</category>
+        
+        <category>转载</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>I/O模型</title>
+        <description>&lt;p&gt;I/O发生过程涉及的对象：&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;调用该IO的线程(thread)&lt;/li&gt;
@@ -390,14 +403,18 @@ epoll_wait的process睡眠。  &lt;br /&gt;
 如果需要等待kernel返回结果，这个进程就会被block。所以主要判断用户是否需要等待kernel返回结果。&lt;br /&gt;
 从这个点看，其实非阻塞I/O并不能完全算是非阻塞，毕竟拷贝数据阶段也是被block的。&lt;/p&gt;
 </description>
-            <pubDate>Sat, 04 Aug 2018 00:00:00 +0800</pubDate>
-        </item>
+        <pubDate>Sat, 04 Aug 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/08/04/computer-io/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/08/04/computer-io/</guid>
         
-        <item>
-            <title>进程与线程</title>
-            <link>/2018/07/29/computer-thread.html</link>
-            <guid isPermaLink="true">/2018/07/29/computer-thread.html</guid>
-            <description>&lt;p&gt;先理解一下，什么是进程和线程：&lt;/p&gt;
+        <category>计算机</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>进程与线程</title>
+        <description>&lt;p&gt;先理解一下，什么是进程和线程：&lt;/p&gt;
 
 &lt;p&gt;在现代操作系统中，进程支持多线程。&lt;/p&gt;
 
@@ -432,14 +449,18 @@ epoll_wait的process睡眠。  &lt;br /&gt;
   &lt;li&gt;用户级线程如果其中一个处于阻塞，则派生它的内核级线程也会被阻塞，因为系统不知道这个线程存在。而内核级别线程不会有这个问题。&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-            <pubDate>Sun, 29 Jul 2018 00:00:00 +0800</pubDate>
-        </item>
+        <pubDate>Sun, 29 Jul 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/07/29/computer-thread/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/07/29/computer-thread/</guid>
         
-        <item>
-            <title>【构建高性能web站点】服务器并发</title>
-            <link>/2018/07/27/bhpws-service.html</link>
-            <guid isPermaLink="true">/2018/07/27/bhpws-service.html</guid>
-            <description>&lt;p&gt;&lt;strong&gt;吞吐率&lt;/strong&gt;&lt;br /&gt;
+        <category>计算机</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>「构建高性能web站点」服务器并发</title>
+        <description>&lt;p&gt;&lt;strong&gt;吞吐率&lt;/strong&gt;&lt;br /&gt;
 单位时间内服务器处理的请求数 reqs/s&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;用户并发数&lt;/strong&gt;
@@ -458,135 +479,143 @@ epoll_wait的process睡眠。  &lt;br /&gt;
 如果对线程与进程不熟悉，请参考&lt;a href=&quot;/2018/07/29/computer-thread.html&quot;&gt;这篇文章&lt;/a&gt;&lt;/p&gt;
 
 </description>
-            <pubDate>Fri, 27 Jul 2018 00:00:00 +0800</pubDate>
-        </item>
+        <pubDate>Fri, 27 Jul 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/07/27/bhpws-service/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/07/27/bhpws-service/</guid>
         
-        <item>
-            <title>PerconaToolkit工具集合</title>
-            <link>/2018/07/14/perconaToolkit.html</link>
-            <guid isPermaLink="true">/2018/07/14/perconaToolkit.html</guid>
-            <description>&lt;h1 id=&quot;pt-align&quot;&gt;pt-align&lt;/h1&gt;
+        <category>web</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>PerconaToolkit工具集合</title>
+        <description>&lt;h3 id=&quot;pt-align&quot;&gt;pt-align&lt;/h3&gt;
 
 &lt;p&gt;将其它工具的输出按列对齐。&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-archiver&quot;&gt;pt-archiver&lt;/h1&gt;
+&lt;h3 id=&quot;pt-archiver&quot;&gt;pt-archiver&lt;/h3&gt;
 
 &lt;p&gt;将数据归档到另一张表或者文件。&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-config-diff&quot;&gt;pt-config-diff&lt;/h1&gt;
+&lt;h3 id=&quot;pt-config-diff&quot;&gt;pt-config-diff&lt;/h3&gt;
 
 &lt;p&gt;对比数据库配置、环境变量差异&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-deadlock-logger&quot;&gt;pt-deadlock-logger&lt;/h1&gt;
+&lt;h3 id=&quot;pt-deadlock-logger&quot;&gt;pt-deadlock-logger&lt;/h3&gt;
 
 &lt;p&gt;记录死锁日志，并保存到文件或者数据表&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-diskstats&quot;&gt;pt-diskstats&lt;/h1&gt;
+&lt;h3 id=&quot;pt-diskstats&quot;&gt;pt-diskstats&lt;/h3&gt;
 
 &lt;p&gt;功能和iostat类似，给出磁盘的I/O统计信息&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-duplicate-key-checker&quot;&gt;pt-duplicate-key-checker&lt;/h1&gt;
+&lt;h3 id=&quot;pt-duplicate-key-checker&quot;&gt;pt-duplicate-key-checker&lt;/h3&gt;
 
 &lt;p&gt;检测表中重复多余的索引或者主键&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-fifo-split&quot;&gt;pt-fifo-split&lt;/h1&gt;
+&lt;h3 id=&quot;pt-fifo-split&quot;&gt;pt-fifo-split&lt;/h3&gt;
 
 &lt;p&gt;文件分割&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-find&quot;&gt;pt-find&lt;/h1&gt;
+&lt;h3 id=&quot;pt-find&quot;&gt;pt-find&lt;/h3&gt;
 
 &lt;p&gt;按条件查找、排序数据库表&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-fingerprint&quot;&gt;pt-fingerprint&lt;/h1&gt;
+&lt;h3 id=&quot;pt-fingerprint&quot;&gt;pt-fingerprint&lt;/h3&gt;
 
 &lt;p&gt;将sql转为绑定形式&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-fk-error-logger&quot;&gt;pt-fk-error-logger&lt;/h1&gt;
+&lt;h3 id=&quot;pt-fk-error-logger&quot;&gt;pt-fk-error-logger&lt;/h3&gt;
 
 &lt;p&gt;记录外键错误&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-heartbeat&quot;&gt;pt-heartbeat&lt;/h1&gt;
+&lt;h3 id=&quot;pt-heartbeat&quot;&gt;pt-heartbeat&lt;/h3&gt;
 
 &lt;p&gt;监控备库延迟&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-index-usage&quot;&gt;pt-index-usage&lt;/h1&gt;
+&lt;h3 id=&quot;pt-index-usage&quot;&gt;pt-index-usage&lt;/h3&gt;
 
 &lt;p&gt;能够从日志当中分析索引的使用情况&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-kill&quot;&gt;pt-kill&lt;/h1&gt;
+&lt;h3 id=&quot;pt-kill&quot;&gt;pt-kill&lt;/h3&gt;
 
 &lt;p&gt;杀死mysql会话&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-summary&quot;&gt;pt-summary&lt;/h1&gt;
+&lt;h3 id=&quot;pt-summary&quot;&gt;pt-summary&lt;/h3&gt;
 
 &lt;p&gt;查看系统摘要报告&lt;/p&gt;
 
 &lt;p&gt;打印出来的信息包括：CPU、内存、硬盘、网卡等信息，还包括文件系统、磁盘调度和队列大小、LVM、RAID、网络链接信息、netstat 的统计，以及前10的负载占用信息和vmstat信息。&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-online-schema-change&quot;&gt;pt-online-schema-change&lt;/h1&gt;
+&lt;h3 id=&quot;pt-online-schema-change&quot;&gt;pt-online-schema-change&lt;/h3&gt;
 
 &lt;p&gt;可以在执行ALTER语句中，不堵塞数据库表格的写操作。&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-pmp&quot;&gt;pt-pmp&lt;/h1&gt;
+&lt;h3 id=&quot;pt-pmp&quot;&gt;pt-pmp&lt;/h3&gt;
 
 &lt;p&gt;获取MySQL的堆栈信息&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-query-digest&quot;&gt;pt-query-digest&lt;/h1&gt;
+&lt;h3 id=&quot;pt-query-digest&quot;&gt;pt-query-digest&lt;/h3&gt;
 
 &lt;p&gt;分析mysql慢查询的一个工具，它可以分析binlog、General log、slowlog，也可以通过SHOWPROCESSLIST或者通过tcpdump抓取的MySQL协议数据来进行分析。&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-show-grants&quot;&gt;pt-show-grants&lt;/h1&gt;
+&lt;h3 id=&quot;pt-show-grants&quot;&gt;pt-show-grants&lt;/h3&gt;
 
 &lt;p&gt;格式化打印输出MySQL上的赋权，以便你可以有效地复制、比较以及版本控制。&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-slave-delay&quot;&gt;pt-slave-delay&lt;/h1&gt;
+&lt;h3 id=&quot;pt-slave-delay&quot;&gt;pt-slave-delay&lt;/h3&gt;
 
 &lt;p&gt;让主库的操作延迟写入到从库&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-slave-find&quot;&gt;pt-slave-find&lt;/h1&gt;
+&lt;h3 id=&quot;pt-slave-find&quot;&gt;pt-slave-find&lt;/h3&gt;
 
 &lt;p&gt;查找和打印MySQL从库的复制层次树&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-slave-restart&quot;&gt;pt-slave-restart&lt;/h1&gt;
+&lt;h3 id=&quot;pt-slave-restart&quot;&gt;pt-slave-restart&lt;/h3&gt;
 
 &lt;p&gt;监控一个或者多个MySQL复制slave的错误，然后当复制停止时试图重启。&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-stalk&quot;&gt;pt-stalk&lt;/h1&gt;
+&lt;h3 id=&quot;pt-stalk&quot;&gt;pt-stalk&lt;/h3&gt;
 
 &lt;p&gt;mysql 性能瓶颈是值得关注的，但往往出现问题的时候，总是持续那么一点时间，没能抓住事故现场，从而无法分析.pt-stalk 是一款当条件触发时,记录相关系统信息的mysql监控工具.这款工具帮助我们设定自己的条件与阀值，当触发条件时可以提供邮件报警，采集回来的信息会存储在文件里，诸如 ps/netstat/vmstat/iostat/processlist/innodbstat 全部一览无余. 就算在认为mysql性能没什么问题时，也可以跑起这款工具，以防不测&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-table-checksum&quot;&gt;pt-table-checksum&lt;/h1&gt;
+&lt;h3 id=&quot;pt-table-checksum&quot;&gt;pt-table-checksum&lt;/h3&gt;
 
 &lt;p&gt;检查主从数据是否一致&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-table-sync&quot;&gt;pt-table-sync&lt;/h1&gt;
+&lt;h3 id=&quot;pt-table-sync&quot;&gt;pt-table-sync&lt;/h3&gt;
 
 &lt;p&gt;同步两张表之间的数据差异&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-table-usage&quot;&gt;pt-table-usage&lt;/h1&gt;
+&lt;h3 id=&quot;pt-table-usage&quot;&gt;pt-table-usage&lt;/h3&gt;
 
 &lt;p&gt;分析日志中查询并分析表使用情况&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-upgrade&quot;&gt;pt-upgrade&lt;/h1&gt;
+&lt;h3 id=&quot;pt-upgrade&quot;&gt;pt-upgrade&lt;/h3&gt;
 
 &lt;p&gt;验证不同服务器上的查询结果是否相同&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-variable-advisor&quot;&gt;pt-variable-advisor&lt;/h1&gt;
+&lt;h3 id=&quot;pt-variable-advisor&quot;&gt;pt-variable-advisor&lt;/h3&gt;
 
 &lt;p&gt;分析mysql参数，并且给出参数设置建议的一款PT工具&lt;/p&gt;
 
-&lt;h1 id=&quot;pt-visual-explain&quot;&gt;pt-visual-explain&lt;/h1&gt;
+&lt;h3 id=&quot;pt-visual-explain&quot;&gt;pt-visual-explain&lt;/h3&gt;
 
 &lt;p&gt;格式化explain输出结果为树结构&lt;/p&gt;
 </description>
-            <pubDate>Sat, 14 Jul 2018 00:00:00 +0800</pubDate>
-        </item>
+        <pubDate>Sat, 14 Jul 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/07/14/perconaToolkit/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/07/14/perconaToolkit/</guid>
         
-        <item>
-            <title>【构建高性能web站点】网络传输</title>
-            <link>/2018/07/14/bhpws-network.html</link>
-            <guid isPermaLink="true">/2018/07/14/bhpws-network.html</guid>
-            <description>&lt;h3 id=&quot;osi七层网络协议四层协议&quot;&gt;OSI七层网络协议&amp;amp;四层协议&lt;/h3&gt;
+        <category>MYSQL</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>【构建高性能web站点】网络传输</title>
+        <description>&lt;h2 id=&quot;osi七层网络协议四层协议&quot;&gt;OSI七层网络协议&amp;amp;四层协议&lt;/h2&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-07-14-bhpws-network/2.png&quot; alt=&quot;2.png&quot; /&gt;&lt;/p&gt;
 
@@ -647,7 +676,7 @@ epoll_wait的process睡眠。  &lt;br /&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;h3 id=&quot;tcp网络传输过程&quot;&gt;TCP网络传输过程&lt;/h3&gt;
+&lt;h2 id=&quot;tcp网络传输过程&quot;&gt;TCP网络传输过程&lt;/h2&gt;
 
 &lt;p&gt;以火车货物类比如下图：&lt;/p&gt;
 
@@ -671,7 +700,7 @@ sequenceDiagram
     传输层-&amp;gt;&amp;gt; http应用层:移除协议头
 &lt;/div&gt;
 
-&lt;h3 id=&quot;带宽&quot;&gt;带宽&lt;/h3&gt;
+&lt;h2 id=&quot;带宽&quot;&gt;带宽&lt;/h2&gt;
 
 &lt;p&gt;首先了解数据发送过程，如下图所示&lt;/p&gt;
 
@@ -690,8 +719,9 @@ sequenceDiagram
 &lt;p&gt;我们常说的100M带宽，就是100Mbit/s，或者100Mbps  &lt;br /&gt;
 铜线中的电信号传播速度约为2.3&lt;em&gt;10^8m/s, 光纤中的光信号约为2.0×10^8m/s（因为光纤传播光信号是利用了光的全反射原理，所以传播距离要大于光纤长度，不过我们计算还是以光纤长度来计算，这也导致了数值小于实际光传播速度3&lt;/em&gt;10^8m/s）&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;独享&amp;amp;共享&lt;/strong&gt;  &lt;br /&gt;
-用个例子来解释，假设交换机出口带宽为100M，主机独享10M，表示该主机任何时刻都是以10Mbps在发送数据，这也导致了交换机必须保证其他主机数据发送速度不能超过90M。如果主机共享10M，则表示该主机发送数据的最大值可以达到10Mbps,但如果该交换机有同时50台共享10M带宽的主机，并且同时在发送数据，则那个时刻只能有2Mbps速度。&lt;/p&gt;
+&lt;h4 id=&quot;独享共享&quot;&gt;独享&amp;amp;共享&lt;/h4&gt;
+
+&lt;p&gt;用个例子来解释，假设交换机出口带宽为100M，主机独享10M，表示该主机任何时刻都是以10Mbps在发送数据，这也导致了交换机必须保证其他主机数据发送速度不能超过90M。如果主机共享10M，则表示该主机发送数据的最大值可以达到10Mbps,但如果该交换机有同时50台共享10M带宽的主机，并且同时在发送数据，则那个时刻只能有2Mbps速度。&lt;/p&gt;
 
 &lt;h2 id=&quot;响应时间&quot;&gt;响应时间&lt;/h2&gt;
 
@@ -703,7 +733,9 @@ sequenceDiagram
 
 &lt;p&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;traceroute&lt;/code&gt;我们可以知道信息从你的计算机到互联网另一端的主机是走的什么路径。当然每次数据包由某一同样的出发点（source）到达某一同样的目的地(destination)走的路径可能会不一样，但基本上来说大部分时候所走的路由是相同的。&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;实例计算下载速度&lt;/strong&gt; - 西安用户下载服务器在北京的100M文件&lt;/p&gt;
+&lt;h4 id=&quot;实例计算下载速度&quot;&gt;实例计算下载速度&lt;/h4&gt;
+
+&lt;p&gt;以西安用户下载服务器在北京的100M文件为例&lt;/p&gt;
 
 &lt;p&gt;前提:这里忽略处理时间，且假设中间只有1个节点（国家主干网）&lt;/p&gt;
 
@@ -718,7 +750,7 @@ sequenceDiagram
 
 &lt;p&gt;下载速度 = 100MB / 800.005s = 124.999KB/s&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;误差&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;误差&quot;&gt;误差&lt;/h4&gt;
 
 &lt;ul&gt;
   &lt;li&gt;100MB数据在传输过程中，并不是完全通过一个节点，才进入下一个节点,而是拆分成每个数据包。&lt;/li&gt;
@@ -728,14 +760,18 @@ sequenceDiagram
   &lt;li&gt;长距离传输需要设置中继器来加强信号，它的接收转发也需要时间。&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-            <pubDate>Sat, 14 Jul 2018 00:00:00 +0800</pubDate>
-        </item>
+        <pubDate>Sat, 14 Jul 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/07/14/bhpws-network/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/07/14/bhpws-network/</guid>
         
-        <item>
-            <title>mysql系列教程 - B+Tree索引</title>
-            <link>/2018/06/30/mysql-innodb-index.html</link>
-            <guid isPermaLink="true">/2018/06/30/mysql-innodb-index.html</guid>
-            <description>&lt;p&gt;了解B+树前，我们先了解下二叉查找树、平衡二叉查找树、B-Tree。&lt;/p&gt;
+        <category>web</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>mysql系列教程 - B+Tree索引</title>
+        <description>&lt;p&gt;了解B+树前，我们先了解下二叉查找树、平衡二叉查找树、B-Tree。&lt;/p&gt;
 
 &lt;h3 id=&quot;二叉查找树&quot;&gt;二叉查找树&lt;/h3&gt;
 
@@ -816,14 +852,18 @@ sequenceDiagram
 
 &lt;p&gt;对于覆盖索引，由于可以从辅助索引中得到查询的记录信息，而不需要再去聚集索引获取记录信息，因此可以减少IO操作。&lt;/p&gt;
 </description>
-            <pubDate>Sat, 30 Jun 2018 00:00:00 +0800</pubDate>
-        </item>
+        <pubDate>Sat, 30 Jun 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/06/30/mysql-innodb-index/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/06/30/mysql-innodb-index/</guid>
         
-        <item>
-            <title>mysql系列教程 - innodb锁</title>
-            <link>/2018/06/23/mysql-innodb-lock.html</link>
-            <guid isPermaLink="true">/2018/06/23/mysql-innodb-lock.html</guid>
-            <description>&lt;h3 id=&quot;lock和latch&quot;&gt;lock和latch&lt;/h3&gt;
+        <category>MYSQL</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>mysql系列教程 - innodb锁</title>
+        <description>&lt;h3 id=&quot;lock和latch&quot;&gt;lock和latch&lt;/h3&gt;
 
 &lt;p&gt;锁分为两种类型 &lt;strong&gt;lock&lt;/strong&gt; 和 &lt;strong&gt;latch&lt;/strong&gt; ，它们之间的差异如下表所示：&lt;/p&gt;
 
@@ -906,8 +946,6 @@ sequenceDiagram
     &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
-
-&lt;p&gt;对行做增删改操作&lt;/p&gt;
 
 &lt;p&gt;如果事务T1已经获得行r的共享锁，那么事务T2可以立即获得行r的共享锁，这种就叫做&lt;strong&gt;锁兼容&lt;/strong&gt;。如果事务T3想获得行r的排他锁，就必须等待T1、T2释放它们的共享锁，这种就叫做&lt;strong&gt;锁不兼容&lt;/strong&gt;。&lt;/p&gt;
 
@@ -1199,40 +1237,44 @@ sequenceDiagram
 
 &lt;p&gt;对于外键值的插入或更新，首先需要查询父表中的记录，即select父表，但是对父表的select操作，不是使用一致性非锁定锁，因为这样会发生数据不一致的问题，因此这时使用的是select … lock in share mode方式，即主动对父表加一个S锁，如果这时父表上已经加了X锁，子表的操作会被阻塞。&lt;/p&gt;
 </description>
-            <pubDate>Sat, 23 Jun 2018 00:00:00 +0800</pubDate>
-        </item>
+        <pubDate>Sat, 23 Jun 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/06/23/mysql-innodb-lock/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/06/23/mysql-innodb-lock/</guid>
         
-        <item>
-            <title>fabric - 架构&amp;执行流程</title>
-            <link>/2018/05/27/hyperledger-fabric.html</link>
-            <guid isPermaLink="true">/2018/05/27/hyperledger-fabric.html</guid>
-            <description>&lt;p&gt;本文简单讲述fabric架构&amp;amp;执行流程，帮助同学快速理解&amp;amp;入门。&lt;/p&gt;
+        <category>MYSQL</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>fabric - 架构&amp;执行流程</title>
+        <description>&lt;p&gt;本文简单讲述fabric架构&amp;amp;执行流程，帮助同学快速理解&amp;amp;入门。&lt;/p&gt;
 
-&lt;h1 id=&quot;架构&quot;&gt;架构&lt;/h1&gt;
+&lt;h2 id=&quot;架构&quot;&gt;架构&lt;/h2&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-05-27-hyperledger-fabric/1.jpeg&quot; alt=&quot;1.jpeg&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;identity&quot;&gt;Identity&lt;/h2&gt;
+&lt;h4 id=&quot;identity&quot;&gt;Identity&lt;/h4&gt;
 
 &lt;p&gt;Identity，也就是身份管理，Fabric是目前为止在设计上最贴近联盟链思想的区块链。联盟链考虑到商业应用对安全、隐私、监管、审计、性能的需求，提高准入门槛，成员必须被许可才能加入网络。Fabric成员管理服务为整个区块链网络提供身份管理、隐私、保密和可审计的服务。成员管理服务通过公钥基础设施PKI和去中心化共识机制使得非许可的区块链变成许可制的区块链。&lt;/p&gt;
 
-&lt;h2 id=&quot;smart-contract&quot;&gt;Smart Contract&lt;/h2&gt;
+&lt;h4 id=&quot;smart-contract&quot;&gt;Smart Contract&lt;/h4&gt;
 
 &lt;p&gt;Fabric的智能合约smart contract称为链码chaincode，是一段代码，它处理网络成员所同意的业务逻辑。和以太坊相比，Fabric链码和底层账本是分开的，升级链码时并不需要迁移账本数据到新链码当中，真正实现了逻辑与数据的分离。&lt;/p&gt;
 
 &lt;p&gt;链码可采用Go、Java、Node.js语言编写。链码被编译成一个独立的应用程序，fabric用Docker容器来运行chaincode，里面的base镜像都是经过签名验证的安全镜像，包括OS层和开发chaincode的语言、runtime和SDK层。一旦chaincode容器被启动，它就会通过gRPC与启动这个chaincode的Peer节点连接。&lt;/p&gt;
 
-&lt;h2 id=&quot;ledger--transcations&quot;&gt;Ledger | Transcations&lt;/h2&gt;
+&lt;h4 id=&quot;ledger--transcations&quot;&gt;Ledger | Transcations&lt;/h4&gt;
 
 &lt;p&gt;Fabric使用建立在HTTP/2上的P2P协议来管理分布式账本。采取可插拔的方式来根据具体需求来设置共识协议，比如PBFT，Raft，PoW和PoS等。&lt;/p&gt;
 
-&lt;h3 id=&quot;ledger&quot;&gt;Ledger&lt;/h3&gt;
+&lt;h6 id=&quot;ledger&quot;&gt;Ledger&lt;/h6&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-05-27-hyperledger-fabric/2.jpg&quot; alt=&quot;2.jpg&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;如上图所示，账本Ledger主要包含两块：blockchain和state。blockchain就是一系列连在一起的block，用来记录历史交易。state对应账本的当前最新状态，它是一个key-value数据库，Fabric默认采用Level DB, 可以替换成其他的Key-value数据库，如Couch DB。举个例子。我们采用区块链实现一个弹珠交易的系统。我们开发了一个Chaincode,每个弹珠有以下几个属性：Name, owner, color, size.  可以定义一个JSON对象，用name做KEY, JSON对象做Value，存储在Level DB或者CouchDB中。&lt;/p&gt;
 
-&lt;h3 id=&quot;transcation&quot;&gt;transcation&lt;/h3&gt;
+&lt;h6 id=&quot;transcation&quot;&gt;transcation&lt;/h6&gt;
 
 &lt;p&gt;Fabric上的transction交易分两种，部署交易和调用交易。&lt;/p&gt;
 
@@ -1243,11 +1285,11 @@ sequenceDiagram
   客户端应用程序通过Fabric提供的API调用先前已部署好的某个chaincode的某个函数执行交易，并相应地读取和写入KV数据库，返回是否成功或者失败。&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;apis-events-sdks&quot;&gt;APIs, Events, SDKs&lt;/h3&gt;
+&lt;h4 id=&quot;apis-events-sdks&quot;&gt;APIs, Events, SDKs&lt;/h4&gt;
 
 &lt;p&gt;Fabric提供API方便应用开发，对服务端的ChainCode，目前支持用Go、Java或者Node.js开发。对客户端应用，Fabric目前提供Node.js和Java SDK。未来计划提供Python 和Go SDK，Fabric还提供RESTAPI。对于开发者，还可以通过CLI快速去测试chaincode，或者去查询交易状态。在区块链网络里，节点和chaincode会发送events来触发一些监听动作，方便与其他外部系统的集成。&lt;/p&gt;
 
-&lt;h1 id=&quot;执行流程&quot;&gt;执行流程&lt;/h1&gt;
+&lt;h2 id=&quot;执行流程&quot;&gt;执行流程&lt;/h2&gt;
 
 &lt;p&gt;首先理解几个概念&lt;/p&gt;
 
@@ -1290,1106 +1332,23 @@ sequenceDiagram
 
 &lt;p&gt;ps:中间过程的每一步，都伴随着权限的验证。会根据MSP颁发的证书，进行判断。&lt;/p&gt;
 
-&lt;h1 id=&quot;参考&quot;&gt;参考&lt;/h1&gt;
+&lt;h2 id=&quot;参考&quot;&gt;参考&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/xcjing/article/details/78883642&quot;&gt;Hyperledger Fabric 1.0架构及原理&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.jianshu.com/p/eb33c7288ce7?from=timeline&quot;&gt;超级账本之——Fabric&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/xcjing/article/details/78883642&quot;&gt;Hyperledger Fabric 1.0架构及原理&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.jianshu.com/p/eb33c7288ce7?from=timeline&quot;&gt;超级账本之——Fabric&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 </description>
-            <pubDate>Sun, 27 May 2018 00:00:00 +0800</pubDate>
-        </item>
+        <pubDate>Sun, 27 May 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/05/27/hyperledger-fabric/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/05/27/hyperledger-fabric/</guid>
         
-        <item>
-            <title>fabric - Node.js SDK</title>
-            <link>/2018/05/27/hyperledger-fabric-sdk.html</link>
-            <guid isPermaLink="true">/2018/05/27/hyperledger-fabric-sdk.html</guid>
-            <description>&lt;p&gt;这里使用官方示例。&lt;/p&gt;
-
-&lt;p&gt;如果之前没有部署过环境，先按照&lt;a href=&quot;/2018/05/13/hyperledger-fabric-1.html&quot;&gt;fabric入门（一）安装&lt;/a&gt;进行环境部署。&lt;/p&gt;
-
-&lt;h1 id=&quot;安装&quot;&gt;安装&lt;/h1&gt;
-
-&lt;p&gt;首先进入示例目录&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;fabric-samples/balance-transfer/
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;有两种方法可以运行示例：&lt;/p&gt;
-
-&lt;h2 id=&quot;方法一推荐&quot;&gt;方法一（推荐）&lt;/h2&gt;
-
-&lt;p&gt;1.通过docker启动网络&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker-compose &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; artifacts/docker-compose.yaml up
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;2.安装&lt;em&gt;fabric-client&lt;/em&gt;和&lt;em&gt;fabric-ca-client&lt;/em&gt;的node模块&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;3.启动node&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;PORT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;4000 node app
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;方法二&quot;&gt;方法二&lt;/h2&gt;
-
-&lt;p&gt;直接执行&lt;em&gt;runApp.sh&lt;/em&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;fabric-samples/balance-transfer
-./runApp.sh
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;这个方法你必须安装&lt;strong&gt;jq&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;网络配置&quot;&gt;网络配置&lt;/h1&gt;
-
-&lt;p&gt;由于我们是使用docker，所以我们需要修改项目的网络配置。&lt;/p&gt;
-
-&lt;p&gt;修改&lt;em&gt;network-config.yaml&lt;/em&gt;，把里面的localhost修改为docker实际ip地址，这里我的IP为192.168.99.100&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;---&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# The network connection profile provides client applications the information about the target&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# blockchain network that are necessary for the applications to interact with it. These are all&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# knowledge that must be acquired from out-of-band sources. This file provides such a source.&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-name: &lt;span class=&quot;s2&quot;&gt;&quot;balance-transfer&quot;&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# Any properties with an &quot;x-&quot; prefix will be treated as application-specific, exactly like how naming&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# in HTTP headers or swagger properties work. The SDK will simply ignore these fields and leave&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# them for the applications to process. This is a mechanism for different components of an application&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# to exchange information that are not part of the standard schema described below. In particular,&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# the &quot;x-type&quot; property with the &quot;hlfv1&quot; value example below is used by Hyperledger Composer to&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# determine the type of Fabric networks (v0.6 vs. v1.0) it needs to work with.&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-x-type: &lt;span class=&quot;s2&quot;&gt;&quot;hlfv1&quot;&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# Describe what the target network is/does.&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-description: &lt;span class=&quot;s2&quot;&gt;&quot;Balance Transfer Network&quot;&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# Schema version of the content. Used by the SDK to apply the corresponding parsing rules.&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-version: &lt;span class=&quot;s2&quot;&gt;&quot;1.0&quot;&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# The client section will be added on a per org basis see org1.yaml and org2.yaml&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#client:&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# [Optional]. But most apps would have this section so that channel objects can be constructed&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# based on the content below. If an app is creating channels, then it likely will not need this&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# section.&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-channels:
-  &lt;span class=&quot;c&quot;&gt;# name of the channel&lt;/span&gt;
-  mychannel:
-    &lt;span class=&quot;c&quot;&gt;# Required. list of orderers designated by the application to use for transactions on this&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# channel. This list can be a result of access control (&quot;org1&quot; can only access &quot;ordererA&quot;), or&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# operational decisions to share loads from applications among the orderers.  The values must&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# be &quot;names&quot; of orgs defined under &quot;organizations/peers&quot;&lt;/span&gt;
-    orderers:
-      - orderer.example.com
-
-    &lt;span class=&quot;c&quot;&gt;# Required. list of peers from participating orgs&lt;/span&gt;
-    peers:
-      peer0.org1.example.com:
-        &lt;span class=&quot;c&quot;&gt;# [Optional]. will this peer be sent transaction proposals for endorsement? The peer must&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;# have the chaincode installed. The app can also use this property to decide which peers&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;# to send the chaincode install request. Default: true&lt;/span&gt;
-        endorsingPeer: &lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;
-
-        &lt;span class=&quot;c&quot;&gt;# [Optional]. will this peer be sent query proposals? The peer must have the chaincode&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;# installed. The app can also use this property to decide which peers to send the&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;# chaincode install request. Default: true&lt;/span&gt;
-        chaincodeQuery: &lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;
-
-        &lt;span class=&quot;c&quot;&gt;# [Optional]. will this peer be sent query proposals that do not require chaincodes, like&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;# queryBlock(), queryTransaction(), etc. Default: true&lt;/span&gt;
-        ledgerQuery: &lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;
-
-        &lt;span class=&quot;c&quot;&gt;# [Optional]. will this peer be the target of the SDK's listener registration? All peers can&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;# produce events but the app typically only needs to connect to one to listen to events.&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;# Default: true&lt;/span&gt;
-        eventSource: &lt;span class=&quot;nb&quot;&gt;true
-
-      &lt;/span&gt;peer1.org1.example.com:
-        endorsingPeer: &lt;span class=&quot;nb&quot;&gt;false
-        &lt;/span&gt;chaincodeQuery: &lt;span class=&quot;nb&quot;&gt;true
-        &lt;/span&gt;ledgerQuery: &lt;span class=&quot;nb&quot;&gt;true
-        &lt;/span&gt;eventSource: &lt;span class=&quot;nb&quot;&gt;false
-
-      &lt;/span&gt;peer0.org2.example.com:
-        endorsingPeer: &lt;span class=&quot;nb&quot;&gt;true
-        &lt;/span&gt;chaincodeQuery: &lt;span class=&quot;nb&quot;&gt;true
-        &lt;/span&gt;ledgerQuery: &lt;span class=&quot;nb&quot;&gt;true
-        &lt;/span&gt;eventSource: &lt;span class=&quot;nb&quot;&gt;true
-
-      &lt;/span&gt;peer1.org2.example.com:
-        endorsingPeer: &lt;span class=&quot;nb&quot;&gt;false
-        &lt;/span&gt;chaincodeQuery: &lt;span class=&quot;nb&quot;&gt;true
-        &lt;/span&gt;ledgerQuery: &lt;span class=&quot;nb&quot;&gt;true
-        &lt;/span&gt;eventSource: &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;
-
-    &lt;span class=&quot;c&quot;&gt;# [Optional]. what chaincodes are expected to exist on this channel? The application can use&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# this information to validate that the target peers are in the expected state by comparing&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# this list with the query results of getInstalledChaincodes() and getInstantiatedChaincodes()&lt;/span&gt;
-    chaincodes:
-      &lt;span class=&quot;c&quot;&gt;# the format follows the &quot;cannonical name&quot; of chaincodes by fabric code&lt;/span&gt;
-      - mycc:v0
-
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# list of participating organizations in this network&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-organizations:
-  Org1:
-    mspid: Org1MSP
-
-    peers:
-      - peer0.org1.example.com
-      - peer1.org1.example.com
-
-    &lt;span class=&quot;c&quot;&gt;# [Optional]. Certificate Authorities issue certificates for identification purposes in a Fabric based&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# network. Typically certificates provisioning is done in a separate process outside of the&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# runtime network. Fabric-CA is a special certificate authority that provides a REST APIs for&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# dynamic certificate management (enroll, revoke, re-enroll). The following section is only for&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# Fabric-CA servers.&lt;/span&gt;
-    certificateAuthorities:
-      - ca-org1
-
-    &lt;span class=&quot;c&quot;&gt;# [Optional]. If the application is going to make requests that are reserved to organization&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# administrators, including creating/updating channels, installing/instantiating chaincodes, it&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# must have access to the admin identity represented by the private key and signing certificate.&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# Both properties can be the PEM string or local path to the PEM file. Note that this is mainly for&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# convenience in development mode, production systems should not expose sensitive information&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# this way. The SDK should allow applications to set the org admin identity via APIs, and only use&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# this route as an alternative when it exists.&lt;/span&gt;
-    adminPrivateKey:
-      path: artifacts/channel/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/5890f0061619c06fb29dea8cb304edecc020fe63f41a6db109f1e227cc1cb2a8_sk
-    signedCert:
-      path: artifacts/channel/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem
-
-  &lt;span class=&quot;c&quot;&gt;# the profile will contain public information about organizations other than the one it belongs to.&lt;/span&gt;
-  &lt;span class=&quot;c&quot;&gt;# These are necessary information to make transaction lifecycles work, including MSP IDs and&lt;/span&gt;
-  &lt;span class=&quot;c&quot;&gt;# peers with a public URL to send transaction proposals. The file will not contain private&lt;/span&gt;
-  &lt;span class=&quot;c&quot;&gt;# information reserved for members of the organization, such as admin key and certificate,&lt;/span&gt;
-  &lt;span class=&quot;c&quot;&gt;# fabric-ca registrar enroll ID and secret, etc.&lt;/span&gt;
-  Org2:
-    mspid: Org2MSP
-    peers:
-      - peer0.org2.example.com
-      - peer1.org2.example.com
-    certificateAuthorities:
-      - ca-org2
-    adminPrivateKey:
-      path: artifacts/channel/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/keystore/1995b11d6573ed3be52fcd7a5fa477bc0f183e1f5f398c8281d0ce7c2c75a076_sk
-    signedCert:
-      path: artifacts/channel/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/signcerts/Admin@org2.example.com-cert.pem
-
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# List of orderers to send transaction and channel create/update requests to. For the time&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# being only one orderer is needed. If more than one is defined, which one get used by the&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# SDK is implementation specific. Consult each SDK's documentation for its handling of orderers.&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-orderers:
-  orderer.example.com:
-    url: grpcs://192.168.99.100:7050
-
-    &lt;span class=&quot;c&quot;&gt;# these are standard properties defined by the gRPC library&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# they will be passed in as-is to gRPC client constructor&lt;/span&gt;
-    grpcOptions:
-      ssl-target-name-override: orderer.example.com
-      grpc-max-send-message-length: 15
-
-    tlsCACerts:
-      path: artifacts/channel/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
-
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# List of peers to send various requests to, including endorsement, query&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# and event listener registration.&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-peers:
-  peer0.org1.example.com:
-    &lt;span class=&quot;c&quot;&gt;# this URL is used to send endorsement and query requests&lt;/span&gt;
-    url: grpcs://192.168.99.100:7051
-
-    &lt;span class=&quot;c&quot;&gt;# this URL is used to connect the EventHub and registering event listeners&lt;/span&gt;
-    eventUrl: grpcs://192.168.99.100:7053
-
-    grpcOptions:
-      ssl-target-name-override: peer0.org1.example.com
-    tlsCACerts:
-      path: artifacts/channel/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
-
-  peer1.org1.example.com:
-    url: grpcs://192.168.99.100:7056
-    eventUrl: grpcs://192.168.99.100:7058
-    grpcOptions:
-      ssl-target-name-override: peer1.org1.example.com
-    tlsCACerts:
-      path: artifacts/channel/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt
-
-  peer0.org2.example.com:
-    url: grpcs://192.168.99.100:8051
-    eventUrl: grpcs://192.168.99.100:8053
-    grpcOptions:
-      ssl-target-name-override: peer0.org2.example.com
-    tlsCACerts:
-      path: artifacts/channel/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
-
-  peer1.org2.example.com:
-    url: grpcs://192.168.99.100:8056
-    eventUrl: grpcs://192.168.99.100:8058
-    grpcOptions:
-      ssl-target-name-override: peer1.org2.example.com
-    tlsCACerts:
-      path: artifacts/channel/crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/ca.crt
-
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# Fabric-CA is a special kind of Certificate Authority provided by Hyperledger Fabric which allows&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# certificate management to be done via REST APIs. Application may choose to use a standard&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# Certificate Authority instead of Fabric-CA, in which case this section would not be specified.&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-certificateAuthorities:
-  ca-org1:
-    url: https://192.168.99.100:7054
-    &lt;span class=&quot;c&quot;&gt;# the properties specified under this object are passed to the 'http' client verbatim when&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# making the request to the Fabric-CA server&lt;/span&gt;
-    httpOptions:
-      verify: &lt;span class=&quot;nb&quot;&gt;false
-    &lt;/span&gt;tlsCACerts:
-      path: artifacts/channel/crypto-config/peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem
-
-    &lt;span class=&quot;c&quot;&gt;# Fabric-CA supports dynamic user enrollment via REST APIs. A &quot;root&quot; user, a.k.a registrar, is&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# needed to enroll and invoke new users.&lt;/span&gt;
-    registrar:
-      - enrollId: admin
-        enrollSecret: adminpw
-    &lt;span class=&quot;c&quot;&gt;# [Optional] The optional name of the CA.&lt;/span&gt;
-    caName: ca-org1
-
-  ca-org2:
-    url: https://192.168.99.100:8054
-    httpOptions:
-      verify: &lt;span class=&quot;nb&quot;&gt;false
-    &lt;/span&gt;tlsCACerts:
-      path: artifacts/channel/crypto-config/peerOrganizations/org2.example.com/ca/ca.org2.example.com-cert.pem
-    registrar:
-      - enrollId: admin
-        enrollSecret: adminpw
-    &lt;span class=&quot;c&quot;&gt;# [Optional] The optional name of the CA.&lt;/span&gt;
-    caName: ca-org2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;然后重新启动你的node服务。&lt;/p&gt;
-
-&lt;h1 id=&quot;测试&quot;&gt;测试&lt;/h1&gt;
-
-&lt;p&gt;注册和enroll新的user在org1&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; POST http://localhost:4000/users &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;content-type: application/x-www-form-urlencoded&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'username=Jim&amp;amp;orgName=org1'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;输出&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;s2&quot;&gt;&quot;success&quot;&lt;/span&gt;: &lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;,
-  &lt;span class=&quot;s2&quot;&gt;&quot;secret&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;RaxhMgevgJcm&quot;&lt;/span&gt;,
-  &lt;span class=&quot;s2&quot;&gt;&quot;message&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;Jim enrolled Successfully&quot;&lt;/span&gt;,
-  &lt;span class=&quot;s2&quot;&gt;&quot;token&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI&quot;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;创建channel&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; POST &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  http://localhost:4000/channels &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;content-type: application/json&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{
-	&quot;channelName&quot;:&quot;mychannel&quot;,
-	&quot;channelConfigPath&quot;:&quot;../artifacts/channel/mychannel.tx&quot;
-}'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;ps: authorization Bearer后跟之前的enroll的token&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;org1加入channel&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; POST &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  http://localhost:4000/channels/mychannel/peers &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;content-type: application/json&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{
-	&quot;peers&quot;: [&quot;peer1&quot;,&quot;peer2&quot;]
-}'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;安装链码&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; POST &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  http://localhost:4000/chaincodes &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;content-type: application/json&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{
-	&quot;peers&quot;: [&quot;peer1&quot;,&quot;peer2&quot;],
-	&quot;chaincodeName&quot;:&quot;mycc&quot;,
-	&quot;chaincodePath&quot;:&quot;github.com/example_cc&quot;,
-	&quot;chaincodeVersion&quot;:&quot;v0&quot;
-}'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;初始化链码&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; POST &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  http://localhost:4000/channels/mychannel/chaincodes &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;content-type: application/json&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{
-	&quot;chaincodeName&quot;:&quot;mycc&quot;,
-	&quot;chaincodeVersion&quot;:&quot;v0&quot;,
-	&quot;args&quot;:[&quot;a&quot;,&quot;100&quot;,&quot;b&quot;,&quot;200&quot;]
-}'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;交易&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; POST &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  http://localhost:4000/channels/mychannel/chaincodes/mycc &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;content-type: application/json&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{
-	&quot;fcn&quot;:&quot;move&quot;,
-	&quot;args&quot;:[&quot;a&quot;,&quot;b&quot;,&quot;10&quot;]
-}'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;查询&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; GET &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;s2&quot;&gt;&quot;http://localhost:4000/channels/mychannel/chaincodes/mycc?peer=peer1&amp;amp;fcn=query&amp;amp;args=%5B%22a%22%5D&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;content-type: application/json&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;根据区块号码查询&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; GET &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;s2&quot;&gt;&quot;http://localhost:4000/channels/mychannel/blocks/1?peer=peer1&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;content-type: application/json&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;根据transactionID查询交易&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; GET http://localhost:4000/channels/mychannel/transactions/TRX_ID?peer&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;peer1 &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;content-type: application/json&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;ps：这里的后的字符为invoke返回的transactionID&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;获取ChainInfo&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; GET &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;s2&quot;&gt;&quot;http://localhost:4000/channels/mychannel?peer=peer1&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;content-type: application/json&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;获取已安装的chaincode&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; GET &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;s2&quot;&gt;&quot;http://localhost:4000/chaincodes?peer=peer1&amp;amp;type=installed&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;content-type: application/json&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;获取已实例化的chaincode&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; GET &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;s2&quot;&gt;&quot;http://localhost:4000/chaincodes?peer=peer1&amp;amp;type=instantiated&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;content-type: application/json&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;获取channels&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; GET &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;s2&quot;&gt;&quot;http://localhost:4000/channels?peer=peer1&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;content-type: application/json&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-            <pubDate>Sun, 27 May 2018 00:00:00 +0800</pubDate>
-        </item>
+        <category>超级账本</category>
         
-        <item>
-            <title>fabric - chaincode(链码)</title>
-            <link>/2018/05/27/hyperledger-fabric-chaincode.html</link>
-            <guid isPermaLink="true">/2018/05/27/hyperledger-fabric-chaincode.html</guid>
-            <description>&lt;p&gt;Chaincode是一段由Go语言编写（支持其他编程语言，如Java），并能实现预定义接口的程序。Chaincode运行在一个受保护的Docker容器当中，与背书节点的运行互相隔离。Chaincode可通过应用提交的交易对账本状态初始化并进行管理。&lt;/p&gt;
-
-&lt;p&gt;一段chaincode通常处理由网络中的成员一致认可的业务逻辑，故我们很可能用“智能合约”来代指chaincode。一段chiancode创建的（账本）状态是与其他chaincode互相隔离的，故而不能被其他chaincode直接访问。不过，如果是在相同的网络中，一段chiancode在获取相应许可后则可以调用其他chiancode来访问它的账本。&lt;/p&gt;
-
-&lt;p&gt;每个chaincode程序都必须实现 chiancode接口 ，接口中的方法会在响应传来的交易时被调用。特别地，Init（初始化）方法会在chaincode接收到instantiate（实例化）或者upgrade(升级)交易时被调用，进而使得chaincode顺利执行必要的初始化操作，包括初始化应用的状态；Invoke（调用）方法会在响应invoke（调用）交易时被调用以执行交易。&lt;/p&gt;
-
-&lt;h1 id=&quot;开发&quot;&gt;开发&lt;/h1&gt;
-
-&lt;h2 id=&quot;存放位置&quot;&gt;存放位置&lt;/h2&gt;
-
-&lt;p&gt;你需要为chaincode应用创建一个位于$GOPATH/src/目录下的子目录。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$GOPATH&lt;/span&gt;/src/sacc &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$GOPATH&lt;/span&gt;/src/sacc
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;编写代码&quot;&gt;编写代码&lt;/h2&gt;
-
-&lt;p&gt;这里我们写一个简单的资产管理chaincode&lt;/p&gt;
-
-&lt;p&gt;1.创建文件&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;touch &lt;/span&gt;sacc.go
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;2.引入必要依赖&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;package main
-
-import &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&quot;fmt&quot;&lt;/span&gt;
-
-    &lt;span class=&quot;s2&quot;&gt;&quot;github.com/hyperledger/fabric/core/chaincode/shim&quot;&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&quot;github.com/hyperledger/fabric/protos/peer&quot;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;3.初始化&lt;/p&gt;
-
-&lt;p&gt;实现&lt;em&gt;Init&lt;/em&gt;函数&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Init is called during chaincode instantiation to initialize any data.
-func &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;t &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;SimpleAsset&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; Init&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;stub shim.ChaincodeStubInterface&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; peer.Response &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;下面，我们将调用&lt;em&gt;ChaincodeStubInterface.GetStringArgs&lt;/em&gt;函数来获取Init所需的参数，并进行有效性检查。在我们的例子中，我们希望传入参数是一组键值对。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Init is called during chaincode instantiation to initialize any
-// data. Note that chaincode upgrade also calls this &lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;to reset
-// or to migrate data, so be careful to avoid a scenario where you
-// inadvertently clobber your ledger’s data!
-func &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;t &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;SimpleAsset&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; Init&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;stub shim.ChaincodeStubInterface&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; peer.Response &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  // Get the args from the transaction proposal
-  args :&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; stub.GetStringArgs&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;len&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;args&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; 2 &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;shim.Error&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Incorrect arguments. Expecting a key and a value&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;接下来，既然我们已经确定调用有效，那么我们就将初始状态放心地存入账本。为了实现该目标，我们将调用ChaincodeStubInterface并以键值为参数传入。如果一切正常，那么我们会收到表明初始化成功的peer.Response返回对象。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Init is called during chaincode instantiation to initialize any
-// data. Note that chaincode upgrade also calls this &lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;to reset
-// or to migrate data, so be careful to avoid a scenario where you
-// inadvertently clobber your ledger’s data!
-func &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;t &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;SimpleAsset&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; Init&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;stub shim.ChaincodeStubInterface&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; peer.Response &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  // Get the args from the transaction proposal
-  args :&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; stub.GetStringArgs&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;len&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;args&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; 2 &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;shim.Error&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Incorrect arguments. Expecting a key and a value&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-  // Set up any variables or assets here by calling stub.PutState&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-
-  // We store the key and the value on the ledger
-  err :&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; stub.PutState&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;args[0], &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;byte&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;args[1]&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;err &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; nil &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;shim.Error&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;fmt.Sprintf&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Failed to create asset: %s&quot;&lt;/span&gt;, args[0]&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;shim.Success&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;nil&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;4.调用chaincode&lt;/p&gt;
-
-&lt;p&gt;首先，添加&lt;em&gt;Invoke&lt;/em&gt;函数签名。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Invoke is called per transaction on the chaincode. Each transaction is
-// either a &lt;span class=&quot;s1&quot;&gt;'get'&lt;/span&gt; or a &lt;span class=&quot;s1&quot;&gt;'set'&lt;/span&gt; on the asset created by Init &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; The &lt;span class=&quot;s1&quot;&gt;'set'&lt;/span&gt;
-// method may create a new asset by specifying a new key-value pair.
-func &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;t &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;SimpleAsset&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; Invoke&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;stub shim.ChaincodeStubInterface&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; peer.Response &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;就如上述Init函数一样，我们需要调用ChaincodeStubInterface来获取参数。Invoke函数所需的传入参数正是应用想要调用的chaincode的名称。在我们的例子中，我们的应用只有两个简单的功能函数：set和get;前者允许对资产的数值进行设定;后者允许获取当前资产的状态。我们先调用ChaincodeStubInterface.GetFunctionAndParameters来获取chaincode应用所需的函数名与参数。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Invoke is called per transaction on the chaincode. Each transaction is
-// either a &lt;span class=&quot;s1&quot;&gt;'get'&lt;/span&gt; or a &lt;span class=&quot;s1&quot;&gt;'set'&lt;/span&gt; on the asset created by Init &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; The Set
-// method may create a new asset by specifying a new key-value pair.
-func &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;t &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;SimpleAsset&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; Invoke&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;stub shim.ChaincodeStubInterface&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; peer.Response &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    // Extract the &lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;and args from the transaction proposal
-    fn, args :&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; stub.GetFunctionAndParameters&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;下面，我们将使set与get这两个函数名正式生效，并调用这些chaincode应用函数，经由shim.Success或shim.Error函数返回一个合理的响应。这两个shim成员函数可以将响应序列化为gRPC protobuf消息。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Invoke is called per transaction on the chaincode. Each transaction is
-// either a &lt;span class=&quot;s1&quot;&gt;'get'&lt;/span&gt; or a &lt;span class=&quot;s1&quot;&gt;'set'&lt;/span&gt; on the asset created by Init &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; The Set
-// method may create a new asset by specifying a new key-value pair.
-func &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;t &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;SimpleAsset&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; Invoke&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;stub shim.ChaincodeStubInterface&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; peer.Response &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    // Extract the &lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;and args from the transaction proposal
-    fn, args :&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; stub.GetFunctionAndParameters&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-
-    var result string
-    var err error
-    &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;fn &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;set&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            result, err &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;stub, args&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            result, err &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; get&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;stub, args&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;err &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; nil &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;shim.Error&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;err.Error&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    // Return the result as success payload
-    &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;shim.Success&lt;span class=&quot;o&quot;&gt;([]&lt;/span&gt;byte&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;result&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;5.调用chaincode应用&lt;/p&gt;
-
-&lt;p&gt;如上文所述，我们的chaincode应用实现了两个函数，并可以被Invoke函数调用。下面我们就来真正实现这些函数。注意，就像上文一样，我们调用chaincode shim API中的ChaincodeStubInterface.PutState和ChaincodeStubInterface.GetState函数来访问账本。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Set stores the asset &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;both key and value&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; on the ledger. If the key exists,
-// it will override the value with the new one
-func &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;stub shim.ChaincodeStubInterface, args &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;string&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;string, error&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;len&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;args&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; 2 &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;, fmt.Errorf&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Incorrect arguments. Expecting a key and a value&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    err :&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; stub.PutState&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;args[0], &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;byte&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;args[1]&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;err &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; nil &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;, fmt.Errorf&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Failed to set asset: %s&quot;&lt;/span&gt;, args[0]&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;args[1], nil
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-// Get returns the value of the specified asset key
-func get&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;stub shim.ChaincodeStubInterface, args &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;string&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;string, error&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;len&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;args&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; 1 &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;, fmt.Errorf&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Incorrect arguments. Expecting a key&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    value, err :&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; stub.GetState&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;args[0]&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;err &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; nil &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;, fmt.Errorf&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Failed to get asset: %s with error: %s&quot;&lt;/span&gt;, args[0], err&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;value &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; nil &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;, fmt.Errorf&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Asset not found: %s&quot;&lt;/span&gt;, args[0]&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;string&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;value&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, nil
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;7.整合全部代码&lt;/p&gt;
-
-&lt;p&gt;终于到了写main函数的最后关头，它将调用shim.Start函数。下面是包含整个chaincode程序的代码：&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;package main
-
-import &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&quot;fmt&quot;&lt;/span&gt;
-
-    &lt;span class=&quot;s2&quot;&gt;&quot;github.com/hyperledger/fabric/core/chaincode/shim&quot;&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&quot;github.com/hyperledger/fabric/protos/peer&quot;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-
-// SimpleAsset implements a simple chaincode to manage an asset
-&lt;span class=&quot;nb&quot;&gt;type &lt;/span&gt;SimpleAsset struct &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-// Init is called during chaincode instantiation to initialize any
-// data. Note that chaincode upgrade also calls this &lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;to reset
-// or to migrate data.
-func &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;t &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;SimpleAsset&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; Init&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;stub shim.ChaincodeStubInterface&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; peer.Response &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    // Get the args from the transaction proposal
-    args :&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; stub.GetStringArgs&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;len&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;args&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; 2 &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;shim.Error&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Incorrect arguments. Expecting a key and a value&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    // Set up any variables or assets here by calling stub.PutState&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-
-    // We store the key and the value on the ledger
-    err :&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; stub.PutState&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;args[0], &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;byte&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;args[1]&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;err &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; nil &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;shim.Error&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;fmt.Sprintf&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Failed to create asset: %s&quot;&lt;/span&gt;, args[0]&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;shim.Success&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;nil&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-// Invoke is called per transaction on the chaincode. Each transaction is
-// either a &lt;span class=&quot;s1&quot;&gt;'get'&lt;/span&gt; or a &lt;span class=&quot;s1&quot;&gt;'set'&lt;/span&gt; on the asset created by Init &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; The Set
-// method may create a new asset by specifying a new key-value pair.
-func &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;t &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;SimpleAsset&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; Invoke&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;stub shim.ChaincodeStubInterface&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; peer.Response &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    // Extract the &lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;and args from the transaction proposal
-    fn, args :&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; stub.GetFunctionAndParameters&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-
-    var result string
-    var err error
-    &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;fn &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;set&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            result, err &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;stub, args&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; // assume &lt;span class=&quot;s1&quot;&gt;'get'&lt;/span&gt; even &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;fn is nil
-            result, err &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; get&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;stub, args&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;err &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; nil &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;shim.Error&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;err.Error&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    // Return the result as success payload
-    &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;shim.Success&lt;span class=&quot;o&quot;&gt;([]&lt;/span&gt;byte&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;result&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-// Set stores the asset &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;both key and value&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; on the ledger. If the key exists,
-// it will override the value with the new one
-func &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;stub shim.ChaincodeStubInterface, args &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;string&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;string, error&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;len&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;args&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; 2 &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;, fmt.Errorf&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Incorrect arguments. Expecting a key and a value&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    err :&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; stub.PutState&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;args[0], &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;byte&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;args[1]&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;err &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; nil &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;, fmt.Errorf&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Failed to set asset: %s&quot;&lt;/span&gt;, args[0]&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;args[1], nil
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-// Get returns the value of the specified asset key
-func get&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;stub shim.ChaincodeStubInterface, args &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;string&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;string, error&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;len&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;args&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; 1 &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;, fmt.Errorf&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Incorrect arguments. Expecting a key&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    value, err :&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; stub.GetState&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;args[0]&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;err &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; nil &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;, fmt.Errorf&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Failed to get asset: %s with error: %s&quot;&lt;/span&gt;, args[0], err&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;value &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; nil &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;, fmt.Errorf&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Asset not found: %s&quot;&lt;/span&gt;, args[0]&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;string&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;value&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, nil
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-// main &lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;starts up the chaincode &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;the container during instantiate
-func main&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;err :&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; shim.Start&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;new&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;SimpleAsset&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; err &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; nil &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            fmt.Printf&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Error starting SimpleAsset chaincode: %s&quot;&lt;/span&gt;, err&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;编译chaincode&quot;&gt;编译chaincode&lt;/h1&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;go get &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--tags&lt;/span&gt; nopkcs11 github.com/hyperledger/fabric/core/chaincode/shim
-go build &lt;span class=&quot;nt&quot;&gt;--tags&lt;/span&gt; nopkcs11
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;测试&quot;&gt;测试&lt;/h1&gt;
-
-&lt;p&gt;1.安装必要的docker镜像&lt;/p&gt;
-
-&lt;p&gt;如果之前没有部署过环境，可以直接按照&lt;a href=&quot;/2018/05/13/hyperledger-fabric-1.html&quot;&gt;fabric入门（一）安装&lt;/a&gt;步骤进行安装。&lt;/p&gt;
-
-&lt;p&gt;2.安装Hyperledger Fabric样例&lt;/p&gt;
-
-&lt;p&gt;下面进入到安装好的&lt;em&gt;fabric-samples&lt;/em&gt;下的&lt;em&gt;chaincode-docker-devmode&lt;/em&gt;目录。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;chaincode-docker-devmode
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;3.安装chaincode&lt;/p&gt;
-
-&lt;p&gt;现在请在&lt;em&gt;chaincode-docker-devmode&lt;/em&gt;目录下面打开三个独立的终端。&lt;/p&gt;
-
-&lt;p&gt;1号终端&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker-compose &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; docker-compose-simple.yaml up
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;上述指令启动了一个带有SingleSampleMSPSoloorderer profile的网络，并将节点在“开发者模式”下启动。它还启动了另外两个容器：一个包含chaincode运行环境;另一个是CLI命令行，可与chaincode进行交互。创建并加入channel（管道）的指令内嵌于CLI容器中，所以我们下面马上跳转到chaincode调用部分。&lt;/p&gt;
-
-&lt;p&gt;2号终端&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-it&lt;/span&gt; chaincode bash
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;执行完上述指令后，您应该会看到如下内容：&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@d2629980e76b:/opt/gopath/src/chaincode#
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;（此时您已经进入chaincode容器）下面编译您的chaincode:&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;sacc
-go build
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;现在运行chaincode：&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_ADDRESS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;peer:7052 &lt;span class=&quot;nv&quot;&gt;CORE_CHAINCODE_ID_NAME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;mycc:0 ./sacc
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;3号终端&lt;/p&gt;
-
-&lt;p&gt;即便您处于&lt;em&gt;–peer-chaincodedev&lt;/em&gt;模式，安装chaincode这一步仍必不可少，这样生命周期系统chaincode才能正常进行检查。也许这一步会在日后的&lt;em&gt;–peer-chaincodedev&lt;/em&gt;模式中省去。&lt;/p&gt;
-
-&lt;p&gt;下面我们将进入CLI容器进行chaincode调用。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-it&lt;/span&gt; cli bash
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;peer chaincode &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; chaincodedev/chaincode/sacc &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; mycc &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; 0
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;4.初始化(3号终端)&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;peer chaincode instantiate &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; mycc &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; 0 &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{&quot;Args&quot;:[&quot;a&quot;,&quot;10&quot;]}'&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-C&lt;/span&gt; myc
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;5.交易(3号终端)&lt;/p&gt;
-
-&lt;p&gt;现在我们执行一次将a的值设为20的调用：&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;peer chaincode invoke &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; mycc &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{&quot;Args&quot;:[&quot;set&quot;, &quot;a&quot;, &quot;20&quot;]}'&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-C&lt;/span&gt; myc
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;最后查询a的值，我们会看到20。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;peer chaincode query &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; mycc &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{&quot;Args&quot;:[&quot;query&quot;,&quot;a&quot;]}'&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-C&lt;/span&gt; myc
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-            <pubDate>Sun, 27 May 2018 00:00:00 +0800</pubDate>
-        </item>
+        <category>fabric</category>
         
-        <item>
-            <title>搭建以太坊私有网络(ubuntn)</title>
-            <link>/2018/05/18/eth-private-network-ubuntu.html</link>
-            <guid isPermaLink="true">/2018/05/18/eth-private-network-ubuntu.html</guid>
-            <description>&lt;p&gt;mac版请参考&lt;a href=&quot;/2018/04/01/ether-private-network.html&quot;&gt;搭建以太坊私有网络&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;安装nodenpm&quot;&gt;安装node&amp;amp;npm&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;nodejs-legacy
-&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;npm
-
-&lt;span class=&quot;c&quot;&gt;# 升级npm&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;npm &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;npm@latest &lt;span class=&quot;nt&quot;&gt;-g&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# 升级node&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;npm i &lt;span class=&quot;nt&quot;&gt;-g&lt;/span&gt; n
-
-&lt;span class=&quot;c&quot;&gt;# 安装最新版可执行&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# sudo n stable&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 由于mist限制node不能大于9，所以只升级到9&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;n 9
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;安装go&quot;&gt;安装go&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;geth 需要1.9版本以上&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;add-apt-repository ppa:longsleep/golang-backports
-&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get update
-&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;golang-go
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;安装libiconv&quot;&gt;安装libiconv&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
-&lt;span class=&quot;nb&quot;&gt;tar &lt;/span&gt;zxvf libiconv-1.15.tar.gz
-&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;libiconv-1.15
-&lt;span class=&quot;nb&quot;&gt;sudo&lt;/span&gt; ./configure &lt;span class=&quot;nt&quot;&gt;--prefix&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/usr/local
-&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;make
-&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;make &lt;span class=&quot;nb&quot;&gt;install
-sudo &lt;/span&gt;ldconfig // 刷新动态链接库缓存 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;安装yarn&quot;&gt;安装Yarn&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-sS&lt;/span&gt; https://dl.yarnpkg.com/debian/pubkey.gpg | &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-key add -
-&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;deb https://dl.yarnpkg.com/debian/ stable main&quot;&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;sudo tee&lt;/span&gt; /etc/apt/sources.list.d/yarn.list
-&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get update &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;yarn
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;安装electron-v179&quot;&gt;安装Electron v1.7.9&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yarn global add electron@1.7.9
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;安装meteor-javascript应用程序框架&quot;&gt;安装meteor JavaScript应用程序框架&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl https://install.meteor.com/ | sh
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;安装gulp&quot;&gt;安装Gulp&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yarn global add gulp
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;安装geth&quot;&gt;安装geth&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/ethereum/go-ethereum.git
-&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;go-ethereum
-make geth
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;把安装后的geth执行文件挪到/usr/bin&lt;/p&gt;
-
-&lt;h3 id=&quot;安装ganache&quot;&gt;安装Ganache&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget https://github.com/trufflesuite/ganache/releases/download/v1.1.0/ganache-1.1.0-x86_64.AppImage
-&lt;span class=&quot;nb&quot;&gt;chmod &lt;/span&gt;a+x ganache-1.1.0-x86_64.AppImage
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;执行&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ganache-1.1.0-x86_64.AppImage
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;安装truffle&quot;&gt;安装Truffle&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;npm &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-g&lt;/span&gt; truffle
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;安装mist&quot;&gt;安装mist&lt;/h3&gt;
-
-&lt;p&gt;下载zip包&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;https://github.com/ethereum/mist/releases/download/v0.10.0/Mist-linux64-0-10-0.zip
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;解压&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;unzip Mist-linux64-0-10-0.zip
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;运行&quot;&gt;运行&lt;/h3&gt;
-
-&lt;p&gt;运行geth&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 进入自定义指定目录&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$yourpath&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 初始化&lt;/span&gt;
-geth init ./genesis.json &lt;span class=&quot;nt&quot;&gt;--datadir&lt;/span&gt; ./chain
-&lt;span class=&quot;c&quot;&gt;# 进入后台&lt;/span&gt;
-geth &lt;span class=&quot;nt&quot;&gt;--datadir&lt;/span&gt; ./chain &lt;span class=&quot;nt&quot;&gt;--nodiscover&lt;/span&gt; console 2&amp;gt;&amp;gt; eth_output.logs
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;运行mist&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./mist &lt;span class=&quot;nt&quot;&gt;--rpc&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$yourpath&lt;/span&gt;/chain/geth.ipc &lt;span class=&quot;nt&quot;&gt;--node-networkid&lt;/span&gt; 1234 &lt;span class=&quot;nt&quot;&gt;--node-datadir&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$yourpath&lt;/span&gt;/chain/
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;PS: 如果页面加载不出来，需要使用代理&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;常见问题&quot;&gt;常见问题&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;安装geth报错&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;build/env.sh go run build/ci.go &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; ./cmd/geth
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; /usr/lib/go-1.10/bin/go &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-ldflags&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; main.gitCommit&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;4e7dc34ff1a7469b95eb16f5b4084c26a0ab3662 &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; ./cmd/geth
-github.com/ethereum/go-ethereum/vendor/github.com/karalabe/hid
-&lt;span class=&quot;c&quot;&gt;# github.com/ethereum/go-ethereum/vendor/github.com/karalabe/hid&lt;/span&gt;
-/tmp/go-build654371927/b223/_x002.o：在函数‘get_usb_string’中：
-vendor/github.com/karalabe/hid/hidapi/libusb/hid.c:444：对‘libiconv_open’未定义的引用
-vendor/github.com/karalabe/hid/hidapi/libusb/hid.c:456：对‘libiconv’未定义的引用
-vendor/github.com/karalabe/hid/hidapi/libusb/hid.c:471：对‘libiconv_close’未定义的引用
-collect2: error: ld returned 1 &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;status
-util.go:45: &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;status 2
-&lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;status 1
-Makefile:15: recipe &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;target &lt;span class=&quot;s1&quot;&gt;'geth'&lt;/span&gt; failed
-make: &lt;span class=&quot;k&quot;&gt;***&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;geth] Error 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;解决方案：
-根据提示找到对应文件&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;vim vendor/github.com/karalabe/hid/hid_enabled.go
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;安装libiconv，并添加链接参数：-liconv&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#cgo linux,!android LDFLAGS: -lrt -liconv&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-            <pubDate>Fri, 18 May 2018 00:00:00 +0800</pubDate>
-        </item>
         
-        <item>
-            <title>fabric入门（五）安装和实例化链码</title>
-            <link>/2018/05/13/hyperledger-fabric-5.html</link>
-            <guid isPermaLink="true">/2018/05/13/hyperledger-fabric-5.html</guid>
-            <description>&lt;h4 id=&quot;安装启动链码&quot;&gt;安装启动链码&lt;/h4&gt;
-
-&lt;p&gt;首先，在将示例代码安装到4个peer节点中的其中一个。这个命令将源代码放到peer节点的文件系统中。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;peer chaincode &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; mycc &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; 1.0 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; github.com/hyperledger/fabric-samples/chaincode/chaincode_example02/go/chaincode_example02
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;接下来，在信道上实例化chaincode。这将初始化信道上的链码，设置链码的背书策略，为目标peer节点启动一个chaincode容器注意-P参数。这是我们需要指定的当这个chaincode的交易需要被验证的时侯的背书策略。&lt;/p&gt;
-
-&lt;p&gt;在下面的命令中，你会注意到我们指定 -P “OR (‘Org0MSP.member’,’Org1MSP.member’)” 作为背书策略。这意味着我们需要Org1或者Org2组织中的其中一个的节点的背书即可（即只有一个背书）。如果我们改变语法为AND那么我们就需要2个背书者。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;peer chaincode instantiate &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; orderer.example.com:7050 &lt;span class=&quot;nt&quot;&gt;--tls&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CORE_PEER_TLS_ENABLED&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--cafile&lt;/span&gt; /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem &lt;span class=&quot;nt&quot;&gt;-C&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CHANNEL_NAME&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; mycc &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; 1.0 &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{&quot;Args&quot;:[&quot;init&quot;,&quot;a&quot;, &quot;100&quot;, &quot;b&quot;,&quot;200&quot;]}'&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-P&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;OR ('Org1MSP.member','Org2MSP.member')&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;调用&quot;&gt;调用&lt;/h4&gt;
-
-&lt;p&gt;现在让我们从a账户转10到b账户。这个交易将创建一个新的区块并更新state DB。调用语法如下：&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;peer chaincode invoke &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; orderer.example.com:7050  &lt;span class=&quot;nt&quot;&gt;--tls&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CORE_PEER_TLS_ENABLED&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--cafile&lt;/span&gt; /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem  &lt;span class=&quot;nt&quot;&gt;-C&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CHANNEL_NAME&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; mycc &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{&quot;Args&quot;:[&quot;invoke&quot;,&quot;a&quot;,&quot;b&quot;,&quot;10&quot;]}'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;查询&quot;&gt;查询&lt;/h4&gt;
-
-&lt;p&gt;让我们确认下我们之前的调用被正确地执行了。我们初始化了a的值为100，在上一次调用的时侯转移了10给b。因此，查询a应该展示90。查询的语法如下：&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;peer chaincode query &lt;span class=&quot;nt&quot;&gt;-C&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CHANNEL_NAME&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; mycc &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{&quot;Args&quot;:[&quot;query&quot;,&quot;a&quot;]}'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;我们应该看到以下内容：&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Query Result: 90
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-            <pubDate>Sun, 13 May 2018 00:00:00 +0800</pubDate>
-        </item>
-        
-        <item>
-            <title>fabric入门（四）启动网络</title>
-            <link>/2018/05/13/hyperledger-fabric-4.html</link>
-            <guid isPermaLink="true">/2018/05/13/hyperledger-fabric-4.html</guid>
-            <description>&lt;h4 id=&quot;启动网络&quot;&gt;启动网络&lt;/h4&gt;
-
-&lt;p&gt;我们将利用docker-compose脚本来启动我们的区块链网络。&lt;/p&gt;
-
-&lt;p&gt;在开始前，我们先注释掉&lt;strong&gt;docker-compose-cli.yml&lt;/strong&gt;的一段&lt;strong&gt;command: /bin/bash&lt;/strong&gt;代码，不然该脚本将在网络启动时执行所有命令.&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; cli:
-    container_name: cli
-    image: hyperledger/fabric-tools:&lt;span class=&quot;nv&quot;&gt;$IMAGE_TAG&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;tty&lt;/span&gt;: &lt;span class=&quot;nb&quot;&gt;true
-    &lt;/span&gt;stdin_open: &lt;span class=&quot;nb&quot;&gt;true
-    &lt;/span&gt;environment:
-      - &lt;span class=&quot;nv&quot;&gt;GOPATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/opt/gopath
-      - &lt;span class=&quot;nv&quot;&gt;CORE_VM_ENDPOINT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;unix:///host/var/run/docker.sock
-      &lt;span class=&quot;c&quot;&gt;#- CORE_LOGGING_LEVEL=DEBUG&lt;/span&gt;
-      - &lt;span class=&quot;nv&quot;&gt;CORE_LOGGING_LEVEL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;INFO
-      - &lt;span class=&quot;nv&quot;&gt;CORE_PEER_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;cli
-      - &lt;span class=&quot;nv&quot;&gt;CORE_PEER_ADDRESS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;peer0.org1.example.com:7051
-      - &lt;span class=&quot;nv&quot;&gt;CORE_PEER_LOCALMSPID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;Org1MSP
-      - &lt;span class=&quot;nv&quot;&gt;CORE_PEER_TLS_ENABLED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;
-      - &lt;span class=&quot;nv&quot;&gt;CORE_PEER_TLS_CERT_FILE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt
-      - &lt;span class=&quot;nv&quot;&gt;CORE_PEER_TLS_KEY_FILE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.key
-      - &lt;span class=&quot;nv&quot;&gt;CORE_PEER_TLS_ROOTCERT_FILE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
-      - &lt;span class=&quot;nv&quot;&gt;CORE_PEER_MSPCONFIGPATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
-    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-    &lt;span class=&quot;c&quot;&gt;#command: /bin/bash&lt;/span&gt;
-    volumes:
-        - /var/run/:/host/var/run/
-        - ./../chaincode/:/opt/gopath/src/github.com/chaincode
-        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
-        - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
-        - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
-    depends_on:
-      - orderer.example.com
-      - peer0.org1.example.com
-      - peer1.org1.example.com
-      - peer0.org2.example.com
-      - peer1.org2.example.com
-    networks:
-      - byfn
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;启动网络&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;CHANNEL_NAME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$CHANNEL_NAME&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;TIMEOUT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;lt;pick_a_value&amp;gt; docker-compose &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; docker-compose-cli.yaml up &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;执行完如图所示：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-05-13-hyperledger-fabric-1/1.jpg&quot; alt=&quot;1.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;创建加入信息&quot;&gt;创建&amp;amp;加入信息&lt;/h4&gt;
-
-&lt;p&gt;进入cli容器，后面命令都是在cli容器中进行&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-it&lt;/span&gt; cli bash
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;回想一下，我们使用configtxgen工具生成信道配置-channel.tx。我们将这个配置作为请求的一部分传递给order。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CHANNEL_NAME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;mychannel
-peer channel create &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; orderer.example.com:7050 &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CHANNEL_NAME&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; ./channel-artifacts/channel.tx &lt;span class=&quot;nt&quot;&gt;--tls&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CORE_PEER_TLS_ENABLED&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--cafile&lt;/span&gt; /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;返回一个创世区块-&lt;channel-ID.block&gt;-我们将使用它加入信道。它包含了channel.tx中的配置信息。&lt;/channel-ID.block&gt;&lt;/p&gt;
-
-&lt;p&gt;接下来让其他节点加入信道&lt;/p&gt;
-
-&lt;p&gt;org1.peer1&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_MSPCONFIGPATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_ADDRESS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;peer0.org1.example.com:7051
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_LOCALMSPID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Org1MSP&quot;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_TLS_ROOTCERT_FILE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
-peer channel &lt;span class=&quot;nb&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; mychannel.block
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;org1.peer1&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_MSPCONFIGPATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_ADDRESS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;peer1.org1.example.com:7051
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_LOCALMSPID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Org1MSP&quot;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_TLS_ROOTCERT_FILE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt
-peer channel &lt;span class=&quot;nb&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; mychannel.block
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;org2.peer0&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_MSPCONFIGPATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_ADDRESS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;peer0.org2.example.com:7051
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_LOCALMSPID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Org2MSP&quot;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_TLS_ROOTCERT_FILE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
-peer channel &lt;span class=&quot;nb&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; mychannel.block
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;org2.peer1&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_MSPCONFIGPATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_ADDRESS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;peer1.org2.example.com:7051
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_LOCALMSPID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Org2MSP&quot;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CORE_PEER_TLS_ROOTCERT_FILE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/ca.crt
-peer channel &lt;span class=&quot;nb&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; mychannel.block
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-            <pubDate>Sun, 13 May 2018 00:00:00 +0800</pubDate>
-        </item>
-        
-    </channel>
+      </item>
+    
+  </channel>
 </rss>

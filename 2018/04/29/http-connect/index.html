@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一个小白的成长学习历程">
+    <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
+    <meta name="theme-color" content="#000000">
+    
+    <title>HTTP - 连接管理 - ben blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2018/04/29/http-connect/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- mermaid CSS -->
+    <link rel="stylesheet" href="/assets/css/mermaid.css">
+
+    <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Ben Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/">Tags</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg.jpg')
+    }
+
+    
+</style>
+<header class="intro-header" >
+    <div class="header-mask"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#http" title="http">http</a>
+                        
+                    </div>
+                    <h1>HTTP - 连接管理</h1>
+                    
+                    
+                    <h2 class="subheading"></h2>
+                    
+                    <span class="meta">Posted by Ben Blog on April 29, 2018</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<h2 id="tcp连接">TCP连接</h2>
+
+<p>世界上⼏乎所有的 HTTP 通信都是由 TCP/IP 承载的，TCP/IP 是全球计算机及⽹络设备都在使⽤的⼀种常⽤的分组交换⽹络分层协议集。客户端应⽤程序可以打开⼀条 TCP/IP 连接，连接到可能运⾏在世界任何地⽅的服务器应⽤程序。⼀旦连接建⽴起来了，在客户端和服务器的计算机之间交换的报⽂就永远不会丢失、受损或失序。</p>
+
+<p>完整的连接执行流程如下图所示:</p>
+
+<p><img src="/assets/img/posts/2018-04-29-http-connect/1.png" alt="1.png" /></p>
+
+<h4 id="tcp是分段由ip分组传送">TCP是分段、由IP分组传送</h4>
+
+<p>TCP 的数据是通过名为 IP 分组（或 IP 数据报）的⼩数据块来发送的。这样的话，如图 a 所⽰，HTTP 就是“HTTP over TCP over IP”这个“协议栈”中的最顶层了。其安全版本 HTTPS 就是在 HTTP 和 TCP 之间插⼊了⼀个（称为 TLS 或 SSL 的）密码加密层（图 b）。</p>
+
+<p><img src="/assets/img/posts/2018-04-29-http-connect/2.png" alt="2.png" /></p>
+
+<p>HTTP 要传送⼀条报⽂时，会以流的形式将报⽂数据的内容通过⼀条打开的 TCP 连接按序传输。TCP 收到数据流之后，会将数据流砍成被称作段的⼩数据块，并将段封装在 IP 分组中，通过因特⽹进⾏传输（如下图）。所有这些⼯作都是由 TCP/IP 软件来处理的，HTTP 程序员什么都看不到。</p>
+
+<p><img src="/assets/img/posts/2018-04-29-http-connect/3.png" alt="3.png" /></p>
+
+<h4 id="保持tcp连接的连续不间断性">保持TCP连接的连续不间断性</h4>
+
+<p>TCP连接是通过 4 个值来识别的：</p>
+
+<blockquote>
+  <p>&lt; 源IP 地址、源端⼝号、⽬的IP 地址、⽬的端⼝号&gt;</p>
+</blockquote>
+
+<p>这 4 个值⼀起唯⼀地定义了⼀条连接。两条不同的 TCP 连接不能拥有 4 个完全相同的地址组件值（但不同连接的部分组件可以拥有相同的值）。</p>
+
+<h4 id="tcp套接字编程">TCP套接字编程</h4>
+
+<p>参考 <a href="http://127.0.0.1:4000/2017/06/11/php-websocket.html">php实现webSocket</a></p>
+
+<h2 id="tcp性能">TCP性能</h2>
+
+<h4 id="http事务延迟">HTTP事务延迟</h4>
+
+<p>HTTP 事务主要的连接、传输以及处理时延</p>
+
+<p><img src="/assets/img/posts/2018-04-29-http-connect/4.png" alt="4.png" /></p>
+
+<p>主要原因：</p>
+
+<ol>
+  <li>
+    <p>客户端⾸先需要根据 URI 确定 Web 服务器的 IP 地址和端⼜号。如果最近没有对 URI 中的主机名进⾏访问，通过 DNS 解析系统将 URI 中的主机名转换成⼀个 IP 地址可能要花费数⼗秒的时间。(⼤多数 HTTP 客户端都有⼀个⼩的 DNS 缓存，⽤来保存近期所访问站点的 IP 地址。如果已经在本地“缓存”（记录）了 IP 地址，查询就可以⽴即完成。因为⼤多数 Web 浏览器浏览的都是少数常⽤站点，所以通常都可以很快地将主机名解析出来。)</p>
+  </li>
+  <li>
+    <p>客户端会向服务器发送⼀条 TCP 连接请求，并等待服务器回送⼀个请求接受应答。每条新的 TCP 连接都会有连接建⽴时延。这个值通常最多只有⼀两秒钟，但如果有数百个 HTTP 事务的话，这个值会快速地叠加上去。</p>
+  </li>
+  <li>
+    <p>⼀旦连接建⽴起来了，客户端就会通过新建⽴的 TCP 管道来发送HTTP 请求。数据到达时，Web 服务器会从 TCP 连接中读取请求报⽂，并对请求进⾏处理。因特⽹传输请求报⽂，以及服务器处理请求报⽂都需要时间。</p>
+  </li>
+</ol>
+
+<h4 id="tcp连接的握时延">TCP连接的握⼿时延</h4>
+
+<p>建⽴⼀条新的 TCP 连接时，甚⾄是在发送任意数据之前，TCP 软件之间会交换⼀系列的 IP 分组，对连接的有关参数进⾏沟通（如下图）。如果连接只⽤来传送少量数据，这些交换过程就会严重降低 HTTP 的性能。</p>
+
+<p><img src="/assets/img/posts/2018-04-29-http-connect/5.png" alt="5.png" /></p>
+
+<p>TCP三次握手如下：</p>
+
+<ol>
+  <li>请求新的 TCP 连接时，客户端要向服务器发送⼀个⼩的 TCP 分组（通常是 40 ～ 60 个字节）。这个分组中设置了⼀个特殊的 SYN 标记，说明这是⼀个连接请求。（如上图a）。</li>
+  <li>如果服务器接受了连接，就会对⼀些连接参数进⾏计算，并向客户端回送⼀个 TCP 分组，这个分组中的 SYN 和 ACK 标记都被置位，说明连接请求已被接受（如上图b）。</li>
+  <li>最后，客户端向服务器回送⼀条确认信息，通知它连接已成功建⽴（如上图c）。现代的 TCP 栈都允许客户端在这个确认分组中发送数据。</li>
+</ol>
+
+<h4 id="tcp慢启动">TCP慢启动</h4>
+
+<p>TCP 数据传输的性能还取决于 TCP 连接的使⽤期（age）。TCP 连接会随着时间进⾏⾃我“调谐”，起初会限制连接的最⼤速度，如果数据成功传输，会随着时间的推移提⾼传输的速度。这种调谐被称为 TCP 慢启动（slow start），⽤于防⽌因特⽹的突然过载和拥塞。</p>
+
+<p>TCP 慢启动限制了⼀个 TCP 端点在任意时刻可以传输的分组数。简单来说，每成功接收⼀个分组，发送端就有了发送另外两个分组的权限。如果某个 HTTP 事务有⼤量数据要发送，是不能⼀次将所有分组都发送出去的。必须发送⼀个分组，等待确认；然后可以发送两个分组，每个分组都必须被确认，这样就可以发送四个分组了，以此类推。这种⽅式被称为“打开拥塞窗⼜”。</p>
+
+<p>由于存在这种拥塞控制特性，所以新连接的传输速度会⽐已经交换过⼀定量数据的、“已调谐”连接慢⼀些。由于已调谐连接要更快⼀些，所以HTTP 中有⼀些可以重⽤现存连接的⼯具。（HTTP持久连接）</p>
+
+<h4 id="time_wait累积与端耗尽">TIME_WAIT累积与端⼜耗尽</h4>
+<p>TIME_WAIT 端⼜耗尽是很严重的性能问题，会影响到性能基准，但在现实中相对较少出现。⼤多数遇到性能基准问题的⼈最终都会碰到这个问题，⽽且性能都会变得出乎意料地差，所以这个问题值得特别关注。</p>
+
+<p>当某个 TCP 端点关闭 TCP 连接时，会在内存中维护⼀个⼩的控制块，⽤来记录最近所关闭连接的 IP 地址和端⼜号。这类信息只会维持⼀⼩段时间，通常是所估计的最⼤分段使⽤期的两倍（称为 2MSL，通常为 2 分钟）左右，以确保在这段时间内不会创建具有相同地址和端⼜号的新连接。实际上，这个算法可以防⽌在两分钟内创建、关闭并重新创建两个具有相同 IP 地址和端⼜号的连接。</p>
+
+<p>现在⾼速路由器的使⽤，使得重复分组⼏乎不可能在连接关闭的⼏分钟后，出现在服务器上。有些操作系统会将 2MSL 设置为⼀个较⼩的值，但修改此值时要特别⼩⼼。分组确实会被复制，如果来⾃之前连接的复制分组插⼊了具有相同连接值的新 TCP 流，会破坏 TCP 数据。</p>
+
+<p>2MSL 的连接关闭延迟通常不是什么问题，但在性能基准环境下就可能会成为⼀个问题。进⾏性能基准测试时，通常只有⼀台或⼏台⽤来产⽣流量的计算机连接到某系统中去，这样就限制了连接到服务器的客户端 IP 地址数。⽽且，服务器通常会在 HTTP 的默认 TCP 端⼜ 80 上进⾏监听。⽤TIME_WAIT 防⽌端⼜号重⽤时，这些情况也限制了可⽤的连接值组合。</p>
+
+<p>在只有⼀个客户端和⼀台 Web 服务器的异常情况下，构建⼀条 TCP 连接
+的 4 个值：</p>
+
+<blockquote>
+  <p>&lt;source-IP-address, source-port, destination-IP-address, destination-port&gt;</p>
+</blockquote>
+
+<p>其中的 3 个都是固定的——只有源端⼜号可以随意改变：</p>
+
+<blockquote>
+  <p>&lt;client-IP, source-port, server-IP, 80&gt;</p>
+</blockquote>
+
+<p>客户端每次连接到服务器上去时，都会获得⼀个新的源端⼜，以实现连接的唯⼀性。但由于可⽤源端⼜的数量有限（⽐如，60 000 个），⽽且在2MSL 秒（⽐如，120 秒）内连接是⽆法重⽤的，连接率就被限制在了 60000/120=500 次 / 秒。如果再不断进⾏优化，并且服务器的连接率不⾼于500 次 / 秒，就可确保不会遇到 TIME_WAIT 端⼜耗尽问题。要修正这个问题，可以增加客户端负载⽣成机器的数量，或者确保客户端和服务器在循环使⽤⼏个虚拟 IP 地址以增加更多的连接组合。</p>
+
+<p>即使没有遇到端⼜耗尽问题，也要特别⼩⼼有⼤量连接处于打开状态的情况，或为处于等待状态的连接分配了⼤量控制块的情况。在有⼤量打开连接或控制块的情况下，有些操作系统的速度会严重减缓。</p>
+
+<h2 id="http连接处理">HTTP连接处理</h2>
+
+<h4 id="串行事务处理延迟">串行事务处理延迟</h4>
+
+<p>如果只对连接进⾏简单的管理，TCP 的性能时延可能会叠加起来。⽐如，假设有⼀个包含了 3 个嵌⼊图⽚的 Web 页⾯。浏览器需要发起 4 个 HTTP事务来显⽰此页⾯： 1 个⽤于顶层的 HTML 页⾯，3 个⽤于嵌⼊的图⽚。如果每个事务都需要（串⾏地建⽴）⼀条新的连接，那么连接时延和慢启动时延就会叠加起来（如下图)。</p>
+
+<p><img src="/assets/img/posts/2018-04-29-http-connect/6.png" alt="6.png" /></p>
+
+<h4 id="并行连接">并行连接</h4>
+
+<p>HTTP 允许客户端打开多条连接，并⾏地执⾏多个 HTTP事务。在这个例⼦中，并⾏加载了四幅嵌⼊式图⽚，每个事务都有⾃⼰的TCP 连接。</p>
+
+<p><img src="/assets/img/posts/2018-04-29-http-connect/7.png" alt="7.png" /></p>
+
+<p>并行连接时间如下图，⾸先装载的是封闭的 HTML 页⾯，然后并⾏处理其余的 3 个事务，每个事务都有⾃⼰的连接。图⽚的装载是并⾏的，连接的时延也是重叠的。(由于软件开销的存在，每个连接请求之间总是会有⼀些⼩的时延，但连接请求和传输时间基本上
+都是重叠起来的。)</p>
+
+<p><img src="/assets/img/posts/2018-04-29-http-connect/8.png" alt="8.png" /></p>
+
+<p>但并行不一定更快</p>
+
+<ol>
+  <li>
+    <p>客户端的⽹络带宽不足，并⾏加载多个对象，每个对象都会去竞争这有限的带宽，每个对象都会以较慢的速度按⽐例加载，这样带来的性能提升就很⼩，甚⾄没什么提升。</p>
+  </li>
+  <li>
+    <p>打开⼤量连接会消耗很多内存资源，从⽽引发⾃⾝的性能问题。</p>
+  </li>
+</ol>
+
+<p>实际上，浏览器确实使⽤了并⾏连接，但它们会将并⾏连接的总数限制为⼀个较⼩的值（通常是 4 个）。服务器可以随意关闭来⾃特定客户端的超量连接。</p>
+
+<h4 id="持久连接">持久连接</h4>
+
+<p>HTTP/1.1（以及 HTTP/1.0 的各种增强版本）允许 HTTP 设备在事务处理结束之后将 TCP 连接保持在打开状态，以便为未来的 HTTP 请求重⽤现存的连接。在事务处理结束之后仍然保持在打开状态的 TCP 连接被称为持久连接。⾮持久连接会在每个事务结束之后关闭。持久连接会在不同事务之间保持打开状态，直到客户端或服务器决定将其关闭为⽌。</p>
+
+<p>重⽤已对⽬标服务器打开的空闲持久连接，就可以避开缓慢的连接建⽴阶段。⽽且，已经打开的连接还可以避免慢启动的拥塞适应阶段，以便更快速地进⾏数据的传输。</p>
+
+<p>持久连接与并⾏连接配合使⽤可能是最⾼效的⽅式。现在，很多 Web 应⽤程序都会打开少量的并⾏连接，其中的每⼀个都是持久连接。</p>
+
+<ul>
+  <li>HTTP/1.0+ keep-alive连接</li>
+</ul>
+
+<p>很多 HTTP/1.0 浏览器和服务器都进⾏了扩展，以⽀持⼀种被称为 keep-alive 连接的早期实验型持久连接。</p>
+
+<p>串行与并行的性能比较如下图：</p>
+
+<p><img src="/assets/img/posts/2018-04-29-http-connect/9.png" alt="9.png" /></p>
+
+<ul>
+  <li>HTTP/1.1持久连接</li>
+</ul>
+
+<p>HTTP/1.1 逐渐停⽌了对 keep-alive 连接的⽀持，⽤⼀种名为持久连接（persistent connection）的改进型设计取代了它。持久连接的⽬的与 keepalive连接的⽬的相同，但⼯作机制更优⼀些。</p>
+
+<p>与 HTTP/1.0+ 的 keep-alive 连接不同，HTTP/1.1 持久连接在默认情况下是激活的。除⾮特别指明，否则 HTTP/1.1 假定所有连接都是持久的。要在事务处理结束之后将连接关闭，HTTP/1.1 应⽤程序必须向报⽂中显式地添加⼀个 Connection: close ⾸部。这是与以前的 HTTP 协议版本很重要的区别，在以前的版本中，keep-alive 连接要么是可选的，要么根本就不⽀持。</p>
+
+<p>HTTP/1.1 客户端假定在收到响应后，除⾮响应中包含了 Connection:close ⾸部，不然 HTTP/1.1 连接就仍维持在打开状态。但是，客户端和服务器仍然可以随时关闭空闲的连接。不发送 Connection: close 并不意味着服务器承诺永远将连接保持在打开状态。</p>
+
+<p>持久连接的限制和规则</p>
+
+<ul>
+  <li>
+    <p>发送了 Connection: close 请求⾸部之后，客户端就⽆法在那条连接上发送更多的请求了。</p>
+  </li>
+  <li>
+    <p>如果客户端不想在连接上发送其他请求了，就应该在最后⼀条请求中发送⼀个 Connection: close 请求⾸部。</p>
+  </li>
+  <li>
+    <p>只有当连接上所有的报⽂都有正确的、⾃定义报⽂长度时——也就是说，实体主体部分的长度都和相应的 Content-Length ⼀致，或者是⽤分块传输编码⽅式编码的——连接才能持久保持。</p>
+  </li>
+  <li>
+    <p>HTTP/1.1 的代理必须能够分别管理与客户端和服务器的持久连接——每个持久连接都只适⽤于⼀跳传输。（由于较⽼的代理会转发 Connection ⾸部，所以）HTTP/1.1 的代理服务器不应该与 HTTP/1.0 客户端建⽴持久连接，除⾮它们了解客户端的处理能⼒。实际上，这⼀点是很难做到的，很多⼚商都违背了这⼀原则。</p>
+  </li>
+  <li>
+    <p>尽管服务器不应该试图在传输报⽂的过程中关闭连接，⽽且在关闭连接之前⾄少应该响应⼀条请求，但不管 Connection ⾸部取了什么值，HTTP/1.1 设备都可以在任意时刻关闭连接。</p>
+  </li>
+  <li>
+    <p>HTTP/1.1 应⽤程序必须能够从异步的关闭中恢复出来。只要不存在可能会累积起来的副作⽤，客户端都应该重试这条请求。</p>
+  </li>
+  <li>
+    <p>除⾮重复发起请求会产⽣副作⽤，否则如果在客户端收到整条响应之前连接关闭了，客户端就必须要重新发起请求。</p>
+  </li>
+  <li>
+    <p>⼀个⽤户客户端对任何服务器或代理最多只能维护两条持久连接，以防服务器过载。代理可能需要更多到服务器的连接来⽀持并发⽤户的通信，所以，如果有 N 个⽤户试图访问服务器的话，代理最多要维持2<em>N</em> 条到任意服务器或⽗代理的连接。</p>
+  </li>
+</ul>
+
+<h4 id="管道化连接">管道化连接</h4>
+
+<p>HTTP/1.1 允许在持久连接上可选地使⽤请求管道。这是相对于 keep-alive连接的又⼀性能优化。在响应到达之前，可以将多条请求放⼊队列。当第⼀条请求通过⽹络流向地球另⼀端的服务器时，第⼆条和第三条请求也可以开始发送了。在⾼时延⽹络条件下，这样做可以降低⽹络的环回时间，提⾼性能。</p>
+
+<p>与串行、持久对比如下图:</p>
+
+<p><img src="/assets/img/posts/2018-04-29-http-connect/10.png" alt="10.png" /></p>
+
+<p>限制：</p>
+
+<ul>
+  <li>
+    <p>如果 HTTP 客户端⽆法确认连接是持久的，就不应该使⽤管道。</p>
+  </li>
+  <li>
+    <p>必须按照与请求相同的顺序回送 HTTP 响应。HTTP 报⽂中没有序列号标签，因此如果收到的响应失序了，就没办法将其与请求匹配起来了。</p>
+  </li>
+  <li>
+    <p>HTTP 客户端必须做好连接会在任意时刻关闭的准备，还要准备好重发所有未完成的管道化请求。如果客户端打开了⼀条持久连接，并⽴即发出了 10 条请求，服务器可能在只处理了，⽐⽅说，5 条请求之后关闭连接。剩下的 5 条请求会失败，客户端必须能够应对这些过早关闭连接的情况，重新发出这些请求。</p>
+  </li>
+  <li>
+    <p>HTTP 客户端不应该⽤管道化的⽅式发送会产⽣副作⽤的请求（⽐如POST）。总之，出错的时候，管道化⽅式会阻碍客户端了解服务器执⾏的是⼀系列管道化请求中的哪⼀些。由于⽆法安全地重试 POST 这样的⾮幂等请求，所以出错时，就存在某些⽅法永远不会被执⾏的风险。</p>
+  </li>
+</ul>
+
+<h2 id="关闭连接">关闭连接</h2>
+
+<p>TCP 连接是双向的。TCP 连接的每⼀端都有⼀个输⼊队列和⼀个输出队列，⽤于数据的读或写。放⼊⼀端输出队列中的数据最终会出现在另⼀端的输⼊队列中。如下图：</p>
+
+<p><img src="/assets/img/posts/2018-04-29-http-connect/11.png" alt="11.png" /></p>
+
+<h4 id="完全关闭与半关闭">完全关闭与半关闭</h4>
+
+<p>应⽤程序可以关闭 TCP 输⼊和输出信道中的任意⼀个，或者将两者都关闭了。套接字调⽤ close() 会将 TCP 连接的输⼊和输出信道都关闭了。这被称作“完全关闭”，如图 4-20a 所⽰。还可以⽤套接字调⽤shutdown() 单独关闭输⼊或输出信道。这被称为“半关闭”，如下图所示：</p>
+
+<p><img src="/assets/img/posts/2018-04-29-http-connect/12.png" alt="12.png" /></p>
+
+<h4 id="tcp关闭及重置错误">TCP关闭及重置错误</h4>
+
+<p>简单的 HTTP 应⽤程序可以只使⽤完全关闭。但当应⽤程序开始与很多其他类型的 HTTP 客户端、服务器和代理进⾏对话且开始使⽤管道化持久连接时，使⽤半关闭来防⽌对等实体收到⾮预期的写⼊错误就变得很重要了。</p>
+
+<p>总之，关闭连接的输出信道总是很安全的。连接另⼀端的对等实体会在从其缓冲区中读出所有数据之后收到⼀条通知，说明流结束了，这样它就知道你将连接关闭了。</p>
+
+<p>关闭连接的输⼊信道⽐较危险，除⾮你知道另⼀端不打算再发送其他数据了。如果另⼀端向你已关闭的输⼊信道发送数据，操作系统就会向另⼀端的机器回送⼀条 TCP“连接被对端重置”的报⽂，如下图所⽰。⼤部分操作系统都会将这种情况作为很严重的错误来处理，删除对端还未读取的所有缓存数据。对管道化连接来说，这是⾮常糟糕的事情。</p>
+
+<p><img src="/assets/img/posts/2018-04-29-http-connect/13.png" alt="13.png" /></p>
+
+<h4 id="正常关闭">正常关闭</h4>
+
+<p>HTTP 规范建议，当客户端或服务器突然要关闭⼀条连接时，应该“正常地关闭传输连接”，但它并没有说明应该如何去做。</p>
+
+<p>总之，实现正常关闭的应⽤程序⾸先应该关闭它们的输出信道，然后等待连接另⼀端的对等实体关闭它的输出信道。当两端都告诉对⽅它们不会再发送任何数据（⽐如关闭输出信道）之后，连接就会被完全关闭，⽽不会有重置的危险。</p>
+
+<p>但不幸的是，⽆法确保对等实体会实现半关闭，或对其进⾏检查。因此，想要正常关闭连接的应⽤程序应该先半关闭其输出信道，然后周期性地检查其输⼊信道的状态（查找数据，或流的末尾）。如果在⼀定的时间区间内对端没有关闭输⼊信道，应⽤程序可以强制关闭连接，以节省资源。</p>
+
+
+                <hr style="visibility: hidden;">
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2018/04/27/http-message-status/" data-toggle="tooltip" data-placement="top" title="HTTP - 报文 - 状态码">
+                        Previous<br>
+                        <span>HTTP - 报文 - 状态码</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2018/04/29/http-headers/" data-toggle="tooltip" data-placement="top" title="HTTP - 报文 - 首部">
+                        Next<br>
+                        <span>HTTP - 报文 - 首部</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+
+
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+        				
+                            
+                				<a href="/tags/#php" title="php" rel="8">
+                                    php
+                                </a>
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#算法" title="算法" rel="6">
+                                    算法
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#数据结构" title="数据结构" rel="2">
+                                    数据结构
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#分布式" title="分布式" rel="2">
+                                    分布式
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#区块链" title="区块链" rel="18">
+                                    区块链
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#比特币" title="比特币" rel="7">
+                                    比特币
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#密码学" title="密码学" rel="6">
+                                    密码学
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#以太坊" title="以太坊" rel="4">
+                                    以太坊
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#http" title="http" rel="12">
+                                    http
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#超级账本" title="超级账本" rel="8">
+                                    超级账本
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#fabric" title="fabric" rel="8">
+                                    fabric
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#MYSQL" title="MYSQL" rel="3">
+                                    MYSQL
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#web" title="web" rel="2">
+                                    web
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#计算机" title="计算机" rel="3">
+                                    计算机
+                                </a>
+                            
+        				
+                            
+        				
+        			</div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    
+
+
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/shadowdragons">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Ben Blog 2018
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async('/js/jquery.tagcloud.js',function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-89143952-2';
+    var _gaDomain = 'shadowdragons.github.io';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '2a8326534823f90fa4eef816aea2ef08';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
