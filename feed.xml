@@ -5,8 +5,8 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 12 Sep 2018 20:47:17 +0800</pubDate>
-    <lastBuildDate>Wed, 12 Sep 2018 20:47:17 +0800</lastBuildDate>
+    <pubDate>Thu, 13 Sep 2018 22:17:59 +0800</pubDate>
+    <lastBuildDate>Thu, 13 Sep 2018 22:17:59 +0800</lastBuildDate>
     <generator>Jekyll v3.8.3</generator>
     
       <item>
@@ -460,24 +460,64 @@ epoll_wait的process睡眠。  &lt;br /&gt;
     
       <item>
         <title>「构建高性能web站点」服务器并发</title>
-        <description>&lt;p&gt;&lt;strong&gt;吞吐率&lt;/strong&gt;&lt;br /&gt;
-单位时间内服务器处理的请求数 reqs/s&lt;/p&gt;
+        <description>&lt;h4 id=&quot;吞吐率&quot;&gt;吞吐率&lt;/h4&gt;
 
-&lt;p&gt;&lt;strong&gt;用户并发数&lt;/strong&gt;
-服务器最大并发数是有一定的利益前提的，就是服务器和用户双方所能接受的最大利益下。&lt;br /&gt;
+&lt;p&gt;单位时间内服务器处理的请求数 reqs/s&lt;/p&gt;
+
+&lt;h4 id=&quot;用户并发数&quot;&gt;用户并发数&lt;/h4&gt;
+
+&lt;p&gt;服务器最大并发数是有一定的利益前提的，就是服务器和用户双方所能接受的最大利益下。&lt;br /&gt;
 每个用户可以在同一时间发起不止一个请求（与浏览器、http版本有关），所以用户并发数 &amp;gt; 请求并发数。&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;请求等待时间&lt;/strong&gt;
-分为以下两种&lt;/p&gt;
+&lt;h4 id=&quot;请求等待时间&quot;&gt;请求等待时间&lt;/h4&gt;
+
+&lt;p&gt;分为以下两种&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;用户平均请求等待时间。&lt;/li&gt;
   &lt;li&gt;服务器平均请求处理时间（等于吞吐率的倒数）。&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;strong&gt;线程与进程&lt;/strong&gt;
-如果对线程与进程不熟悉，请参考&lt;a href=&quot;/2018/07/29/computer-thread.html&quot;&gt;这篇文章&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&quot;线程与进程&quot;&gt;线程与进程&lt;/h4&gt;
 
+&lt;p&gt;参考这篇文章&lt;a href=&quot;/2018/07/29/computer-thread/&quot;&gt;进程与线程&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;系统负载&quot;&gt;系统负载&lt;/h4&gt;
+
+&lt;p&gt;可以通过 &lt;code class=&quot;highlighter-rouge&quot;&gt;cat /proc/loadavg&lt;/code&gt; 或者 &lt;code class=&quot;highlighter-rouge&quot;&gt;top&lt;/code&gt; 查看。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-07-27-bhpws-service/1.jpg&quot; alt=&quot;1.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;上面数字的含义：&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;10/200&lt;/td&gt;
+      &lt;td&gt;10表示此时运行队列中的进程个数；200表示此时的进程总数&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;17145&lt;/td&gt;
+      &lt;td&gt;目前创建的最后一个进程ID&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;1.63&lt;/td&gt;
+      &lt;td&gt;1分钟内运行队列中就绪等待的进程数平均值&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;0.48&lt;/td&gt;
+      &lt;td&gt;5分钟内运行队列中就绪等待的进程数平均值&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;0.21&lt;/td&gt;
+      &lt;td&gt;10分钟内运行队列中就绪等待的进程数平均值&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h4 id=&quot;io模型&quot;&gt;I/O模型&lt;/h4&gt;
+
+&lt;p&gt;参考这篇文章&lt;a href=&quot;/2018/08/04/computer-io/&quot;&gt;I/O模型&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Fri, 27 Jul 2018 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2018/07/27/bhpws-service/</link>
