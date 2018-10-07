@@ -179,6 +179,30 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2017/12/11/shadowsock/">
+        <h2 class="post-title">
+            shadowsock部署
+        </h2>
+        
+        <div class="post-content-preview">
+            部署
+
+我是选了网上大多数人推荐的vultr，性价比高，而且还有很骚的操作，后面讲。  
+1.选服务器，直接选最便宜的，因为我只是拿来当ss用。  
+2.安装ss，参考Shadowsocks 一键安装脚本（四合一）
+
+以root用户进入该服务器终端，执行一下命令
+
+wget --no-check-certificate -O shadowsocks-all.sh https://raw....
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on December 11, 2017
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2017/06/25/php-remember-login/">
         <h2 class="post-title">
             php实现记住登录
@@ -377,29 +401,6 @@ po...
 <hr>
 
 <div class="post-preview">
-    <a href="/2016/11/14/system-thread-cpu/">
-        <h2 class="post-title">
-            线程与cpu核
-        </h2>
-        
-        <div class="post-content-preview">
-            进程，线程，核之间的关联
-
-
-  一个应用普遍只占一个进程，一个进程可以衍生出多个线程，而核只与线程有关。
-  一个线程只能在一个核上面跑。
-
-
-单核CPU，程序可以创建多个线程，但他们并不是真正意义上的并行执行，因为他们只会占用一个核，所以只是切换速度较快，没察觉到。每个线程会分配差不多20ms的时间片，执行完时间片，会切换到其他线程，该线程会处于等待执行状态，等其他线程执行完，再继续执行...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 14, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
     <a href="/2016/11/14/machinelearning-supervised/">
         <h2 class="post-title">
             监督学习与梯度下降
@@ -524,8 +525,6 @@ python实...
                             
                         
                             
-                        
-                            
                                 <a href="/tags/#分布式" title="分布式" rel="2">
                                     分布式
                                 </a>
@@ -599,6 +598,8 @@ python实...
                                 <a href="/tags/#计算机" title="计算机" rel="3">
                                     计算机
                                 </a>
+                            
+                        
                             
                         
                             

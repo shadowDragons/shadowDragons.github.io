@@ -5,9 +5,168 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 13 Sep 2018 22:17:59 +0800</pubDate>
-    <lastBuildDate>Thu, 13 Sep 2018 22:17:59 +0800</lastBuildDate>
-    <generator>Jekyll v3.8.3</generator>
+    <pubDate>Sun, 07 Oct 2018 11:20:08 +0800</pubDate>
+    <lastBuildDate>Sun, 07 Oct 2018 11:20:08 +0800</lastBuildDate>
+    <generator>Jekyll v3.8.4</generator>
+    
+      <item>
+        <title>系统调用跟踪 - strace、dtruss</title>
+        <description>&lt;h3 id=&quot;linux工具strace&quot;&gt;linux工具strace&lt;/h3&gt;
+
+&lt;h5 id=&quot;语法&quot;&gt;语法&lt;/h5&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;strace [-dffhiqrtttTvVxx] [-a column] [-e expr] ... [-o file]
+
+              [-p pid] ... [-s strsize] [-u username] [-E var&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;val] ...
+
+              [command [arg ...]]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;或者&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;strace &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;expr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; ... &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-O&lt;/span&gt; overhead] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; sortby] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-E&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;var&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;val] ...
+
+              &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;command&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;arg ...]]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;参数说明&quot;&gt;参数说明&lt;/h5&gt;
+
+&lt;p&gt;-c 统计每一系统调用的所执行的时间,次数和出错的次数等.&lt;/p&gt;
+
+&lt;p&gt;-d 输出strace关于标准错误的调试信息.&lt;/p&gt;
+
+&lt;p&gt;-f 跟踪由fork调用所产生的子进程.&lt;/p&gt;
+
+&lt;p&gt;-ff 如果提供-o filename,则所有进程的跟踪结果输出到相应的filename.pid中,pid是各进程的进程号.&lt;/p&gt;
+
+&lt;p&gt;-F 尝试跟踪vfork调用.在-f时,vfork不被跟踪.&lt;/p&gt;
+
+&lt;p&gt;-h 输出简要的帮助信息.&lt;/p&gt;
+
+&lt;p&gt;-i 输出系统调用的入口指针.&lt;/p&gt;
+
+&lt;p&gt;-q 禁止输出关于脱离的消息.&lt;/p&gt;
+
+&lt;p&gt;-r 打印出相对时间关于每一个系统调用.&lt;/p&gt;
+
+&lt;p&gt;-t 在输出中的每一行前加上时间信息.&lt;/p&gt;
+
+&lt;p&gt;-tt 在输出中的每一行前加上时间信息,微秒级.&lt;/p&gt;
+
+&lt;p&gt;-ttt 微秒级输出,以秒了表示时间.&lt;/p&gt;
+
+&lt;p&gt;-T 显示每一调用所耗的时间.&lt;/p&gt;
+
+&lt;p&gt;-v 输出所有的系统调用.一些调用关于环境变量,状态,输入输出等调用由于使用频繁,默认不输出.&lt;/p&gt;
+
+&lt;p&gt;-V 输出strace的版本信息.&lt;/p&gt;
+
+&lt;p&gt;-x 以十六进制形式输出非标准字符串.&lt;/p&gt;
+
+&lt;p&gt;-xx 所有字符串以十六进制形式输出.&lt;/p&gt;
+
+&lt;p&gt;-a column 设置返回值的输出位置.默认 为40.&lt;/p&gt;
+
+&lt;p&gt;-e expr 指定一个表达式,用来控制如何跟踪.格式如下:&lt;/p&gt;
+
+&lt;p&gt;[qualifier=][!]value1[,value2]…&lt;/p&gt;
+
+&lt;p&gt;qualifier只能是 trace,abbrev,verbose,raw,signal,read,write其中之一.value是用来限定的符号或数字.默认的 qualifier是 trace.感叹号是否定符号.例如-eopen等价于 -e trace=open,表示只跟踪open调用.而-etrace!=open表示跟踪除了open以外的其它调用.有两个特殊的符号 all 和 none. 注意有些shell使用!来执行历史记录里的命令,所以要使用\.&lt;/p&gt;
+
+&lt;p&gt;-e trace=set 只跟踪指定的系统调用.例如:-e trace=open,close,rean,write表示只跟踪这四个系统调用.默认的为set=all.&lt;/p&gt;
+
+&lt;p&gt;-e trace=file 只跟踪有关文件操作的系统调用.&lt;/p&gt;
+
+&lt;p&gt;-e trace=process 只跟踪有关进程控制的系统调用.&lt;/p&gt;
+
+&lt;p&gt;-e trace=network 跟踪与网络有关的所有系统调用.&lt;/p&gt;
+
+&lt;p&gt;-e strace=signal 跟踪所有与系统信号有关的系统调用.&lt;/p&gt;
+
+&lt;p&gt;-e trace=ipc 跟踪所有与进程通讯有关的系统调用.&lt;/p&gt;
+
+&lt;p&gt;-e abbrev=set 设定strace输出的系统调用的结果集.-v 等与 abbrev=none.默认为abbrev=all.&lt;/p&gt;
+
+&lt;p&gt;-e raw=set 将指定的系统调用的参数以十六进制显示.&lt;/p&gt;
+
+&lt;p&gt;-e signal=set 指定跟踪的系统信号.默认为all.如 signal=!SIGIO(或者signal=!io),表示不跟踪SIGIO信号.&lt;/p&gt;
+
+&lt;p&gt;-e read=set 输出从指定文件中读出的数据.例如-e read=3,5&lt;/p&gt;
+
+&lt;p&gt;-e write=set 输出写入到指定文件中的数据.&lt;/p&gt;
+
+&lt;p&gt;-o filename 将strace的输出写入文件filename&lt;/p&gt;
+
+&lt;p&gt;-p pid 跟踪指定的进程pid.&lt;/p&gt;
+
+&lt;p&gt;-s strsize 指定输出的字符串的最大长度.默认为32.文件名一直全部输出.&lt;/p&gt;
+
+&lt;p&gt;-u username 以username 的UID和GID执行被跟踪的命令.&lt;/p&gt;
+
+&lt;h5 id=&quot;例子&quot;&gt;例子&lt;/h5&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://huoding.com/2013/10/06/288&quot;&gt;通过Strace定位故障原因&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;mac工具dtruss&quot;&gt;mac工具dtruss&lt;/h3&gt;
+
+&lt;h5 id=&quot;语法-1&quot;&gt;语法&lt;/h5&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dtruss [-acdefholLs] [-t syscall] { -p PID | -n name | command | -W name }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;参数说明-1&quot;&gt;参数说明&lt;/h5&gt;
+
+&lt;p&gt;-a 输出全部&lt;/p&gt;
+
+&lt;p&gt;-b bufsize&lt;br /&gt;
+dynamic variable buffer size. Increase this if you notice
+dynamic variable drop errors. The default is “4m” for 4
+megabytes per CPU.&lt;/p&gt;
+
+&lt;p&gt;-c 输出系统调用数&lt;/p&gt;
+
+&lt;p&gt;-d 输出时间消耗&lt;/p&gt;
+
+&lt;p&gt;-e 输出剩余多少时间&lt;/p&gt;
+
+&lt;p&gt;-f 监视fork出来的进程调用&lt;/p&gt;
+
+&lt;p&gt;-l force printing of pid/lwpid per line&lt;/p&gt;
+
+&lt;p&gt;-L don’t print pid/lwpid per line&lt;/p&gt;
+
+&lt;p&gt;-n name 跟踪名为name的进程&lt;/p&gt;
+
+&lt;p&gt;-o 输出花在cpu上的时间&lt;/p&gt;
+
+&lt;p&gt;-s 输出栈跟踪&lt;/p&gt;
+
+&lt;p&gt;-p PID 监视某个pid&lt;/p&gt;
+
+&lt;p&gt;-t syscall 只监视某个系统调用&lt;/p&gt;
+
+&lt;h5 id=&quot;例子-1&quot;&gt;例子&lt;/h5&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dtruss &lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt;       &lt;span class=&quot;c&quot;&gt;# run and examine &quot;df -h&quot;  &lt;/span&gt;
+dtruss &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 1871     &lt;span class=&quot;c&quot;&gt;# examine PID 1871  &lt;/span&gt;
+dtruss &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;tar&lt;/span&gt;      &lt;span class=&quot;c&quot;&gt;# examine all processes called &quot;tar&quot;  &lt;/span&gt;
+dtruss &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; test.sh  &lt;span class=&quot;c&quot;&gt;# run test.sh and follow children&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;参考&quot;&gt;参考&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/qq_38712943/article/details/82149045&quot;&gt;strace&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/kfy2011/article/details/48102843&quot;&gt;系统调用跟踪命令strace和dtruss&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 07 Oct 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/10/07/strace-dtruss/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/10/07/strace-dtruss/</guid>
+        
+        <category>工具</category>
+        
+        
+      </item>
     
       <item>
         <title>nginx与php-fpm 连接数</title>
@@ -1282,110 +1441,6 @@ sequenceDiagram
         <guid isPermaLink="true">http://localhost:4000/2018/06/23/mysql-innodb-lock/</guid>
         
         <category>MYSQL</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>fabric - 架构&amp;执行流程</title>
-        <description>&lt;p&gt;本文简单讲述fabric架构&amp;amp;执行流程，帮助同学快速理解&amp;amp;入门。&lt;/p&gt;
-
-&lt;h2 id=&quot;架构&quot;&gt;架构&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-05-27-hyperledger-fabric/1.jpeg&quot; alt=&quot;1.jpeg&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;identity&quot;&gt;Identity&lt;/h4&gt;
-
-&lt;p&gt;Identity，也就是身份管理，Fabric是目前为止在设计上最贴近联盟链思想的区块链。联盟链考虑到商业应用对安全、隐私、监管、审计、性能的需求，提高准入门槛，成员必须被许可才能加入网络。Fabric成员管理服务为整个区块链网络提供身份管理、隐私、保密和可审计的服务。成员管理服务通过公钥基础设施PKI和去中心化共识机制使得非许可的区块链变成许可制的区块链。&lt;/p&gt;
-
-&lt;h4 id=&quot;smart-contract&quot;&gt;Smart Contract&lt;/h4&gt;
-
-&lt;p&gt;Fabric的智能合约smart contract称为链码chaincode，是一段代码，它处理网络成员所同意的业务逻辑。和以太坊相比，Fabric链码和底层账本是分开的，升级链码时并不需要迁移账本数据到新链码当中，真正实现了逻辑与数据的分离。&lt;/p&gt;
-
-&lt;p&gt;链码可采用Go、Java、Node.js语言编写。链码被编译成一个独立的应用程序，fabric用Docker容器来运行chaincode，里面的base镜像都是经过签名验证的安全镜像，包括OS层和开发chaincode的语言、runtime和SDK层。一旦chaincode容器被启动，它就会通过gRPC与启动这个chaincode的Peer节点连接。&lt;/p&gt;
-
-&lt;h4 id=&quot;ledger--transcations&quot;&gt;Ledger | Transcations&lt;/h4&gt;
-
-&lt;p&gt;Fabric使用建立在HTTP/2上的P2P协议来管理分布式账本。采取可插拔的方式来根据具体需求来设置共识协议，比如PBFT，Raft，PoW和PoS等。&lt;/p&gt;
-
-&lt;h6 id=&quot;ledger&quot;&gt;Ledger&lt;/h6&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-05-27-hyperledger-fabric/2.jpg&quot; alt=&quot;2.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;如上图所示，账本Ledger主要包含两块：blockchain和state。blockchain就是一系列连在一起的block，用来记录历史交易。state对应账本的当前最新状态，它是一个key-value数据库，Fabric默认采用Level DB, 可以替换成其他的Key-value数据库，如Couch DB。举个例子。我们采用区块链实现一个弹珠交易的系统。我们开发了一个Chaincode,每个弹珠有以下几个属性：Name, owner, color, size.  可以定义一个JSON对象，用name做KEY, JSON对象做Value，存储在Level DB或者CouchDB中。&lt;/p&gt;
-
-&lt;h6 id=&quot;transcation&quot;&gt;transcation&lt;/h6&gt;
-
-&lt;p&gt;Fabric上的transction交易分两种，部署交易和调用交易。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;部署交易  &lt;br /&gt;
-  把Chaincode部署到peer节点上并准备好被调用，当一个部署交易成功执行时，Chaincode就被部署到各个peer节点上。好比把一个web service或者EJB部署到应用服务器上的不同实例上。&lt;/li&gt;
-  &lt;li&gt;调用交易  &lt;br /&gt;
-  客户端应用程序通过Fabric提供的API调用先前已部署好的某个chaincode的某个函数执行交易，并相应地读取和写入KV数据库，返回是否成功或者失败。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;apis-events-sdks&quot;&gt;APIs, Events, SDKs&lt;/h4&gt;
-
-&lt;p&gt;Fabric提供API方便应用开发，对服务端的ChainCode，目前支持用Go、Java或者Node.js开发。对客户端应用，Fabric目前提供Node.js和Java SDK。未来计划提供Python 和Go SDK，Fabric还提供RESTAPI。对于开发者，还可以通过CLI快速去测试chaincode，或者去查询交易状态。在区块链网络里，节点和chaincode会发送events来触发一些监听动作，方便与其他外部系统的集成。&lt;/p&gt;
-
-&lt;h2 id=&quot;执行流程&quot;&gt;执行流程&lt;/h2&gt;
-
-&lt;p&gt;首先理解几个概念&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;MSP  &lt;br /&gt;
-  MSP(Membership Service Provider), 这类节点主管区块链网络中其他的节点的授权，准入，踢除。通过给不同节点颁发证书的方式，授予不同类型的节点相应的权限。&lt;/li&gt;
-  &lt;li&gt;Ordering Node  &lt;br /&gt;
-  中文可以称作排序节点。通常在一个网络中至少有一个或多个排序节点，这类节点负责 按照指定的算法，将交易进行排序，并返回给Committing Peer。其并不关心具体的交易细节。&lt;/li&gt;
-  &lt;li&gt;Endorsing Peer  &lt;br /&gt;
-  这类节点的主要负责接收交易请求，验证这笔交易之后，并做一些预处理之后，并将签名后的数据传回给客户端。&lt;/li&gt;
-  &lt;li&gt;Committing Peer  &lt;br /&gt;
-  这类节点做是区块链网络中的全节点，它们需要记录完整的区块信息，并且验证每笔交易的正确性，是最终将交易打包进区块链的节点。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;交易的执行路程如下&lt;/p&gt;
-
-&lt;p&gt;1.首先从客户端发起一笔交易提交到Endorsing Peer，进行预处理。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-05-27-hyperledger-fabric/3.png&quot; alt=&quot;3.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;2.预处理通过之后，将签名数据，传回给客户端。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-05-27-hyperledger-fabric/4.png&quot; alt=&quot;4.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;3.客户端发起请求，将收到的签名数据传给Ordering Node。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-05-27-hyperledger-fabric/5.png&quot; alt=&quot;5.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;4.Ordering Node对交易进行排序，然后传给Committing Peer。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-05-27-hyperledger-fabric/6.png&quot; alt=&quot;6.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;5.Committing Peer这里将排序好的交易进行验证，并打包，通过指定的共识算法达成一致，形成新的区块。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-05-27-hyperledger-fabric/7.png&quot; alt=&quot;7.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;6.最后将交易结果返回给客户端。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-05-27-hyperledger-fabric/8.png&quot; alt=&quot;8.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ps:中间过程的每一步，都伴随着权限的验证。会根据MSP颁发的证书，进行判断。&lt;/p&gt;
-
-&lt;h2 id=&quot;参考&quot;&gt;参考&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/xcjing/article/details/78883642&quot;&gt;Hyperledger Fabric 1.0架构及原理&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.jianshu.com/p/eb33c7288ce7?from=timeline&quot;&gt;超级账本之——Fabric&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Sun, 27 May 2018 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/05/27/hyperledger-fabric/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/05/27/hyperledger-fabric/</guid>
-        
-        <category>超级账本</category>
-        
-        <category>fabric</category>
         
         
       </item>

@@ -10,7 +10,7 @@
     <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
     <meta name="theme-color" content="#000000">
     
-    <title>线程与cpu核 - ben blog</title>
+    <title>系统调用跟踪 - strace、dtruss - ben blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2016/11/14/system-thread-cpu/">
+    <link rel="canonical" href="http://localhost:4000/2018/10/07/strace-dtruss/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -169,15 +169,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#操作系统" title="操作系统">操作系统</a>
+                        <a class="tag" href="/tags/#工具" title="工具">工具</a>
                         
                     </div>
-                    <h1>线程与cpu核</h1>
+                    <h1>系统调用跟踪 - strace、dtruss</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Ben Blog on November 14, 2016</span>
+                    <span class="meta">Posted by Ben Blog on October 7, 2018</span>
                 </div>
             </div>
         </div>
@@ -198,16 +198,153 @@
                 <!-- Multi-Lingual -->
                 
 
-				<p>进程，线程，核之间的关联</p>
+				<h3 id="linux工具strace">linux工具strace</h3>
 
-<ol>
-  <li>一个应用普遍只占一个进程，一个进程可以衍生出多个线程，而核只与线程有关。</li>
-  <li>一个线程只能在一个核上面跑。</li>
-</ol>
+<h5 id="语法">语法</h5>
 
-<p>单核CPU，程序可以创建多个线程，但他们并不是真正意义上的并行执行，因为他们只会占用一个核，所以只是切换速度较快，没察觉到。每个线程会分配差不多20ms的时间片，执行完时间片，会切换到其他线程，该线程会处于等待执行状态，等其他线程执行完，再继续执行20ms。如果遇到有某些操作比较耗时，又要及时反馈给用户，还是很有必要多线程的。</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>strace [-dffhiqrtttTvVxx] [-a column] [-e expr] ... [-o file]
 
-<p>多核CPU，应该多用多线程，系统会把线程平均分配到每个核上面，一个核上面的线程处理参考上面的单核CPU。</p>
+              [-p pid] ... [-s strsize] [-u username] [-E var<span class="o">=</span>val] ...
+
+              [command [arg ...]]
+</code></pre></div></div>
+
+<p>或者</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>strace <span class="nt">-c</span> <span class="o">[</span><span class="nt">-e</span> <span class="nb">expr</span><span class="o">]</span> ... <span class="o">[</span><span class="nt">-O</span> overhead] <span class="o">[</span><span class="nt">-S</span> sortby] <span class="o">[</span><span class="nt">-E</span> <span class="nv">var</span><span class="o">=</span>val] ...
+
+              <span class="o">[</span><span class="nb">command</span> <span class="o">[</span>arg ...]]
+</code></pre></div></div>
+
+<h5 id="参数说明">参数说明</h5>
+
+<p>-c 统计每一系统调用的所执行的时间,次数和出错的次数等.</p>
+
+<p>-d 输出strace关于标准错误的调试信息.</p>
+
+<p>-f 跟踪由fork调用所产生的子进程.</p>
+
+<p>-ff 如果提供-o filename,则所有进程的跟踪结果输出到相应的filename.pid中,pid是各进程的进程号.</p>
+
+<p>-F 尝试跟踪vfork调用.在-f时,vfork不被跟踪.</p>
+
+<p>-h 输出简要的帮助信息.</p>
+
+<p>-i 输出系统调用的入口指针.</p>
+
+<p>-q 禁止输出关于脱离的消息.</p>
+
+<p>-r 打印出相对时间关于每一个系统调用.</p>
+
+<p>-t 在输出中的每一行前加上时间信息.</p>
+
+<p>-tt 在输出中的每一行前加上时间信息,微秒级.</p>
+
+<p>-ttt 微秒级输出,以秒了表示时间.</p>
+
+<p>-T 显示每一调用所耗的时间.</p>
+
+<p>-v 输出所有的系统调用.一些调用关于环境变量,状态,输入输出等调用由于使用频繁,默认不输出.</p>
+
+<p>-V 输出strace的版本信息.</p>
+
+<p>-x 以十六进制形式输出非标准字符串.</p>
+
+<p>-xx 所有字符串以十六进制形式输出.</p>
+
+<p>-a column 设置返回值的输出位置.默认 为40.</p>
+
+<p>-e expr 指定一个表达式,用来控制如何跟踪.格式如下:</p>
+
+<p>[qualifier=][!]value1[,value2]…</p>
+
+<p>qualifier只能是 trace,abbrev,verbose,raw,signal,read,write其中之一.value是用来限定的符号或数字.默认的 qualifier是 trace.感叹号是否定符号.例如-eopen等价于 -e trace=open,表示只跟踪open调用.而-etrace!=open表示跟踪除了open以外的其它调用.有两个特殊的符号 all 和 none. 注意有些shell使用!来执行历史记录里的命令,所以要使用\.</p>
+
+<p>-e trace=set 只跟踪指定的系统调用.例如:-e trace=open,close,rean,write表示只跟踪这四个系统调用.默认的为set=all.</p>
+
+<p>-e trace=file 只跟踪有关文件操作的系统调用.</p>
+
+<p>-e trace=process 只跟踪有关进程控制的系统调用.</p>
+
+<p>-e trace=network 跟踪与网络有关的所有系统调用.</p>
+
+<p>-e strace=signal 跟踪所有与系统信号有关的系统调用.</p>
+
+<p>-e trace=ipc 跟踪所有与进程通讯有关的系统调用.</p>
+
+<p>-e abbrev=set 设定strace输出的系统调用的结果集.-v 等与 abbrev=none.默认为abbrev=all.</p>
+
+<p>-e raw=set 将指定的系统调用的参数以十六进制显示.</p>
+
+<p>-e signal=set 指定跟踪的系统信号.默认为all.如 signal=!SIGIO(或者signal=!io),表示不跟踪SIGIO信号.</p>
+
+<p>-e read=set 输出从指定文件中读出的数据.例如-e read=3,5</p>
+
+<p>-e write=set 输出写入到指定文件中的数据.</p>
+
+<p>-o filename 将strace的输出写入文件filename</p>
+
+<p>-p pid 跟踪指定的进程pid.</p>
+
+<p>-s strsize 指定输出的字符串的最大长度.默认为32.文件名一直全部输出.</p>
+
+<p>-u username 以username 的UID和GID执行被跟踪的命令.</p>
+
+<h5 id="例子">例子</h5>
+
+<p><a href="https://huoding.com/2013/10/06/288">通过Strace定位故障原因</a></p>
+
+<h3 id="mac工具dtruss">mac工具dtruss</h3>
+
+<h5 id="语法-1">语法</h5>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dtruss [-acdefholLs] [-t syscall] { -p PID | -n name | command | -W name }
+</code></pre></div></div>
+
+<h5 id="参数说明-1">参数说明</h5>
+
+<p>-a 输出全部</p>
+
+<p>-b bufsize<br />
+dynamic variable buffer size. Increase this if you notice
+dynamic variable drop errors. The default is “4m” for 4
+megabytes per CPU.</p>
+
+<p>-c 输出系统调用数</p>
+
+<p>-d 输出时间消耗</p>
+
+<p>-e 输出剩余多少时间</p>
+
+<p>-f 监视fork出来的进程调用</p>
+
+<p>-l force printing of pid/lwpid per line</p>
+
+<p>-L don’t print pid/lwpid per line</p>
+
+<p>-n name 跟踪名为name的进程</p>
+
+<p>-o 输出花在cpu上的时间</p>
+
+<p>-s 输出栈跟踪</p>
+
+<p>-p PID 监视某个pid</p>
+
+<p>-t syscall 只监视某个系统调用</p>
+
+<h5 id="例子-1">例子</h5>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dtruss <span class="nb">df</span> <span class="nt">-h</span>       <span class="c"># run and examine "df -h"  </span>
+dtruss <span class="nt">-p</span> 1871     <span class="c"># examine PID 1871  </span>
+dtruss <span class="nt">-n</span> <span class="nb">tar</span>      <span class="c"># examine all processes called "tar"  </span>
+dtruss <span class="nt">-f</span> test.sh  <span class="c"># run test.sh and follow children</span>
+</code></pre></div></div>
+
+<h3 id="参考">参考</h3>
+
+<p><a href="https://blog.csdn.net/qq_38712943/article/details/82149045">strace</a></p>
+
+<p><a href="https://blog.csdn.net/kfy2011/article/details/48102843">系统调用跟踪命令strace和dtruss</a></p>
 
 
                 <hr style="visibility: hidden;">
@@ -215,19 +352,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2016/11/14/machinelearning-supervised/" data-toggle="tooltip" data-placement="top" title="监督学习与梯度下降">
+                        <a href="/2018/08/11/php-nginx-connect/" data-toggle="tooltip" data-placement="top" title="nginx与php-fpm 连接数">
                         Previous<br>
-                        <span>监督学习与梯度下降</span>
+                        <span>nginx与php-fpm 连接数</span>
                         </a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2016/11/18/php-about-thred-safe/" data-toggle="tooltip" data-placement="top" title="php线程安全">
-                        Next<br>
-                        <span>php线程安全</span>
-                        </a>
-                    </li>
                     
                 </ul>
 
@@ -285,8 +415,6 @@
                 				<a href="/tags/#数据结构" title="数据结构" rel="2">
                                     数据结构
                                 </a>
-                            
-        				
                             
         				
                             
@@ -367,6 +495,8 @@
                 				<a href="/tags/#计算机" title="计算机" rel="3">
                                     计算机
                                 </a>
+                            
+        				
                             
         				
                             
