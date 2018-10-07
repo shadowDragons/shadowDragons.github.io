@@ -5,8 +5,8 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 07 Oct 2018 15:30:48 +0800</pubDate>
-    <lastBuildDate>Sun, 07 Oct 2018 15:30:48 +0800</lastBuildDate>
+    <pubDate>Sun, 07 Oct 2018 21:08:50 +0800</pubDate>
+    <lastBuildDate>Sun, 07 Oct 2018 21:08:50 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
     
       <item>
@@ -234,10 +234,92 @@ dtruss &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; test.sh  &lt;span class=
 &lt;span class=&quot;c1&quot;&gt;//集合&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$smarty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;display&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'index.htm'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$id1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'|'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$id2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;局限性&quot;&gt;局限性&lt;/h3&gt;
+
+&lt;p&gt;1.当缓存文件过多，cpu需要耗在遍历文件。&lt;/p&gt;
+
+&lt;p&gt;可以通过设置支持目录分级&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$smarty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;use_sub_dirs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;2.缓存文件存在I/O消耗。&lt;/p&gt;
+
+&lt;p&gt;可以把缓存内容存到内存中。&lt;/p&gt;
+
+&lt;h3 id=&quot;参考&quot;&gt;参考&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://jingyan.baidu.com/album/ea24bc39c0d376da62b331a4.html?picindex=1&quot;&gt;Smarty缓存技术完整的执行流程&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Sun, 07 Oct 2018 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2018/10/07/smarty/</link>
         <guid isPermaLink="true">http://localhost:4000/2018/10/07/smarty/</guid>
+        
+        <category>php</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>php加速器</title>
+        <description>&lt;h3 id=&quot;opcache推荐&quot;&gt;opcache(推荐)&lt;/h3&gt;
+
+&lt;p&gt;新一代PHP加速器，由Zend公司研发，其实现原理与Xcache类似，都是把PHP执行后的数据缓冲到内存中从而避免重复的编译过程，能够直接使用缓冲区已编译的代码从而提高速度，降低服务器负载，但性能却比Xcache更加优越。&lt;/p&gt;
+
+&lt;p&gt;PHP 5.5.0 及后续版本中已经绑定了 opcache 扩展。 对于 PHP 5.2，5.3 和 5.4 版本可以使用PECL扩展中的 opcache 库。&lt;/p&gt;
+
+&lt;h5 id=&quot;配置说明&quot;&gt;配置说明&lt;/h5&gt;
+
+&lt;div class=&quot;language-ini highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;py&quot;&gt;opcache.enable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;1 (default &quot;1&quot;)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;;OPcache打开/关闭开关。当设置为Off或者0时，会关闭Opcache, 代码没有被优化和缓存。
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;opcache.enable_cli&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;1 (default &quot;0&quot;)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;;CLI环境下，PHP启用OPcache。这主要是为了测试和调试。从 PHP 7.1.2 开始，默认启用。
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;opcache.memory_consumption&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;128 (default &quot;64&quot;)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;;OPcache共享内存存储大小。用于存储预编译的opcode（以MB为单位）。
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;opcache.interned_strings_buffer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;8 (default &quot;4&quot;)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;;这是一个很有用的选项，但是似乎完全没有文档说明。PHP使用了一种叫做字符串驻留（string interning）的技术来改善性能。例如，如果你在代码中使用了1000次字符串“foobar”，在PHP内部只会在第一使用这个字符串的时候分配一个不可变的内存区域来存储这个字符串，其他的999次使用都会直接指向这个内存区域。这个选项则会把这个特性提升一个层次——默认情况下这个不可变的内存区域只会存在于单个php-fpm的进程中，如果设置了这个选项，那么它将会在所有的php-fpm进程中共享。在比较大的应用中，这可以非常有效地节约内存，提高应用的性能。
+&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;这个选项的值是以兆字节（megabytes）作为单位，如果把它设置为16，则表示16MB，默认是4MB，这是一个比较低的值。&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;opcache.max_accelerated_files&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(default&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;&quot;2000&quot;)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;;这个选项用于控制内存中最多可以缓存多少个PHP文件。这个选项必须得设置得足够大，大于你的项目中的所有PHP文件的总和。
+&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;设置值取值范围最小值是&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;200，最大值在&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;PHP&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;5.5.6&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;之前是&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;100000，PHP&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;5.5.6&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;及之后是&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;1000000。也就是说在200到1000000之间。&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;你可以运行“find&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;-type&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;-print&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;php&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;wc&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;-l”这个命令来快速计算你的代码库中的PHP文件数。&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;opcache.max_wasted_percentage&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(default&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;&quot;5&quot;)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;;计划重新启动之前，“浪费”内存的最大百分比。
+&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;opcache.use_cwd&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(default&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;&quot;1&quot;)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;;如果启用，OPcache将在哈希表的脚本键之后附加改脚本的工作目录， 以避免同名脚本冲突的问题。禁用此选项可以提高性能，但是可能会导致应用崩溃
+&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;opcache.validate_timestamps&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(default&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;&quot;1&quot;)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;;如果启用（设置为1），OPcache会在opcache.revalidate_freq设置的秒数去检测文件的时间戳（timestamp）检查脚本是否更新。
+&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;如果这个选项被禁用（设置为0），opcache.revalidate_freq会被忽略，PHP文件永远不会被检查。这意味着如果你修改了你的代码，然后你把它更新到服务器上，再在浏览器上请求更新的代码对应的功能，你会看不到更新的效果，你必须使用&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;`opcache_reset()`&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;或者&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;`opcache_invalidate()`&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;函数来手动重置&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;OPcache。或者重重你的web服务器或者php-fpm&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;来使文件系统更改生效。&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;我强烈建议你在生产环境中设置为0，why？因为当你在更新服务器代码的时候，如果代码较多，更新操作是有些延迟的，在这个延迟的过程中必然出现老代码和新代码混合的情况，这个时候对用户请求的处理必然存在不确定性。最后，等所有的代码更新完毕后，再平滑重启PHP和web服务器。&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;opcache.revalidate_freq&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(default&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;&quot;2&quot;)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;;这个选项用于设置缓存的过期时间（单位是秒），当这个时间达到后，opcache会检查你的代码是否改变，如果改变了PHP会重新编译它，生成新的opcode，并且更新缓存。值为“0”表示每次请求都会检查你的PHP代码是否更新（这意味着会增加很多次stat系统调用，译注：stat系统调用是读取文件的状态，这里主要是获取最近修改时间，这个系统调用会发生磁盘I/O，所以必然会消耗一些CPU时间，当然系统调用本身也会消耗一些CPU时间）。可以在开发环境中把它设置为0，生产环境下不用管。
+&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;如果&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;`opcache.validate_timestamps`&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;配置指令设置为禁用（设置为0），那么此设置项将会被忽略。&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;opcache.revalidate_path&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(default&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;&quot;0&quot;)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;;在include_path优化中启用或禁用文件搜索
+&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;如果被禁用，并且找到了使用的缓存文件相同的include_path，该文件不被再次搜索。因此，如果一个文件与include_path中的其他地方相同的名称出现将不会被发现。如果此优化对此有效，请启用此指令你的应用程序，这个指令的默认值是禁用的，这意味着该优化是活跃的。&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;opcache.fast_shutdown（默认“0”）&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;;如果启用，则会使用快速停止续发事件。 所谓快速停止续发事件是指依赖 Zend 引擎的内存管理模块 一次释放全部请求变量的内存，而不是依次释放每一个已分配的内存块。
+&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;该指令已在PHP&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;7.2.0中被删除。快速关机序列的一个变种已经被集成到PHP中，并且如果可能的话将被自动使用。&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;其他加速器&quot;&gt;其他加速器&lt;/h3&gt;
+
+&lt;h5 id=&quot;apc&quot;&gt;APC&lt;/h5&gt;
+
+&lt;p&gt;Alternative PHP Cache (APC) 是一个开放自由的PHP opcode缓存。它的目标是提供一个自由、 开放，和健全的框架用于缓存和优化PHP的中间代码。 它是PHP PECL中的一个扩展。&lt;/p&gt;
+
+&lt;h5 id=&quot;xcache&quot;&gt;xcache&lt;/h5&gt;
+
+&lt;p&gt;XCache是国人自己开发的东西，性能比早期的eAccelerator加速器要优良。&lt;/p&gt;
+
+&lt;h5 id=&quot;eaccelerator&quot;&gt;eAccelerator&lt;/h5&gt;
+
+&lt;p&gt;eAccelerator的前身其实是truck-mmcache，因为开发truk-mmcache的人被Zend给招安了，所以开发eAccelerator的人继承了truk-mmcache的一些特性，设计出eAccelerator加速器。&lt;/p&gt;
+</description>
+        <pubDate>Sun, 07 Oct 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/10/07/opcode-cache/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/10/07/opcode-cache/</guid>
         
         <category>php</category>
         
@@ -1040,98 +1122,6 @@ sequenceDiagram
         <guid isPermaLink="true">http://localhost:4000/2018/07/14/bhpws-network/</guid>
         
         <category>web</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>mysql系列教程 - B+Tree索引</title>
-        <description>&lt;p&gt;了解B+树前，我们先了解下二叉查找树、平衡二叉查找树、B-Tree。&lt;/p&gt;
-
-&lt;h3 id=&quot;二叉查找树&quot;&gt;二叉查找树&lt;/h3&gt;
-
-&lt;p&gt;二叉查找树具有以下性质：左子树的键值小于根的键值，右子树的键值大于根的键值。如下图所示：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-06-30-mysql-innodb-index/1.png&quot; alt=&quot;1.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;由于它可以任意构造，所以也可以按照赢下方式构建二叉树。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-06-30-mysql-innodb-index/2.png&quot; alt=&quot;2.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;我们知道，二叉树查找一个节点所需的最大时间取决于树高，所以如果像上图所示进行查找，效率会非常低。所以，要提高查找效率，需要这颗树是平衡的，从而引出了&lt;strong&gt;平衡二叉树&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;h3 id=&quot;平衡二叉树avl树&quot;&gt;平衡二叉树（AVL树）&lt;/h3&gt;
-
-&lt;p&gt;平衡二叉树定义如下：首先符合二叉查找树的定义，其次必须满足任何节点的两个子树高最大差为1。如下图所示：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-06-30-mysql-innodb-index/3.png&quot; alt=&quot;3.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;平衡树查询速度的确很快，不过维护一颗平衡二叉树需要一定的开销，需要做1次或多次左旋和右旋来得到插入或者更新后树的平衡性，不过多用于内存结构对象中，所以开销相对较小。如下图所示：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-06-30-mysql-innodb-index/4.jpg&quot; alt=&quot;4.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;b-tree&quot;&gt;B-Tree&lt;/h3&gt;
-
-&lt;p&gt;B-Tree是为磁盘等外存储设备设计的一种平衡查找树。因此在讲B-Tree之前先了解下磁盘的相关知识。&lt;/p&gt;
-
-&lt;p&gt;系统从磁盘读取数据到内存时是以磁盘块（block）为基本单位的，位于同一个磁盘块中的数据会被一次性读取出来，而不是需要什么取什么。&lt;/p&gt;
-
-&lt;p&gt;InnoDB存储引擎中有页（Page）的概念，页是其磁盘管理的最小单位。InnoDB存储引擎中默认每个页的大小为16KB，可通过参数innodb_page_size将页的大小设置为4K、8K、16K，在MySQL中可通过如下命令查看页的大小：&lt;/p&gt;
-
-&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;show&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;variables&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;like&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'innodb_page_size'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;而系统一个磁盘块的存储空间往往没有这么大，因此InnoDB每次申请磁盘空间时都会是若干地址连续磁盘块来达到页的大小16KB。InnoDB在把磁盘数据读入到磁盘时会以页为基本单位，在查询数据时如果一个页中的每条数据都能有助于定位数据记录的位置，这将会减少磁盘I/O次数，提高查询效率。&lt;/p&gt;
-
-&lt;p&gt;B-Tree相对于平衡二叉树来说，减少了节点数，每层增加节点数，减少了树高，提高了查找效率。&lt;/p&gt;
-
-&lt;p&gt;如下图所示：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-06-30-mysql-innodb-index/5.png&quot; alt=&quot;5.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;从上图中可以看到每个节点中不仅包含数据的key值，还有data值。由于每个节点存储一个页的数据，而每一个页的存储空间是有限的，如果data数据较大时将会导致每个节点（即一个页）能存储的key的数量很小，当存储的数据量很大时同样会导致B-Tree的深度较大，增大查询时的磁盘I/O次数，进而影响查询效率。&lt;/p&gt;
-
-&lt;h3 id=&quot;btree&quot;&gt;B+Tree&lt;/h3&gt;
-
-&lt;p&gt;B+Tree是在B-Tree基础上的一种优化，使其更适合实现外存储索引结构，InnoDB存储引擎就是用B+Tree实现其索引结构。&lt;/p&gt;
-
-&lt;p&gt;在B+Tree中，所有数据记录节点都是按照键值大小顺序存放在同一层的叶子节点上，而非叶子节点上只存储key值信息，这样可以大大加大每个节点存储的key值数量，降低B+Tree的高度。&lt;/p&gt;
-
-&lt;p&gt;B+Tree相对于B-Tree有几点不同：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;非叶子节点只存储键值信息。&lt;/li&gt;
-  &lt;li&gt;所有叶子节点之间都有一个链指针。&lt;/li&gt;
-  &lt;li&gt;数据记录都存放在叶子节点中。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;结构如下图所示：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-06-30-mysql-innodb-index/6.png&quot; alt=&quot;6.png&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;聚集索引和辅助索引&quot;&gt;聚集索引和辅助索引&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;聚集索引&lt;/strong&gt;就是按照每张表的主键构造一颗B+树，同时叶子节点中存放的为整张表的行数据，也将聚集索引的叶子节点称为&lt;strong&gt;数据页&lt;/strong&gt;。一张表只能拥有一个聚集索引。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;辅助索引&lt;/strong&gt;的叶子节点并不包含行记录的全部数据，而是存储相应行数据的聚集索引键，即主键。当通过辅助索引来查询数据时，InnoDB存储引擎会遍历辅助索引找到主键，然后再通过主键在聚集索引中找到完整的行记录数据。&lt;/p&gt;
-
-&lt;p&gt;如果是多列索引（联合索引、覆盖索引），它的内部的结果。从本质上来说，联合索引也是一棵B+树，不同的是联合索引的键值的数量不是1，而是大于等于2。接着来讨论两个整型列组成的联合索引，假设两个键值的名称分别为a、b，如下图所示&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-06-30-mysql-innodb-index/7.jpg&quot; alt=&quot;7.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;从上图可以观察到多个键值的B+树情况，其实和单个键值的B+树并没有什么不同，键值都是排序的，通过叶子节点可以逻辑上顺序地读出所有数据，就上面的例子来说，即（1,1）、（1,2）、（2,1）、（2,4）、（3,1）、（3,2）。其数据按(a,b)的顺序进行了存放。&lt;/p&gt;
-
-&lt;p&gt;对于查询“SELECT * FROM TABLE WHERE a=xxx and b=xxx”，显然是可以使用（a,b）这个联合索引的。对于单个的a列查询“SELECT * FROM TABLE WHERE a=xxx”也是可以使用这个（a,b）这个联合索引的。但对于b列的查询“SELECT * FROM TABLE WHERE b=xxx”则不可以使用这棵B+树索引。可以发现叶子节点上的b值为1、2、1、4、1、2，显然不是排序的，而B+树的特性就是数据是排序的才能使用二分查找法，因此对于b列的查询使用不到（a,b）的索引。&lt;/p&gt;
-
-&lt;p&gt;联合索引的第二个好处是已经对第二个键值进行了排序处理。例如，在很多情况下应用程序都需要查询某个用户的购物情况，并按照时间进行排序，最后取出最近三次的购买记录，这时使用联合索引可以避免多一次的排序操作，因为索引本身在叶子节点已经排序了。&lt;/p&gt;
-
-&lt;p&gt;对于覆盖索引，由于可以从辅助索引中得到查询的记录信息，而不需要再去聚集索引获取记录信息，因此可以减少IO操作。&lt;/p&gt;
-</description>
-        <pubDate>Sat, 30 Jun 2018 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/06/30/mysql-innodb-index/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/06/30/mysql-innodb-index/</guid>
-        
-        <category>MYSQL</category>
         
         
       </item>

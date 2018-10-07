@@ -263,15 +263,32 @@
 <span class="nv">$smarty</span><span class="o">-&gt;</span><span class="na">display</span><span class="p">(</span><span class="s1">'index.htm'</span><span class="p">,</span> <span class="nv">$id1</span> <span class="o">.</span> <span class="s1">'|'</span> <span class="o">.</span> <span class="nv">$id2</span><span class="p">)</span>
 </code></pre></div></div>
 
+<h3 id="局限性">局限性</h3>
+
+<p>1.当缓存文件过多，cpu需要耗在遍历文件。</p>
+
+<p>可以通过设置支持目录分级</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$smarty</span><span class="o">-&gt;</span><span class="na">use_sub_dirs</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>2.缓存文件存在I/O消耗。</p>
+
+<p>可以把缓存内容存到内存中。</p>
+
+<h3 id="参考">参考</h3>
+
+<p><a href="https://jingyan.baidu.com/album/ea24bc39c0d376da62b331a4.html?picindex=1">Smarty缓存技术完整的执行流程</a></p>
+
 
                 <hr style="visibility: hidden;">
 
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/08/11/php-nginx-connect/" data-toggle="tooltip" data-placement="top" title="nginx与php-fpm 连接数">
+                        <a href="/2018/10/07/opcode-cache/" data-toggle="tooltip" data-placement="top" title="php加速器">
                         Previous<br>
-                        <span>nginx与php-fpm 连接数</span>
+                        <span>php加速器</span>
                         </a>
                     </li>
                     
@@ -322,7 +339,7 @@
                     <div class="tags">
         				
                             
-                				<a href="/tags/#php" title="php" rel="9">
+                				<a href="/tags/#php" title="php" rel="10">
                                     php
                                 </a>
                             

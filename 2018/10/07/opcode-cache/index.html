@@ -10,7 +10,7 @@
     <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
     <meta name="theme-color" content="#000000">
     
-    <title>mysql系列教程 - innodb锁 - ben blog</title>
+    <title>php加速器 - ben blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2018/06/23/mysql-innodb-lock/">
+    <link rel="canonical" href="http://localhost:4000/2018/10/07/opcode-cache/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -169,15 +169,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#MYSQL" title="MYSQL">MYSQL</a>
+                        <a class="tag" href="/tags/#php" title="php">php</a>
                         
                     </div>
-                    <h1>mysql系列教程 - innodb锁</h1>
+                    <h1>php加速器</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Ben Blog on June 23, 2018</span>
+                    <span class="meta">Posted by Ben Blog on October 7, 2018</span>
                 </div>
             </div>
         </div>
@@ -198,379 +198,59 @@
                 <!-- Multi-Lingual -->
                 
 
-				<h3 id="lock和latch">lock和latch</h3>
+				<h3 id="opcache推荐">opcache(推荐)</h3>
 
-<p>锁分为两种类型 <strong>lock</strong> 和 <strong>latch</strong> ，它们之间的差异如下表所示：</p>
+<p>新一代PHP加速器，由Zend公司研发，其实现原理与Xcache类似，都是把PHP执行后的数据缓冲到内存中从而避免重复的编译过程，能够直接使用缓冲区已编译的代码从而提高速度，降低服务器负载，但性能却比Xcache更加优越。</p>
 
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">-</th>
-      <th style="text-align: left">lock</th>
-      <th>latch</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">对象</td>
-      <td style="text-align: left">事务</td>
-      <td>线程</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">保护</td>
-      <td style="text-align: left">数据库内容</td>
-      <td>内存数据结构</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">持续时间</td>
-      <td style="text-align: left">整个事务过程</td>
-      <td>临界资源</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">模式</td>
-      <td style="text-align: left">行锁、表锁、意向锁</td>
-      <td>读写锁、互斥量</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">死锁</td>
-      <td style="text-align: left">通过waits-for graph、time out等机制进行死锁检测和处理</td>
-      <td>无死锁检测与处理机制。仅通过应用程序加锁的顺序保证无死锁情况发生</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">存在于</td>
-      <td style="text-align: left">Lock Manager 的哈希表中</td>
-      <td>每个数据结构的对象中</td>
-    </tr>
-  </tbody>
-</table>
+<p>PHP 5.5.0 及后续版本中已经绑定了 opcache 扩展。 对于 PHP 5.2，5.3 和 5.4 版本可以使用PECL扩展中的 opcache 库。</p>
 
-<p><strong>下面讲到的锁都是针对lock来讲。</strong></p>
+<h5 id="配置说明">配置说明</h5>
 
-<h3 id="锁类型">锁类型</h3>
-
-<ul>
-  <li><strong>共享锁（S）</strong> ：允许事务读一行数据。</li>
-  <li><strong>排他锁（x）</strong> ：允许事务删除或更新一行数据。</li>
-</ul>
-
-<p>以下情况会加锁：</p>
-
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: center">锁类型</th>
-      <th style="text-align: left">加锁情况</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: center">行S</td>
-      <td style="text-align: left">读取行记录</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">行X</td>
-      <td style="text-align: left">增删改行记录</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">表S</td>
-      <td style="text-align: left">全表扫描</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">表X</td>
-      <td style="text-align: left">修改表结构</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>如果事务T1已经获得行r的共享锁，那么事务T2可以立即获得行r的共享锁，这种就叫做<strong>锁兼容</strong>。如果事务T3想获得行r的排他锁，就必须等待T1、T2释放它们的共享锁，这种就叫做<strong>锁不兼容</strong>。</p>
-
-<p>共享锁与排他锁的兼容性如下表所示：</p>
-
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: center">-</th>
-      <th style="text-align: center">X</th>
-      <th style="text-align: center">S</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: center">X</td>
-      <td style="text-align: center">不兼容</td>
-      <td style="text-align: center">不兼容</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">S</td>
-      <td style="text-align: center">不兼容</td>
-      <td style="text-align: center">兼容</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>innodb支持多粒度锁定，即可以同时存在行锁和表锁。并支持另外一种锁方式，称为<strong>意向锁</strong>。因为数据本身也分为以下几层</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>数据库 <span class="o">&gt;</span> 表 <span class="o">&gt;</span> 页 <span class="o">&gt;</span> 行
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">opcache.enable</span><span class="p">=</span><span class="s">1 (default "1")</span>
+<span class="c">;OPcache打开/关闭开关。当设置为Off或者0时，会关闭Opcache, 代码没有被优化和缓存。
+</span><span class="py">opcache.enable_cli</span><span class="p">=</span><span class="s">1 (default "0")</span>
+<span class="c">;CLI环境下，PHP启用OPcache。这主要是为了测试和调试。从 PHP 7.1.2 开始，默认启用。
+</span><span class="py">opcache.memory_consumption</span><span class="p">=</span><span class="s">128 (default "64")</span>
+<span class="c">;OPcache共享内存存储大小。用于存储预编译的opcode（以MB为单位）。
+</span><span class="py">opcache.interned_strings_buffer</span><span class="p">=</span><span class="s">8 (default "4")</span>
+<span class="c">;这是一个很有用的选项，但是似乎完全没有文档说明。PHP使用了一种叫做字符串驻留（string interning）的技术来改善性能。例如，如果你在代码中使用了1000次字符串“foobar”，在PHP内部只会在第一使用这个字符串的时候分配一个不可变的内存区域来存储这个字符串，其他的999次使用都会直接指向这个内存区域。这个选项则会把这个特性提升一个层次——默认情况下这个不可变的内存区域只会存在于单个php-fpm的进程中，如果设置了这个选项，那么它将会在所有的php-fpm进程中共享。在比较大的应用中，这可以非常有效地节约内存，提高应用的性能。
+</span><span class="err">这个选项的值是以兆字节（megabytes）作为单位，如果把它设置为16，则表示16MB，默认是4MB，这是一个比较低的值。</span>
+<span class="err">opcache.max_accelerated_files</span> <span class="err">(default</span> <span class="err">"2000")</span>
+<span class="c">;这个选项用于控制内存中最多可以缓存多少个PHP文件。这个选项必须得设置得足够大，大于你的项目中的所有PHP文件的总和。
+</span><span class="err">设置值取值范围最小值是</span> <span class="err">200，最大值在</span> <span class="err">PHP</span> <span class="err">5.5.6</span> <span class="err">之前是</span> <span class="err">100000，PHP</span> <span class="err">5.5.6</span> <span class="err">及之后是</span> <span class="err">1000000。也就是说在200到1000000之间。</span>
+<span class="err">你可以运行“find</span> <span class="err">.</span> <span class="err">-type</span> <span class="err">f</span> <span class="err">-print</span> <span class="err">|</span> <span class="err">grep</span> <span class="err">php</span> <span class="err">|</span> <span class="err">wc</span> <span class="err">-l”这个命令来快速计算你的代码库中的PHP文件数。</span>
+<span class="err">opcache.max_wasted_percentage</span> <span class="err">(default</span> <span class="err">"5")</span>
+<span class="c">;计划重新启动之前，“浪费”内存的最大百分比。
+</span><span class="err">opcache.use_cwd</span> <span class="err">(default</span> <span class="err">"1")</span>
+<span class="c">;如果启用，OPcache将在哈希表的脚本键之后附加改脚本的工作目录， 以避免同名脚本冲突的问题。禁用此选项可以提高性能，但是可能会导致应用崩溃
+</span><span class="err">opcache.validate_timestamps</span> <span class="err">(default</span> <span class="err">"1")</span>
+<span class="c">;如果启用（设置为1），OPcache会在opcache.revalidate_freq设置的秒数去检测文件的时间戳（timestamp）检查脚本是否更新。
+</span><span class="err">如果这个选项被禁用（设置为0），opcache.revalidate_freq会被忽略，PHP文件永远不会被检查。这意味着如果你修改了你的代码，然后你把它更新到服务器上，再在浏览器上请求更新的代码对应的功能，你会看不到更新的效果，你必须使用</span> <span class="err">`opcache_reset()`</span> <span class="err">或者</span> <span class="err">`opcache_invalidate()`</span> <span class="err">函数来手动重置</span> <span class="err">OPcache。或者重重你的web服务器或者php-fpm</span> <span class="err">来使文件系统更改生效。</span>
+<span class="err">我强烈建议你在生产环境中设置为0，why？因为当你在更新服务器代码的时候，如果代码较多，更新操作是有些延迟的，在这个延迟的过程中必然出现老代码和新代码混合的情况，这个时候对用户请求的处理必然存在不确定性。最后，等所有的代码更新完毕后，再平滑重启PHP和web服务器。</span>
+<span class="err">opcache.revalidate_freq</span> <span class="err">(default</span> <span class="err">"2")</span>
+<span class="c">;这个选项用于设置缓存的过期时间（单位是秒），当这个时间达到后，opcache会检查你的代码是否改变，如果改变了PHP会重新编译它，生成新的opcode，并且更新缓存。值为“0”表示每次请求都会检查你的PHP代码是否更新（这意味着会增加很多次stat系统调用，译注：stat系统调用是读取文件的状态，这里主要是获取最近修改时间，这个系统调用会发生磁盘I/O，所以必然会消耗一些CPU时间，当然系统调用本身也会消耗一些CPU时间）。可以在开发环境中把它设置为0，生产环境下不用管。
+</span><span class="err">如果</span> <span class="err">`opcache.validate_timestamps`</span> <span class="err">配置指令设置为禁用（设置为0），那么此设置项将会被忽略。</span>
+<span class="err">opcache.revalidate_path</span> <span class="err">(default</span> <span class="err">"0")</span>
+<span class="c">;在include_path优化中启用或禁用文件搜索
+</span><span class="err">如果被禁用，并且找到了使用的缓存文件相同的include_path，该文件不被再次搜索。因此，如果一个文件与include_path中的其他地方相同的名称出现将不会被发现。如果此优化对此有效，请启用此指令你的应用程序，这个指令的默认值是禁用的，这意味着该优化是活跃的。</span>
+<span class="err">opcache.fast_shutdown（默认“0”）</span>
+<span class="c">;如果启用，则会使用快速停止续发事件。 所谓快速停止续发事件是指依赖 Zend 引擎的内存管理模块 一次释放全部请求变量的内存，而不是依次释放每一个已分配的内存块。
+</span><span class="err">该指令已在PHP</span> <span class="err">7.2.0中被删除。快速关机序列的一个变种已经被集成到PHP中，并且如果可能的话将被自动使用。</span>
 </code></pre></div></div>
 
-<p>所以，如果如果对某一层加锁，就需要对其所有上层加意向锁，意向锁也分为意向共享锁（IS），意向排他锁（IX）。  <br />
-对行加共享锁前，会对表加意向共享锁；对行加排他锁前，会对表加意向排他锁。</p>
+<h3 id="其他加速器">其他加速器</h3>
 
-<p>表级意向锁和表级锁的兼容性如下表所示：</p>
+<h5 id="apc">APC</h5>
 
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: center">-</th>
-      <th style="text-align: center">IS</th>
-      <th style="text-align: center">IX</th>
-      <th style="text-align: center">S</th>
-      <th style="text-align: center">X</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: center">IS</td>
-      <td style="text-align: center">兼容</td>
-      <td style="text-align: center">兼容</td>
-      <td style="text-align: center">兼容</td>
-      <td style="text-align: center">不兼容</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">IX</td>
-      <td style="text-align: center">兼容</td>
-      <td style="text-align: center">兼容</td>
-      <td style="text-align: center">不兼容</td>
-      <td style="text-align: center">不兼容</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">S</td>
-      <td style="text-align: center">兼容</td>
-      <td style="text-align: center">不兼容</td>
-      <td style="text-align: center">兼容</td>
-      <td style="text-align: center">不兼容</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">X</td>
-      <td style="text-align: center">不兼容</td>
-      <td style="text-align: center">不兼容</td>
-      <td style="text-align: center">不兼容</td>
-      <td style="text-align: center">不兼容</td>
-    </tr>
-  </tbody>
-</table>
+<p>Alternative PHP Cache (APC) 是一个开放自由的PHP opcode缓存。它的目标是提供一个自由、 开放，和健全的框架用于缓存和优化PHP的中间代码。 它是PHP PECL中的一个扩展。</p>
 
-<p>例如对记录r加X锁之前，必须对表1加上IX锁，如果已经有事务对表1进行了S表锁，由于不兼容，需要等待表锁操作完成。</p>
+<h5 id="xcache">xcache</h5>
 
-<h3 id="查看锁">查看锁</h3>
+<p>XCache是国人自己开发的东西，性能比早期的eAccelerator加速器要优良。</p>
 
-<p>innodb1.0版本之前，用户只能通过以下命令查看当前数据库锁的请求。</p>
+<h5 id="eaccelerator">eAccelerator</h5>
 
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SHOW</span> <span class="k">FULL</span> <span class="n">PROCESSLIST</span><span class="p">;</span>
-<span class="k">SHOW</span> <span class="n">ENGINE</span> <span class="n">INNODB</span> <span class="n">STATUS</span><span class="p">;</span>
-</code></pre></div></div>
-
-<p>从innodb1.0版本开始，在INFORMATION_SCHEMA架构中添加了表INNODB_TRX、INNODB_LOCKS、INNODB_LOCK_WAITS。通过这3张表，用户可以更简单的监控当前事务并分析可能存在的锁问题。</p>
-
-<p>INNODB_TRX表由以下字段组成：</p>
-
-<p>| 字段 | 说明 |
-| :- | :- |
-| trx_id | InnoDB存储引擎内部唯一的事务ID
-| trx_state | 当前事务的状态。
-| trx_started | 事务的开始时间。
-| trx_requested_lock_id | 等待事务的锁ID。如trx_state的状态为LOCK WAIT,那么该值代表当前的等待之前事务占用锁资源的ID.若trx_state不是LOCK WAIT,则该值为NULL。
-| trx_wait_started | 事务等待开始的时间。
-| trx_weight | 事务的权重，反映了一个事务修改和锁住的行数。在InnoDB存储引擎中，当发生死锁需要回滚时，InnoDB存储会选 
-择该值最小的进行回滚。
-| trx_mysql_thread_id | Mysql中的线程ID,SHOW PROCESSLIST显示的结果。
-| trx_query | 事务运行的sql语句。</p>
-
-<p>实际例子：</p>
-
-<p><img src="/assets/img/posts/2018-06-23-mysql-innodb-lock/1.jpg" alt="1.jpg" /></p>
-
-<p>通过state可以观察到trx_id为730FEE的事务当前正在运行，而trx_id为731F4的事务处于LOCK WAIT状态，且运行的SQL语句是select * from parent lock in shar mode。该表只是显示了当前运行的innoDB事务，并不能准确的判断锁的一些情况。如果需要查看锁，还需要访问 INNODB_LOCKS。</p>
-
-<p>INNODB_LOCKS表由如下字段组成：</p>
-
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">字段</th>
-      <th style="text-align: left">说明</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">lock_id</td>
-      <td style="text-align: left">锁的ID。</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">lock_trx_id</td>
-      <td style="text-align: left">事务ID。</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">lock_mode</td>
-      <td style="text-align: left">锁的模式。</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">lock_type</td>
-      <td style="text-align: left">锁的类型，表锁还是行锁。</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">lock_table</td>
-      <td style="text-align: left">要加锁的表。</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">lock_index</td>
-      <td style="text-align: left">锁的索引。</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">lock_space</td>
-      <td style="text-align: left">InnoDB存储引擎表空间的ID号。</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">lock_page</td>
-      <td style="text-align: left">被锁住的页的数量。若是表锁，则该值为NULL。</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">lock_rec</td>
-      <td style="text-align: left">被锁住的行的数量。若是表锁，则该值为NULL。</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">lock_data</td>
-      <td style="text-align: left">被锁住的行的主键值。当是表锁，该值为NULL。</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>按照上面的例子，继续查看表INNODB_LOCKS。</p>
-
-<p><img src="/assets/img/posts/2018-06-23-mysql-innodb-lock/2.jpg" alt="2.jpg" /></p>
-
-<p>用户可以清楚的看到当前锁的信息，trx_id为730FEE的事务想表parent加了一个X的行锁。ID为7311F4的事务想表parent申请了一个S的行锁。lock_data都是1，申请相同的资源，因此会有等待。这样可以解析INNODB_TRX为什么一个事务的trx_state是RUNNING另一个是LOCK WAITLE</p>
-
-<p>另外需要注意的是，发现lock_data并不是可信的值。例如当用户运行一个范围查找时，lock_data可能只返回第一行的主键值。与此同时，如果当前资源被锁住了。若锁住的页因为InnoDB存储引擎缓冲池的容量，导致页从缓冲池中被刷出，则查看INNODB_LOCKS表时，该值同样显示为NULL。即InnoDB存储引擎不会从磁盘进行再一次的查找</p>
-
-<p>在通过INNODB_LOCKS馋看了每张表上锁的情况后，用户可以判断由此引发的等待情况。当事务较小时，用户就可以人为地、直观地进行判断了。但是当事务量非常大，其中锁和等待也时常发生。这个时候就不容易判断。但是可以通过INNODB_LOCK_WAITS可以很直观的反应出当前事务的等待。</p>
-
-<p>INNODB_LOCK_WAIT表由以下字段组成：</p>
-
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">字段</th>
-      <th style="text-align: left">说明</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">requesting_trx_id</td>
-      <td style="text-align: left">申请锁资源的事务ID</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">requesting_lock_id</td>
-      <td style="text-align: left">申请的锁的ID。</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">blocking_trx_id</td>
-      <td style="text-align: left">阻塞的事务的ID。</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">blocking_lock_id</td>
-      <td style="text-align: left">阻塞的事务的ID。</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>按照上面的例子，运行如下查询：</p>
-
-<p><img src="/assets/img/posts/2018-06-23-mysql-innodb-lock/3.jpg" alt="3.jpg" /></p>
-
-<p>通过上述的SQL语句，用户可以清楚的看到哪个事务阻塞了另一个事务。当然这只是给出了事务和锁ID，如果需要，用户可以根据表INNODB_TRX、INNODB_LOCKS、INNODB_LOCK_WAITS得到更为直观的详细信息。例如，用户可以执行如下联合查询</p>
-
-<p><img src="/assets/img/posts/2018-06-23-mysql-innodb-lock/4.jpg" alt="4.jpg" /></p>
-
-<h3 id="一致性非锁定读">一致性非锁定读</h3>
-
-<p><strong>一致性的非锁定读</strong>是指innodb存储引擎通过行多版本控制的方式来读取当前执行时间数据库中的行数据。</p>
-
-<p>就是说如果读取的行已被加了X锁，这时不需要等待X锁的释放，而是读取行记录的快照数据（即该行的之前版本的数据），该实现是通过undo段来实现，而undo本身是用来在事务中回滚数据，因此快照数据本身是没有额外的消耗的。<strong>读取快照是不需要上锁的</strong>，因为没有事务需要对历史数据进行修改操作。</p>
-
-<p>由于读取的行数据必须不能被其他事务修改，所以对使用场景有要求，在事务隔离级别READ COMMIT（提交读）和REPEATABLE READ（可重复读，默认）下，innodb使用一致性非锁定读。  <br />
-在READ COMMIT隔离级别下，对于快照数据，一致性非锁定读总是读取被锁定行的最新一份快照。  <br />
-在REPEATABLE READ隔离级别下，对于快照数据，一致性非锁定读总是读取事务开始时的行数据版本。</p>
-
-<h3 id="自增长与锁">自增长与锁</h3>
-
-<p>当对含有自增长的计数器的表进行插入操作时，这个计数器会被初始化，执行如下的语句来得到计数器的值：</p>
-
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="k">max</span><span class="p">(</span><span class="n">auto_inc_col</span><span class="p">)</span> <span class="k">from</span> <span class="n">test</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
-</code></pre></div></div>
-
-<p>插入操作会根据这个自增长的计数器值加1赋予自增长列。这个实现方式称作为AUTO-INC Locking。这种锁采用一种特殊的表锁机制，为了提高插入的性能，锁不是在一个事务完成后才释放，而是在完成对自增长值插入的SQL语句后立即释放。</p>
-
-<p>虽然AUTO-INC Locking从一定程度上提高了并发插入的效率，但还是存在一些性能问题。首先，对于有自增长值的列的并发插入性能较差，事务必须等待前一个插入的完成。其次，对于INSERT—-SELECT的大数据量的插入会影响插入的性能，因为另一个事务中的插入会被阻塞。</p>
-
-<p>从MySQL5.1.22版本开始，InnoDB存储引擎引擎中提供了一种轻量级互斥量的自增长实现机制，这种机制大大提高了自增长值插入的性能。并且从该版本开始，InnoDB存储引擎提供了一个参数innodb_autoinc_lock_mode来控制自增长的模式，该参数的默认值为1.
-在继续讨论新的自增长方式实现方式之前，需要对自增长的插入进行分类，如下：</p>
-
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">插入类型</th>
-      <th style="text-align: left">说明</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">insert-like</td>
-      <td style="text-align: left">指所有的插入语句，如insert，replace，insert—select,replace—select,load data等</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">simple inserts</td>
-      <td style="text-align: left">指能在插入之前就确定插入行数的语句。这些语句包含insert、replace等，需要注意的是：simple inserts不包含insert—on duplicater key update这类SQL语句</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">bulk inserts</td>
-      <td style="text-align: left">指在插入之前不能确定得到插入行数的语句，如insert—select，replace–select，load data</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">mixed-mode inserts</td>
-      <td style="text-align: left">指插入中有一部分的值是自增长的，有一部分是确定的，如INSERT INTO t1(c1,c2) VALAUES (1,’a’),(null,’b’),(5,’e’); 或者指 INSERT … ON DUPLICATE KEY UPDATE 这类sql语句。</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>接着来分析参数innodb_autoinc_lock_mode，如下表所示：</p>
-
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: center">innodb_autoinc_lock_mode</th>
-      <th style="text-align: left">说明</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: center">0</td>
-      <td style="text-align: left">这是MySQL5.1.22版本之前自增长的实现方式，即通过表锁的AUTO-INC Locking方式，因为有了新的自增长实现方式，0这个选项不应该是新版用户的首选项</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">1</td>
-      <td style="text-align: left">这是该参数的默认值。对于simple inserts，该值会用互斥量去对内存中的计数器进行累加的操作，对于bulk inserts，还是使用传统表锁的AUTO-INC Locking方式。在这种配置下，如果不考虑回滚操作，对于自增长列的增长还是连续的，并且在这种方式下，statement-based方式的replication还是能很好地工作。需要注意的是，如果已经使用AUTO-INC Locking方式去产生自增长的值，而这时需要进行simple inserts的操作时，还是需要等待AUTO-INC Locking的释放</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">2</td>
-      <td style="text-align: left">在这个模式下，对于所有的insert-like自增长的产生都是通过互斥量，而不是通过AUTO-INC Locking的方式，显然这时性能最高的方式。然而会带来一定的问题。因为并发插入的存在，在每次插入时，自增长的值可能不是连续的。最重要的是，基于Statment-base replication会出现问题。因此，使用这个模式，任何时候都应该使用row-base replication，这样才能保证最大的并发性能及replication主从数据的一致。</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3 id="外键和锁">外键和锁</h3>
-
-<p>对于外键值的插入或更新，首先需要查询父表中的记录，即select父表，但是对父表的select操作，不是使用一致性非锁定锁，因为这样会发生数据不一致的问题，因此这时使用的是select … lock in share mode方式，即主动对父表加一个S锁，如果这时父表上已经加了X锁，子表的操作会被阻塞。</p>
+<p>eAccelerator的前身其实是truck-mmcache，因为开发truk-mmcache的人被Zend给招安了，所以开发eAccelerator的人继承了truk-mmcache的一些特性，设计出eAccelerator加速器。</p>
 
 
                 <hr style="visibility: hidden;">
@@ -578,17 +258,17 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/05/27/hyperledger-fabric/" data-toggle="tooltip" data-placement="top" title="fabric - 架构&执行流程">
+                        <a href="/2018/08/11/php-nginx-connect/" data-toggle="tooltip" data-placement="top" title="nginx与php-fpm 连接数">
                         Previous<br>
-                        <span>fabric - 架构&执行流程</span>
+                        <span>nginx与php-fpm 连接数</span>
                         </a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2018/06/30/mysql-innodb-index/" data-toggle="tooltip" data-placement="top" title="mysql系列教程 - B+Tree索引">
+                        <a href="/2018/10/07/smarty/" data-toggle="tooltip" data-placement="top" title="smarty">
                         Next<br>
-                        <span>mysql系列教程 - B+Tree索引</span>
+                        <span>smarty</span>
                         </a>
                     </li>
                     
