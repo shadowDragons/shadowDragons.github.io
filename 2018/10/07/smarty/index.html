@@ -10,7 +10,7 @@
     <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
     <meta name="theme-color" content="#000000">
     
-    <title>「构建高性能web站点」服务器并发 - ben blog</title>
+    <title>smarty - ben blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2018/07/27/bhpws-service/">
+    <link rel="canonical" href="http://localhost:4000/2018/10/07/smarty/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -169,15 +169,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#web" title="web">web</a>
+                        <a class="tag" href="/tags/#php" title="php">php</a>
                         
                     </div>
-                    <h1>「构建高性能web站点」服务器并发</h1>
+                    <h1>smarty</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Ben Blog on July 27, 2018</span>
+                    <span class="meta">Posted by Ben Blog on October 7, 2018</span>
                 </div>
             </div>
         </div>
@@ -198,64 +198,70 @@
                 <!-- Multi-Lingual -->
                 
 
-				<h4 id="吞吐率">吞吐率</h4>
+				<h3 id="执行流程">执行流程</h3>
 
-<p>单位时间内服务器处理的请求数 reqs/s</p>
+<p><a href="/assets/img/posts/2018-10-07-smarty/1.jpg"><img src="/assets/img/posts/2018-10-07-smarty/1.jpg" alt="1.jpg" title="点击查看原图" /></a></p>
 
-<h4 id="用户并发数">用户并发数</h4>
+<h3 id="开启缓存">开启缓存</h3>
 
-<p>服务器最大并发数是有一定的利益前提的，就是服务器和用户双方所能接受的最大利益下。<br />
-每个用户可以在同一时间发起不止一个请求（与浏览器、http版本有关），所以用户并发数 &gt; 请求并发数。</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$smarty</span><span class="o">-&gt;</span><span class="na">caching</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+<span class="nv">$smarty</span><span class="o">-&gt;</span><span class="na">cache_lifetime</span> <span class="o">=</span> <span class="mi">3600</span><span class="p">;</span>
+</code></pre></div></div>
 
-<h4 id="请求等待时间">请求等待时间</h4>
+<p>判断是否已有缓存</p>
 
-<p>分为以下两种</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="nv">$smarty</span><span class="o">-&gt;</span><span class="na">isCached</span><span class="p">(</span><span class="s1">'index.htm'</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nv">$smarty</span><span class="o">-&gt;</span><span class="na">display</span><span class="p">(</span><span class="s1">'index.htm'</span><span class="p">);</span>
+    <span class="k">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
 
-<ul>
-  <li>用户平均请求等待时间。</li>
-  <li>服务器平均请求处理时间（等于吞吐率的倒数）。</li>
-</ul>
+<span class="c1">// do something</span>
+<span class="nv">$smarty</span><span class="o">-&gt;</span><span class="na">display</span><span class="p">(</span><span class="s1">'index.htm'</span><span class="p">);</span>
+</code></pre></div></div>
 
-<h4 id="线程与进程">线程与进程</h4>
+<h3 id="清除缓存">清除缓存</h3>
 
-<p>参考这篇文章<a href="/2018/07/29/computer-thread/">进程与线程</a></p>
+<h5 id="单个页面缓存">单个页面缓存</h5>
 
-<h4 id="系统负载">系统负载</h4>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$smarty</span><span class="o">-&gt;</span><span class="na">clearCache</span><span class="p">(</span><span class="s1">'index.htm'</span><span class="p">);</span>
+</code></pre></div></div>
 
-<p>可以通过 <code class="highlighter-rouge">cat /proc/loadavg</code> 或者 <code class="highlighter-rouge">top</code> 查看。</p>
+<h5 id="全部页面缓存">全部页面缓存</h5>
 
-<p><img src="/assets/img/posts/2018-07-27-bhpws-service/1.jpg" alt="1.jpg" /></p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$smarty</span><span class="o">-&gt;</span><span class="na">clearAllCache</span><span class="p">();</span>
+</code></pre></div></div>
 
-<p>上面数字的含义：</p>
+<h3 id="局部缓存">局部缓存</h3>
 
-<table>
-  <tbody>
-    <tr>
-      <td>10/200</td>
-      <td>10表示此时运行队列中的进程个数；200表示此时的进程总数</td>
-    </tr>
-    <tr>
-      <td>17145</td>
-      <td>目前创建的最后一个进程ID</td>
-    </tr>
-    <tr>
-      <td>1.63</td>
-      <td>1分钟内运行队列中就绪等待的进程数平均值</td>
-    </tr>
-    <tr>
-      <td>0.48</td>
-      <td>5分钟内运行队列中就绪等待的进程数平均值</td>
-    </tr>
-    <tr>
-      <td>0.21</td>
-      <td>10分钟内运行队列中就绪等待的进程数平均值</td>
-    </tr>
-  </tbody>
-</table>
+<h5 id="变量">变量</h5>
 
-<h4 id="io模型">I/O模型</h4>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 第三个参数 true 表示不缓存</span>
+<span class="nv">$smarty</span><span class="o">-&gt;</span><span class="na">assign</span><span class="p">(</span><span class="s1">'var'</span><span class="p">,</span> <span class="s1">'value'</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</code></pre></div></div>
 
-<p>参考这篇文章<a href="/2018/08/04/computer-io/">I/O模型</a></p>
+<h5 id="模板变量">模板变量</h5>
+
+<div class="language-smarty highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">{</span><span class="nv">$num</span> <span class="nb">nocache</span><span class="o">=</span><span class="kc">true</span><span class="k">}</span>
+</code></pre></div></div>
+
+<h5 id="模板局部">模板局部</h5>
+
+<div class="language-smarty highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">{</span><span class="nb">nocache</span><span class="k">}</span>
+<span class="nt">&lt;div&gt;</span><span class="k">{</span><span class="nv">$title</span><span class="k">}</span><span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;br/&gt;</span>
+<span class="nt">&lt;div&gt;</span>评论数：<span class="k">{</span><span class="nv">$num</span><span class="o">]</span><span class="k">}</span><span class="nt">&lt;/div&gt;</span>
+<span class="k">{/</span><span class="nb">nocache</span><span class="k">}</span>
+</code></pre></div></div>
+
+<h3 id="单页面多缓存">单页面多缓存</h3>
+
+<p>display拥有第二个参数，我们可以把需要改变的变量放入第二个参数就可以实现根据不同的请求生成不同的缓存！常用于详细内容页。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$smarty</span><span class="o">-&gt;</span><span class="na">display</span><span class="p">(</span><span class="s1">'index.htm'</span><span class="p">,</span> <span class="nv">$id</span><span class="p">);</span>
+
+<span class="c1">//集合</span>
+<span class="nv">$smarty</span><span class="o">-&gt;</span><span class="na">display</span><span class="p">(</span><span class="s1">'index.htm'</span><span class="p">,</span> <span class="nv">$id1</span> <span class="o">.</span> <span class="s1">'|'</span> <span class="o">.</span> <span class="nv">$id2</span><span class="p">)</span>
+</code></pre></div></div>
 
 
                 <hr style="visibility: hidden;">
@@ -263,17 +269,17 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/07/14/perconaToolkit/" data-toggle="tooltip" data-placement="top" title="PerconaToolkit工具集合">
+                        <a href="/2018/08/11/php-nginx-connect/" data-toggle="tooltip" data-placement="top" title="nginx与php-fpm 连接数">
                         Previous<br>
-                        <span>PerconaToolkit工具集合</span>
+                        <span>nginx与php-fpm 连接数</span>
                         </a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2018/07/29/computer-thread/" data-toggle="tooltip" data-placement="top" title="进程与线程">
+                        <a href="/2018/10/07/strace-dtruss/" data-toggle="tooltip" data-placement="top" title="系统调用跟踪 - strace、dtruss">
                         Next<br>
-                        <span>进程与线程</span>
+                        <span>系统调用跟踪 - strace、dtruss</span>
                         </a>
                     </li>
                     
