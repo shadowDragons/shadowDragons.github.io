@@ -10,7 +10,7 @@
     <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
     <meta name="theme-color" content="#000000">
     
-    <title>进程与线程 - ben blog</title>
+    <title>【构建高性能web站点】浏览器缓存 - ben blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2018/07/29/computer-thread/">
+    <link rel="canonical" href="http://localhost:4000/2018/10/11/bhpws-brower-cache/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -169,15 +169,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#计算机" title="计算机">计算机</a>
+                        <a class="tag" href="/tags/#web" title="web">web</a>
                         
                     </div>
-                    <h1>进程与线程</h1>
+                    <h1>【构建高性能web站点】浏览器缓存</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Ben Blog on July 29, 2018</span>
+                    <span class="meta">Posted by Ben Blog on October 11, 2018</span>
                 </div>
             </div>
         </div>
@@ -198,40 +198,86 @@
                 <!-- Multi-Lingual -->
                 
 
-				<p>先理解一下，什么是进程和线程：</p>
+				<p>我们可以通过http头信息来实现浏览器缓存。</p>
 
-<p>在现代操作系统中，进程支持多线程。</p>
+<h3 id="last-modified">Last-Modified</h3>
 
-<ul>
-  <li>进程是资源管理的最小单元；</li>
-  <li>线程是程序执行的最小单元。</li>
-</ul>
+<p>这种信息需要后台来判定是否过期。流程如下：</p>
 
-<p>它们之间的关系如下图所示：</p>
+<script src="/assets/js/mermaid.js"></script>
+<div class="mermaid">
+sequenceDiagram;
+    participant 客户端
+    participant 服务端
+    客户端-&gt;服务端: 请求静态文件
+    服务端-&gt;客户端: 返回头信息 Last-Modified: {最后修改时间} GMT
+    Note left of 客户端: 确认文件是否过期
+    客户端-&gt;服务端: 返回头信息If-Modified-Since: {上一步获取的最后修改时间} GMT 
+    Note right of 服务端: 获取客户端的头信息，根据设定的过期时间判断
+    服务端-&gt;客户端: 返回静态文件是否过期
+</div>
 
-<p><a href="/assets/img/posts/2018-07-29-computer-thread/1.png"><img src="/assets/img/posts/2018-07-29-computer-thread/1.png" alt="1.png" title="点击查看原图" /></a></p>
+<p>缺点：需要请求服务器，确认是否过期</p>
 
-<p>那么什么是程序执行的最小单位呢？</p>
+<h3 id="etag">ETag</h3>
 
-<p>线程作为调度和分配的基本单位（也被称为轻量级进程），这是因为他们共享进程的资源，所以没有太多的内存消耗。</p>
+<p>同样需要后台来判定是否过期。流程如下：</p>
 
-<p>当多个程序同时在执行的时候，我们的cpu（当cpu数小于程序数）并不能同时处理，cpu将会按照自己的逻辑排优先级，每次分配一定数量的时间片（1时间片=10ms），执行完时间片时间，就必须挂起等待，轮到其他程序执行，以此类推，如下图所示：</p>
+<script src="/assets/js/mermaid.js"></script>
+<div class="mermaid">
+sequenceDiagram;
+    participant 客户端
+    participant 服务端
+    客户端-&gt;服务端: 请求静态文件
+    服务端-&gt;客户端: 返回头信息 ETag: {根据文件内容计算出来的值} 
+    Note left of 客户端: 确认文件是否过期
+    客户端-&gt;服务端: 返回头信息If-None-Match: {上一步获取的ETag值}
+    Note right of 服务端: 获取客户端的头信息，计算目前文件内容的ETag值做对比
+    服务端-&gt;客户端: 返回静态文件是否过期
+</div>
 
-<p><a href="/assets/img/posts/2018-07-29-computer-thread/2.png"><img src="/assets/img/posts/2018-07-29-computer-thread/2.png" alt="2.png" title="点击查看原图" /></a></p>
+<p>缺点：需要请求服务器，确认是否过期</p>
 
-<p>当然cpu并不认识我们的程序，它只认进程里面的线程，所以是分配时间片给线程。</p>
+<h3 id="expires">Expires</h3>
 
-<p>我们上面所说的线程都是指内核级线程，即系统知道该线程的存在。  <br />
-还有一种是<strong>用户级线程</strong>，由程序的线程库产生的，这种是系统不知道该线程存在的，所以可以认为是程序自己实现的虚拟线程。如下图所示：</p>
+<p>这种方式可以彻底消灭服务器请求，流程如下：</p>
 
-<p><a href="/assets/img/posts/2018-07-29-computer-thread/3.png"><img src="/assets/img/posts/2018-07-29-computer-thread/3.png" alt="3.png" title="点击查看原图" /></a></p>
+<script src="/assets/js/mermaid.js"></script>
+<div class="mermaid">
+sequenceDiagram;
+    participant 客户端
+    participant 服务端
+    客户端-&gt;服务端: 请求静态文件
+    服务端-&gt;客户端: 返回头信息 Expires: {过期时间} GMT
+    loop 判断过期
+        客户端-&gt;客户端: 根据Expires过期时间判断
+    end
+</div>
 
-<p>用户级线程与内核级线程的区别：</p>
+<p>缺点：依赖本地时间、无法实时更新静态文件内容。</p>
 
-<ul>
-  <li>用户级线程是共享进程资源的，切换不需要有上下文切换的消耗，这是因为内核级线程切换通常会跨进程，所以需要把资源存储到其他地方，等轮到它执行时，再把资源拿回来。</li>
-  <li>用户级线程如果其中一个处于阻塞，则派生它的内核级线程也会被阻塞，因为系统不知道这个线程存在。而内核级别线程不会有这个问题。</li>
-</ul>
+<h3 id="cache-control">Cache-control</h3>
+
+<p>HTTP1.1 的Cache-control可以弥补Expires依赖本地时间的不足。格式如下：</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cache-control: max-age=<span class="nt">&lt;second&gt;</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">max-age</code>指定了缓存过期的相对时间，单位秒，并且是相对于本地时间。浏览器根据本地当前时间是否大于max-age+上次访问时间</p>
+
+<p>流程如下：</p>
+
+<script src="/assets/js/mermaid.js"></script>
+<div class="mermaid">
+sequenceDiagram;
+    participant 客户端
+    participant 服务端
+    客户端-&gt;服务端: 请求静态文件
+    服务端-&gt;客户端: 返回头信息 Expires: {过期时间} GMT、Cache-control: max-age={有效时长}
+    loop 判断过期
+        客户端-&gt;客户端: 优先判断max-age
+    end
+</div>
 
 
                 <hr style="visibility: hidden;">
@@ -239,19 +285,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/07/27/bhpws-service/" data-toggle="tooltip" data-placement="top" title="「构建高性能web站点」服务器并发">
+                        <a href="/2018/10/07/strace-dtruss/" data-toggle="tooltip" data-placement="top" title="系统调用跟踪 - strace、dtruss">
                         Previous<br>
-                        <span>「构建高性能web站点」服务器并发</span>
+                        <span>系统调用跟踪 - strace、dtruss</span>
                         </a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2018/08/04/computer-io/" data-toggle="tooltip" data-placement="top" title="I/O模型">
-                        Next<br>
-                        <span>I/O模型</span>
-                        </a>
-                    </li>
                     
                 </ul>
 
