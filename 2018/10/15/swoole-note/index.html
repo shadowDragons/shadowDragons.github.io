@@ -10,7 +10,7 @@
     <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
     <meta name="theme-color" content="#000000">
     
-    <title>系统调用跟踪 - strace、dtruss - ben blog</title>
+    <title>swoole 学习笔记 - ben blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2018/10/07/strace-dtruss/">
+    <link rel="canonical" href="http://localhost:4000/2018/10/15/swoole-note/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -169,15 +169,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#工具" title="工具">工具</a>
+                        <a class="tag" href="/tags/#php" title="php">php</a>
                         
                     </div>
-                    <h1>系统调用跟踪 - strace、dtruss</h1>
+                    <h1>swoole 学习笔记</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Ben Blog on October 7, 2018</span>
+                    <span class="meta">Posted by Ben Blog on October 15, 2018</span>
                 </div>
             </div>
         </div>
@@ -198,153 +198,92 @@
                 <!-- Multi-Lingual -->
                 
 
-				<h3 id="linux工具strace">linux工具strace</h3>
+				<p>最近需要用到多进程处理任务，先学习一番。</p>
 
-<h5 id="语法">语法</h5>
+<h3 id="安装">安装</h3>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>strace [-dffhiqrtttTvVxx] [-a column] [-e expr] ... [-o file]
-
-              [-p pid] ... [-s strsize] [-u username] [-E var<span class="o">=</span>val] ...
-
-              [command [arg ...]]
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pecl <span class="nb">install </span>swoole
 </code></pre></div></div>
 
-<p>或者</p>
+<h5 id="安装遇到的问题">安装遇到的问题</h5>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>strace <span class="nt">-c</span> <span class="o">[</span><span class="nt">-e</span> <span class="nb">expr</span><span class="o">]</span> ... <span class="o">[</span><span class="nt">-O</span> overhead] <span class="o">[</span><span class="nt">-S</span> sortby] <span class="o">[</span><span class="nt">-E</span> <span class="nv">var</span><span class="o">=</span>val] ...
+<p>我选择了支持openssl，安装过程中遇到了两个错误</p>
 
-              <span class="o">[</span><span class="nb">command</span> <span class="o">[</span>arg ...]]
+<p>1、 <code class="highlighter-rouge">fatal error: 'openssl/ssl.h' file not found</code></p>
+
+<p>解决方法： <br />
+一般用brew安装的软件，都会把需要include的文件自动放到/usr/local/include里的，但是不知为什么安装openssl的时候没有放到那里。</p>
+
+<ul>
+  <li><code class="highlighter-rouge">cp -R /usr/local/opt/openssl/include/openssl /usr/local/include</code></li>
+  <li><code class="highlighter-rouge">ln -s /usr/local/opt/openssl/include/openssl /usr/local/include/openssl</code>（推荐）</li>
+</ul>
+
+<p>2、<code class="highlighter-rouge">Enable openssl support, require openssl library.</code></p>
+
+<p>查看 openssl 信息 <code class="highlighter-rouge">brew info openssl</code>，可以查看一下信息</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For compilers to find openssl you may need to <span class="nb">set</span>:
+  <span class="nb">export </span><span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">"-L/usr/local/opt/openssl/lib"</span>
+  <span class="nb">export </span><span class="nv">CPPFLAGS</span><span class="o">=</span><span class="s2">"-I/usr/local/opt/openssl/include"</span>
 </code></pre></div></div>
 
-<h5 id="参数说明">参数说明</h5>
+<p>添加环境变量即可修复这个问题。</p>
 
-<p>-c 统计每一系统调用的所执行的时间,次数和出错的次数等.</p>
+<h3 id="多进程">多进程</h3>
 
-<p>-d 输出strace关于标准错误的调试信息.</p>
+<p><a href="https://wiki.swoole.com/wiki/page/p-process.html">官方文档</a></p>
 
-<p>-f 跟踪由fork调用所产生的子进程.</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
 
-<p>-ff 如果提供-o filename,则所有进程的跟踪结果输出到相应的filename.pid中,pid是各进程的进程号.</p>
+<span class="nv">$url_arr</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+<span class="k">for</span> <span class="p">(</span><span class="nv">$i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nv">$i</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span><span class="nv">$i</span><span class="o">++</span><span class="p">){</span>
+    <span class="nv">$url_arr</span><span class="p">[]</span> <span class="o">=</span> <span class="s2">"www.baidu.com?wd="</span><span class="o">.</span><span class="nv">$i</span><span class="p">;</span>
+<span class="p">}</span>
 
-<p>-F 尝试跟踪vfork调用.在-f时,vfork不被跟踪.</p>
+<span class="nv">$workers</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
 
-<p>-h 输出简要的帮助信息.</p>
+<span class="c1">// 创建子进程</span>
+<span class="k">for</span> <span class="p">(</span><span class="nv">$i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nv">$i</span><span class="o">&lt;</span><span class="mi">5</span><span class="p">;</span><span class="nv">$i</span><span class="o">++</span><span class="p">){</span>
+  <span class="nv">$process</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">swoole_process</span><span class="p">(</span><span class="s1">'getContents'</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
+  <span class="nv">$pid</span> <span class="o">=</span> <span class="nv">$process</span><span class="o">-&gt;</span><span class="na">start</span><span class="p">();</span>
 
-<p>-i 输出系统调用的入口指针.</p>
+  <span class="c1">// 向管道内写入数据</span>
+  <span class="nv">$process</span><span class="o">-&gt;</span><span class="na">write</span><span class="p">(</span><span class="nv">$i</span><span class="p">);</span>
+  <span class="nv">$workers</span><span class="p">[</span><span class="nv">$pid</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$process</span><span class="p">;</span>
+<span class="p">}</span>
 
-<p>-q 禁止输出关于脱离的消息.</p>
+<span class="c1">//主进程数据结果</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$workers</span> <span class="k">as</span> <span class="nv">$process</span><span class="p">){</span>
+    <span class="k">echo</span> <span class="nv">$process</span><span class="o">-&gt;</span><span class="na">read</span><span class="p">();</span>
+    <span class="k">echo</span> <span class="nx">PHP_EOL</span><span class="p">;</span>
+<span class="p">}</span>
 
-<p>-r 打印出相对时间关于每一个系统调用.</p>
+<span class="k">function</span> <span class="nf">getContents</span><span class="p">(</span><span class="nx">swoole_process</span> <span class="nv">$worker</span><span class="p">){</span>
+    <span class="c1">// 从管道中读取数据</span>
+    <span class="nv">$i</span> <span class="o">=</span> <span class="nv">$worker</span><span class="o">-&gt;</span><span class="na">read</span><span class="p">();</span>
+    <span class="k">global</span> <span class="nv">$url_arr</span><span class="p">;</span>
+    <span class="nv">$res1</span> <span class="o">=</span> <span class="nx">execCurl</span><span class="p">(</span><span class="nv">$url_arr</span><span class="p">[(</span><span class="nv">$i</span><span class="o">*</span><span class="mi">2</span><span class="p">)]);</span>
+    <span class="nb">sleep</span><span class="p">(</span><span class="nb">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">));</span>
+    <span class="nv">$res2</span> <span class="o">=</span> <span class="nx">execCurl</span><span class="p">(</span><span class="nv">$url_arr</span><span class="p">[(</span><span class="nv">$i</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">)]);</span>
+    <span class="k">echo</span> <span class="nv">$res1</span><span class="o">.</span><span class="nx">PHP_EOL</span><span class="o">.</span><span class="nv">$res2</span><span class="p">;</span>
+<span class="p">}</span>
 
-<p>-t 在输出中的每一行前加上时间信息.</p>
+<span class="k">function</span> <span class="nf">execCurl</span><span class="p">(</span><span class="nv">$url</span><span class="p">){</span>
+    <span class="k">return</span> <span class="s2">"handle "</span><span class="o">.</span><span class="nv">$url</span><span class="o">.</span><span class="s2">" finished"</span><span class="p">;</span>
+<span class="p">}</span>
 
-<p>-tt 在输出中的每一行前加上时间信息,微秒级.</p>
-
-<p>-ttt 微秒级输出,以秒了表示时间.</p>
-
-<p>-T 显示每一调用所耗的时间.</p>
-
-<p>-v 输出所有的系统调用.一些调用关于环境变量,状态,输入输出等调用由于使用频繁,默认不输出.</p>
-
-<p>-V 输出strace的版本信息.</p>
-
-<p>-x 以十六进制形式输出非标准字符串.</p>
-
-<p>-xx 所有字符串以十六进制形式输出.</p>
-
-<p>-a column 设置返回值的输出位置.默认 为40.</p>
-
-<p>-e expr 指定一个表达式,用来控制如何跟踪.格式如下:</p>
-
-<p>[qualifier=][!]value1[,value2]…</p>
-
-<p>qualifier只能是 trace,abbrev,verbose,raw,signal,read,write其中之一.value是用来限定的符号或数字.默认的 qualifier是 trace.感叹号是否定符号.例如-eopen等价于 -e trace=open,表示只跟踪open调用.而-etrace!=open表示跟踪除了open以外的其它调用.有两个特殊的符号 all 和 none. 注意有些shell使用!来执行历史记录里的命令,所以要使用\.</p>
-
-<p>-e trace=set 只跟踪指定的系统调用.例如:-e trace=open,close,rean,write表示只跟踪这四个系统调用.默认的为set=all.</p>
-
-<p>-e trace=file 只跟踪有关文件操作的系统调用.</p>
-
-<p>-e trace=process 只跟踪有关进程控制的系统调用.</p>
-
-<p>-e trace=network 跟踪与网络有关的所有系统调用.</p>
-
-<p>-e strace=signal 跟踪所有与系统信号有关的系统调用.</p>
-
-<p>-e trace=ipc 跟踪所有与进程通讯有关的系统调用.</p>
-
-<p>-e abbrev=set 设定strace输出的系统调用的结果集.-v 等与 abbrev=none.默认为abbrev=all.</p>
-
-<p>-e raw=set 将指定的系统调用的参数以十六进制显示.</p>
-
-<p>-e signal=set 指定跟踪的系统信号.默认为all.如 signal=!SIGIO(或者signal=!io),表示不跟踪SIGIO信号.</p>
-
-<p>-e read=set 输出从指定文件中读出的数据.例如-e read=3,5</p>
-
-<p>-e write=set 输出写入到指定文件中的数据.</p>
-
-<p>-o filename 将strace的输出写入文件filename</p>
-
-<p>-p pid 跟踪指定的进程pid.</p>
-
-<p>-s strsize 指定输出的字符串的最大长度.默认为32.文件名一直全部输出.</p>
-
-<p>-u username 以username 的UID和GID执行被跟踪的命令.</p>
-
-<h5 id="例子">例子</h5>
-
-<p><a href="https://huoding.com/2013/10/06/288">通过Strace定位故障原因</a></p>
-
-<h3 id="mac工具dtruss">mac工具dtruss</h3>
-
-<h5 id="语法-1">语法</h5>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dtruss [-acdefholLs] [-t syscall] { -p PID | -n name | command | -W name }
+<span class="c1">////回收子进程</span>
+<span class="k">while</span><span class="p">(</span><span class="nb">count</span><span class="p">(</span><span class="nv">$workers</span><span class="p">)){</span>
+    <span class="k">foreach</span><span class="p">(</span><span class="nv">$workers</span> <span class="k">as</span> <span class="nv">$pid</span><span class="o">=&gt;</span><span class="nv">$worker</span><span class="p">){</span>
+        <span class="nv">$ret</span> <span class="o">=</span> <span class="nx">swoole_process</span><span class="o">::</span><span class="na">wait</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nv">$ret</span><span class="p">){</span>
+            <span class="k">echo</span> <span class="s2">"worker exit: </span><span class="nv">$pid</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+            <span class="nb">unset</span><span class="p">(</span><span class="nv">$workers</span><span class="p">[</span><span class="nv">$pid</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div></div>
-
-<h5 id="参数说明-1">参数说明</h5>
-
-<p>-a 输出全部</p>
-
-<p>-b bufsize<br />
-dynamic variable buffer size. Increase this if you notice
-dynamic variable drop errors. The default is “4m” for 4
-megabytes per CPU.</p>
-
-<p>-c 输出系统调用数</p>
-
-<p>-d 输出时间消耗</p>
-
-<p>-e 输出剩余多少时间</p>
-
-<p>-f 监视fork出来的进程调用</p>
-
-<p>-l force printing of pid/lwpid per line</p>
-
-<p>-L don’t print pid/lwpid per line</p>
-
-<p>-n name 跟踪名为name的进程</p>
-
-<p>-o 输出花在cpu上的时间</p>
-
-<p>-s 输出栈跟踪</p>
-
-<p>-p PID 监视某个pid</p>
-
-<p>-t syscall 只监视某个系统调用</p>
-
-<h5 id="例子-1">例子</h5>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dtruss <span class="nb">df</span> <span class="nt">-h</span>       <span class="c"># run and examine "df -h"  </span>
-dtruss <span class="nt">-p</span> 1871     <span class="c"># examine PID 1871  </span>
-dtruss <span class="nt">-n</span> <span class="nb">tar</span>      <span class="c"># examine all processes called "tar"  </span>
-dtruss <span class="nt">-f</span> test.sh  <span class="c"># run test.sh and follow children</span>
-</code></pre></div></div>
-
-<h3 id="参考">参考</h3>
-
-<p><a href="https://blog.csdn.net/qq_38712943/article/details/82149045">strace</a></p>
-
-<p><a href="https://blog.csdn.net/kfy2011/article/details/48102843">系统调用跟踪命令strace和dtruss</a></p>
 
 
                 <hr style="visibility: hidden;">
@@ -352,19 +291,12 @@ dtruss <span class="nt">-f</span> test.sh  <span class="c"># run test.sh and fol
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/10/07/smarty/" data-toggle="tooltip" data-placement="top" title="smarty">
-                        Previous<br>
-                        <span>smarty</span>
-                        </a>
-                    </li>
-                    
-                    
-                    <li class="next">
                         <a href="/2018/10/11/bhpws-brower-cache/" data-toggle="tooltip" data-placement="top" title="【构建高性能web站点】浏览器缓存">
-                        Next<br>
+                        Previous<br>
                         <span>【构建高性能web站点】浏览器缓存</span>
                         </a>
                     </li>
+                    
                     
                 </ul>
 

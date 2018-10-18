@@ -179,6 +179,35 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2016/11/24/consistency-highavailability/">
+        <h2 class="post-title">
+            数据库的一致性与高可用
+        </h2>
+        
+        <div class="post-content-preview">
+            在给定多台计算机，他们相互之间由网络相互连通，能够做到：
+
+
+  数据每次成功写入，数据不会丢失，并且按照写入的顺序排列
+  给定安全级别，保证服务可用性，并尽可能减少机器消耗。
+
+
+2PC
+
+所谓的两个阶段是指：第一阶段：准备阶段(投票阶段)和第二阶段：提交阶段（执行阶段）。
+
+准备阶段
+
+事务协调者(事务管理器)给每个参与者(资源管理器)发送Prepare消息，每个参与者要么直接返回失败...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on November 24, 2016
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2016/11/18/php-about-thred-safe/">
         <h2 class="post-title">
             php线程安全
@@ -453,33 +482,6 @@ j = 0000001
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2016/11/12/php-async/">
-        <h2 class="post-title">
-            php实现异步
-        </h2>
-        
-        <div class="post-content-preview">
-            php在处理异步执行主要有以下四种方式来处理，其中第四种方式是最好的，推荐使用。
-
-1.ajax或嵌入img标签，在src中指向异步地址。
-
-缺点 不能算是真正异步，主要用户关闭浏览器，异步脚本也就被终止掉了
-
-&lt;html&gt;
-&lt;head&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;img src="b.php"&gt; 
-&lt;script sr...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 12, 2016
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -514,7 +516,7 @@ j = 0000001
                     <div class="tags">
                         
                             
-                                <a href="/tags/#php" title="php" rel="10">
+                                <a href="/tags/#php" title="php" rel="11">
                                     php
                                 </a>
                             
@@ -696,12 +698,7 @@ j = 0000001
                 <p class="copyright text-muted">
                     Copyright &copy; Ben Blog 2018
                     <br>
-                    Theme by <a href="http://huangxuan.me">Hux</a> |
-                    <iframe
-                        style="margin-left: 2px; margin-bottom:-5px;"
-                        frameborder="0" scrolling="0" width="100px" height="20px"
-                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true" >
-                    </iframe>
+                    Theme by <a href="http://huangxuan.me">Hux</a>
                 </p>
             </div>
         </div>
