@@ -10,7 +10,7 @@
     <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
     <meta name="theme-color" content="#000000">
     
-    <title>fabric - 架构&执行流程 - ben blog</title>
+    <title>“老鼠试药”算法 - ben blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2018/05/27/hyperledger-fabric/">
+    <link rel="canonical" href="http://localhost:4000/2018/10/29/mouse-algorithm/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -169,17 +169,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#超级账本" title="超级账本">超级账本</a>
-                        
-                        <a class="tag" href="/tags/#fabric" title="fabric">fabric</a>
+                        <a class="tag" href="/tags/#算法" title="算法">算法</a>
                         
                     </div>
-                    <h1>fabric - 架构&执行流程</h1>
+                    <h1>“老鼠试药”算法</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Ben Blog on May 27, 2018</span>
+                    <span class="meta">Posted by Ben Blog on October 29, 2018</span>
                 </div>
             </div>
         </div>
@@ -200,96 +198,162 @@
                 <!-- Multi-Lingual -->
                 
 
-				<p>本文简单讲述fabric架构&amp;执行流程，帮助同学快速理解&amp;入门。</p>
+				<p>昨天在网上看到一个视频，看到了一个很有趣的算法，赶紧记录下来。</p>
 
-<h2 id="架构">架构</h2>
+<h4 id="老鼠试药">“老鼠试药”</h4>
 
-<p><img src="/assets/img/posts/2018-05-27-hyperledger-fabric/1.jpeg" alt="1.jpeg" /></p>
+<p>题目是这样的：有100瓶药水，只有1瓶毒药。毒性发作需要1周时间，请问至少需要机智老鼠才能用1周时间找到那瓶毒药。</p>
 
-<h4 id="identity">Identity</h4>
+<p>我们可以用二进制来轻松的解决这个问题。</p>
 
-<p>Identity，也就是身份管理，Fabric是目前为止在设计上最贴近联盟链思想的区块链。联盟链考虑到商业应用对安全、隐私、监管、审计、性能的需求，提高准入门槛，成员必须被许可才能加入网络。Fabric成员管理服务为整个区块链网络提供身份管理、隐私、保密和可审计的服务。成员管理服务通过公钥基础设施PKI和去中心化共识机制使得非许可的区块链变成许可制的区块链。</p>
+<p>1、首先把100瓶药水按1到100排号。<br />
+2、将序号转换为二进制。如下表所示：</p>
 
-<h4 id="smart-contract">Smart Contract</h4>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">药品序号</th>
+      <th style="text-align: left">二进制</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">1</td>
+      <td style="text-align: left">0000001</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">2</td>
+      <td style="text-align: left">0000010</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">…</td>
+      <td style="text-align: left">…</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">100</td>
+      <td style="text-align: left">1100100</td>
+    </tr>
+  </tbody>
+</table>
 
-<p>Fabric的智能合约smart contract称为链码chaincode，是一段代码，它处理网络成员所同意的业务逻辑。和以太坊相比，Fabric链码和底层账本是分开的，升级链码时并不需要迁移账本数据到新链码当中，真正实现了逻辑与数据的分离。</p>
+<p>3、可以看到，这些二进制总共有7位，所以我们只需要7只老鼠，每只老鼠喝对应位置为1的毒药，如果老鼠死亡，则把对应位置为1，否则置为0。</p>
 
-<p>链码可采用Go、Java、Node.js语言编写。链码被编译成一个独立的应用程序，fabric用Docker容器来运行chaincode，里面的base镜像都是经过签名验证的安全镜像，包括OS层和开发chaincode的语言、runtime和SDK层。一旦chaincode容器被启动，它就会通过gRPC与启动这个chaincode的Peer节点连接。</p>
+<table>
+  <tbody>
+    <tr>
+      <td>位数1</td>
+      <td>位数2</td>
+      <td>位数3</td>
+      <td>位数4</td>
+      <td>位数5</td>
+      <td>位数6</td>
+      <td>位数7</td>
+      <td>对应序号</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>.</td>
+      <td>.</td>
+      <td>.</td>
+      <td>.</td>
+      <td>.</td>
+      <td>.</td>
+      <td>.</td>
+      <td>.</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>100</td>
+    </tr>
+    <tr>
+      <td>1号老鼠</td>
+      <td>2号老鼠</td>
+      <td>3号老鼠</td>
+      <td>4号老鼠</td>
+      <td>5号老鼠</td>
+      <td>6号老鼠</td>
+      <td>7号老鼠</td>
+      <td>-</td>
+    </tr>
+  </tbody>
+</table>
 
-<h4 id="ledger--transcations">Ledger | Transcations</h4>
+<p>举个例子，如果第3，4，7号到老鼠死亡，则可以算出二进制数为0011001的药瓶有毒，也即是25号。</p>
 
-<p>Fabric使用建立在HTTP/2上的P2P协议来管理分布式账本。采取可插拔的方式来根据具体需求来设置共识协议，比如PBFT，Raft，PoW和PoS等。</p>
+<h4 id="奇数枪毙">“奇数枪毙”</h4>
 
-<h6 id="ledger">Ledger</h6>
+<p>有100个人按序号排列，从序号1开始依次报数，念到奇数的枪毙。剩余的人重新按序号排列，依次执行。问如果想活命，应该一开始站在哪一序号？</p>
 
-<p><img src="/assets/img/posts/2018-05-27-hyperledger-fabric/2.jpg" alt="2.jpg" /></p>
+<p>这个问题我们依旧可以用二进制来解决这个问题。</p>
 
-<p>如上图所示，账本Ledger主要包含两块：blockchain和state。blockchain就是一系列连在一起的block，用来记录历史交易。state对应账本的当前最新状态，它是一个key-value数据库，Fabric默认采用Level DB, 可以替换成其他的Key-value数据库，如Couch DB。举个例子。我们采用区块链实现一个弹珠交易的系统。我们开发了一个Chaincode,每个弹珠有以下几个属性：Name, owner, color, size.  可以定义一个JSON对象，用name做KEY, JSON对象做Value，存储在Level DB或者CouchDB中。</p>
+<p>1、先列出100个人对应序号的二进制</p>
 
-<h6 id="transcation">transcation</h6>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">序号</th>
+      <th style="text-align: left">二进制</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">1</td>
+      <td style="text-align: left">0000001</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">2</td>
+      <td style="text-align: left">0000010</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">…</td>
+      <td style="text-align: left">…</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">100</td>
+      <td style="text-align: left">1100100</td>
+    </tr>
+  </tbody>
+</table>
 
-<p>Fabric上的transction交易分两种，部署交易和调用交易。</p>
+<p>2、从这里可以看出，末位为1的人需要被枪毙。<br />
+3、接下来剩余的人都是末位为0，由于需要重新排序，新的序号刚好是去掉末位后的数。所以我们把那些人到末位去掉，再按照第2步的逻辑枪毙，以此类推。<br />
+4、所以我们得出1000000会是最后胜出的人，即一开始序号为64的人。</p>
 
-<ul>
-  <li>部署交易  <br />
-  把Chaincode部署到peer节点上并准备好被调用，当一个部署交易成功执行时，Chaincode就被部署到各个peer节点上。好比把一个web service或者EJB部署到应用服务器上的不同实例上。</li>
-  <li>调用交易  <br />
-  客户端应用程序通过Fabric提供的API调用先前已部署好的某个chaincode的某个函数执行交易，并相应地读取和写入KV数据库，返回是否成功或者失败。</li>
-</ul>
-
-<h4 id="apis-events-sdks">APIs, Events, SDKs</h4>
-
-<p>Fabric提供API方便应用开发，对服务端的ChainCode，目前支持用Go、Java或者Node.js开发。对客户端应用，Fabric目前提供Node.js和Java SDK。未来计划提供Python 和Go SDK，Fabric还提供RESTAPI。对于开发者，还可以通过CLI快速去测试chaincode，或者去查询交易状态。在区块链网络里，节点和chaincode会发送events来触发一些监听动作，方便与其他外部系统的集成。</p>
-
-<h2 id="执行流程">执行流程</h2>
-
-<p>首先理解几个概念</p>
-
-<ul>
-  <li>MSP  <br />
-  MSP(Membership Service Provider), 这类节点主管区块链网络中其他的节点的授权，准入，踢除。通过给不同节点颁发证书的方式，授予不同类型的节点相应的权限。</li>
-  <li>Ordering Node  <br />
-  中文可以称作排序节点。通常在一个网络中至少有一个或多个排序节点，这类节点负责 按照指定的算法，将交易进行排序，并返回给Committing Peer。其并不关心具体的交易细节。</li>
-  <li>Endorsing Peer  <br />
-  这类节点的主要负责接收交易请求，验证这笔交易之后，并做一些预处理之后，并将签名后的数据传回给客户端。</li>
-  <li>Committing Peer  <br />
-  这类节点做是区块链网络中的全节点，它们需要记录完整的区块信息，并且验证每笔交易的正确性，是最终将交易打包进区块链的节点。</li>
-</ul>
-
-<p>交易的执行路程如下</p>
-
-<p>1.首先从客户端发起一笔交易提交到Endorsing Peer，进行预处理。</p>
-
-<p><img src="/assets/img/posts/2018-05-27-hyperledger-fabric/3.png" alt="3.png" /></p>
-
-<p>2.预处理通过之后，将签名数据，传回给客户端。</p>
-
-<p><img src="/assets/img/posts/2018-05-27-hyperledger-fabric/4.png" alt="4.png" /></p>
-
-<p>3.客户端发起请求，将收到的签名数据传给Ordering Node。</p>
-
-<p><img src="/assets/img/posts/2018-05-27-hyperledger-fabric/5.png" alt="5.png" /></p>
-
-<p>4.Ordering Node对交易进行排序，然后传给Committing Peer。</p>
-
-<p><img src="/assets/img/posts/2018-05-27-hyperledger-fabric/6.png" alt="6.png" /></p>
-
-<p>5.Committing Peer这里将排序好的交易进行验证，并打包，通过指定的共识算法达成一致，形成新的区块。</p>
-
-<p><img src="/assets/img/posts/2018-05-27-hyperledger-fabric/7.png" alt="7.png" /></p>
-
-<p>6.最后将交易结果返回给客户端。</p>
-
-<p><img src="/assets/img/posts/2018-05-27-hyperledger-fabric/8.png" alt="8.png" /></p>
-
-<p>ps:中间过程的每一步，都伴随着权限的验证。会根据MSP颁发的证书，进行判断。</p>
-
-<h2 id="参考">参考</h2>
-
-<ul>
-  <li><a href="https://blog.csdn.net/xcjing/article/details/78883642">Hyperledger Fabric 1.0架构及原理</a></li>
-  <li><a href="https://www.jianshu.com/p/eb33c7288ce7?from=timeline">超级账本之——Fabric</a></li>
-</ul>
 
 
                 <hr style="visibility: hidden;">
@@ -297,19 +361,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/05/27/hyperledger-fabric-sdk/" data-toggle="tooltip" data-placement="top" title="fabric - Node.js SDK">
+                        <a href="/2018/10/15/swoole-note/" data-toggle="tooltip" data-placement="top" title="swoole 学习笔记">
                         Previous<br>
-                        <span>fabric - Node.js SDK</span>
+                        <span>swoole 学习笔记</span>
                         </a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2018/06/23/mysql-innodb-lock/" data-toggle="tooltip" data-placement="top" title="mysql系列教程 - innodb锁">
-                        Next<br>
-                        <span>mysql系列教程 - innodb锁</span>
-                        </a>
-                    </li>
                     
                 </ul>
 

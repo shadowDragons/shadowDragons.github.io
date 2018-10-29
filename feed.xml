@@ -5,9 +5,177 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 18 Oct 2018 22:24:39 +0800</pubDate>
-    <lastBuildDate>Thu, 18 Oct 2018 22:24:39 +0800</lastBuildDate>
+    <pubDate>Mon, 29 Oct 2018 22:28:20 +0800</pubDate>
+    <lastBuildDate>Mon, 29 Oct 2018 22:28:20 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
+    
+      <item>
+        <title>“老鼠试药”算法</title>
+        <description>&lt;p&gt;昨天在网上看到一个视频，看到了一个很有趣的算法，赶紧记录下来。&lt;/p&gt;
+
+&lt;h4 id=&quot;老鼠试药&quot;&gt;“老鼠试药”&lt;/h4&gt;
+
+&lt;p&gt;题目是这样的：有100瓶药水，只有1瓶毒药。毒性发作需要1周时间，请问至少需要机智老鼠才能用1周时间找到那瓶毒药。&lt;/p&gt;
+
+&lt;p&gt;我们可以用二进制来轻松的解决这个问题。&lt;/p&gt;
+
+&lt;p&gt;1、首先把100瓶药水按1到100排号。&lt;br /&gt;
+2、将序号转换为二进制。如下表所示：&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;药品序号&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;二进制&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;1&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;0000001&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;2&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;0000010&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;…&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;…&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;100&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;1100100&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;3、可以看到，这些二进制总共有7位，所以我们只需要7只老鼠，每只老鼠喝对应位置为1的毒药，如果老鼠死亡，则把对应位置为1，否则置为0。&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;位数1&lt;/td&gt;
+      &lt;td&gt;位数2&lt;/td&gt;
+      &lt;td&gt;位数3&lt;/td&gt;
+      &lt;td&gt;位数4&lt;/td&gt;
+      &lt;td&gt;位数5&lt;/td&gt;
+      &lt;td&gt;位数6&lt;/td&gt;
+      &lt;td&gt;位数7&lt;/td&gt;
+      &lt;td&gt;对应序号&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;.&lt;/td&gt;
+      &lt;td&gt;.&lt;/td&gt;
+      &lt;td&gt;.&lt;/td&gt;
+      &lt;td&gt;.&lt;/td&gt;
+      &lt;td&gt;.&lt;/td&gt;
+      &lt;td&gt;.&lt;/td&gt;
+      &lt;td&gt;.&lt;/td&gt;
+      &lt;td&gt;.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;100&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;1号老鼠&lt;/td&gt;
+      &lt;td&gt;2号老鼠&lt;/td&gt;
+      &lt;td&gt;3号老鼠&lt;/td&gt;
+      &lt;td&gt;4号老鼠&lt;/td&gt;
+      &lt;td&gt;5号老鼠&lt;/td&gt;
+      &lt;td&gt;6号老鼠&lt;/td&gt;
+      &lt;td&gt;7号老鼠&lt;/td&gt;
+      &lt;td&gt;-&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;举个例子，如果第3，4，7号到老鼠死亡，则可以算出二进制数为0011001的药瓶有毒，也即是25号。&lt;/p&gt;
+
+&lt;h4 id=&quot;奇数枪毙&quot;&gt;“奇数枪毙”&lt;/h4&gt;
+
+&lt;p&gt;有100个人按序号排列，从序号1开始依次报数，念到奇数的枪毙。剩余的人重新按序号排列，依次执行。问如果想活命，应该一开始站在哪一序号？&lt;/p&gt;
+
+&lt;p&gt;这个问题我们依旧可以用二进制来解决这个问题。&lt;/p&gt;
+
+&lt;p&gt;1、先列出100个人对应序号的二进制&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;序号&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;二进制&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;1&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;0000001&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;2&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;0000010&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;…&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;…&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;100&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;1100100&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;2、从这里可以看出，末位为1的人需要被枪毙。&lt;br /&gt;
+3、接下来剩余的人都是末位为0，由于需要重新排序，新的序号刚好是去掉末位后的数。所以我们把那些人到末位去掉，再按照第2步的逻辑枪毙，以此类推。&lt;br /&gt;
+4、所以我们得出1000000会是最后胜出的人，即一开始序号为64的人。&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 29 Oct 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/10/29/mouse-algorithm/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/10/29/mouse-algorithm/</guid>
+        
+        <category>算法</category>
+        
+        
+      </item>
     
       <item>
         <title>swoole 学习笔记</title>
@@ -961,76 +1129,6 @@ epoll_wait的process睡眠。  &lt;br /&gt;
         <guid isPermaLink="true">http://localhost:4000/2018/07/29/computer-thread/</guid>
         
         <category>计算机</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>「构建高性能web站点」服务器并发</title>
-        <description>&lt;h4 id=&quot;吞吐率&quot;&gt;吞吐率&lt;/h4&gt;
-
-&lt;p&gt;单位时间内服务器处理的请求数 reqs/s&lt;/p&gt;
-
-&lt;h4 id=&quot;用户并发数&quot;&gt;用户并发数&lt;/h4&gt;
-
-&lt;p&gt;服务器最大并发数是有一定的利益前提的，就是服务器和用户双方所能接受的最大利益下。&lt;br /&gt;
-每个用户可以在同一时间发起不止一个请求（与浏览器、http版本有关），所以用户并发数 &amp;gt; 请求并发数。&lt;/p&gt;
-
-&lt;h4 id=&quot;请求等待时间&quot;&gt;请求等待时间&lt;/h4&gt;
-
-&lt;p&gt;分为以下两种&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;用户平均请求等待时间。&lt;/li&gt;
-  &lt;li&gt;服务器平均请求处理时间（等于吞吐率的倒数）。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;线程与进程&quot;&gt;线程与进程&lt;/h4&gt;
-
-&lt;p&gt;参考这篇文章&lt;a href=&quot;/2018/07/29/computer-thread/&quot;&gt;进程与线程&lt;/a&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;系统负载&quot;&gt;系统负载&lt;/h4&gt;
-
-&lt;p&gt;可以通过 &lt;code class=&quot;highlighter-rouge&quot;&gt;cat /proc/loadavg&lt;/code&gt; 或者 &lt;code class=&quot;highlighter-rouge&quot;&gt;top&lt;/code&gt; 查看。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/2018-07-27-bhpws-service/1.jpg&quot; alt=&quot;1.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;上面数字的含义：&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;10/200&lt;/td&gt;
-      &lt;td&gt;10表示此时运行队列中的进程个数；200表示此时的进程总数&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;17145&lt;/td&gt;
-      &lt;td&gt;目前创建的最后一个进程ID&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;1.63&lt;/td&gt;
-      &lt;td&gt;1分钟内运行队列中就绪等待的进程数平均值&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0.48&lt;/td&gt;
-      &lt;td&gt;5分钟内运行队列中就绪等待的进程数平均值&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0.21&lt;/td&gt;
-      &lt;td&gt;10分钟内运行队列中就绪等待的进程数平均值&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h4 id=&quot;io模型&quot;&gt;I/O模型&lt;/h4&gt;
-
-&lt;p&gt;参考这篇文章&lt;a href=&quot;/2018/08/04/computer-io/&quot;&gt;I/O模型&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Fri, 27 Jul 2018 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/07/27/bhpws-service/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/07/27/bhpws-service/</guid>
-        
-        <category>web</category>
         
         
       </item>
