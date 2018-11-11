@@ -10,7 +10,7 @@
     <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
     <meta name="theme-color" content="#000000">
     
-    <title>哈希表 - ben blog</title>
+    <title>「Docker」Compose V3使用说明 - ben blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2016/11/13/hash-table/">
+    <link rel="canonical" href="http://localhost:4000/2018/11/12/docker-compose/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -169,15 +169,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#数据结构" title="数据结构">数据结构</a>
+                        <a class="tag" href="/tags/#docker" title="docker">docker</a>
                         
                     </div>
-                    <h1>哈希表</h1>
+                    <h1>「Docker」Compose V3使用说明</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Ben Blog on November 13, 2016</span>
+                    <span class="meta">Posted by Ben Blog on November 12, 2018</span>
                 </div>
             </div>
         </div>
@@ -198,65 +198,19 @@
                 <!-- Multi-Lingual -->
                 
 
-				<h4 id="线性探查">线性探查</h4>
+				<blockquote>
+  <p>本文主要是讲解V3版本的各项配置说明，其他版本去对应的官方文档查看。<a href="https://docs.docker.com/compose/compose-file/compose-file-v2/">V2&gt;</a>、<a href="https://docs.docker.com/compose/compose-file/compose-file-v1/">V1&gt;</a></p>
+</blockquote>
 
-<p>查找</p>
+<h3 id="简介">简介</h3>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">i</span> <span class="o">=</span> <span class="nx">base</span> <span class="o">=</span> <span class="nx">key</span><span class="o">%</span><span class="nx">HT</span><span class="p">.</span><span class="nx">length</span> <span class="c1">// get hashed index</span>
-<span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">HT</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">==</span> <span class="nx">EMPTY</span><span class="p">)</span> <span class="k">return</span> <span class="s2">"not found"</span>
-  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">HT</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">==</span> <span class="nx">key</span><span class="p">)</span> <span class="k">return</span> <span class="s2">"found at index i"</span>
-  <span class="k">else</span> <span class="nx">i</span> <span class="o">=</span> <span class="p">(</span><span class="nx">base</span><span class="o">+</span><span class="nx">step</span><span class="o">*</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="nx">HT</span><span class="p">.</span><span class="nx">length</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">Compose</code>允许用户通过一个单独的<code class="highlighter-rouge">docker-compose.yml</code>模板文件（YAML 格式）来定义一组相关联的应用容器为一个项目（project）。</p>
 
-<p>插入</p>
-
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="nx">HT</span> <span class="nx">is</span> <span class="mi">1</span> <span class="nx">item</span> <span class="nx">before</span> <span class="nx">full</span><span class="p">,</span> <span class="nx">prevent</span> <span class="nx">insertion</span>
-<span class="nx">i</span> <span class="o">=</span> <span class="nx">base</span> <span class="o">=</span> <span class="nx">key</span><span class="o">%</span><span class="nx">HT</span><span class="p">.</span><span class="nx">length</span> <span class="c1">// get hashed index</span>
-<span class="k">while</span> <span class="p">(</span><span class="nx">HT</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">!=</span> <span class="nx">EMPTY</span> <span class="o">||</span> <span class="nx">HT</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">!=</span> <span class="nx">DELETED</span><span class="p">)</span>
-  <span class="nx">i</span> <span class="o">=</span> <span class="p">(</span><span class="nx">base</span><span class="o">+</span><span class="nx">step</span><span class="o">*</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="nx">HT</span><span class="p">.</span><span class="nx">length</span>
-<span class="nx">found</span> <span class="nx">insertion</span> <span class="nx">point</span><span class="p">,</span> <span class="nx">insert</span> <span class="nx">key</span> <span class="nx">at</span> <span class="nx">HT</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>删除</p>
-
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">i</span> <span class="o">=</span> <span class="nx">base</span> <span class="o">=</span> <span class="nx">key</span><span class="o">%</span><span class="nx">HT</span><span class="p">.</span><span class="nx">length</span> <span class="c1">// get hashed index</span>
-<span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">HT</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">==</span> <span class="nx">EMPTY</span><span class="p">)</span> <span class="k">break</span> <span class="c1">// key not found</span>
-  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">HT</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">==</span> <span class="nx">key</span><span class="p">)</span>
-    <span class="nx">HT</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">DELETED</span>
-  <span class="k">else</span> <span class="nx">i</span> <span class="o">=</span> <span class="p">(</span><span class="nx">base</span><span class="o">+</span><span class="nx">step</span><span class="o">*</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="nx">HT</span><span class="p">.</span><span class="nx">length</span>
-</code></pre></div></div>
-
-<h4 id="二次探查">二次探查</h4>
-
-<p>查找</p>
-
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">i</span> <span class="o">=</span> <span class="nx">base</span> <span class="o">=</span> <span class="nx">key</span><span class="o">%</span><span class="nx">HT</span><span class="p">.</span><span class="nx">length</span> <span class="c1">// get hashed index</span>
-<span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">HT</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">==</span> <span class="nx">EMPTY</span><span class="p">)</span> <span class="k">return</span> <span class="s2">"not found"</span>
-  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">HT</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">==</span> <span class="nx">key</span><span class="p">)</span> <span class="k">return</span> <span class="s2">"found at index i"</span>
-  <span class="k">else</span> <span class="nx">i</span> <span class="o">=</span> <span class="p">(</span><span class="nx">base</span><span class="o">+</span><span class="nx">step</span><span class="o">*</span><span class="nx">step</span><span class="p">)</span><span class="o">%</span><span class="nx">HT</span><span class="p">.</span><span class="nx">length</span>
-</code></pre></div></div>
-
-<p>插入</p>
-
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="nx">HT</span> <span class="nx">is</span> <span class="mi">1</span> <span class="nx">item</span> <span class="nx">before</span> <span class="nx">full</span><span class="p">,</span> <span class="nx">prevent</span> <span class="nx">insertion</span>
-<span class="nx">i</span> <span class="o">=</span> <span class="nx">base</span> <span class="o">=</span> <span class="nx">key</span><span class="o">%</span><span class="nx">HT</span><span class="p">.</span><span class="nx">length</span> <span class="c1">// get hashed index</span>
-<span class="k">while</span> <span class="p">(</span><span class="nx">HT</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">!=</span> <span class="nx">EMPTY</span> <span class="o">||</span> <span class="nx">HT</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">!=</span> <span class="nx">DELETED</span><span class="p">)</span>
-  <span class="nx">i</span> <span class="o">=</span> <span class="p">(</span><span class="nx">base</span><span class="o">+</span><span class="nx">step</span><span class="o">*</span><span class="nx">step</span><span class="p">)</span><span class="o">%</span><span class="nx">HT</span><span class="p">.</span><span class="nx">length</span>
-<span class="nx">found</span> <span class="nx">insertion</span> <span class="nx">point</span><span class="p">,</span> <span class="nx">insert</span> <span class="nx">key</span> <span class="nx">at</span> <span class="nx">HT</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>删除</p>
-
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">i</span> <span class="o">=</span> <span class="nx">base</span> <span class="o">=</span> <span class="nx">key</span><span class="o">%</span><span class="nx">HT</span><span class="p">.</span><span class="nx">length</span> <span class="c1">// get hashed index</span>
-<span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">HT</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">==</span> <span class="nx">EMPTY</span><span class="p">)</span> <span class="k">break</span> <span class="c1">// key not found</span>
-  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">HT</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">==</span> <span class="nx">key</span><span class="p">)</span>
-    <span class="nx">HT</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">DELETED</span>
-  <span class="k">else</span> <span class="nx">i</span> <span class="o">=</span> <span class="p">(</span><span class="nx">base</span><span class="o">+</span><span class="nx">step</span><span class="o">*</span><span class="nx">step</span><span class="p">)</span><span class="o">%</span><span class="nx">HT</span><span class="p">.</span><span class="nx">length</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">Compose</code>中有两个重要的概念：</p>
+<ul>
+  <li>服务 (service)：一个应用的容器，实际上可以包括若干运行相同镜像的容器实例。</li>
+  <li>项目 (project)：由一组关联的应用容器组成的一个完整业务单元，在<code class="highlighter-rouge">docker-compose.yml</code>文件中定义。</li>
+</ul>
 
 
                 <hr style="visibility: hidden;">
@@ -264,19 +218,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2016/11/13/bit-cal/" data-toggle="tooltip" data-placement="top" title="位运算">
+                        <a href="/2018/11/12/docker-base/" data-toggle="tooltip" data-placement="top" title="「Docker」基础">
                         Previous<br>
-                        <span>位运算</span>
+                        <span>「Docker」基础</span>
                         </a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2016/11/13/jsonp/" data-toggle="tooltip" data-placement="top" title="jsonp实现异步请求跨域">
-                        Next<br>
-                        <span>jsonp实现异步请求跨域</span>
-                        </a>
-                    </li>
                     
                 </ul>
 

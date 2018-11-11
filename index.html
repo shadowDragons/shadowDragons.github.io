@@ -179,6 +179,68 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2018/11/12/docker-compose/">
+        <h2 class="post-title">
+            「Docker」Compose V3使用说明
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  本文主要是讲解V3版本的各项配置说明，其他版本去对应的官方文档查看。V2&gt;、V1&gt;
+
+
+简介
+
+Compose允许用户通过一个单独的docker-compose.yml模板文件（YAML 格式）来定义一组相关联的应用容器为一个项目（project）。
+
+Compose中有两个重要的概念：
+
+  服务 (service)：一个应用的容器，实际上可以包括若干运行相同镜像的容器实...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on November 12, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/11/12/docker-base/">
+        <h2 class="post-title">
+            「Docker」基础
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  本篇主要让大家知道如何安装、 Docker的基本知识点、Docker的基本使用
+
+
+安装
+
+Docker
+
+由于我本机是mac系统，所以这里以mac安装为例子。其他系统的安装请自行查看官方文档&gt;。
+
+进入官网下载页面&gt;下载。
+
+
+
+下载完成后，直接安装。
+
+完成后，直接打开Docker应用程序，如果这时顶部导航会显示Docker图标，说明已经启动了。
+
+
+
+查看版本，输入以...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on November 12, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/10/29/mouse-algorithm/">
         <h2 class="post-title">
             “老鼠试药”算法
@@ -244,7 +306,7 @@ pecl install swoole
 <div class="post-preview">
     <a href="/2018/10/11/bhpws-brower-cache/">
         <h2 class="post-title">
-            【构建高性能web站点】浏览器缓存
+            『构建高性能web站点』浏览器缓存
         </h2>
         
         <div class="post-content-preview">
@@ -300,9 +362,9 @@ str...
 <hr>
 
 <div class="post-preview">
-    <a href="/2018/10/07/smarty/">
+    <a href="/2018/10/07/smarty-cache/">
         <h2 class="post-title">
-            smarty
+            smarty缓存应用
         </h2>
         
         <div class="post-content-preview">
@@ -397,77 +459,6 @@ Linux的socket 事件wakeup callback机制
     </a>
     <p class="post-meta">
         Posted by Ben Blog on August 5, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/08/04/computer-io/">
-        <h2 class="post-title">
-            I/O模型
-        </h2>
-        
-        <div class="post-content-preview">
-            I/O发生过程涉及的对象：
-
-
-  调用该IO的线程(thread)
-  系统内核(kernel)
-
-
-I/O发生过程步骤：
-
-
-  等待数据准备
-  将数据从内核拷贝到用户的进程空间。
-
-
-阻塞型I/O（blocking I/O）
-
-
-
-用户thread在整个过程当中，都需要等待kernel返回数据，所以整个过程都是被block的。
-
-非阻塞型I/O（non-blocking I/O）
-
-...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on August 4, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/07/29/computer-thread/">
-        <h2 class="post-title">
-            进程与线程
-        </h2>
-        
-        <div class="post-content-preview">
-            先理解一下，什么是进程和线程：
-
-在现代操作系统中，进程支持多线程。
-
-
-  进程是资源管理的最小单元；
-  线程是程序执行的最小单元。
-
-
-它们之间的关系如下图所示：
-
-
-
-那么什么是程序执行的最小单位呢？
-
-线程作为调度和分配的基本单位（也被称为轻量级进程），这是因为他们共享进程的资源，所以没有太多的内存消耗。
-
-当多个程序同时在执行的时候，我们的cpu（当cpu数小于程序数）并不能同时...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on July 29, 2018
     </p>
 </div>
 <hr>
@@ -603,6 +594,12 @@ I/O发生过程步骤：
                         
                             
                         
+                            
+                        
+                            
+                                <a href="/tags/#docker" title="docker" rel="2">
+                                    docker
+                                </a>
                             
                         
                     </div>

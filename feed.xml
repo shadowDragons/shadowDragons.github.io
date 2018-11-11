@@ -5,9 +5,104 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 29 Oct 2018 22:28:20 +0800</pubDate>
-    <lastBuildDate>Mon, 29 Oct 2018 22:28:20 +0800</lastBuildDate>
+    <pubDate>Sun, 11 Nov 2018 22:52:17 +0800</pubDate>
+    <lastBuildDate>Sun, 11 Nov 2018 22:52:17 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
+    
+      <item>
+        <title>「Docker」Compose V3使用说明</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;本文主要是讲解V3版本的各项配置说明，其他版本去对应的官方文档查看。&lt;a href=&quot;https://docs.docker.com/compose/compose-file/compose-file-v2/&quot;&gt;V2&amp;gt;&lt;/a&gt;、&lt;a href=&quot;https://docs.docker.com/compose/compose-file/compose-file-v1/&quot;&gt;V1&amp;gt;&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;简介&quot;&gt;简介&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Compose&lt;/code&gt;允许用户通过一个单独的&lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt;模板文件（YAML 格式）来定义一组相关联的应用容器为一个项目（project）。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Compose&lt;/code&gt;中有两个重要的概念：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;服务 (service)：一个应用的容器，实际上可以包括若干运行相同镜像的容器实例。&lt;/li&gt;
+  &lt;li&gt;项目 (project)：由一组关联的应用容器组成的一个完整业务单元，在&lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt;文件中定义。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Mon, 12 Nov 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/11/12/docker-compose/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/11/12/docker-compose/</guid>
+        
+        <category>docker</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>「Docker」基础</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;本篇主要让大家知道如何安装、 Docker的基本知识点、Docker的基本使用&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;安装&quot;&gt;安装&lt;/h3&gt;
+
+&lt;h4 id=&quot;docker&quot;&gt;Docker&lt;/h4&gt;
+
+&lt;p&gt;由于我本机是mac系统，所以这里以mac安装为例子。其他系统的安装请自行查看&lt;a href=&quot;https://docs.docker.com/&quot;&gt;官方文档&amp;gt;&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;进入&lt;a href=&quot;https://docs.docker.com/docker-for-mac/install/&quot;&gt;官网下载页面&amp;gt;&lt;/a&gt;下载。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-11-12-docker-base/1.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-11-12-docker-base/1.jpg&quot; alt=&quot;1.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;下载完成后，直接安装。&lt;/p&gt;
+
+&lt;p&gt;完成后，直接打开Docker应用程序，如果这时顶部导航会显示Docker图标，说明已经启动了。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-11-12-docker-base/2.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-11-12-docker-base/2.jpg&quot; alt=&quot;2.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;查看版本，输入以下命令查看。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-11-12-docker-base/3.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-11-12-docker-base/3.jpg&quot; alt=&quot;3.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;kitematic&quot;&gt;Kitematic&lt;/h4&gt;
+
+&lt;p&gt;Kitematic是Docker可视化界面工具，可以很轻易的来管理容器。&lt;/p&gt;
+
+&lt;p&gt;点击顶部导航&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker&lt;/code&gt;图标，在下拉菜单中选中&lt;code class=&quot;highlighter-rouge&quot;&gt;Kitematic&lt;/code&gt;，即可下载。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-11-12-docker-base/4.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-11-12-docker-base/4.jpg&quot; alt=&quot;4.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;下载完成，直接解压并拖到应用程序即可。&lt;/p&gt;
+
+&lt;h3 id=&quot;基本概念&quot;&gt;基本概念&lt;/h3&gt;
+
+&lt;h4 id=&quot;镜像image&quot;&gt;镜像（Image）&lt;/h4&gt;
+
+&lt;p&gt;镜像是一个特殊的文件系统，除了提供容器运行时所需的程序、库、资源、配置等文件外，还包含了一些为运行时准备的一些配置参数（如匿名卷、环境变量、用户等）。镜像不包含任何动态数据，其内容在构建之后也不会被改变。&lt;/p&gt;
+
+&lt;h4 id=&quot;容器container&quot;&gt;容器（Container）&lt;/h4&gt;
+
+&lt;p&gt;镜像和容器的关系，就像是面向对象程序设计中的 类 和 实例 一样，镜像是静态的定义，容器是镜像运行时的实体。容器可以被创建、启动、停止、删除、暂停等。&lt;/p&gt;
+
+&lt;p&gt;容器的实质是进程，但与直接在宿主执行的进程不同，容器进程运行于属于自己的独立的 命名空间。因此容器可以拥有自己的 root 文件系统、自己的网络配置、自己的进程空间，甚至自己的用户 ID 空间。容器内的进程是运行在一个隔离的环境里，使用起来，就好像是在一个独立于宿主的系统下操作一样。这种特性使得容器封装的应用比直接在宿主运行更加安全。也因为这种隔离的特性，很多人初学 Docker 时常常会混淆容器和虚拟机。&lt;/p&gt;
+
+&lt;h4 id=&quot;仓库repository&quot;&gt;仓库（Repository）&lt;/h4&gt;
+
+&lt;p&gt;镜像构建完成后，可以很容易的在当前宿主机上运行，但是，如果需要在其它服务器上使用这个镜像，我们就需要一个集中的存储、分发镜像的服务，Docker Registry 就是这样的服务。&lt;/p&gt;
+
+&lt;p&gt;一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker Registry&lt;/code&gt;中可以包含多个仓库；每个仓库可以包含多个标签（Tag）；每个标签对应一个镜像。&lt;/p&gt;
+
+&lt;p&gt;通常，一个仓库会包含同一个软件不同版本的镜像，而标签就常用于对应该软件的各个版本。我们可以通过 &lt;仓库名&gt;:&lt;标签&gt; 的格式来指定具体是这个软件哪个版本的镜像。如果不给出标签，将以 latest 作为默认标签。&lt;/标签&gt;&lt;/仓库名&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;使用镜像&quot;&gt;使用镜像&lt;/h3&gt;
+
+&lt;h3 id=&quot;使用容器&quot;&gt;使用容器&lt;/h3&gt;
+
+</description>
+        <pubDate>Mon, 12 Nov 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/11/12/docker-base/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/11/12/docker-base/</guid>
+        
+        <category>docker</category>
+        
+        
+      </item>
     
       <item>
         <title>“老鼠试药”算法</title>
@@ -276,7 +371,7 @@
       </item>
     
       <item>
-        <title>【构建高性能web站点】浏览器缓存</title>
+        <title>『构建高性能web站点』浏览器缓存</title>
         <description>&lt;p&gt;我们可以通过http头信息来实现浏览器缓存。&lt;/p&gt;
 
 &lt;h3 id=&quot;last-modified&quot;&gt;Last-Modified&lt;/h3&gt;
@@ -527,7 +622,7 @@ dtruss &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; test.sh  &lt;span class=
       </item>
     
       <item>
-        <title>smarty</title>
+        <title>smarty缓存应用</title>
         <description>&lt;h3 id=&quot;执行流程&quot;&gt;执行流程&lt;/h3&gt;
 
 &lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-10-07-smarty/1.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-10-07-smarty/1.jpg&quot; alt=&quot;1.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
@@ -611,8 +706,8 @@ dtruss &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; test.sh  &lt;span class=
 &lt;p&gt;&lt;a href=&quot;https://jingyan.baidu.com/album/ea24bc39c0d376da62b331a4.html?picindex=1&quot;&gt;Smarty缓存技术完整的执行流程&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Sun, 07 Oct 2018 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/10/07/smarty/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/10/07/smarty/</guid>
+        <link>http://localhost:4000/2018/10/07/smarty-cache/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/10/07/smarty-cache/</guid>
         
         <category>php</category>
         
@@ -1012,123 +1107,6 @@ epoll_wait的process睡眠。  &lt;br /&gt;
         <category>计算机</category>
         
         <category>转载</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>I/O模型</title>
-        <description>&lt;p&gt;I/O发生过程涉及的对象：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;调用该IO的线程(thread)&lt;/li&gt;
-  &lt;li&gt;系统内核(kernel)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;I/O发生过程步骤：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;等待数据准备&lt;/li&gt;
-  &lt;li&gt;将数据从内核拷贝到用户的进程空间。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&quot;阻塞型ioblocking-io&quot;&gt;阻塞型I/O（blocking I/O）&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-08-04-computer-io/1.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-08-04-computer-io/1.jpg&quot; alt=&quot;1.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;用户thread在整个过程当中，都需要等待kernel返回数据，所以整个过程都是被block的。&lt;/p&gt;
-
-&lt;h4 id=&quot;非阻塞型ionon-blocking-io&quot;&gt;非阻塞型I/O（non-blocking I/O）&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-08-04-computer-io/2.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-08-04-computer-io/2.jpg&quot; alt=&quot;2.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;等待数据阶段，如果请求的数据没准备好，kernel会返回失败，用户thread是采用轮询方式进行的，所以在这个阶段不会被block。&lt;br /&gt;
-拷贝数据阶段，当kernel返回成功，则发送拷贝数据请求，等待kennel把数据从内核拷贝到用户空间，所以这个阶段是被block的。&lt;/p&gt;
-
-&lt;h4 id=&quot;io复用io-multiplexing&quot;&gt;I/O复用（IO multiplexing）&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-08-04-computer-io/3.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-08-04-computer-io/3.jpg&quot; alt=&quot;3.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;我们常用的select、epoll都是使用这种模型。&lt;br /&gt;
-等待数据阶段，用户调用了select，并等待select返回结果，这个阶段是被block的。&lt;br /&gt;
-读取数据阶段，当select返回了可读结果，则发送拷贝数据请求，等待kennel把数据从内核拷贝到用户空间，这个阶段也是被block的。&lt;/p&gt;
-
-&lt;p&gt;这么看来其实I/O复用还不如阻塞I/O，虽然整个过程同样都是被block的，但需要发送两次系统请求，性能会有所下降。&lt;br /&gt;
-用select的优势在于它可以同时处理多个connection。（多说一句。所以，如果处理的连接数不是很高的话，使用select/epoll的web server不一定比使用multi-threading + blocking IO的web server性能更好，可能延迟还更大。select/epoll的优势并不是对于单个连接能处理得更快，而是在于能处理更多的连接。&lt;/p&gt;
-
-&lt;h4 id=&quot;异步ioasynchronous-io&quot;&gt;异步I/O（asynchronous I/O）&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-08-04-computer-io/4.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-08-04-computer-io/4.jpg&quot; alt=&quot;4.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;等待数据阶段，用户发送请求之后kernel会立即返回结果，之后用户进程就可以去处理其他事情了，这个阶段不会被block。  &lt;br /&gt;
-拷贝数据阶段，用户也不需要感知，kernel在数据准备好之后，会立刻被数据拷贝到用户进程空间，然后给用户进程发信号去读取，这个阶段也不会被block。&lt;/p&gt;
-
-&lt;h4 id=&quot;信号驱动io-signal-driven-io&quot;&gt;信号驱动I/O (signal-driven I/O）&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-08-04-computer-io/5.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-08-04-computer-io/5.jpg&quot; alt=&quot;5.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;对比&quot;&gt;对比&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-08-04-computer-io/.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-08-04-computer-io/6.jpg&quot; alt=&quot;6.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;同步和异步&lt;br /&gt;
-其实只要判断在整个过程中，用户能不能去处理其他事情，如果能，就是异步，不能，就是同步。&lt;/p&gt;
-
-&lt;p&gt;阻塞与非阻塞  &lt;br /&gt;
-如果需要等待kernel返回结果，这个进程就会被block。所以主要判断用户是否需要等待kernel返回结果。&lt;br /&gt;
-从这个点看，其实非阻塞I/O并不能完全算是非阻塞，毕竟拷贝数据阶段也是被block的。&lt;/p&gt;
-</description>
-        <pubDate>Sat, 04 Aug 2018 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/08/04/computer-io/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/08/04/computer-io/</guid>
-        
-        <category>计算机</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>进程与线程</title>
-        <description>&lt;p&gt;先理解一下，什么是进程和线程：&lt;/p&gt;
-
-&lt;p&gt;在现代操作系统中，进程支持多线程。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;进程是资源管理的最小单元；&lt;/li&gt;
-  &lt;li&gt;线程是程序执行的最小单元。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;它们之间的关系如下图所示：&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-07-29-computer-thread/1.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-07-29-computer-thread/1.png&quot; alt=&quot;1.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;那么什么是程序执行的最小单位呢？&lt;/p&gt;
-
-&lt;p&gt;线程作为调度和分配的基本单位（也被称为轻量级进程），这是因为他们共享进程的资源，所以没有太多的内存消耗。&lt;/p&gt;
-
-&lt;p&gt;当多个程序同时在执行的时候，我们的cpu（当cpu数小于程序数）并不能同时处理，cpu将会按照自己的逻辑排优先级，每次分配一定数量的时间片（1时间片=10ms），执行完时间片时间，就必须挂起等待，轮到其他程序执行，以此类推，如下图所示：&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-07-29-computer-thread/2.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-07-29-computer-thread/2.png&quot; alt=&quot;2.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;当然cpu并不认识我们的程序，它只认进程里面的线程，所以是分配时间片给线程。&lt;/p&gt;
-
-&lt;p&gt;我们上面所说的线程都是指内核级线程，即系统知道该线程的存在。  &lt;br /&gt;
-还有一种是&lt;strong&gt;用户级线程&lt;/strong&gt;，由程序的线程库产生的，这种是系统不知道该线程存在的，所以可以认为是程序自己实现的虚拟线程。如下图所示：&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-07-29-computer-thread/3.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-07-29-computer-thread/3.png&quot; alt=&quot;3.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;用户级线程与内核级线程的区别：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;用户级线程是共享进程资源的，切换不需要有上下文切换的消耗，这是因为内核级线程切换通常会跨进程，所以需要把资源存储到其他地方，等轮到它执行时，再把资源拿回来。&lt;/li&gt;
-  &lt;li&gt;用户级线程如果其中一个处于阻塞，则派生它的内核级线程也会被阻塞，因为系统不知道这个线程存在。而内核级别线程不会有这个问题。&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Sun, 29 Jul 2018 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/07/29/computer-thread/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/07/29/computer-thread/</guid>
-        
-        <category>计算机</category>
         
         
       </item>

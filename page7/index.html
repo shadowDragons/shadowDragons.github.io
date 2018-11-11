@@ -179,6 +179,68 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2017/02/05/php-daemon/">
+        <h2 class="post-title">
+            php实现守护进程
+        </h2>
+        
+        <div class="post-content-preview">
+            守护进程应该能达到的要求 不依赖于当前会话，且无法打开控制终端。
+
+编写过程
+
+1.假设当前进程为p  
+2.创建子进程c1，然后退出父进程p(进程组组长无法创建会话，这样c1就不是进程组组长)。  
+3.在c1进程中创建会话，此时进程c1为会话组长，并且可以打开控制终端。  
+4.在c1进程中创建子进程c2,退出父进程c1。  
+5.在c2进程中进行逻辑处理。
+
+实现
+
+&lt;?php
+...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on February 5, 2017
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2017/02/02/mac-rsync-fswatch/">
+        <h2 class="post-title">
+            mac使用rsync+fswatch实现目录文件实时同步
+        </h2>
+        
+        <div class="post-content-preview">
+            安装rsync
+
+brew install rsync
+
+
+创建用户
+
+创建用户配置文件\etc\rsyncd.secrets  
+添加用户名:密码  
+这里我们设置用户名为root，密码123456，即root:123456
+
+配置
+
+创建配置文件 \etc\rsyncd.conf
+
+uid = root                   #守护进程的用户权限
+gid = root
+po...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on February 2, 2017
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2016/11/24/transaction-deal/">
         <h2 class="post-title">
             数据库的事务处理
@@ -417,62 +479,6 @@ while (--k!=0)
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2016/11/13/jsonp/">
-        <h2 class="post-title">
-            jsonp实现异步请求跨域
-        </h2>
-        
-        <div class="post-content-preview">
-            ajax 和 jsonp的区别  
-ajax是通过XmlHttpRequest来获取非本页内容，而jsonp是通过动态添加&lt;script&gt;来调用服务器提供的脚本。
-
-为什么jsonp能够跨服  
-因为在web调用js文件是不受跨服影响的，不仅如此，凡是拥有src属性的都有跨服的能力。
-
-方案1
-
-www.b.com/remote.js
-
-alert(1)
-
-
-www.a.com/...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 13, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/11/13/hash-table/">
-        <h2 class="post-title">
-            哈希表
-        </h2>
-        
-        <div class="post-content-preview">
-            线性探查
-
-查找
-
-i = base = key%HT.length // get hashed index
-while (true)
-  if (HT[i] == EMPTY) return "not found"
-  else if (HT[i] == key) return "found at index i"
-  else i = (base+step*1)%HT.length
-
-
-...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 13, 2016
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -608,6 +614,12 @@ while (true)
                         
                             
                         
+                            
+                        
+                            
+                                <a href="/tags/#docker" title="docker" rel="2">
+                                    docker
+                                </a>
                             
                         
                     </div>
