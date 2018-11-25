@@ -5,34 +5,9 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 11 Nov 2018 22:52:17 +0800</pubDate>
-    <lastBuildDate>Sun, 11 Nov 2018 22:52:17 +0800</lastBuildDate>
+    <pubDate>Sun, 25 Nov 2018 20:59:34 +0800</pubDate>
+    <lastBuildDate>Sun, 25 Nov 2018 20:59:34 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
-    
-      <item>
-        <title>「Docker」Compose V3使用说明</title>
-        <description>&lt;blockquote&gt;
-  &lt;p&gt;本文主要是讲解V3版本的各项配置说明，其他版本去对应的官方文档查看。&lt;a href=&quot;https://docs.docker.com/compose/compose-file/compose-file-v2/&quot;&gt;V2&amp;gt;&lt;/a&gt;、&lt;a href=&quot;https://docs.docker.com/compose/compose-file/compose-file-v1/&quot;&gt;V1&amp;gt;&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&quot;简介&quot;&gt;简介&lt;/h3&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Compose&lt;/code&gt;允许用户通过一个单独的&lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt;模板文件（YAML 格式）来定义一组相关联的应用容器为一个项目（project）。&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Compose&lt;/code&gt;中有两个重要的概念：&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;服务 (service)：一个应用的容器，实际上可以包括若干运行相同镜像的容器实例。&lt;/li&gt;
-  &lt;li&gt;项目 (project)：由一组关联的应用容器组成的一个完整业务单元，在&lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt;文件中定义。&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Mon, 12 Nov 2018 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/11/12/docker-compose/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/11/12/docker-compose/</guid>
-        
-        <category>docker</category>
-        
-        
-      </item>
     
       <item>
         <title>「Docker」基础</title>
@@ -1107,6 +1082,77 @@ epoll_wait的process睡眠。  &lt;br /&gt;
         <category>计算机</category>
         
         <category>转载</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>I/O模型</title>
+        <description>&lt;p&gt;I/O发生过程涉及的对象：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;调用该IO的线程(thread)&lt;/li&gt;
+  &lt;li&gt;系统内核(kernel)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I/O发生过程步骤：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;等待数据准备&lt;/li&gt;
+  &lt;li&gt;将数据从内核拷贝到用户的进程空间。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;阻塞型ioblocking-io&quot;&gt;阻塞型I/O（blocking I/O）&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-08-04-computer-io/1.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-08-04-computer-io/1.jpg&quot; alt=&quot;1.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;用户thread在整个过程当中，都需要等待kernel返回数据，所以整个过程都是被block的。&lt;/p&gt;
+
+&lt;h4 id=&quot;非阻塞型ionon-blocking-io&quot;&gt;非阻塞型I/O（non-blocking I/O）&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-08-04-computer-io/2.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-08-04-computer-io/2.jpg&quot; alt=&quot;2.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;等待数据阶段，如果请求的数据没准备好，kernel会返回失败，用户thread是采用轮询方式进行的，所以在这个阶段不会被block。&lt;br /&gt;
+拷贝数据阶段，当kernel返回成功，则发送拷贝数据请求，等待kennel把数据从内核拷贝到用户空间，所以这个阶段是被block的。&lt;/p&gt;
+
+&lt;h4 id=&quot;io复用io-multiplexing&quot;&gt;I/O复用（IO multiplexing）&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-08-04-computer-io/3.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-08-04-computer-io/3.jpg&quot; alt=&quot;3.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;我们常用的select、epoll都是使用这种模型。&lt;br /&gt;
+等待数据阶段，用户调用了select，并等待select返回结果，这个阶段是被block的。&lt;br /&gt;
+读取数据阶段，当select返回了可读结果，则发送拷贝数据请求，等待kennel把数据从内核拷贝到用户空间，这个阶段也是被block的。&lt;/p&gt;
+
+&lt;p&gt;这么看来其实I/O复用还不如阻塞I/O，虽然整个过程同样都是被block的，但需要发送两次系统请求，性能会有所下降。&lt;br /&gt;
+用select的优势在于它可以同时处理多个connection。（多说一句。所以，如果处理的连接数不是很高的话，使用select/epoll的web server不一定比使用multi-threading + blocking IO的web server性能更好，可能延迟还更大。select/epoll的优势并不是对于单个连接能处理得更快，而是在于能处理更多的连接。&lt;/p&gt;
+
+&lt;h4 id=&quot;异步ioasynchronous-io&quot;&gt;异步I/O（asynchronous I/O）&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-08-04-computer-io/4.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-08-04-computer-io/4.jpg&quot; alt=&quot;4.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;等待数据阶段，用户发送请求之后kernel会立即返回结果，之后用户进程就可以去处理其他事情了，这个阶段不会被block。  &lt;br /&gt;
+拷贝数据阶段，用户也不需要感知，kernel在数据准备好之后，会立刻被数据拷贝到用户进程空间，然后给用户进程发信号去读取，这个阶段也不会被block。&lt;/p&gt;
+
+&lt;h4 id=&quot;信号驱动io-signal-driven-io&quot;&gt;信号驱动I/O (signal-driven I/O）&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-08-04-computer-io/5.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-08-04-computer-io/5.jpg&quot; alt=&quot;5.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;对比&quot;&gt;对比&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-08-04-computer-io/.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-08-04-computer-io/6.jpg&quot; alt=&quot;6.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;同步和异步&lt;br /&gt;
+其实只要判断在整个过程中，用户能不能去处理其他事情，如果能，就是异步，不能，就是同步。&lt;/p&gt;
+
+&lt;p&gt;阻塞与非阻塞  &lt;br /&gt;
+如果需要等待kernel返回结果，这个进程就会被block。所以主要判断用户是否需要等待kernel返回结果。&lt;br /&gt;
+从这个点看，其实非阻塞I/O并不能完全算是非阻塞，毕竟拷贝数据阶段也是被block的。&lt;/p&gt;
+</description>
+        <pubDate>Sat, 04 Aug 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/08/04/computer-io/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/08/04/computer-io/</guid>
+        
+        <category>计算机</category>
         
         
       </item>

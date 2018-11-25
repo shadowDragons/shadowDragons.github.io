@@ -179,32 +179,6 @@
             ">
     			
 <div class="post-preview">
-    <a href="/2018/11/12/docker-compose/">
-        <h2 class="post-title">
-            「Docker」Compose V3使用说明
-        </h2>
-        
-        <div class="post-content-preview">
-            
-  本文主要是讲解V3版本的各项配置说明，其他版本去对应的官方文档查看。V2&gt;、V1&gt;
-
-
-简介
-
-Compose允许用户通过一个单独的docker-compose.yml模板文件（YAML 格式）来定义一组相关联的应用容器为一个项目（project）。
-
-Compose中有两个重要的概念：
-
-  服务 (service)：一个应用的容器，实际上可以包括若干运行相同镜像的容器实...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 12, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
     <a href="/2018/11/12/docker-base/">
         <h2 class="post-title">
             「Docker」基础
@@ -463,6 +437,44 @@ Linux的socket 事件wakeup callback机制
 </div>
 <hr>
 
+<div class="post-preview">
+    <a href="/2018/08/04/computer-io/">
+        <h2 class="post-title">
+            I/O模型
+        </h2>
+        
+        <div class="post-content-preview">
+            I/O发生过程涉及的对象：
+
+
+  调用该IO的线程(thread)
+  系统内核(kernel)
+
+
+I/O发生过程步骤：
+
+
+  等待数据准备
+  将数据从内核拷贝到用户的进程空间。
+
+
+阻塞型I/O（blocking I/O）
+
+
+
+用户thread在整个过程当中，都需要等待kernel返回数据，所以整个过程都是被block的。
+
+非阻塞型I/O（non-blocking I/O）
+
+...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on August 4, 2018
+    </p>
+</div>
+<hr>
+
 
 <!-- Pager -->
 
@@ -596,10 +608,6 @@ Linux的socket 事件wakeup callback机制
                         
                             
                         
-                            
-                                <a href="/tags/#docker" title="docker" rel="2">
-                                    docker
-                                </a>
                             
                         
                     </div>

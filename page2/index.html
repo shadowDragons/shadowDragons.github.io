@@ -179,44 +179,6 @@
             ">
     			
 <div class="post-preview">
-    <a href="/2018/08/04/computer-io/">
-        <h2 class="post-title">
-            I/O模型
-        </h2>
-        
-        <div class="post-content-preview">
-            I/O发生过程涉及的对象：
-
-
-  调用该IO的线程(thread)
-  系统内核(kernel)
-
-
-I/O发生过程步骤：
-
-
-  等待数据准备
-  将数据从内核拷贝到用户的进程空间。
-
-
-阻塞型I/O（blocking I/O）
-
-
-
-用户thread在整个过程当中，都需要等待kernel返回数据，所以整个过程都是被block的。
-
-非阻塞型I/O（non-blocking I/O）
-
-...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on August 4, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
     <a href="/2018/07/29/computer-thread/">
         <h2 class="post-title">
             进程与线程
@@ -510,6 +472,37 @@ docker-compose -f artifacts/docker-compose.yaml up
 </div>
 <hr>
 
+<div class="post-preview">
+    <a href="/2018/05/18/eth-private-network-ubuntu/">
+        <h2 class="post-title">
+            搭建以太坊私有网络(ubuntn)
+        </h2>
+        
+        <div class="post-content-preview">
+            mac版请参考搭建以太坊私有网络
+
+安装node&amp;npm
+
+sudo apt-get install nodejs-legacy
+sudo apt-get install npm
+
+# 升级npm
+sudo npm install npm@latest -g
+
+# 升级node
+sudo npm i -g n
+
+# 安装最新版可执行
+# sudo n stable
+# 由于mist限...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on May 18, 2018
+    </p>
+</div>
+<hr>
+
 
 <!-- Pager -->
 
@@ -647,10 +640,6 @@ docker-compose -f artifacts/docker-compose.yaml up
                         
                             
                         
-                            
-                                <a href="/tags/#docker" title="docker" rel="2">
-                                    docker
-                                </a>
                             
                         
                     </div>
