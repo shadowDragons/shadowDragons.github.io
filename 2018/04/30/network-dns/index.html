@@ -681,8 +681,14 @@ sequenceDiagram
 
 <script>
     // dynamic User by Hux
-    var _gaId = 'UA-89143952-2';
-    var _gaDomain = 'shadowdragons.github.io';
+    if (document.domain == 'tudool.com' || document.domain == 'www.tudool.com') {
+        var _gaId = 'UA-89143952-3';
+        var _gaDomain = 'www.tudool.com';
+    } else {
+        var _gaId = 'UA-89143952-2';
+        var _gaDomain = 'shadowdragons.github.io';
+    }
+
 
     // Originial
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -700,8 +706,12 @@ sequenceDiagram
 
 <script>
     // dynamic User by Hux
-    var _baId = '2a8326534823f90fa4eef816aea2ef08';
-
+    if (document.domain == 'tudool.com' || document.domain == 'www.tudool.com') {
+        var _baId = '9a5ff48930575f65a9958d6277b9e28e';
+    } else {
+        var _baId = '2a8326534823f90fa4eef816aea2ef08';
+    }
+    
     // Originial
     var _hmt = _hmt || [];
     (function() {
