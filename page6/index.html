@@ -179,6 +179,25 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2018/03/17/rsa/">
+        <h2 class="post-title">
+            RSA算法
+        </h2>
+        
+        <div class="post-content-preview">
+            
+
+drow.io源文件下载
+
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on March 17, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/03/09/Byzantine-failures/">
         <h2 class="post-title">
             拜占庭算法
@@ -368,35 +387,6 @@ wget --no-check-certificate -O shadowsocks-all.sh https://raw....
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2017/02/05/php-daemon/">
-        <h2 class="post-title">
-            php实现守护进程
-        </h2>
-        
-        <div class="post-content-preview">
-            守护进程应该能达到的要求 不依赖于当前会话，且无法打开控制终端。
-
-编写过程
-
-1.假设当前进程为p  
-2.创建子进程c1，然后退出父进程p(进程组组长无法创建会话，这样c1就不是进程组组长)。  
-3.在c1进程中创建会话，此时进程c1为会话组长，并且可以打开控制终端。  
-4.在c1进程中创建子进程c2,退出父进程c1。  
-5.在c2进程中进行逻辑处理。
-
-实现
-
-&lt;?php
-...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on February 5, 2017
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -535,6 +525,10 @@ wget --no-check-certificate -O shadowsocks-all.sh https://raw....
                             
                         
                             
+                                <a href="/tags/#docker" title="docker" rel="2">
+                                    docker
+                                </a>
+                            
                         
                     </div>
                 </section>
@@ -613,7 +607,7 @@ wget --no-check-certificate -O shadowsocks-all.sh https://raw....
                     
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; Ben Blog 2018
+                    Copyright &copy; Ben Blog 2019
                     <br>
                     Theme by <a href="http://huangxuan.me">Hux</a>
                 </p>
