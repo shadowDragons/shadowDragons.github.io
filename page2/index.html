@@ -179,6 +179,33 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2018/08/11/php-nginx-connect/">
+        <h2 class="post-title">
+            nginx与php-fpm 连接数
+        </h2>
+        
+        <div class="post-content-preview">
+            Apache连接请求机制
+
+
+
+Apache的处理机制是每有一个请求就会去fork一个子进程来处理请求。
+这样带来的缺点很明显：
+当请求量大的时候，需要开启一样数量的进程，这样一来系统内存的消耗，二来cpu执行切换带来的上下文切换消耗非常大。
+
+Nginx是如何解决这些问题的呢？答案是使用I/O复用技术。
+下面只是简单讲解什么是I/O复用，有兴趣的同学可以参考I/O模型
+
+Nginx使用的I...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on August 11, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/08/05/computer-select-poll-epoll/">
         <h2 class="post-title">
             「转载」select、poll与epoll
@@ -478,42 +505,6 @@ Identity，也就是身份管理，Fabric是目前为止在设计上最贴近联
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2018/05/27/hyperledger-fabric-sdk/">
-        <h2 class="post-title">
-            fabric - Node.js SDK
-        </h2>
-        
-        <div class="post-content-preview">
-            这里使用官方示例。
-
-如果之前没有部署过环境，先按照fabric入门（一）安装进行环境部署。
-
-安装
-
-首先进入示例目录
-
-cd fabric-samples/balance-transfer/
-
-
-有两种方法可以运行示例：
-
-方法一（推荐）
-
-1.通过docker启动网络
-
-docker-compose -f artifacts/docker-compose.yaml up
-
-
-2.安装f...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on May 27, 2018
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -654,7 +645,7 @@ docker-compose -f artifacts/docker-compose.yaml up
                             
                         
                             
-                                <a href="/tags/#精进" title="精进" rel="2">
+                                <a href="/tags/#精进" title="精进" rel="3">
                                     精进
                                 </a>
                             
