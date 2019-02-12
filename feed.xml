@@ -5,9 +5,9 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 24 Jan 2019 23:16:34 +0800</pubDate>
-    <lastBuildDate>Thu, 24 Jan 2019 23:16:34 +0800</lastBuildDate>
-    <generator>Jekyll v3.8.4</generator>
+    <pubDate>Tue, 12 Feb 2019 19:04:30 +0800</pubDate>
+    <lastBuildDate>Tue, 12 Feb 2019 19:04:30 +0800</lastBuildDate>
+    <generator>Jekyll v3.8.5</generator>
     
       <item>
         <title>多平台任务管理工具 - Taskwarrior</title>
@@ -1289,81 +1289,118 @@ sequenceDiagram;
 
 &lt;h5 id=&quot;参数说明&quot;&gt;参数说明&lt;/h5&gt;
 
-&lt;p&gt;-c 统计每一系统调用的所执行的时间,次数和出错的次数等.&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+-c 统计每一系统调用的所执行的时间,次数和出错的次数等.
 
-&lt;p&gt;-d 输出strace关于标准错误的调试信息.&lt;/p&gt;
+-d 输出strace关于标准错误的调试信息.
 
-&lt;p&gt;-f 跟踪由fork调用所产生的子进程.&lt;/p&gt;
+-f 跟踪由fork调用所产生的子进程.
 
-&lt;p&gt;-ff 如果提供-o filename,则所有进程的跟踪结果输出到相应的filename.pid中,pid是各进程的进程号.&lt;/p&gt;
+-ff 如果提供-o filename,则所有进程的跟踪结果输出到相应的filename.pid中,pid是各进程的进程号.
 
-&lt;p&gt;-F 尝试跟踪vfork调用.在-f时,vfork不被跟踪.&lt;/p&gt;
+-F 尝试跟踪vfork调用.在-f时,vfork不被跟踪.
 
-&lt;p&gt;-h 输出简要的帮助信息.&lt;/p&gt;
+-h 输出简要的帮助信息.
 
-&lt;p&gt;-i 输出系统调用的入口指针.&lt;/p&gt;
+-i 输出系统调用的入口指针.
 
-&lt;p&gt;-q 禁止输出关于脱离的消息.&lt;/p&gt;
+-q 禁止输出关于脱离的消息.
 
-&lt;p&gt;-r 打印出相对时间关于每一个系统调用.&lt;/p&gt;
+-r 打印出相对时间关于每一个系统调用.
 
-&lt;p&gt;-t 在输出中的每一行前加上时间信息.&lt;/p&gt;
+-t 在输出中的每一行前加上时间信息.
 
-&lt;p&gt;-tt 在输出中的每一行前加上时间信息,微秒级.&lt;/p&gt;
+-tt 在输出中的每一行前加上时间信息,微秒级.
 
-&lt;p&gt;-ttt 微秒级输出,以秒了表示时间.&lt;/p&gt;
+-ttt 微秒级输出,以秒了表示时间.
 
-&lt;p&gt;-T 显示每一调用所耗的时间.&lt;/p&gt;
+-T 显示每一调用所耗的时间.
 
-&lt;p&gt;-v 输出所有的系统调用.一些调用关于环境变量,状态,输入输出等调用由于使用频繁,默认不输出.&lt;/p&gt;
+-v 输出所有的系统调用.一些调用关于环境变量,状态,输入输出等调用由于使用频繁,默认不输出.
 
-&lt;p&gt;-V 输出strace的版本信息.&lt;/p&gt;
+-V 输出strace的版本信息.
 
-&lt;p&gt;-x 以十六进制形式输出非标准字符串.&lt;/p&gt;
+-x 以十六进制形式输出非标准字符串.
 
-&lt;p&gt;-xx 所有字符串以十六进制形式输出.&lt;/p&gt;
+-xx 所有字符串以十六进制形式输出.
 
-&lt;p&gt;-a column 设置返回值的输出位置.默认 为40.&lt;/p&gt;
+-a column 设置返回值的输出位置.默认 为40.
 
-&lt;p&gt;-e expr 指定一个表达式,用来控制如何跟踪.格式如下:&lt;/p&gt;
+-e expr 指定一个表达式,用来控制如何跟踪.格式如下:
 
-&lt;p&gt;[qualifier=][!]value1[,value2]…&lt;/p&gt;
+[qualifier=][!]value1[,value2]...
 
-&lt;p&gt;qualifier只能是 trace,abbrev,verbose,raw,signal,read,write其中之一.value是用来限定的符号或数字.默认的 qualifier是 trace.感叹号是否定符号.例如-eopen等价于 -e trace=open,表示只跟踪open调用.而-etrace!=open表示跟踪除了open以外的其它调用.有两个特殊的符号 all 和 none. 注意有些shell使用!来执行历史记录里的命令,所以要使用\.&lt;/p&gt;
+qualifier只能是 trace,abbrev,verbose,raw,signal,read,write其中之一.value是用来限定的符号或数字.默认的 qualifier是 trace.感叹号是否定符号.例如-eopen等价于 -e trace=open,表示只跟踪open调用.而-etrace!=open表示跟踪除了open以外的其它调用.有两个特殊的符号 all 和 none. 注意有些shell使用!来执行历史记录里的命令,所以要使用\\.
 
-&lt;p&gt;-e trace=set 只跟踪指定的系统调用.例如:-e trace=open,close,rean,write表示只跟踪这四个系统调用.默认的为set=all.&lt;/p&gt;
+-e trace=set 只跟踪指定的系统调用.例如:-e trace=open,close,rean,write表示只跟踪这四个系统调用.默认的为set=all.
 
-&lt;p&gt;-e trace=file 只跟踪有关文件操作的系统调用.&lt;/p&gt;
+-e trace=file 只跟踪有关文件操作的系统调用.
 
-&lt;p&gt;-e trace=process 只跟踪有关进程控制的系统调用.&lt;/p&gt;
+-e trace=process 只跟踪有关进程控制的系统调用.
 
-&lt;p&gt;-e trace=network 跟踪与网络有关的所有系统调用.&lt;/p&gt;
+-e trace=network 跟踪与网络有关的所有系统调用.
 
-&lt;p&gt;-e strace=signal 跟踪所有与系统信号有关的系统调用.&lt;/p&gt;
+-e strace=signal 跟踪所有与系统信号有关的系统调用.
 
-&lt;p&gt;-e trace=ipc 跟踪所有与进程通讯有关的系统调用.&lt;/p&gt;
+-e trace=ipc 跟踪所有与进程通讯有关的系统调用.
 
-&lt;p&gt;-e abbrev=set 设定strace输出的系统调用的结果集.-v 等与 abbrev=none.默认为abbrev=all.&lt;/p&gt;
+-e abbrev=set 设定strace输出的系统调用的结果集.-v 等与 abbrev=none.默认为abbrev=all.
 
-&lt;p&gt;-e raw=set 将指定的系统调用的参数以十六进制显示.&lt;/p&gt;
+-e raw=set 将指定的系统调用的参数以十六进制显示.
 
-&lt;p&gt;-e signal=set 指定跟踪的系统信号.默认为all.如 signal=!SIGIO(或者signal=!io),表示不跟踪SIGIO信号.&lt;/p&gt;
+-e signal=set 指定跟踪的系统信号.默认为all.如 signal=!SIGIO(或者signal=!io),表示不跟踪SIGIO信号.
 
-&lt;p&gt;-e read=set 输出从指定文件中读出的数据.例如-e read=3,5&lt;/p&gt;
+-e read=set 输出从指定文件中读出的数据.例如-e read=3,5
 
-&lt;p&gt;-e write=set 输出写入到指定文件中的数据.&lt;/p&gt;
+-e write=set 输出写入到指定文件中的数据.
 
-&lt;p&gt;-o filename 将strace的输出写入文件filename&lt;/p&gt;
+-o filename 将strace的输出写入文件filename
 
-&lt;p&gt;-p pid 跟踪指定的进程pid.&lt;/p&gt;
+-p pid 跟踪指定的进程pid.
 
-&lt;p&gt;-s strsize 指定输出的字符串的最大长度.默认为32.文件名一直全部输出.&lt;/p&gt;
+-s strsize 指定输出的字符串的最大长度.默认为32.文件名一直全部输出.
 
-&lt;p&gt;-u username 以username 的UID和GID执行被跟踪的命令.&lt;/p&gt;
+-u username 以username 的UID和GID执行被跟踪的命令.   
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h5 id=&quot;例子&quot;&gt;例子&lt;/h5&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://huoding.com/2013/10/06/288&quot;&gt;通过Strace定位故障原因&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;调试PHP进程并打印到日志文件&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;1、运行命令&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ps -ef|grep php-fpm|awk '{print &quot; -p &quot; $2&quot; -s 10000 -o /tmp/strace_&quot;$2&quot;.log&quot;}'|xargs sudo strace
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;2、执行代码&lt;/p&gt;
+
+&lt;p&gt;3、直接ctrl+c退出&lt;/p&gt;
+
+&lt;p&gt;输出结果如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-10-07-strace、dtruss/1.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-10-07-strace、dtruss/1.png&quot; alt=&quot;1.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;通过查看进程调用，我们了解进程的执行顺序，调试数据库等连接的情况。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;统计PHP进程的系统调用并打印到日志文件&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;1、运行命令&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ps -ef|grep php-fpm|awk '{print &quot; -p &quot; $2&quot; -s 10000 -o /tmp/strace_&quot;$2&quot;.log&quot;}'|xargs sudo strace
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;2、执行代码&lt;/p&gt;
+
+&lt;p&gt;3、直接ctrl+c退出&lt;/p&gt;
+
+&lt;p&gt;输出结果如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-10-07-strace、dtruss/2.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-10-07-strace、dtruss/1.png&quot; alt=&quot;2.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;通过统计系统调用，我们可以知道进程在哪些系统操作上调用、耗时较多，方便做优化。&lt;/p&gt;
 
 &lt;h3 id=&quot;mac工具dtruss&quot;&gt;mac工具dtruss&lt;/h3&gt;
 

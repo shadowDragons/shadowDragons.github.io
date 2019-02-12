@@ -218,81 +218,118 @@
 
 <h5 id="参数说明">参数说明</h5>
 
-<p>-c 统计每一系统调用的所执行的时间,次数和出错的次数等.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+-c 统计每一系统调用的所执行的时间,次数和出错的次数等.
 
-<p>-d 输出strace关于标准错误的调试信息.</p>
+-d 输出strace关于标准错误的调试信息.
 
-<p>-f 跟踪由fork调用所产生的子进程.</p>
+-f 跟踪由fork调用所产生的子进程.
 
-<p>-ff 如果提供-o filename,则所有进程的跟踪结果输出到相应的filename.pid中,pid是各进程的进程号.</p>
+-ff 如果提供-o filename,则所有进程的跟踪结果输出到相应的filename.pid中,pid是各进程的进程号.
 
-<p>-F 尝试跟踪vfork调用.在-f时,vfork不被跟踪.</p>
+-F 尝试跟踪vfork调用.在-f时,vfork不被跟踪.
 
-<p>-h 输出简要的帮助信息.</p>
+-h 输出简要的帮助信息.
 
-<p>-i 输出系统调用的入口指针.</p>
+-i 输出系统调用的入口指针.
 
-<p>-q 禁止输出关于脱离的消息.</p>
+-q 禁止输出关于脱离的消息.
 
-<p>-r 打印出相对时间关于每一个系统调用.</p>
+-r 打印出相对时间关于每一个系统调用.
 
-<p>-t 在输出中的每一行前加上时间信息.</p>
+-t 在输出中的每一行前加上时间信息.
 
-<p>-tt 在输出中的每一行前加上时间信息,微秒级.</p>
+-tt 在输出中的每一行前加上时间信息,微秒级.
 
-<p>-ttt 微秒级输出,以秒了表示时间.</p>
+-ttt 微秒级输出,以秒了表示时间.
 
-<p>-T 显示每一调用所耗的时间.</p>
+-T 显示每一调用所耗的时间.
 
-<p>-v 输出所有的系统调用.一些调用关于环境变量,状态,输入输出等调用由于使用频繁,默认不输出.</p>
+-v 输出所有的系统调用.一些调用关于环境变量,状态,输入输出等调用由于使用频繁,默认不输出.
 
-<p>-V 输出strace的版本信息.</p>
+-V 输出strace的版本信息.
 
-<p>-x 以十六进制形式输出非标准字符串.</p>
+-x 以十六进制形式输出非标准字符串.
 
-<p>-xx 所有字符串以十六进制形式输出.</p>
+-xx 所有字符串以十六进制形式输出.
 
-<p>-a column 设置返回值的输出位置.默认 为40.</p>
+-a column 设置返回值的输出位置.默认 为40.
 
-<p>-e expr 指定一个表达式,用来控制如何跟踪.格式如下:</p>
+-e expr 指定一个表达式,用来控制如何跟踪.格式如下:
 
-<p>[qualifier=][!]value1[,value2]…</p>
+[qualifier=][!]value1[,value2]...
 
-<p>qualifier只能是 trace,abbrev,verbose,raw,signal,read,write其中之一.value是用来限定的符号或数字.默认的 qualifier是 trace.感叹号是否定符号.例如-eopen等价于 -e trace=open,表示只跟踪open调用.而-etrace!=open表示跟踪除了open以外的其它调用.有两个特殊的符号 all 和 none. 注意有些shell使用!来执行历史记录里的命令,所以要使用\.</p>
+qualifier只能是 trace,abbrev,verbose,raw,signal,read,write其中之一.value是用来限定的符号或数字.默认的 qualifier是 trace.感叹号是否定符号.例如-eopen等价于 -e trace=open,表示只跟踪open调用.而-etrace!=open表示跟踪除了open以外的其它调用.有两个特殊的符号 all 和 none. 注意有些shell使用!来执行历史记录里的命令,所以要使用\\.
 
-<p>-e trace=set 只跟踪指定的系统调用.例如:-e trace=open,close,rean,write表示只跟踪这四个系统调用.默认的为set=all.</p>
+-e trace=set 只跟踪指定的系统调用.例如:-e trace=open,close,rean,write表示只跟踪这四个系统调用.默认的为set=all.
 
-<p>-e trace=file 只跟踪有关文件操作的系统调用.</p>
+-e trace=file 只跟踪有关文件操作的系统调用.
 
-<p>-e trace=process 只跟踪有关进程控制的系统调用.</p>
+-e trace=process 只跟踪有关进程控制的系统调用.
 
-<p>-e trace=network 跟踪与网络有关的所有系统调用.</p>
+-e trace=network 跟踪与网络有关的所有系统调用.
 
-<p>-e strace=signal 跟踪所有与系统信号有关的系统调用.</p>
+-e strace=signal 跟踪所有与系统信号有关的系统调用.
 
-<p>-e trace=ipc 跟踪所有与进程通讯有关的系统调用.</p>
+-e trace=ipc 跟踪所有与进程通讯有关的系统调用.
 
-<p>-e abbrev=set 设定strace输出的系统调用的结果集.-v 等与 abbrev=none.默认为abbrev=all.</p>
+-e abbrev=set 设定strace输出的系统调用的结果集.-v 等与 abbrev=none.默认为abbrev=all.
 
-<p>-e raw=set 将指定的系统调用的参数以十六进制显示.</p>
+-e raw=set 将指定的系统调用的参数以十六进制显示.
 
-<p>-e signal=set 指定跟踪的系统信号.默认为all.如 signal=!SIGIO(或者signal=!io),表示不跟踪SIGIO信号.</p>
+-e signal=set 指定跟踪的系统信号.默认为all.如 signal=!SIGIO(或者signal=!io),表示不跟踪SIGIO信号.
 
-<p>-e read=set 输出从指定文件中读出的数据.例如-e read=3,5</p>
+-e read=set 输出从指定文件中读出的数据.例如-e read=3,5
 
-<p>-e write=set 输出写入到指定文件中的数据.</p>
+-e write=set 输出写入到指定文件中的数据.
 
-<p>-o filename 将strace的输出写入文件filename</p>
+-o filename 将strace的输出写入文件filename
 
-<p>-p pid 跟踪指定的进程pid.</p>
+-p pid 跟踪指定的进程pid.
 
-<p>-s strsize 指定输出的字符串的最大长度.默认为32.文件名一直全部输出.</p>
+-s strsize 指定输出的字符串的最大长度.默认为32.文件名一直全部输出.
 
-<p>-u username 以username 的UID和GID执行被跟踪的命令.</p>
+-u username 以username 的UID和GID执行被跟踪的命令.   
+
+</code></pre></div></div>
 
 <h5 id="例子">例子</h5>
 
 <p><a href="https://huoding.com/2013/10/06/288">通过Strace定位故障原因</a></p>
+
+<p><strong>调试PHP进程并打印到日志文件</strong></p>
+
+<p>1、运行命令</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps -ef|grep php-fpm|awk '{print " -p " $2" -s 10000 -o /tmp/strace_"$2".log"}'|xargs sudo strace
+</code></pre></div></div>
+
+<p>2、执行代码</p>
+
+<p>3、直接ctrl+c退出</p>
+
+<p>输出结果如下：</p>
+
+<p><a href="/assets/img/posts/2018-10-07-strace、dtruss/1.png"><img src="/assets/img/posts/2018-10-07-strace、dtruss/1.png" alt="1.png" title="点击查看原图" /></a></p>
+
+<p>通过查看进程调用，我们了解进程的执行顺序，调试数据库等连接的情况。</p>
+
+<p><strong>统计PHP进程的系统调用并打印到日志文件</strong></p>
+
+<p>1、运行命令</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps -ef|grep php-fpm|awk '{print " -p " $2" -s 10000 -o /tmp/strace_"$2".log"}'|xargs sudo strace
+</code></pre></div></div>
+
+<p>2、执行代码</p>
+
+<p>3、直接ctrl+c退出</p>
+
+<p>输出结果如下：</p>
+
+<p><a href="/assets/img/posts/2018-10-07-strace、dtruss/2.png"><img src="/assets/img/posts/2018-10-07-strace、dtruss/1.png" alt="2.png" title="点击查看原图" /></a></p>
+
+<p>通过统计系统调用，我们可以知道进程在哪些系统操作上调用、耗时较多，方便做优化。</p>
 
 <h3 id="mac工具dtruss">mac工具dtruss</h3>
 
