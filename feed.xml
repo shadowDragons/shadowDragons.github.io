@@ -5,9 +5,538 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 22 Feb 2019 22:42:21 +0800</pubDate>
-    <lastBuildDate>Fri, 22 Feb 2019 22:42:21 +0800</lastBuildDate>
+    <pubDate>Sun, 24 Feb 2019 01:13:00 +0800</pubDate>
+    <lastBuildDate>Sun, 24 Feb 2019 01:13:00 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
+    
+      <item>
+        <title>「转载」OAuth2.0</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;转载自&lt;a href=&quot;http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html&quot;&gt;理解OAuth 2.0&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/OAuth&quot;&gt;OAuth&lt;/a&gt;是一个关于授权（authorization）的开放网络标准，在全世界得到广泛应用，目前的版本是2.0版。&lt;/p&gt;
+
+&lt;p&gt;本文对OAuth 2.0的设计思路和运行流程，做一个简明通俗的解释，主要参考材料为&lt;a href=&quot;http://www.rfcreader.com/#rfc6749&quot;&gt;RFC 6749&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h3 id=&quot;应用场景&quot;&gt;应用场景&lt;/h3&gt;
+
+&lt;p&gt;为了理解OAuth的适用场合，让我举一个假设的例子。&lt;/p&gt;
+
+&lt;p&gt;有一个”云冲印”的网站，可以将用户储存在Google的照片，冲印出来。用户为了使用该服务，必须让”云冲印”读取自己储存在Google上的照片。&lt;/p&gt;
+
+&lt;p&gt;问题是只有得到用户的授权，Google才会同意”云冲印”读取这些照片。那么，”云冲印”怎样获得用户的授权呢？&lt;/p&gt;
+
+&lt;p&gt;传统方法是，用户将自己的Google用户名和密码，告诉”云冲印”，后者就可以读取用户的照片了。这样的做法有以下几个严重的缺点。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;“云冲印”为了后续的服务，会保存用户的密码，这样很不安全。&lt;/li&gt;
+  &lt;li&gt;Google不得不部署密码登录，而我们知道，单纯的密码登录并不安全。&lt;/li&gt;
+  &lt;li&gt;“云冲印”拥有了获取用户储存在Google所有资料的权力，用户没法限制”云冲印”获得授权的范围和有效期。&lt;/li&gt;
+  &lt;li&gt;用户只有修改密码，才能收回赋予”云冲印”的权力。但是这样做，会使得其他所有获得用户授权的第三方应用程序全部失效。&lt;/li&gt;
+  &lt;li&gt;只要有一个第三方应用程序被破解，就会导致用户密码泄漏，以及所有被密码保护的数据泄漏。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;OAuth就是为了解决上面这些问题而诞生的。&lt;/p&gt;
+
+&lt;h3 id=&quot;名词定义&quot;&gt;名词定义&lt;/h3&gt;
+
+&lt;p&gt;在详细讲解OAuth 2.0之前，需要了解几个专用名词。它们对读懂后面的讲解，尤其是几张图，至关重要。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Third-party application&lt;/strong&gt; 第三方应用程序，本文中又称”客户端”（client），即上一节例子中的”云冲印”。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;HTTP service&lt;/strong&gt; HTTP服务提供商，本文中简称”服务提供商”，即上一节例子中的Google。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Resource Owner&lt;/strong&gt; 资源所有者，本文中又称”用户”（user）。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;User Agent&lt;/strong&gt; 用户代理，本文中就是指浏览器。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Authorization server&lt;/strong&gt; 认证服务器，即服务提供商专门用来处理认证的服务器。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Resource server&lt;/strong&gt; 资源服务器，即服务提供商存放用户生成的资源的服务器。它与认证服务器，可以是同一台服务器，也可以是不同的服务器。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;知道了上面这些名词，就不难理解，OAuth的作用就是让”客户端”安全可控地获取”用户”的授权，与”服务商提供商”进行互动。&lt;/p&gt;
+
+&lt;h3 id=&quot;oauth的思路&quot;&gt;OAuth的思路&lt;/h3&gt;
+
+&lt;p&gt;OAuth在”客户端”与”服务提供商”之间，设置了一个授权层（authorization layer）。”客户端”不能直接登录”服务提供商”，只能登录授权层，以此将用户与客户端区分开来。”客户端”登录授权层所用的令牌（token），与用户的密码不同。用户可以在登录的时候，指定授权层令牌的权限范围和有效期。&lt;/p&gt;
+
+&lt;p&gt;“客户端”登录授权层以后，”服务提供商”根据令牌的权限范围和有效期，向”客户端”开放用户储存的资料。&lt;/p&gt;
+
+&lt;h3 id=&quot;运行流程&quot;&gt;运行流程&lt;/h3&gt;
+
+&lt;p&gt;OAuth 2.0的运行流程如下图，摘自RFC 6749。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-02-24-oauth2/1.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-02-24-oauth2/1.png&quot; alt=&quot;1.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;用户打开客户端以后，客户端要求用户给予授权。&lt;/li&gt;
+  &lt;li&gt;用户同意给予客户端授权。&lt;/li&gt;
+  &lt;li&gt;客户端使用上一步获得的授权，向认证服务器申请令牌。&lt;/li&gt;
+  &lt;li&gt;认证服务器对客户端进行认证以后，确认无误，同意发放令牌。&lt;/li&gt;
+  &lt;li&gt;客户端使用令牌，向资源服务器申请获取资源。&lt;/li&gt;
+  &lt;li&gt;资源服务器确认令牌无误，同意向客户端开放资源。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;不难看出来，上面六个步骤之中，B是关键，即用户怎样才能给于客户端授权。有了这个授权以后，客户端就可以获取令牌，进而凭令牌获取资源。&lt;/p&gt;
+
+&lt;p&gt;下面一一讲解客户端获取授权的四种模式。&lt;/p&gt;
+
+&lt;h3 id=&quot;客户端的授权模式&quot;&gt;客户端的授权模式&lt;/h3&gt;
+
+&lt;p&gt;客户端必须得到用户的授权（authorization grant），才能获得令牌（access token）。OAuth 2.0定义了四种授权方式。&lt;/p&gt;
+
+&lt;h5 id=&quot;授权码模式&quot;&gt;授权码模式&lt;/h5&gt;
+
+&lt;p&gt;授权码模式（authorization code）是功能最完整、流程最严密的授权模式。它的特点就是通过客户端的后台服务器，与”服务提供商”的认证服务器进行互动。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-02-24-oauth2/2.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-02-24-oauth2/2.png&quot; alt=&quot;2.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;它的步骤如下：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;用户访问客户端，后者将前者导向认证服务器。&lt;/li&gt;
+  &lt;li&gt;用户选择是否给予客户端授权。&lt;/li&gt;
+  &lt;li&gt;假设用户给予授权，认证服务器将用户导向客户端事先指定的”重定向URI”（redirection URI），同时附上一个授权码。&lt;/li&gt;
+  &lt;li&gt;客户端收到授权码，附上早先的”重定向URI”，向认证服务器申请令牌。这一步是在客户端的后台的服务器上完成的，对用户不可见。&lt;/li&gt;
+  &lt;li&gt;认证服务器核对了授权码和重定向URI，确认无误后，向客户端发送访问令牌（access token）和更新令牌（refresh token）。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;下面是上面这些步骤所需要的参数。&lt;/p&gt;
+
+&lt;p&gt;1步骤中，客户端申请认证的URI，包含以下参数：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;response_type：表示授权类型，必选项，此处的值固定为”code”&lt;/li&gt;
+  &lt;li&gt;client_id：表示客户端的ID，必选项&lt;/li&gt;
+  &lt;li&gt;redirect_uri：表示重定向URI，可选项&lt;/li&gt;
+  &lt;li&gt;scope：表示申请的权限范围，可选项&lt;/li&gt;
+  &lt;li&gt;state：表示客户端的当前状态，可以指定任意值，认证服务器会原封不动地返回这个值。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;GET /authorize?response_type=code&amp;amp;client_id=s6BhdRkqt3&amp;amp;state=xyz&amp;amp;redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb HTTP/1.1
+Host: server.example.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;3步骤中，服务器回应客户端的URI，包含以下参数：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;code：表示授权码，必选项。该码的有效期应该很短，通常设为10分钟，客户端只能使用该码一次，否则会被授权服务器拒绝。该码与客户端ID和重定向URI，是一一对应关系。&lt;/li&gt;
+  &lt;li&gt;state：如果客户端的请求中包含这个参数，认证服务器的回应也必须一模一样包含这个参数。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HTTP/1.1 302 Found
+Location: https://client.example.com/cb?code=SplxlOBeZQQYbYS6WxSbIA&amp;amp;state=xyz
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;4步骤中，客户端向认证服务器申请令牌的HTTP请求，包含以下参数：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;grant_type：表示使用的授权模式，必选项，此处的值固定为”authorization_code”。&lt;/li&gt;
+  &lt;li&gt;code：表示上一步获得的授权码，必选项。&lt;/li&gt;
+  &lt;li&gt;redirect_uri：表示重定向URI，必选项，且必须与A步骤中的该参数值保持一致。&lt;/li&gt;
+  &lt;li&gt;client_id：表示客户端ID，必选项。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;POST /token HTTP/1.1
+Host: server.example.com
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&amp;amp;code=SplxlOBeZQQYbYS6WxSbIA&amp;amp;redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;5步骤中，认证服务器发送的HTTP回复，包含以下参数：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;access_token：表示访问令牌，必选项。&lt;/li&gt;
+  &lt;li&gt;token_type：表示令牌类型，该值大小写不敏感，必选项，可以是bearer类型或mac类型。&lt;/li&gt;
+  &lt;li&gt;expires_in：表示过期时间，单位为秒。如果省略该参数，必须其他方式设置过期时间。&lt;/li&gt;
+  &lt;li&gt;refresh_token：表示更新令牌，用来获取下一次的访问令牌，可选项。&lt;/li&gt;
+  &lt;li&gt;scope：表示权限范围，如果与客户端申请的范围一致，此项可省略。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+    &quot;access_token&quot;:&quot;2YotnFZFEjr1zCsicMWpAA&quot;,
+    &quot;token_type&quot;:&quot;example&quot;,
+    &quot;expires_in&quot;:3600,
+    &quot;refresh_token&quot;:&quot;tGzv3JOkF0XG5Qx2TlKWIA&quot;,
+    &quot;example_parameter&quot;:&quot;example_value&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;从上面代码可以看到，相关参数使用JSON格式发送（Content-Type: application/json）。此外，HTTP头信息中明确指定不得缓存。&lt;/p&gt;
+
+&lt;h5 id=&quot;简化模式&quot;&gt;简化模式&lt;/h5&gt;
+
+&lt;p&gt;简化模式（implicit grant type）不通过第三方应用程序的服务器，直接在浏览器中向认证服务器申请令牌，跳过了”授权码”这个步骤，因此得名。所有步骤在浏览器中完成，令牌对访问者是可见的，且客户端不需要认证。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-02-24-oauth2/3.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-02-24-oauth2/3.png&quot; alt=&quot;3.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;它的步骤如下：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;客户端将用户导向认证服务器。&lt;/li&gt;
+  &lt;li&gt;用户决定是否给于客户端授权。&lt;/li&gt;
+  &lt;li&gt;假设用户给予授权，认证服务器将用户导向客户端指定的”重定向URI”，并在URI的Hash部分包含了访问令牌。&lt;/li&gt;
+  &lt;li&gt;浏览器向资源服务器发出请求，其中不包括上一步收到的Hash值。&lt;/li&gt;
+  &lt;li&gt;资源服务器返回一个网页，其中包含的代码可以获取Hash值中的令牌。&lt;/li&gt;
+  &lt;li&gt;浏览器执行上一步获得的脚本，提取出令牌。&lt;/li&gt;
+  &lt;li&gt;浏览器将令牌发给客户端。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;下面是上面这些步骤所需要的参数。&lt;/p&gt;
+
+&lt;p&gt;1步骤中，客户端发出的HTTP请求，包含以下参数：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;response_type：表示授权类型，此处的值固定为”token”，必选项。&lt;/li&gt;
+  &lt;li&gt;client_id：表示客户端的ID，必选项。&lt;/li&gt;
+  &lt;li&gt;redirect_uri：表示重定向的URI，可选项。&lt;/li&gt;
+  &lt;li&gt;scope：表示权限范围，可选项。&lt;/li&gt;
+  &lt;li&gt;state：表示客户端的当前状态，可以指定任意值，认证服务器会原封不动地返回这个值。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;GET /authorize?response_type=token&amp;amp;client_id=s6BhdRkqt3&amp;amp;state=xyz&amp;amp;redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb HTTP/1.1
+Host: server.example.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;3步骤中，认证服务器回应客户端的URI，包含以下参数：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;access_token：表示访问令牌，必选项。&lt;/li&gt;
+  &lt;li&gt;token_type：表示令牌类型，该值大小写不敏感，必选项。&lt;/li&gt;
+  &lt;li&gt;expires_in：表示过期时间，单位为秒。如果省略该参数，必须其他方式设置过期时间。&lt;/li&gt;
+  &lt;li&gt;scope：表示权限范围，如果与客户端申请的范围一致，此项可省略。&lt;/li&gt;
+  &lt;li&gt;state：如果客户端的请求中包含这个参数，认证服务器的回应也必须一模一样包含这个参数。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HTTP/1.1 302 Found
+Location: http://example.com/cb#access_token=2YotnFZFEjr1zCsicMWpAA&amp;amp;state=xyz&amp;amp;token_type=example&amp;amp;expires_in=3600
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在上面的例子中，认证服务器用HTTP头信息的Location栏，指定浏览器重定向的网址。注意，在这个网址的Hash部分包含了令牌。&lt;/p&gt;
+
+&lt;p&gt;根据上面的4步骤，下一步浏览器会访问Location指定的网址，但是Hash部分不会发送。接下来的E步骤，服务提供商的资源服务器发送过来的代码，会提取出Hash中的令牌。&lt;/p&gt;
+
+&lt;h5 id=&quot;密码模式&quot;&gt;密码模式&lt;/h5&gt;
+
+&lt;p&gt;密码模式（Resource Owner Password Credentials Grant）中，用户向客户端提供自己的用户名和密码。客户端使用这些信息，向”服务商提供商”索要授权。&lt;/p&gt;
+
+&lt;p&gt;在这种模式中，用户必须把自己的密码给客户端，但是客户端不得储存密码。这通常用在用户对客户端高度信任的情况下，比如客户端是操作系统的一部分，或者由一个著名公司出品。而认证服务器只有在其他授权模式无法执行的情况下，才能考虑使用这种模式。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-02-24-oauth2/4.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-02-24-oauth2/4.png&quot; alt=&quot;4.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;它的步骤如下：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;用户向客户端提供用户名和密码。&lt;/li&gt;
+  &lt;li&gt;客户端将用户名和密码发给认证服务器，向后者请求令牌。&lt;/li&gt;
+  &lt;li&gt;认证服务器确认无误后，向客户端提供访问令牌。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;2步骤中，客户端发出的HTTP请求，包含以下参数：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;grant_type：表示授权类型，此处的值固定为”password”，必选项。&lt;/li&gt;
+  &lt;li&gt;username：表示用户名，必选项。&lt;/li&gt;
+  &lt;li&gt;password：表示用户的密码，必选项。&lt;/li&gt;
+  &lt;li&gt;scope：表示权限范围，可选项。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;POST /token HTTP/1.1
+Host: server.example.com
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&amp;amp;username=johndoe&amp;amp;password=A3ddj3w
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;3步骤中，认证服务器向客户端发送访问令牌，下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+    &quot;access_token&quot;:&quot;2YotnFZFEjr1zCsicMWpAA&quot;,
+    &quot;token_type&quot;:&quot;example&quot;,
+    &quot;expires_in&quot;:3600,
+    &quot;refresh_token&quot;:&quot;tGzv3JOkF0XG5Qx2TlKWIA&quot;,
+    &quot;example_parameter&quot;:&quot;example_value&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;上面代码中，各个参数的含义参见《授权码模式》一节。&lt;/p&gt;
+
+&lt;p&gt;整个过程中，客户端不得保存用户的密码。&lt;/p&gt;
+
+&lt;h5 id=&quot;客户端模式&quot;&gt;客户端模式&lt;/h5&gt;
+
+&lt;p&gt;客户端模式（Client Credentials Grant）指客户端以自己的名义，而不是以用户的名义，向”服务提供商”进行认证。严格地说，客户端模式并不属于OAuth框架所要解决的问题。在这种模式中，用户直接向客户端注册，客户端以自己的名义要求”服务提供商”提供服务，其实不存在授权问题。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-02-24-oauth2/5.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-02-24-oauth2/5.png&quot; alt=&quot;5.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;它的步骤如下：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;客户端向认证服务器进行身份认证，并要求一个访问令牌。&lt;/li&gt;
+  &lt;li&gt;认证服务器确认无误后，向客户端提供访问令牌。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;1步骤中，客户端发出的HTTP请求，包含以下参数：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;granttype：表示授权类型，此处的值固定为”clientcredentials”，必选项。&lt;/li&gt;
+  &lt;li&gt;scope：表示权限范围，可选项。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;POST /token HTTP/1.1
+Host: server.example.com
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;认证服务器必须以某种方式，验证客户端身份。&lt;/p&gt;
+
+&lt;p&gt;2步骤中，认证服务器向客户端发送访问令牌，下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+    &quot;access_token&quot;:&quot;2YotnFZFEjr1zCsicMWpAA&quot;,
+    &quot;token_type&quot;:&quot;example&quot;,
+    &quot;expires_in&quot;:3600,
+    &quot;example_parameter&quot;:&quot;example_value&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;上面代码中，各个参数的含义参见《授权码模式》一节。&lt;/p&gt;
+
+&lt;h3 id=&quot;更新令牌&quot;&gt;更新令牌&lt;/h3&gt;
+
+&lt;p&gt;如果用户访问的时候，客户端的”访问令牌”已经过期，则需要使用”更新令牌”申请一个新的访问令牌。&lt;/p&gt;
+
+&lt;p&gt;客户端发出更新令牌的HTTP请求，包含以下参数：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;granttype：表示使用的授权模式，此处的值固定为”refreshtoken”，必选项。&lt;/li&gt;
+  &lt;li&gt;refresh_token：表示早前收到的更新令牌，必选项。&lt;/li&gt;
+  &lt;li&gt;scope：表示申请的授权范围，不可以超出上一次申请的范围，如果省略该参数，则表示与上一次一致。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;POST /token HTTP/1.1
+Host: server.example.com
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=refresh_token&amp;amp;refresh_token=tGzv3JOkF0XG5Qx2TlKW
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Sun, 24 Feb 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/02/24/oauth2/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/02/24/oauth2/</guid>
+        
+        <category>web开发</category>
+        
+        <category>转载</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>「转载」JSON Web Token(JWT)</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;转载自&lt;a href=&quot;http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html&quot;&gt;JSON Web Token 入门教程&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;JSON Web Token（缩写 JWT）是目前最流行的跨域认证解决方案，本文介绍它的原理和用法。&lt;/p&gt;
+
+&lt;h3 id=&quot;跨域认证的问题&quot;&gt;跨域认证的问题&lt;/h3&gt;
+
+&lt;p&gt;互联网服务离不开用户认证。一般流程是下面这样。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;用户向服务器发送用户名和密码。&lt;/li&gt;
+  &lt;li&gt;服务器验证通过后，在当前对话（session）里面保存相关数据，比如用户角色、登录时间等等。&lt;/li&gt;
+  &lt;li&gt;服务器向用户返回一个 session_id，写入用户的 Cookie。&lt;/li&gt;
+  &lt;li&gt;用户随后的每一次请求，都会通过 Cookie，将 session_id 传回服务器。&lt;/li&gt;
+  &lt;li&gt;服务器收到 session_id，找到前期保存的数据，由此得知用户的身份。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;这种模式的问题在于，扩展性（scaling）不好。单机当然没有问题，如果是服务器集群，或者是跨域的服务导向架构，就要求 session 数据共享，每台服务器都能够读取 session。&lt;/p&gt;
+
+&lt;p&gt;举例来说，A 网站和 B 网站是同一家公司的关联服务。现在要求，用户只要在其中一个网站登录，再访问另一个网站就会自动登录，请问怎么实现？&lt;/p&gt;
+
+&lt;p&gt;一种解决方案是 session 数据持久化，写入数据库或别的持久层。各种服务收到请求后，都向持久层请求数据。这种方案的优点是架构清晰，缺点是工程量比较大。另外，持久层万一挂了，就会单点失败。&lt;/p&gt;
+
+&lt;p&gt;另一种方案是服务器索性不保存 session 数据了，所有数据都保存在客户端，每次请求都发回服务器。JWT 就是这种方案的一个代表。&lt;/p&gt;
+
+&lt;h3 id=&quot;jwt-的原理&quot;&gt;JWT 的原理&lt;/h3&gt;
+
+&lt;p&gt;JWT 的原理是，服务器认证以后，生成一个 JSON 对象，发回给用户，就像下面这样。&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;姓名&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;张三&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;角色&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;管理员&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;到期时间&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2018年7月1日0点0分&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;以后，用户与服务端通信的时候，都要发回这个 JSON 对象。服务器完全只靠这个对象认定用户身份。为了防止用户篡改数据，服务器在生成这个对象的时候，会加上签名（详见后文）。&lt;/p&gt;
+
+&lt;p&gt;服务器就不保存任何 session 数据了，也就是说，服务器变成无状态了，从而比较容易实现扩展。&lt;/p&gt;
+
+&lt;h3 id=&quot;jwt-的数据结构&quot;&gt;JWT 的数据结构&lt;/h3&gt;
+
+&lt;p&gt;实际的 JWT 大概就像下面这样。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-02-24-jwt/1.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-02-24-jwt/1.jpg&quot; alt=&quot;1.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;它是一个很长的字符串，中间用点（.）分隔成三个部分。注意，JWT 内部是没有换行的，这里只是为了便于展示，将它写成了几行。&lt;/p&gt;
+
+&lt;p&gt;JWT 的三个部分依次如下。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Header（头部）&lt;/li&gt;
+  &lt;li&gt;Payload（负载）&lt;/li&gt;
+  &lt;li&gt;Signature（签名）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;写成一行，就是下面的样子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Header.Payload.Signature
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-02-24-jwt/2.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-02-24-jwt/2.jpg&quot; alt=&quot;2.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;下面依次介绍这三个部分。&lt;/p&gt;
+
+&lt;h4 id=&quot;header&quot;&gt;Header&lt;/h4&gt;
+
+&lt;p&gt;Header 部分是一个 JSON 对象，描述 JWT 的元数据，通常是下面的样子。&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;alg&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;HS256&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;typ&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;JWT&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;上面代码中，alg属性表示签名的算法（algorithm），默认是 HMAC SHA256（写成 HS256）；typ属性表示这个令牌（token）的类型（type），JWT 令牌统一写为JWT。&lt;/p&gt;
+
+&lt;p&gt;最后，将上面的 JSON 对象使用 Base64URL 算法（详见后文）转成字符串。&lt;/p&gt;
+
+&lt;h5 id=&quot;payload&quot;&gt;Payload&lt;/h5&gt;
+
+&lt;p&gt;Payload 部分也是一个 JSON 对象，用来存放实际需要传递的数据。JWT 规定了7个官方字段，供选用。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;iss (issuer)：签发人&lt;/li&gt;
+  &lt;li&gt;exp (expiration time)：过期时间&lt;/li&gt;
+  &lt;li&gt;sub (subject)：主题&lt;/li&gt;
+  &lt;li&gt;aud (audience)：受众&lt;/li&gt;
+  &lt;li&gt;nbf (Not Before)：生效时间&lt;/li&gt;
+  &lt;li&gt;iat (Issued At)：签发时间&lt;/li&gt;
+  &lt;li&gt;jti (JWT ID)：编号&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;除了官方字段，你还可以在这个部分定义私有字段，下面就是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;sub&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;1234567890&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;John Doe&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;admin&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;注意，JWT 默认是不加密的，任何人都可以读到，所以不要把秘密信息放在这个部分。&lt;/p&gt;
+
+&lt;p&gt;这个 JSON 对象也要使用 Base64URL 算法转成字符串。&lt;/p&gt;
+
+&lt;h5 id=&quot;signature&quot;&gt;Signature&lt;/h5&gt;
+
+&lt;p&gt;Signature 部分是对前两部分的签名，防止数据篡改。&lt;/p&gt;
+
+&lt;p&gt;首先，需要指定一个密钥（secret）。这个密钥只有服务器才知道，不能泄露给用户。然后，使用 Header 里面指定的签名算法（默认是 HMAC SHA256），按照下面的公式产生签名。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HMACSHA256(
+  base64UrlEncode(header) + &quot;.&quot; +
+  base64UrlEncode(payload),
+  secret)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;算出签名以后，把 Header、Payload、Signature 三个部分拼成一个字符串，每个部分之间用”点”（.）分隔，就可以返回给用户。&lt;/p&gt;
+
+&lt;h5 id=&quot;base64url&quot;&gt;Base64URL&lt;/h5&gt;
+
+&lt;p&gt;前面提到，Header 和 Payload 串型化的算法是 Base64URL。这个算法跟 Base64 算法基本类似，但有一些小的不同。&lt;/p&gt;
+
+&lt;p&gt;JWT 作为一个令牌（token），有些场合可能会放到 URL（比如 api.example.com/?token=xxx）。Base64 有三个字符+、/和=，在 URL 里面有特殊含义，所以要被替换掉：=被省略、+替换成-，/替换成_ 。这就是 Base64URL 算法。&lt;/p&gt;
+
+&lt;h3 id=&quot;jwt-的使用方式&quot;&gt;JWT 的使用方式&lt;/h3&gt;
+
+&lt;p&gt;客户端收到服务器返回的 JWT，可以储存在 Cookie 里面，也可以储存在 localStorage。&lt;/p&gt;
+
+&lt;p&gt;此后，客户端每次与服务器通信，都要带上这个 JWT。你可以把它放在 Cookie 里面自动发送，但是这样不能跨域，所以更好的做法是放在 HTTP 请求的头信息Authorization字段里面。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Authorization: Bearer &amp;lt;token&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;另一种做法是，跨域的时候，JWT 就放在 POST 请求的数据体里面。&lt;/p&gt;
+
+&lt;h3 id=&quot;jwt-的几个特点&quot;&gt;JWT 的几个特点&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;JWT 默认是不加密，但也是可以加密的。生成原始 Token 以后，可以用密钥再加密一次。&lt;/li&gt;
+  &lt;li&gt;JWT 不加密的情况下，不能将秘密数据写入 JWT。&lt;/li&gt;
+  &lt;li&gt;JWT 不仅可以用于认证，也可以用于交换信息。有效使用 JWT，可以降低服务器查询数据库的次数。&lt;/li&gt;
+  &lt;li&gt;JWT 的最大缺点是，由于服务器不保存 session 状态，因此无法在使用过程中废止某个 token，或者更改 token 的权限。也就是说，一旦 JWT 签发了，在到期之前就会始终有效，除非服务器部署额外的逻辑。&lt;/li&gt;
+  &lt;li&gt;JWT 本身包含了认证信息，一旦泄露，任何人都可以获得该令牌的所有权限。为了减少盗用，JWT 的有效期应该设置得比较短。对于一些比较重要的权限，使用时应该再次对用户进行认证。&lt;/li&gt;
+  &lt;li&gt;为了减少盗用，JWT 不应该使用 HTTP 协议明码传输，要使用 HTTPS 协议传输。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;六、参考链接&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://jwt.io/introduction/&quot;&gt;Introduction to JSON Web Tokens&lt;/a&gt;， by Auth0&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://medium.com/@bryanmanuele/sessionless-authentication-withe-jwts-with-node-express-passport-js-69b059e4b22c&quot;&gt;Sessionless Authentication using JWTs (with Node + Express + Passport JS)&lt;/a&gt;, by Bryan Manuele&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/dwyl/learn-json-web-tokens/blob/master/README.md&quot;&gt;Learn how to use JSON Web Tokens&lt;/a&gt;, by dwyl&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Sun, 24 Feb 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/02/24/jwt/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/02/24/jwt/</guid>
+        
+        <category>web开发</category>
+        
+        <category>转载</category>
+        
+        
+      </item>
     
       <item>
         <title>多平台任务管理工具 - Taskwarrior</title>
@@ -1262,7 +1791,7 @@ sequenceDiagram;
         <link>http://localhost:4000/2018/10/11/bhpws-brower-cache/</link>
         <guid isPermaLink="true">http://localhost:4000/2018/10/11/bhpws-brower-cache/</guid>
         
-        <category>web</category>
+        <category>web开发</category>
         
         
       </item>
@@ -1459,164 +1988,6 @@ dtruss &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; test.sh  &lt;span class=
         <guid isPermaLink="true">http://localhost:4000/2018/10/07/strace-dtruss/</guid>
         
         <category>工具</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>smarty缓存应用</title>
-        <description>&lt;h3 id=&quot;执行流程&quot;&gt;执行流程&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-10-07-smarty/1.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-10-07-smarty/1.jpg&quot; alt=&quot;1.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;开启缓存&quot;&gt;开启缓存&lt;/h3&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$smarty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;caching&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;$smarty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;cache_lifetime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3600&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;判断是否已有缓存&lt;/p&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$smarty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isCached&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'index.htm'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nv&quot;&gt;$smarty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;display&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'index.htm'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;// do something&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;$smarty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;display&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'index.htm'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;清除缓存&quot;&gt;清除缓存&lt;/h3&gt;
-
-&lt;h5 id=&quot;单个页面缓存&quot;&gt;单个页面缓存&lt;/h5&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$smarty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;clearCache&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'index.htm'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h5 id=&quot;全部页面缓存&quot;&gt;全部页面缓存&lt;/h5&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$smarty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;clearAllCache&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;局部缓存&quot;&gt;局部缓存&lt;/h3&gt;
-
-&lt;h5 id=&quot;变量&quot;&gt;变量&lt;/h5&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 第三个参数 true 表示不缓存&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;$smarty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;assign&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'var'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'value'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h5 id=&quot;模板变量&quot;&gt;模板变量&lt;/h5&gt;
-
-&lt;div class=&quot;language-smarty highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$num&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;nocache&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h5 id=&quot;模板局部&quot;&gt;模板局部&lt;/h5&gt;
-
-&lt;div class=&quot;language-smarty highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;nocache&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&amp;gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$title&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;br/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&amp;gt;&lt;/span&gt;评论数：&lt;span class=&quot;k&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$num&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;{/&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;nocache&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;单页面多缓存&quot;&gt;单页面多缓存&lt;/h3&gt;
-
-&lt;p&gt;display拥有第二个参数，我们可以把需要改变的变量放入第二个参数就可以实现根据不同的请求生成不同的缓存！常用于详细内容页。&lt;/p&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$smarty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;display&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'index.htm'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;//集合&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;$smarty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;display&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'index.htm'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$id1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'|'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$id2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;局限性&quot;&gt;局限性&lt;/h3&gt;
-
-&lt;p&gt;1.当缓存文件过多，cpu需要耗在遍历文件。&lt;/p&gt;
-
-&lt;p&gt;可以通过设置支持目录分级&lt;/p&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$smarty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;use_sub_dirs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;2.缓存文件存在I/O消耗。&lt;/p&gt;
-
-&lt;p&gt;可以把缓存内容存到内存中。&lt;/p&gt;
-
-&lt;h3 id=&quot;参考&quot;&gt;参考&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://jingyan.baidu.com/album/ea24bc39c0d376da62b331a4.html?picindex=1&quot;&gt;Smarty缓存技术完整的执行流程&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Sun, 07 Oct 2018 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/10/07/smarty-cache/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/10/07/smarty-cache/</guid>
-        
-        <category>php</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>php加速器</title>
-        <description>&lt;h3 id=&quot;opcache推荐&quot;&gt;opcache(推荐)&lt;/h3&gt;
-
-&lt;p&gt;新一代PHP加速器，由Zend公司研发，其实现原理与Xcache类似，都是把PHP执行后的数据缓冲到内存中从而避免重复的编译过程，能够直接使用缓冲区已编译的代码从而提高速度，降低服务器负载，但性能却比Xcache更加优越。&lt;/p&gt;
-
-&lt;p&gt;PHP 5.5.0 及后续版本中已经绑定了 opcache 扩展。 对于 PHP 5.2，5.3 和 5.4 版本可以使用PECL扩展中的 opcache 库。&lt;/p&gt;
-
-&lt;h5 id=&quot;配置说明&quot;&gt;配置说明&lt;/h5&gt;
-
-&lt;div class=&quot;language-ini highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;py&quot;&gt;opcache.enable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;1 (default &quot;1&quot;)&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;;OPcache打开/关闭开关。当设置为Off或者0时，会关闭Opcache, 代码没有被优化和缓存。
-&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;opcache.enable_cli&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;1 (default &quot;0&quot;)&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;;CLI环境下，PHP启用OPcache。这主要是为了测试和调试。从 PHP 7.1.2 开始，默认启用。
-&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;opcache.memory_consumption&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;128 (default &quot;64&quot;)&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;;OPcache共享内存存储大小。用于存储预编译的opcode（以MB为单位）。
-&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;opcache.interned_strings_buffer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;8 (default &quot;4&quot;)&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;;这是一个很有用的选项，但是似乎完全没有文档说明。PHP使用了一种叫做字符串驻留（string interning）的技术来改善性能。例如，如果你在代码中使用了1000次字符串“foobar”，在PHP内部只会在第一使用这个字符串的时候分配一个不可变的内存区域来存储这个字符串，其他的999次使用都会直接指向这个内存区域。这个选项则会把这个特性提升一个层次——默认情况下这个不可变的内存区域只会存在于单个php-fpm的进程中，如果设置了这个选项，那么它将会在所有的php-fpm进程中共享。在比较大的应用中，这可以非常有效地节约内存，提高应用的性能。
-&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;这个选项的值是以兆字节（megabytes）作为单位，如果把它设置为16，则表示16MB，默认是4MB，这是一个比较低的值。&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;opcache.max_accelerated_files&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(default&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;&quot;2000&quot;)&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;;这个选项用于控制内存中最多可以缓存多少个PHP文件。这个选项必须得设置得足够大，大于你的项目中的所有PHP文件的总和。
-&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;设置值取值范围最小值是&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;200，最大值在&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;PHP&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;5.5.6&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;之前是&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;100000，PHP&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;5.5.6&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;及之后是&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;1000000。也就是说在200到1000000之间。&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;你可以运行“find&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;-type&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;-print&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;php&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;wc&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;-l”这个命令来快速计算你的代码库中的PHP文件数。&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;opcache.max_wasted_percentage&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(default&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;&quot;5&quot;)&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;;计划重新启动之前，“浪费”内存的最大百分比。
-&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;opcache.use_cwd&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(default&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;&quot;1&quot;)&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;;如果启用，OPcache将在哈希表的脚本键之后附加改脚本的工作目录， 以避免同名脚本冲突的问题。禁用此选项可以提高性能，但是可能会导致应用崩溃
-&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;opcache.validate_timestamps&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(default&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;&quot;1&quot;)&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;;如果启用（设置为1），OPcache会在opcache.revalidate_freq设置的秒数去检测文件的时间戳（timestamp）检查脚本是否更新。
-&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;如果这个选项被禁用（设置为0），opcache.revalidate_freq会被忽略，PHP文件永远不会被检查。这意味着如果你修改了你的代码，然后你把它更新到服务器上，再在浏览器上请求更新的代码对应的功能，你会看不到更新的效果，你必须使用&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;`opcache_reset()`&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;或者&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;`opcache_invalidate()`&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;函数来手动重置&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;OPcache。或者重重你的web服务器或者php-fpm&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;来使文件系统更改生效。&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;我强烈建议你在生产环境中设置为0，why？因为当你在更新服务器代码的时候，如果代码较多，更新操作是有些延迟的，在这个延迟的过程中必然出现老代码和新代码混合的情况，这个时候对用户请求的处理必然存在不确定性。最后，等所有的代码更新完毕后，再平滑重启PHP和web服务器。&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;opcache.revalidate_freq&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(default&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;&quot;2&quot;)&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;;这个选项用于设置缓存的过期时间（单位是秒），当这个时间达到后，opcache会检查你的代码是否改变，如果改变了PHP会重新编译它，生成新的opcode，并且更新缓存。值为“0”表示每次请求都会检查你的PHP代码是否更新（这意味着会增加很多次stat系统调用，译注：stat系统调用是读取文件的状态，这里主要是获取最近修改时间，这个系统调用会发生磁盘I/O，所以必然会消耗一些CPU时间，当然系统调用本身也会消耗一些CPU时间）。可以在开发环境中把它设置为0，生产环境下不用管。
-&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;如果&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;`opcache.validate_timestamps`&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;配置指令设置为禁用（设置为0），那么此设置项将会被忽略。&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;opcache.revalidate_path&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(default&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;&quot;0&quot;)&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;;在include_path优化中启用或禁用文件搜索
-&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;如果被禁用，并且找到了使用的缓存文件相同的include_path，该文件不被再次搜索。因此，如果一个文件与include_path中的其他地方相同的名称出现将不会被发现。如果此优化对此有效，请启用此指令你的应用程序，这个指令的默认值是禁用的，这意味着该优化是活跃的。&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;opcache.fast_shutdown（默认“0”）&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;;如果启用，则会使用快速停止续发事件。 所谓快速停止续发事件是指依赖 Zend 引擎的内存管理模块 一次释放全部请求变量的内存，而不是依次释放每一个已分配的内存块。
-&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;该指令已在PHP&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;7.2.0中被删除。快速关机序列的一个变种已经被集成到PHP中，并且如果可能的话将被自动使用。&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;其他加速器&quot;&gt;其他加速器&lt;/h3&gt;
-
-&lt;h5 id=&quot;apc&quot;&gt;APC&lt;/h5&gt;
-
-&lt;p&gt;Alternative PHP Cache (APC) 是一个开放自由的PHP opcode缓存。它的目标是提供一个自由、 开放，和健全的框架用于缓存和优化PHP的中间代码。 它是PHP PECL中的一个扩展。&lt;/p&gt;
-
-&lt;h5 id=&quot;xcache&quot;&gt;xcache&lt;/h5&gt;
-
-&lt;p&gt;XCache是国人自己开发的东西，性能比早期的eAccelerator加速器要优良。&lt;/p&gt;
-
-&lt;h5 id=&quot;eaccelerator&quot;&gt;eAccelerator&lt;/h5&gt;
-
-&lt;p&gt;eAccelerator的前身其实是truck-mmcache，因为开发truk-mmcache的人被Zend给招安了，所以开发eAccelerator的人继承了truk-mmcache的一些特性，设计出eAccelerator加速器。&lt;/p&gt;
-</description>
-        <pubDate>Sun, 07 Oct 2018 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/10/07/opcode-cache/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/10/07/opcode-cache/</guid>
-        
-        <category>php</category>
         
         
       </item>
