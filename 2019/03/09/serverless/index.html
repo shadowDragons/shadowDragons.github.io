@@ -10,7 +10,7 @@
     <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
     <meta name="theme-color" content="#000000">
     
-    <title>ben blog</title>
+    <title>微服务框架技术选型 - ben blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/page6/">
+    <link rel="canonical" href="http://localhost:4000/2019/03/09/serverless/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -157,465 +157,241 @@
 </script>
 
 
-    <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg.jpg')
+    }
+
+    
+</style>
+<header class="intro-header" >
+    <div class="header-mask"></div>
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
-                <div class="site-heading">
-                    <h1>Ben Blog</h1>
-                    <!--<hr class="small">-->
-                    <span class="subheading">一个小白的成长学习历程</span>
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#微服务" title="微服务">微服务</a>
+                        
+                    </div>
+                    <h1>微服务框架技术选型</h1>
+                    
+                    
+                    <h2 class="subheading"></h2>
+                    
+                    <span class="meta">Posted by Ben Blog on March 9, 2019</span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-	<div class="row">
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<p><a href="/assets/img/posts/2019-03-09-serverless/1.png"><img src="/assets/img/posts/2019-03-09-serverless/1.png" alt="1.png" title="点击查看原图" /></a></p>
+
+
+
+                <hr style="visibility: hidden;">
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/02/24/oauth2/" data-toggle="tooltip" data-placement="top" title="「转载」OAuth2.0">
+                        Previous<br>
+                        <span>「转载」OAuth2.0</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2019/03/09/xpack-crack/" data-toggle="tooltip" data-placement="top" title="Elasticsearch6.x-xpack破解">
+                        Next<br>
+                        <span>Elasticsearch6.x-xpack破解</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+
+
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
         
 
-<!-- USE SIDEBAR -->
-    <!-- PostList Container -->
-    		<div class="
-                col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                postlist-container
-            ">
-    			
-<div class="post-preview">
-    <a href="/2018/04/05/md5/">
-        <h2 class="post-title">
-            加密散列-md5
-        </h2>
-        
-        <div class="post-content-preview">
-            
-  MD5消息摘要算法（英语：MD5 Message-Digest Algorithm），一种被广泛使用的密码散列函数，可以产生出一个128位（16字节）的散列值（hash value），用于确保信息传输完整一致。
-
-
-算法步骤
-
-原始消息分为N个512bit的消息块。每个消息块分成16个32bit。
-
-1.补位  
-由于必须分成n个512bit块，所以必须进行补位。  
-最后还需要预留6...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on April 5, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/04/01/ether-private-network/">
-        <h2 class="post-title">
-            搭建以太坊私有网络
-        </h2>
-        
-        <div class="post-content-preview">
-            Geth
-
-可以通过命令行方式实现以太坊的各种功能,如账户的新建编辑删除，开启挖矿，ether币的转移，智能合约的部署和执行等等。
-
-安装
-
-brew tap ethereum/ethereum
-brew install ethereum
-
-
-安装完成后检查，输入geth version
-
-
-
-创建私有网络
-
-1.创建一个目录，如geth-private-test
-
-2.进入该目录下，创建文...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on April 1, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/04/01/cryptography/">
-        <h2 class="post-title">
-            密码学
-        </h2>
-        
-        <div class="post-content-preview">
-            对称加密
-
-加密 
-
-解密 
-
-优点  
-加解密效率高（速度快，空间占用小），加密强度高。
-
-缺点  
-安全性弱，密钥由多方管理，密钥容易泄露。
-
-常见加密算法  
-DES、3DES、Blowfish、RC2、AES以及国密的SM4。
-
-非对称加密
-
-加密 
-
-解密 
-
-优点  
-安全性高，公私钥分离。
-
-缺点  
-加解密效率低。
-
-常见加密算法  
-RSA、椭圆曲线算法
-
-同态加密
-
-是一...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on April 1, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/03/23/agreement/">
-        <h2 class="post-title">
-            共识算法
-        </h2>
-        
-        <div class="post-content-preview">
-            
-
-drow.io源文件下载
-
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on March 23, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/03/18/bitcoin-mining/">
-        <h2 class="post-title">
-            比特币挖矿
-        </h2>
-        
-        <div class="post-content-preview">
-            
-
-drow.io源文件下载
-
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on March 18, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/03/18/bitcoin-51attach/">
-        <h2 class="post-title">
-            比特币51攻击
-        </h2>
-        
-        <div class="post-content-preview">
-            
-
-drow.io源文件下载
-
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on March 18, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/03/17/rsa/">
-        <h2 class="post-title">
-            RSA算法
-        </h2>
-        
-        <div class="post-content-preview">
-            
-
-drow.io源文件下载
-
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on March 17, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/03/09/Byzantine-failures/">
-        <h2 class="post-title">
-            拜占庭算法
-        </h2>
-        
-        <div class="post-content-preview">
-            
-
-drow.io源文件下载
-
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on March 9, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/03/03/bitcoin-network/">
-        <h2 class="post-title">
-            比特币网络
-        </h2>
-        
-        <div class="post-content-preview">
-            
-
-drow.io源文件下载
-
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on March 3, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/03/03/bitcoin-chain/">
-        <h2 class="post-title">
-            比特币区块链
-        </h2>
-        
-        <div class="post-content-preview">
-            
-
-drow.io源文件下载
-
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on March 3, 2018
-    </p>
-</div>
-<hr>
-
-
-<!-- Pager -->
-
-<ul class="pager">
-    
-    <li class="previous">
-        <a href="/page5">&larr; Newer Posts</a>
-    </li>
-    
-    
-    <li class="next">
-        <a href="/page7">Older Posts &rarr;</a>
-    </li>
-    
-</ul>
-
-
-    		</div>
     <!-- Sidebar Container -->
             <div class="
-                col-lg-3 col-lg-offset-0
-                col-md-3 col-md-offset-0
-                col-sm-12
-                col-xs-12
-                sidebar-container
-            ">
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
                 <!-- Featured Tags -->
                 
                 <section>
                     <hr class="hidden-sm hidden-xs">
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
-                        
+        				
                             
-                                <a href="/tags/#php" title="php" rel="11">
+                				<a href="/tags/#php" title="php" rel="11">
                                     php
                                 </a>
                             
-                        
+        				
                             
-                        
+        				
                             
-                                <a href="/tags/#算法" title="算法" rel="7">
+                				<a href="/tags/#算法" title="算法" rel="7">
                                     算法
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#数据结构" title="数据结构" rel="2">
+                				<a href="/tags/#数据结构" title="数据结构" rel="2">
                                     数据结构
                                 </a>
                             
-                        
+        				
                             
-                        
+        				
                             
-                        
+        				
                             
-                                <a href="/tags/#分布式" title="分布式" rel="2">
+                				<a href="/tags/#分布式" title="分布式" rel="2">
                                     分布式
                                 </a>
                             
-                        
+        				
                             
-                        
+        				
                             
-                        
+        				
                             
-                        
+        				
                             
-                                <a href="/tags/#区块链" title="区块链" rel="18">
+                				<a href="/tags/#区块链" title="区块链" rel="18">
                                     区块链
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#比特币" title="比特币" rel="7">
+                				<a href="/tags/#比特币" title="比特币" rel="7">
                                     比特币
                                 </a>
                             
-                        
+        				
                             
-                        
+        				
                             
-                        
+        				
                             
-                                <a href="/tags/#密码学" title="密码学" rel="6">
+                				<a href="/tags/#密码学" title="密码学" rel="6">
                                     密码学
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#以太坊" title="以太坊" rel="4">
+                				<a href="/tags/#以太坊" title="以太坊" rel="4">
                                     以太坊
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#http" title="http" rel="12">
+                				<a href="/tags/#http" title="http" rel="12">
                                     http
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#超级账本" title="超级账本" rel="8">
+                				<a href="/tags/#超级账本" title="超级账本" rel="8">
                                     超级账本
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#fabric" title="fabric" rel="8">
+                				<a href="/tags/#fabric" title="fabric" rel="8">
                                     fabric
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#MYSQL" title="MYSQL" rel="3">
+                				<a href="/tags/#MYSQL" title="MYSQL" rel="3">
                                     MYSQL
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#web开发" title="web开发" rel="5">
+                				<a href="/tags/#web开发" title="web开发" rel="5">
                                     web开发
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#计算机" title="计算机" rel="3">
+                				<a href="/tags/#计算机" title="计算机" rel="3">
                                     计算机
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#转载" title="转载" rel="3">
+                				<a href="/tags/#转载" title="转载" rel="3">
                                     转载
                                 </a>
                             
-                        
+        				
                             
-                        
+        				
                             
-                        
+        				
                             
-                                <a href="/tags/#精进" title="精进" rel="3">
+                				<a href="/tags/#精进" title="精进" rel="3">
                                     精进
                                 </a>
                             
-                        
+        				
                             
-                        
+        				
                             
-                        
-                    </div>
+        				
+        			</div>
                 </section>
                 
 
-                <!-- Short About -->
-                <section class="visible-md visible-lg">
-                    <hr><h5><a href="/about/">ABOUT ME</a></h5>
-                    <div class="short-about">
-                        
-                            <img src="/img/avatar.jpg" />
-                        
-                        
-                            <p>最美的风景往往在没有路的地方</p>
-                        
-                        <!-- SNS Link -->
-                        <ul class="list-inline">
-                            
-                            
-                            
-                            
-                            
-                            
-                            <li>
-                                <a target="_blank" href="https://github.com/shadowdragons">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            
-                            
-                        </ul>
-                    </div>
-                </section>
                 <!-- Friends Blog -->
                 
                 <hr>
@@ -624,10 +400,53 @@ drow.io源文件下载
                     
                 </ul>
                 
-    		</div>
-        
-	</div>
-</div>
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
 
 
     <!-- Footer -->
@@ -786,6 +605,64 @@ drow.io源文件下载
 
 
 <!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
 
 
 

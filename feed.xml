@@ -5,8 +5,8 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 09 Mar 2019 23:33:49 +0800</pubDate>
-    <lastBuildDate>Sat, 09 Mar 2019 23:33:49 +0800</lastBuildDate>
+    <pubDate>Sun, 10 Mar 2019 00:25:12 +0800</pubDate>
+    <lastBuildDate>Sun, 10 Mar 2019 00:25:12 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
     
       <item>
@@ -140,6 +140,20 @@ jar &lt;span class=&quot;nt&quot;&gt;-cvf&lt;/span&gt; x-pack-core-x.x.x_new.jar
         <guid isPermaLink="true">http://localhost:4000/2019/03/09/xpack-crack/</guid>
         
         <category>Elastic</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>微服务框架技术选型</title>
+        <description>&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-03-09-serverless/1.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-03-09-serverless/1.png&quot; alt=&quot;1.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 09 Mar 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/03/09/serverless/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/03/09/serverless/</guid>
+        
+        <category>微服务</category>
         
         
       </item>
@@ -1835,98 +1849,6 @@ grant_type=refresh_token&amp;amp;refresh_token=tGzv3JOkF0XG5Qx2TlKW
         <guid isPermaLink="true">http://localhost:4000/2018/10/15/swoole-note/</guid>
         
         <category>php</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>『构建高性能web站点』浏览器缓存</title>
-        <description>&lt;p&gt;我们可以通过http头信息来实现浏览器缓存。&lt;/p&gt;
-
-&lt;h3 id=&quot;last-modified&quot;&gt;Last-Modified&lt;/h3&gt;
-
-&lt;p&gt;这种信息需要后台来判定是否过期。流程如下：&lt;/p&gt;
-
-&lt;script src=&quot;/assets/js/mermaid.js&quot;&gt;&lt;/script&gt;
-&lt;div class=&quot;mermaid&quot;&gt;
-sequenceDiagram;
-    participant 客户端
-    participant 服务端
-    客户端-&amp;gt;服务端: 请求静态文件
-    服务端-&amp;gt;客户端: 返回头信息 Last-Modified: {最后修改时间} GMT
-    Note left of 客户端: 确认文件是否过期
-    客户端-&amp;gt;服务端: 返回头信息If-Modified-Since: {上一步获取的最后修改时间} GMT 
-    Note right of 服务端: 获取客户端的头信息，根据设定的过期时间判断
-    服务端-&amp;gt;客户端: 返回静态文件是否过期
-&lt;/div&gt;
-
-&lt;p&gt;缺点：需要请求服务器，确认是否过期&lt;/p&gt;
-
-&lt;h3 id=&quot;etag&quot;&gt;ETag&lt;/h3&gt;
-
-&lt;p&gt;同样需要后台来判定是否过期。流程如下：&lt;/p&gt;
-
-&lt;script src=&quot;/assets/js/mermaid.js&quot;&gt;&lt;/script&gt;
-&lt;div class=&quot;mermaid&quot;&gt;
-sequenceDiagram;
-    participant 客户端
-    participant 服务端
-    客户端-&amp;gt;服务端: 请求静态文件
-    服务端-&amp;gt;客户端: 返回头信息 ETag: {根据文件内容计算出来的值} 
-    Note left of 客户端: 确认文件是否过期
-    客户端-&amp;gt;服务端: 返回头信息If-None-Match: {上一步获取的ETag值}
-    Note right of 服务端: 获取客户端的头信息，计算目前文件内容的ETag值做对比
-    服务端-&amp;gt;客户端: 返回静态文件是否过期
-&lt;/div&gt;
-
-&lt;p&gt;缺点：需要请求服务器，确认是否过期&lt;/p&gt;
-
-&lt;h3 id=&quot;expires&quot;&gt;Expires&lt;/h3&gt;
-
-&lt;p&gt;这种方式可以彻底消灭服务器请求，流程如下：&lt;/p&gt;
-
-&lt;script src=&quot;/assets/js/mermaid.js&quot;&gt;&lt;/script&gt;
-&lt;div class=&quot;mermaid&quot;&gt;
-sequenceDiagram;
-    participant 客户端
-    participant 服务端
-    客户端-&amp;gt;服务端: 请求静态文件
-    服务端-&amp;gt;客户端: 返回头信息 Expires: {过期时间} GMT
-    loop 判断过期
-        客户端-&amp;gt;客户端: 根据Expires过期时间判断
-    end
-&lt;/div&gt;
-
-&lt;p&gt;缺点：依赖本地时间、无法实时更新静态文件内容。&lt;/p&gt;
-
-&lt;h3 id=&quot;cache-control&quot;&gt;Cache-control&lt;/h3&gt;
-
-&lt;p&gt;HTTP1.1 的Cache-control可以弥补Expires依赖本地时间的不足。格式如下：&lt;/p&gt;
-
-&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Cache-control: max-age=&lt;span class=&quot;nt&quot;&gt;&amp;lt;second&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;max-age&lt;/code&gt;指定了缓存过期的相对时间，单位秒，并且是相对于本地时间。浏览器根据本地当前时间是否大于max-age+上次访问时间&lt;/p&gt;
-
-&lt;p&gt;流程如下：&lt;/p&gt;
-
-&lt;script src=&quot;/assets/js/mermaid.js&quot;&gt;&lt;/script&gt;
-&lt;div class=&quot;mermaid&quot;&gt;
-sequenceDiagram;
-    participant 客户端
-    participant 服务端
-    客户端-&amp;gt;服务端: 请求静态文件
-    服务端-&amp;gt;客户端: 返回头信息 Expires: {过期时间} GMT、Cache-control: max-age={有效时长}
-    loop 判断过期
-        客户端-&amp;gt;客户端: 优先判断max-age
-    end
-&lt;/div&gt;
-</description>
-        <pubDate>Thu, 11 Oct 2018 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/10/11/bhpws-brower-cache/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/10/11/bhpws-brower-cache/</guid>
-        
-        <category>web开发</category>
         
         
       </item>

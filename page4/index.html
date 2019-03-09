@@ -188,6 +188,33 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2018/05/13/hyperledger-fabric-2/">
+        <h2 class="post-title">
+            fabric入门（二）启动&关闭网络
+        </h2>
+        
+        <div class="post-content-preview">
+            进入官方示例
+
+cd $GOPATH/src/github.com/hyperledger/fabric-samples/first-network
+
+
+第一步生成我们各种网络实体的所有证书和密钥，genesis block用于引导排序服务，以及配置Channel所需要的一组交易配置集合。
+运行以下命令：
+
+./byfn.sh -m generate
+
+
+接下来可以使用以下命令来启动整个网络...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on May 13, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/05/13/hyperledger-fabric-1/">
         <h2 class="post-title">
             fabric入门（一）安装
@@ -431,30 +458,6 @@ DNS数据包结构
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2018/04/29/http-connect/">
-        <h2 class="post-title">
-            HTTP - 连接管理
-        </h2>
-        
-        <div class="post-content-preview">
-            TCP连接
-
-世界上⼏乎所有的 HTTP 通信都是由 TCP/IP 承载的，TCP/IP 是全球计算机及⽹络设备都在使⽤的⼀种常⽤的分组交换⽹络分层协议集。客户端应⽤程序可以打开⼀条 TCP/IP 连接，连接到可能运⾏在世界任何地⽅的服务器应⽤程序。⼀旦连接建⽴起来了，在客户端和服务器的计算机之间交换的报⽂就永远不会丢失、受损或失序。
-
-完整的连接执行流程如下图所示:
-
-
-
-TCP是分段、由...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on April 29, 2018
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -602,6 +605,8 @@ TCP是分段、由...
                                 <a href="/tags/#精进" title="精进" rel="3">
                                     精进
                                 </a>
+                            
+                        
                             
                         
                             
