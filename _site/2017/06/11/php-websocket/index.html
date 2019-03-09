@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一个小白的成长学习历程">
+    <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
+    <meta name="theme-color" content="#000000">
+    
+    <title>php实现webSocket - ben blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2017/06/11/php-websocket/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- mermaid CSS -->
+    <link rel="stylesheet" href="/assets/css/mermaid.css">
+
+    <script type="text/javascript"
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Ben Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/book/">Book</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/">Tags</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg.jpg')
+    }
+
+    
+</style>
+<header class="intro-header" >
+    <div class="header-mask"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#php" title="php">php</a>
+                        
+                    </div>
+                    <h1>php实现webSocket</h1>
+                    
+                    
+                    <h2 class="subheading"></h2>
+                    
+                    <span class="meta">Posted by Ben Blog on June 11, 2017</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<h2 id="socket">socket</h2>
+
+<blockquote>
+  <p>Socket是应用层与TCP/IP协议族通信的中间软件抽象层，它是一组接口。在设计模式中，Socket其实就是一个门面模式，它把复杂的TCP/IP协议族隐藏在Socket接口后面，对用户来说，一组简单的接口就是全部，让Socket去组织数据，以符合指定的协议。</p>
+</blockquote>
+
+<h4 id="执行流程">执行流程</h4>
+
+<p><img src="/assets/img/posts/2017-06-11-php-websocket/1.jpg" alt="执行流程" /></p>
+
+<p>服务器端  <br />
+1.初始化  <br />
+2.绑定端口(bind)  <br />
+3.进入监听(listen)  <br />
+4.阻塞(accept),等待用户连接  <br />
+5.接收，发送客户端数据</p>
+
+<p>客户端  <br />
+1.初始化  <br />
+2.连接服务器(connect)  <br />
+3.发送，读取数据</p>
+
+<h4 id="实现">实现</h4>
+
+<p>服务器端</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">//确保在连接客户端时不会超时</span>
+<span class="nb">set_time_limit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="nv">$ip</span> <span class="o">=</span> <span class="s1">'127.0.0.1'</span><span class="p">;</span>
+<span class="nv">$port</span> <span class="o">=</span> <span class="mi">1935</span><span class="p">;</span>
+
+<span class="cm">/*
+ +-------------------------------
+ *    @socket通信整个过程
+ +-------------------------------
+ *    @socket_create
+ *    @socket_bind
+ *    @socket_listen
+ *    @socket_accept
+ *    @socket_read
+ *    @socket_write
+ *    @socket_close
+ +--------------------------------
+ */</span>
+
+<span class="cm">/*----------------    以下操作都是手册上的    -------------------*/</span>
+<span class="k">if</span><span class="p">((</span><span class="nv">$sock</span> <span class="o">=</span> <span class="nb">socket_create</span><span class="p">(</span><span class="nx">AF_INET</span><span class="p">,</span><span class="nx">SOCK_STREAM</span><span class="p">,</span><span class="nx">SOL_TCP</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"socket_create() 失败的原因是:"</span><span class="o">.</span><span class="nb">socket_strerror</span><span class="p">(</span><span class="nv">$sock</span><span class="p">)</span><span class="o">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">if</span><span class="p">((</span><span class="nv">$ret</span> <span class="o">=</span> <span class="nb">socket_bind</span><span class="p">(</span><span class="nv">$sock</span><span class="p">,</span><span class="nv">$ip</span><span class="p">,</span><span class="nv">$port</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"socket_bind() 失败的原因是:"</span><span class="o">.</span><span class="nb">socket_strerror</span><span class="p">(</span><span class="nv">$ret</span><span class="p">)</span><span class="o">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">if</span><span class="p">((</span><span class="nv">$ret</span> <span class="o">=</span> <span class="nb">socket_listen</span><span class="p">(</span><span class="nv">$sock</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"socket_listen() 失败的原因是:"</span><span class="o">.</span><span class="nb">socket_strerror</span><span class="p">(</span><span class="nv">$ret</span><span class="p">)</span><span class="o">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nv">$count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="k">do</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">((</span><span class="nv">$msgsock</span> <span class="o">=</span> <span class="nb">socket_accept</span><span class="p">(</span><span class="nv">$sock</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"socket_accept() failed: reason: "</span> <span class="o">.</span> <span class="nb">socket_strerror</span><span class="p">(</span><span class="nv">$msgsock</span><span class="p">)</span> <span class="o">.</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        
+        <span class="c1">//发到客户端</span>
+        <span class="nv">$msg</span> <span class="o">=</span><span class="s2">"测试成功！</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="nb">socket_write</span><span class="p">(</span><span class="nv">$msgsock</span><span class="p">,</span> <span class="nv">$msg</span><span class="p">,</span> <span class="nb">strlen</span><span class="p">(</span><span class="nv">$msg</span><span class="p">));</span>
+        
+        <span class="k">echo</span> <span class="s2">"测试成功了啊</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="nv">$buf</span> <span class="o">=</span> <span class="nb">socket_read</span><span class="p">(</span><span class="nv">$msgsock</span><span class="p">,</span><span class="mi">8192</span><span class="p">);</span>
+        
+        
+        <span class="nv">$talkback</span> <span class="o">=</span> <span class="s2">"收到的信息:</span><span class="nv">$buf</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="k">echo</span> <span class="nv">$talkback</span><span class="p">;</span>
+        
+        <span class="k">if</span><span class="p">(</span><span class="o">++</span><span class="nv">$count</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">){</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">};</span>
+        
+    
+    <span class="p">}</span>
+    <span class="c1">//echo $buf;</span>
+    <span class="nb">socket_close</span><span class="p">(</span><span class="nv">$msgsock</span><span class="p">);</span>
+
+<span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+
+<span class="nb">socket_close</span><span class="p">(</span><span class="nv">$sock</span><span class="p">);</span>
+<span class="cp">?&gt;</span>
+</code></pre></div></div>
+
+<p>客户端</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nb">error_reporting</span><span class="p">(</span><span class="k">E_ALL</span><span class="p">);</span>
+<span class="nb">set_time_limit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="k">echo</span> <span class="s2">"&lt;h2&gt;TCP/IP Connection&lt;/h2&gt;</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+
+<span class="nv">$port</span> <span class="o">=</span> <span class="mi">1935</span><span class="p">;</span>
+<span class="nv">$ip</span> <span class="o">=</span> <span class="s2">"127.0.0.1"</span><span class="p">;</span>
+
+<span class="cm">/*
+ +-------------------------------
+ *    @socket连接整个过程
+ +-------------------------------
+ *    @socket_create
+ *    @socket_connect
+ *    @socket_write
+ *    @socket_read
+ *    @socket_close
+ +--------------------------------
+ */</span>
+
+<span class="nv">$socket</span> <span class="o">=</span> <span class="nb">socket_create</span><span class="p">(</span><span class="nx">AF_INET</span><span class="p">,</span> <span class="nx">SOCK_STREAM</span><span class="p">,</span> <span class="nx">SOL_TCP</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$socket</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"socket_create() failed: reason: "</span> <span class="o">.</span> <span class="nb">socket_strerror</span><span class="p">(</span><span class="nv">$socket</span><span class="p">)</span> <span class="o">.</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span><span class="k">else</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"OK.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">echo</span> <span class="s2">"试图连接 '</span><span class="nv">$ip</span><span class="s2">' 端口 '</span><span class="nv">$port</span><span class="s2">'...</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="nv">$result</span> <span class="o">=</span> <span class="nb">socket_connect</span><span class="p">(</span><span class="nv">$socket</span><span class="p">,</span> <span class="nv">$ip</span><span class="p">,</span> <span class="nv">$port</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$result</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"socket_connect() failed.</span><span class="se">\n</span><span class="s2">Reason: (</span><span class="nv">$result</span><span class="s2">) "</span> <span class="o">.</span> <span class="nb">socket_strerror</span><span class="p">(</span><span class="nv">$result</span><span class="p">)</span> <span class="o">.</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span><span class="k">else</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"连接OK</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nv">$in</span> <span class="o">=</span> <span class="s2">"Ho</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="nv">$in</span> <span class="o">.=</span> <span class="s2">"first blood</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="nv">$out</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">socket_write</span><span class="p">(</span><span class="nv">$socket</span><span class="p">,</span> <span class="nv">$in</span><span class="p">,</span> <span class="nb">strlen</span><span class="p">(</span><span class="nv">$in</span><span class="p">)))</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"socket_write() failed: reason: "</span> <span class="o">.</span> <span class="nb">socket_strerror</span><span class="p">(</span><span class="nv">$socket</span><span class="p">)</span> <span class="o">.</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span><span class="k">else</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"发送到服务器信息成功！</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="k">echo</span> <span class="s2">"发送的内容为:&lt;font color='red'&gt;</span><span class="nv">$in</span><span class="s2">&lt;/font&gt; &lt;br&gt;"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">while</span><span class="p">(</span><span class="nv">$out</span> <span class="o">=</span> <span class="nb">socket_read</span><span class="p">(</span><span class="nv">$socket</span><span class="p">,</span> <span class="mi">8192</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"接收服务器回传信息成功！</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="k">echo</span> <span class="s2">"接受的内容为:"</span><span class="p">,</span><span class="nv">$out</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="k">echo</span> <span class="s2">"关闭SOCKET...</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="nb">socket_close</span><span class="p">(</span><span class="nv">$socket</span><span class="p">);</span>
+<span class="k">echo</span> <span class="s2">"关闭OK</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="cp">?&gt;</span>
+</code></pre></div></div>
+
+<h2 id="websocket">webSocket</h2>
+
+<h4 id="执行流程-1">执行流程</h4>
+
+<p>1.初始化  <br />
+2.绑定端口  <br />
+3.监听  <br />
+4.等待用户连接  <br />
+5.客户端发送握手  <br />
+6.服务器响应握手  <br />
+7.握手完毕后,可以相互传输数据  <br />
+8.连接结束,发送关闭控制帧并断开TCP</p>
+
+<p>握手流程</p>
+
+<p><img src="/assets/img/posts/2017-06-11-php-websocket/1.jpg" alt="握手流程" /></p>
+
+<p>socket-select说明</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">socket_select</span> <span class="p">(</span><span class="k">array</span> <span class="o">&amp;</span><span class="nv">$read</span><span class="p">,</span> <span class="k">array</span> <span class="o">&amp;</span><span class="nv">$write</span><span class="p">,</span> <span class="k">array</span> <span class="o">&amp;</span><span class="nv">$except</span><span class="p">,</span> <span class="nv">$tv_sec</span><span class="p">,</span> <span class="nv">$tv_usec</span> <span class="o">=</span> <span class="kc">null</span><span class="p">)</span>
+</code></pre></div></div>
+<p>获取read数组中活动的socket，并且把不活跃的从read数组中删除,具体的看文档. 这是一个同步方法，必须得到响应之后才会继续下一步,常用在同步非阻塞IO。  <br />
+1.新连接到来时,被监听的端口是活跃的,如果是新数据到来或者客户端关闭链接时,活跃的是对应的客户端socket而不是服务器上被监听的端口  <br />
+2.如果客户端发来数据没有被读走,则socket_select将会始终显示客户端是活跃状态并将其保存在readfds数组中  <br />
+3.如果客户端先关闭了,则必须手动关闭服务器上相对应的客户端socket,否则socket_select也始终显示该客户端活跃(这个道理跟”有新连接到来然后没有用socket_access把它读出来,导致监听的端口一直活跃”是一样的)</p>
+
+<h4 id="实现-1">实现</h4>
+
+<p>server.php</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="sd">/**
+ * Simple server class which manage WebSocket protocols
+ * @author Sann-Remy Chea &lt;http://srchea.com&gt;
+ * @license This program is free software: you can redistribute it and/or modify
+ * 	it under the terms of the GNU General Public License as published by
+ * 	the Free Software Foundation, either version 3 of the License, or
+ * 	(at your option) any later version.
+ * 	This program is distributed in the hope that it will be useful,
+ * 	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * 	GNU General Public License for more details.
+ * 	You should have received a copy of the GNU General Public License
+ * 	along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ * @version 1.0.0
+ */</span>
+<span class="k">namespace</span> <span class="nx">PushWebSocket</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">Server</span> <span class="p">{</span>
+	<span class="sd">/**
+	 * The address of the server
+	 * @var String
+	 */</span>
+	<span class="k">private</span> <span class="nv">$address</span><span class="p">;</span>
+	<span class="sd">/**
+	 * The port for the master socket
+	 * @var int
+	 */</span>
+	<span class="k">private</span> <span class="nv">$port</span><span class="p">;</span>
+	<span class="sd">/**
+	 * The master socket
+	 * @var Resource
+	 */</span>
+	<span class="k">private</span> <span class="nv">$master</span><span class="p">;</span>
+	<span class="sd">/**
+	 * The array of sockets (1 socket = 1 client)
+	 * @var Array of resource
+	 */</span>
+	<span class="k">private</span> <span class="nv">$sockets</span><span class="p">;</span>
+	<span class="sd">/**
+	 * The array of connected clients
+	 * @var Array of clients
+	 */</span>
+	<span class="k">private</span> <span class="nv">$clients</span><span class="p">;</span>
+	<span class="sd">/**
+	 * If true, the server will print messages to the terminal
+	 * @var Boolean
+	 */</span>
+	<span class="k">private</span> <span class="nv">$verboseMode</span><span class="p">;</span>
+	<span class="sd">/**
+	 * Server constructor
+	 * @param $address The address IP or hostname of the server (default: 127.0.0.1).
+	 * @param $port The port for the master socket (default: 5001)
+	 */</span>
+	<span class="k">public</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">(</span><span class="nv">$address</span> <span class="o">=</span> <span class="s1">'127.0.0.1'</span><span class="p">,</span> <span class="nv">$port</span> <span class="o">=</span> <span class="mi">5001</span><span class="p">,</span> <span class="nv">$verboseMode</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Server starting..."</span><span class="p">);</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">address</span> <span class="o">=</span> <span class="nv">$address</span><span class="p">;</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">port</span> <span class="o">=</span> <span class="nv">$port</span><span class="p">;</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">verboseMode</span> <span class="o">=</span> <span class="nv">$verboseMode</span><span class="p">;</span>
+		<span class="c1">// socket creation</span>
+		<span class="nv">$socket</span> <span class="o">=</span> <span class="nb">socket_create</span><span class="p">(</span><span class="nx">AF_INET</span><span class="p">,</span> <span class="nx">SOCK_STREAM</span><span class="p">,</span> <span class="nx">SOL_TCP</span><span class="p">);</span>
+		<span class="nb">socket_set_option</span><span class="p">(</span><span class="nv">$socket</span><span class="p">,</span> <span class="nx">SOL_SOCKET</span><span class="p">,</span> <span class="nx">SO_REUSEADDR</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+		<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">is_resource</span><span class="p">(</span><span class="nv">$socket</span><span class="p">))</span> <span class="p">{</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"socket_create() failed: "</span><span class="o">.</span><span class="nb">socket_strerror</span><span class="p">(</span><span class="nb">socket_last_error</span><span class="p">()),</span> <span class="kc">true</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">socket_bind</span><span class="p">(</span><span class="nv">$socket</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">address</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">port</span><span class="p">))</span> <span class="p">{</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"socket_bind() failed: "</span><span class="o">.</span><span class="nb">socket_strerror</span><span class="p">(</span><span class="nb">socket_last_error</span><span class="p">()),</span> <span class="kc">true</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">socket_listen</span><span class="p">(</span><span class="nv">$socket</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span> <span class="p">{</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"socket_listen() failed: "</span><span class="o">.</span><span class="nb">socket_strerror</span><span class="p">(</span><span class="nb">socket_last_error</span><span class="p">()),</span> <span class="kc">true</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">master</span> <span class="o">=</span> <span class="nv">$socket</span><span class="p">;</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">sockets</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="nv">$socket</span><span class="p">);</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Server started on </span><span class="si">{</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">address</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">port</span><span class="si">}</span><span class="s2">"</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="sd">/**
+	 * Create a client object with its associated socket
+	 * @param $socket
+	 */</span>
+	<span class="k">private</span> <span class="k">function</span> <span class="nf">connect</span><span class="p">(</span><span class="nv">$socket</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Creating client..."</span><span class="p">);</span>
+		<span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\PushWebSocket\Client</span><span class="p">(</span><span class="nb">uniqid</span><span class="p">(),</span> <span class="nv">$socket</span><span class="p">);</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">clients</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$client</span><span class="p">;</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">sockets</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$socket</span><span class="p">;</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Client #</span><span class="si">{</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getId</span><span class="p">()</span><span class="si">}</span><span class="s2"> is successfully created!"</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="sd">/**
+	 * Do the handshaking between client and server
+	 * @param $client
+	 * @param $headers
+	 */</span>
+	<span class="k">private</span> <span class="k">function</span> <span class="nf">handshake</span><span class="p">(</span><span class="nv">$client</span><span class="p">,</span> <span class="nv">$headers</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Getting client WebSocket version..."</span><span class="p">);</span>
+		<span class="k">if</span><span class="p">(</span><span class="nb">preg_match</span><span class="p">(</span><span class="s2">"/Sec-WebSocket-Version: (.*)</span><span class="se">\r\n</span><span class="s2">/"</span><span class="p">,</span> <span class="nv">$headers</span><span class="p">,</span> <span class="nv">$match</span><span class="p">))</span> <span class="p">{</span>
+			<span class="nv">$version</span> <span class="o">=</span> <span class="nv">$match</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+		<span class="p">}</span>
+		<span class="k">else</span> <span class="p">{</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"The client doesn't support WebSocket"</span><span class="p">);</span>
+			<span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Client WebSocket version is </span><span class="si">{</span><span class="nv">$version</span><span class="si">}</span><span class="s2">, (required: 13)"</span><span class="p">);</span>
+		<span class="k">if</span><span class="p">(</span><span class="nv">$version</span> <span class="o">==</span> <span class="mi">13</span><span class="p">)</span> <span class="p">{</span>
+			<span class="c1">// Extract header variables</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Getting headers..."</span><span class="p">);</span>
+			<span class="k">if</span><span class="p">(</span><span class="nb">preg_match</span><span class="p">(</span><span class="s2">"/GET (.*) HTTP/"</span><span class="p">,</span> <span class="nv">$headers</span><span class="p">,</span> <span class="nv">$match</span><span class="p">))</span>
+				<span class="nv">$root</span> <span class="o">=</span> <span class="nv">$match</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+			<span class="k">if</span><span class="p">(</span><span class="nb">preg_match</span><span class="p">(</span><span class="s2">"/Host: (.*)</span><span class="se">\r\n</span><span class="s2">/"</span><span class="p">,</span> <span class="nv">$headers</span><span class="p">,</span> <span class="nv">$match</span><span class="p">))</span>
+				<span class="nv">$host</span> <span class="o">=</span> <span class="nv">$match</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+			<span class="k">if</span><span class="p">(</span><span class="nb">preg_match</span><span class="p">(</span><span class="s2">"/Origin: (.*)</span><span class="se">\r\n</span><span class="s2">/"</span><span class="p">,</span> <span class="nv">$headers</span><span class="p">,</span> <span class="nv">$match</span><span class="p">))</span>
+				<span class="nv">$origin</span> <span class="o">=</span> <span class="nv">$match</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+			<span class="k">if</span><span class="p">(</span><span class="nb">preg_match</span><span class="p">(</span><span class="s2">"/Sec-WebSocket-Key: (.*)</span><span class="se">\r\n</span><span class="s2">/"</span><span class="p">,</span> <span class="nv">$headers</span><span class="p">,</span> <span class="nv">$match</span><span class="p">))</span>
+				<span class="nv">$key</span> <span class="o">=</span> <span class="nv">$match</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Client headers are:"</span><span class="p">);</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"</span><span class="se">\t</span><span class="s2">- Root: "</span><span class="o">.</span><span class="nv">$root</span><span class="p">);</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"</span><span class="se">\t</span><span class="s2">- Host: "</span><span class="o">.</span><span class="nv">$host</span><span class="p">);</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"</span><span class="se">\t</span><span class="s2">- Origin: "</span><span class="o">.</span><span class="nv">$origin</span><span class="p">);</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"</span><span class="se">\t</span><span class="s2">- Sec-WebSocket-Key: "</span><span class="o">.</span><span class="nv">$key</span><span class="p">);</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Generating Sec-WebSocket-Accept key..."</span><span class="p">);</span>
+			<span class="nv">$acceptKey</span> <span class="o">=</span> <span class="nv">$key</span><span class="o">.</span><span class="s1">'258EAFA5-E914-47DA-95CA-C5AB0DC85B11'</span><span class="p">;</span>
+			<span class="nv">$acceptKey</span> <span class="o">=</span> <span class="nb">base64_encode</span><span class="p">(</span><span class="nb">sha1</span><span class="p">(</span><span class="nv">$acceptKey</span><span class="p">,</span> <span class="kc">true</span><span class="p">));</span>
+			<span class="nv">$upgrade</span> <span class="o">=</span> <span class="s2">"HTTP/1.1 101 Switching Protocols</span><span class="se">\r\n</span><span class="s2">"</span><span class="o">.</span>
+					   <span class="s2">"Upgrade: websocket</span><span class="se">\r\n</span><span class="s2">"</span><span class="o">.</span>
+					   <span class="s2">"Connection: Upgrade</span><span class="se">\r\n</span><span class="s2">"</span><span class="o">.</span>
+					   <span class="s2">"Sec-WebSocket-Accept: </span><span class="nv">$acceptKey</span><span class="s2">"</span><span class="o">.</span>
+					   <span class="s2">"</span><span class="se">\r\n\r\n</span><span class="s2">"</span><span class="p">;</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Sending this response to the client #</span><span class="si">{</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getId</span><span class="p">()</span><span class="si">}</span><span class="s2">:</span><span class="se">\r\n</span><span class="s2">"</span><span class="o">.</span><span class="nv">$upgrade</span><span class="p">);</span>
+			<span class="nb">socket_write</span><span class="p">(</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getSocket</span><span class="p">(),</span> <span class="nv">$upgrade</span><span class="p">);</span>
+			<span class="nv">$client</span><span class="o">-&gt;</span><span class="na">setHandshake</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Handshake is successfully done!"</span><span class="p">);</span>
+			<span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="k">else</span> <span class="p">{</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"WebSocket version 13 required (the client supports version </span><span class="si">{</span><span class="nv">$version</span><span class="si">}</span><span class="s2">)"</span><span class="p">);</span>
+			<span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="sd">/**
+	 * Disconnect a client and close the connection
+	 * @param $socket
+	 */</span>
+	<span class="k">private</span> <span class="k">function</span> <span class="nf">disconnect</span><span class="p">(</span><span class="nv">$client</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Disconnecting client #</span><span class="si">{</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getId</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">);</span>
+		<span class="nv">$client</span><span class="o">-&gt;</span><span class="na">setIsConnected</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+		<span class="nv">$i</span> <span class="o">=</span> <span class="nb">array_search</span><span class="p">(</span><span class="nv">$client</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">clients</span><span class="p">);</span>
+		<span class="nv">$j</span> <span class="o">=</span> <span class="nb">array_search</span><span class="p">(</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getSocket</span><span class="p">(),</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">sockets</span><span class="p">);</span>
+		<span class="k">if</span><span class="p">(</span><span class="nv">$j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">if</span><span class="p">(</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getSocket</span><span class="p">())</span> <span class="p">{</span>
+				<span class="nb">array_splice</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">sockets</span><span class="p">,</span> <span class="nv">$j</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+				<span class="nb">socket_shutdown</span><span class="p">(</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getSocket</span><span class="p">(),</span> <span class="mi">2</span><span class="p">);</span>
+				<span class="nb">socket_close</span><span class="p">(</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getSocket</span><span class="p">());</span>
+				<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Socket closed"</span><span class="p">);</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">if</span><span class="p">(</span><span class="nv">$i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nb">array_splice</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">clients</span><span class="p">,</span> <span class="nv">$i</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Client #</span><span class="si">{</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getId</span><span class="p">()</span><span class="si">}</span><span class="s2"> disconnected"</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="sd">/**
+	 * Get the client associated with the socket
+	 * @param $socket
+	 * @return A client object if found, if not false
+	 */</span>
+	<span class="k">private</span> <span class="k">function</span> <span class="nf">getClientBySocket</span><span class="p">(</span><span class="nv">$socket</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">foreach</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">clients</span> <span class="k">as</span> <span class="nv">$client</span><span class="p">)</span>
+			<span class="k">if</span><span class="p">(</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getSocket</span><span class="p">()</span> <span class="o">==</span> <span class="nv">$socket</span><span class="p">)</span> <span class="p">{</span>
+				<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Client found"</span><span class="p">);</span>
+				<span class="k">return</span> <span class="nv">$client</span><span class="p">;</span>
+			<span class="p">}</span>
+		<span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="sd">/**
+	 * Do an action
+	 * @param $client
+	 * @param $action
+	 */</span>
+	<span class="k">private</span> <span class="k">function</span> <span class="nf">action</span><span class="p">(</span><span class="nv">$client</span><span class="p">,</span> <span class="nv">$action</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nv">$action</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">unmask</span><span class="p">(</span><span class="nv">$action</span><span class="p">);</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Performing action: "</span><span class="o">.</span><span class="nv">$action</span><span class="p">);</span>
+		<span class="k">if</span><span class="p">(</span><span class="nv">$action</span> <span class="o">==</span> <span class="s2">"exit"</span> <span class="o">||</span> <span class="nv">$action</span> <span class="o">==</span> <span class="s2">"quit"</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Killing a child process"</span><span class="p">);</span>
+			<span class="nb">posix_kill</span><span class="p">(</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getPid</span><span class="p">(),</span> <span class="nx">SIGTERM</span><span class="p">);</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Process </span><span class="si">{</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getPid</span><span class="p">()</span><span class="si">}</span><span class="s2"> is killed!"</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="sd">/**
+	 * Run the server
+	 */</span>
+	<span class="k">public</span> <span class="k">function</span> <span class="nf">run</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Start running..."</span><span class="p">);</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Open in a browser: websocket_client.html (http)"</span><span class="p">);</span>
+		<span class="nv">$i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+		<span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nv">$changed_sockets</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">sockets</span><span class="p">;</span>
+			<span class="k">if</span><span class="p">(</span><span class="nv">$changed_sockets</span><span class="p">)</span> <span class="p">{</span>
+				<span class="o">@</span><span class="nb">socket_select</span><span class="p">(</span><span class="nv">$changed_sockets</span><span class="p">,</span> <span class="nv">$write</span> <span class="o">=</span> <span class="k">NULL</span><span class="p">,</span> <span class="nv">$except</span> <span class="o">=</span> <span class="k">NULL</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+				<span class="k">foreach</span><span class="p">(</span><span class="nv">$changed_sockets</span> <span class="k">as</span> <span class="nv">$socket</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="c1">//如果是主机，则有新客户端请求连接</span>
+					<span class="k">if</span><span class="p">(</span><span class="nv">$socket</span> <span class="o">==</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">master</span><span class="p">)</span> <span class="p">{</span>
+						<span class="k">if</span><span class="p">((</span><span class="nv">$acceptedSocket</span> <span class="o">=</span> <span class="nb">socket_accept</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">master</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+							<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Socket error: "</span><span class="o">.</span><span class="nb">socket_strerror</span><span class="p">(</span><span class="nb">socket_last_error</span><span class="p">(</span><span class="nv">$acceptedSocket</span><span class="p">)));</span>
+						<span class="p">}</span>
+						<span class="k">else</span> <span class="p">{</span>
+							<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="nv">$i</span><span class="p">);</span>
+							<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="nv">$acceptedSocket</span><span class="p">);</span>
+						<span class="p">}</span>
+					<span class="p">}</span>
+                    <span class="c1">//有客户端的新数据到来或者关闭链接</span>
+					<span class="k">else</span> <span class="p">{</span>
+						<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="nv">$i</span><span class="p">);</span>
+						<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Finding the socket that associated to the client..."</span><span class="p">);</span>
+						<span class="nv">$client</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getClientBySocket</span><span class="p">(</span><span class="nv">$socket</span><span class="p">);</span>
+						<span class="k">if</span><span class="p">(</span><span class="nv">$client</span><span class="p">)</span> <span class="p">{</span>
+							<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Receiving data from the client"</span><span class="p">);</span>
+							<span class="nv">$data</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+							<span class="k">while</span><span class="p">(</span><span class="nv">$bytes</span> <span class="o">=</span> <span class="o">@</span><span class="nb">socket_recv</span><span class="p">(</span><span class="nv">$socket</span><span class="p">,</span> <span class="nv">$r_data</span><span class="p">,</span> <span class="mi">2048</span><span class="p">,</span> <span class="nx">MSG_DONTWAIT</span><span class="p">))</span> <span class="p">{</span>
+								<span class="nv">$data</span> <span class="o">.=</span> <span class="nv">$r_data</span><span class="p">;</span>
+							<span class="p">}</span>
+							<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getHandshake</span><span class="p">())</span> <span class="p">{</span>
+								<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Doing the handshake"</span><span class="p">);</span>
+								<span class="k">if</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">handshake</span><span class="p">(</span><span class="nv">$client</span><span class="p">,</span> <span class="nv">$data</span><span class="p">))</span> <span class="p">{</span>
+									<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">startProcess</span><span class="p">(</span><span class="nv">$client</span><span class="p">);</span>
+								<span class="p">}</span>
+								<span class="k">else</span> <span class="p">{</span>
+									<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">disconnect</span><span class="p">(</span><span class="nv">$client</span><span class="p">);</span>
+								<span class="p">}</span>
+							<span class="p">}</span>
+							<span class="k">elseif</span><span class="p">(</span><span class="nv">$bytes</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+								<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">disconnect</span><span class="p">(</span><span class="nv">$client</span><span class="p">);</span>
+							<span class="p">}</span>
+							<span class="k">else</span> <span class="p">{</span>
+								<span class="c1">// When received data from client</span>
+								<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">action</span><span class="p">(</span><span class="nv">$client</span><span class="p">,</span> <span class="nv">$data</span><span class="p">);</span>
+							<span class="p">}</span>
+						<span class="p">}</span>
+					<span class="p">}</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			<span class="nv">$i</span> <span class="o">++</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="sd">/**
+	 * Start a child process for pushing data
+	 * @param unknown_type $client
+	 */</span>
+	<span class="k">private</span> <span class="k">function</span> <span class="nf">startProcess</span><span class="p">(</span><span class="nv">$client</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Start a client process"</span><span class="p">);</span>
+		<span class="nv">$pid</span> <span class="o">=</span> <span class="nb">pcntl_fork</span><span class="p">();</span>
+		<span class="k">if</span><span class="p">(</span><span class="nv">$pid</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">die</span><span class="p">(</span><span class="s1">'could not fork'</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">elseif</span><span class="p">(</span><span class="nv">$pid</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// process</span>
+			<span class="nv">$client</span><span class="o">-&gt;</span><span class="na">setPid</span><span class="p">(</span><span class="nv">$pid</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">else</span> <span class="p">{</span>
+			<span class="c1">// we are the child</span>
+			<span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+				<span class="c1">// check if the client is connected</span>
+				<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">isConnected</span><span class="p">()){</span>
+					<span class="k">break</span><span class="p">;</span>
+				<span class="p">}</span>
+				<span class="c1">// push something to the client</span>
+				<span class="nv">$seconds</span> <span class="o">=</span> <span class="nb">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+				<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">send</span><span class="p">(</span><span class="nv">$client</span><span class="p">,</span> <span class="s2">"I am waiting </span><span class="si">{</span><span class="nv">$seconds</span><span class="si">}</span><span class="s2"> seconds"</span><span class="p">);</span>
+				<span class="nb">sleep</span><span class="p">(</span><span class="nv">$seconds</span><span class="p">);</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="sd">/**
+	 * Send a text to client
+	 * @param $client
+	 * @param $text
+	 */</span>
+	<span class="k">private</span> <span class="k">function</span> <span class="nf">send</span><span class="p">(</span><span class="nv">$client</span><span class="p">,</span> <span class="nv">$text</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Send '"</span><span class="o">.</span><span class="nv">$text</span><span class="o">.</span><span class="s2">"' to client #</span><span class="si">{</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getId</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">);</span>
+		<span class="nv">$text</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">encode</span><span class="p">(</span><span class="nv">$text</span><span class="p">);</span>
+		<span class="k">if</span><span class="p">(</span><span class="nb">socket_write</span><span class="p">(</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getSocket</span><span class="p">(),</span> <span class="nv">$text</span><span class="p">,</span> <span class="nb">strlen</span><span class="p">(</span><span class="nv">$text</span><span class="p">))</span> <span class="o">===</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">console</span><span class="p">(</span><span class="s2">"Unable to write to client #</span><span class="si">{</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getId</span><span class="p">()</span><span class="si">}</span><span class="s2">'s socket"</span><span class="p">);</span>
+			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">disconnect</span><span class="p">(</span><span class="nv">$client</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="sd">/**
+	 * Encode a text for sending to clients via ws://
+	 * @param $text
+	 * @param $messageType
+	 */</span>
+	<span class="k">function</span> <span class="nf">encode</span><span class="p">(</span><span class="nv">$message</span><span class="p">,</span> <span class="nv">$messageType</span><span class="o">=</span><span class="s1">'text'</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">switch</span> <span class="p">(</span><span class="nv">$messageType</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">case</span> <span class="s1">'continuous'</span><span class="o">:</span>
+				<span class="nv">$b1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+				<span class="k">break</span><span class="p">;</span>
+			<span class="k">case</span> <span class="s1">'text'</span><span class="o">:</span>
+				<span class="nv">$b1</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+				<span class="k">break</span><span class="p">;</span>
+			<span class="k">case</span> <span class="s1">'binary'</span><span class="o">:</span>
+				<span class="nv">$b1</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+				<span class="k">break</span><span class="p">;</span>
+			<span class="k">case</span> <span class="s1">'close'</span><span class="o">:</span>
+				<span class="nv">$b1</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+				<span class="k">break</span><span class="p">;</span>
+			<span class="k">case</span> <span class="s1">'ping'</span><span class="o">:</span>
+				<span class="nv">$b1</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+				<span class="k">break</span><span class="p">;</span>
+			<span class="k">case</span> <span class="s1">'pong'</span><span class="o">:</span>
+				<span class="nv">$b1</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+				<span class="k">break</span><span class="p">;</span>
+		<span class="p">}</span>
+			<span class="nv">$b1</span> <span class="o">+=</span> <span class="mi">128</span><span class="p">;</span>
+		<span class="nv">$length</span> <span class="o">=</span> <span class="nb">strlen</span><span class="p">(</span><span class="nv">$message</span><span class="p">);</span>
+		<span class="nv">$lengthField</span> <span class="o">=</span> <span class="s2">""</span><span class="p">;</span>
+		<span class="k">if</span><span class="p">(</span><span class="nv">$length</span> <span class="o">&lt;</span> <span class="mi">126</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nv">$b2</span> <span class="o">=</span> <span class="nv">$length</span><span class="p">;</span>
+		<span class="p">}</span> <span class="k">elseif</span><span class="p">(</span><span class="nv">$length</span> <span class="o">&lt;=</span> <span class="mi">65536</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nv">$b2</span> <span class="o">=</span> <span class="mi">126</span><span class="p">;</span>
+			<span class="nv">$hexLength</span> <span class="o">=</span> <span class="nb">dechex</span><span class="p">(</span><span class="nv">$length</span><span class="p">);</span>
+			<span class="c1">//$this-&gt;stdout("Hex Length: $hexLength");</span>
+			<span class="k">if</span><span class="p">(</span><span class="nb">strlen</span><span class="p">(</span><span class="nv">$hexLength</span><span class="p">)</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+				<span class="nv">$hexLength</span> <span class="o">=</span> <span class="s1">'0'</span> <span class="o">.</span> <span class="nv">$hexLength</span><span class="p">;</span>
+			<span class="p">}</span>
+			<span class="nv">$n</span> <span class="o">=</span> <span class="nb">strlen</span><span class="p">(</span><span class="nv">$hexLength</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span>
+			<span class="k">for</span><span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="nv">$n</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span><span class="o">=</span><span class="nv">$i</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+				<span class="nv">$lengthField</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">hexdec</span><span class="p">(</span><span class="nb">substr</span><span class="p">(</span><span class="nv">$hexLength</span><span class="p">,</span> <span class="nv">$i</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span> <span class="o">.</span> <span class="nv">$lengthField</span><span class="p">;</span>
+			<span class="p">}</span>
+			<span class="k">while</span><span class="p">(</span><span class="nb">strlen</span><span class="p">(</span><span class="nv">$lengthField</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+				<span class="nv">$lengthField</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">.</span> <span class="nv">$lengthField</span><span class="p">;</span>
+			<span class="p">}</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="nv">$b2</span> <span class="o">=</span> <span class="mi">127</span><span class="p">;</span>
+			<span class="nv">$hexLength</span> <span class="o">=</span> <span class="nb">dechex</span><span class="p">(</span><span class="nv">$length</span><span class="p">);</span>
+			<span class="k">if</span><span class="p">(</span><span class="nb">strlen</span><span class="p">(</span><span class="nv">$hexLength</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+				<span class="nv">$hexLength</span> <span class="o">=</span> <span class="s1">'0'</span> <span class="o">.</span> <span class="nv">$hexLength</span><span class="p">;</span>
+			<span class="p">}</span>
+			<span class="nv">$n</span> <span class="o">=</span> <span class="nb">strlen</span><span class="p">(</span><span class="nv">$hexLength</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span>
+			<span class="k">for</span><span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="nv">$n</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">=</span> <span class="nv">$i</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+				<span class="nv">$lengthField</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">hexdec</span><span class="p">(</span><span class="nb">substr</span><span class="p">(</span><span class="nv">$hexLength</span><span class="p">,</span> <span class="nv">$i</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span> <span class="o">.</span> <span class="nv">$lengthField</span><span class="p">;</span>
+			<span class="p">}</span>
+			<span class="k">while</span><span class="p">(</span><span class="nb">strlen</span><span class="p">(</span><span class="nv">$lengthField</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="p">{</span>
+				<span class="nv">$lengthField</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">.</span> <span class="nv">$lengthField</span><span class="p">;</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="nb">chr</span><span class="p">(</span><span class="nv">$b1</span><span class="p">)</span> <span class="o">.</span> <span class="nb">chr</span><span class="p">(</span><span class="nv">$b2</span><span class="p">)</span> <span class="o">.</span> <span class="nv">$lengthField</span> <span class="o">.</span> <span class="nv">$message</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="sd">/**
+	 * Unmask a received payload
+	 * @param $buffer
+	 */</span>
+	<span class="k">private</span> <span class="k">function</span> <span class="nf">unmask</span><span class="p">(</span><span class="nv">$payload</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nv">$length</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="nv">$payload</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span> <span class="mi">127</span><span class="p">;</span>
+		<span class="k">if</span><span class="p">(</span><span class="nv">$length</span> <span class="o">==</span> <span class="mi">126</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nv">$masks</span> <span class="o">=</span> <span class="nb">substr</span><span class="p">(</span><span class="nv">$payload</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+			<span class="nv">$data</span> <span class="o">=</span> <span class="nb">substr</span><span class="p">(</span><span class="nv">$payload</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">elseif</span><span class="p">(</span><span class="nv">$length</span> <span class="o">==</span> <span class="mi">127</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nv">$masks</span> <span class="o">=</span> <span class="nb">substr</span><span class="p">(</span><span class="nv">$payload</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+			<span class="nv">$data</span> <span class="o">=</span> <span class="nb">substr</span><span class="p">(</span><span class="nv">$payload</span><span class="p">,</span> <span class="mi">14</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">else</span> <span class="p">{</span>
+			<span class="nv">$masks</span> <span class="o">=</span> <span class="nb">substr</span><span class="p">(</span><span class="nv">$payload</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+			<span class="nv">$data</span> <span class="o">=</span> <span class="nb">substr</span><span class="p">(</span><span class="nv">$payload</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="nv">$text</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+		<span class="k">for</span><span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nb">strlen</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span> <span class="o">++</span><span class="nv">$i</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nv">$text</span> <span class="o">.=</span> <span class="nv">$data</span><span class="p">[</span><span class="nv">$i</span><span class="p">]</span> <span class="o">^</span> <span class="nv">$masks</span><span class="p">[</span><span class="nv">$i</span><span class="o">%</span><span class="mi">4</span><span class="p">];</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="nv">$text</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="sd">/**
+	 * Print a text to the terminal
+	 * @param $text the text to display
+	 * @param $exit if true, the process will exit
+	 */</span>
+	<span class="k">private</span> <span class="k">function</span> <span class="nf">console</span><span class="p">(</span><span class="nv">$text</span><span class="p">,</span> <span class="nv">$exit</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nv">$text</span> <span class="o">=</span> <span class="nb">date</span><span class="p">(</span><span class="s1">'[Y-m-d H:i:s] '</span><span class="p">)</span><span class="o">.</span><span class="nv">$text</span><span class="o">.</span><span class="s2">"</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
+		<span class="k">if</span><span class="p">(</span><span class="nv">$exit</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">die</span><span class="p">(</span><span class="nv">$text</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">if</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">verboseMode</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">echo</span> <span class="nv">$text</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span>
+</code></pre></div></div>
+
+<p>client.php</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="sd">/**
+ * Define a Client object
+ * @author Sann-Remy Chea &lt;http://srchea.com&gt;
+ * @license This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ * @version 1.0.0
+ */</span>
+<span class="k">namespace</span> <span class="nx">PushWebSocket</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">Client</span> <span class="p">{</span>
+	<span class="k">private</span> <span class="nv">$id</span><span class="p">;</span>
+	<span class="k">private</span> <span class="nv">$socket</span><span class="p">;</span>
+	<span class="k">private</span> <span class="nv">$handshake</span><span class="p">;</span>
+	<span class="k">private</span> <span class="nv">$pid</span><span class="p">;</span>
+	<span class="k">private</span> <span class="nv">$isConnected</span><span class="p">;</span>
+	<span class="k">public</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">(</span><span class="nv">$id</span><span class="p">,</span> <span class="nv">$socket</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">id</span> <span class="o">=</span> <span class="nv">$id</span><span class="p">;</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">socket</span> <span class="o">=</span> <span class="nv">$socket</span><span class="p">;</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">handshake</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">pid</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">isConnected</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">public</span> <span class="k">function</span> <span class="nf">getId</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">id</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">public</span> <span class="k">function</span> <span class="nf">getSocket</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">socket</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">public</span> <span class="k">function</span> <span class="nf">getHandshake</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">handshake</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">public</span> <span class="k">function</span> <span class="nf">getPid</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">pid</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">public</span> <span class="k">function</span> <span class="nf">isConnected</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">isConnected</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">public</span> <span class="k">function</span> <span class="nf">setId</span><span class="p">(</span><span class="nv">$id</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">id</span> <span class="o">=</span> <span class="nv">$id</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">public</span> <span class="k">function</span> <span class="nf">setSocket</span><span class="p">(</span><span class="nv">$socket</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">socket</span> <span class="o">=</span> <span class="nv">$socket</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">public</span> <span class="k">function</span> <span class="nf">setHandshake</span><span class="p">(</span><span class="nv">$handshake</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">handshake</span> <span class="o">=</span> <span class="nv">$handshake</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">public</span> <span class="k">function</span> <span class="nf">setPid</span><span class="p">(</span><span class="nv">$pid</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">pid</span> <span class="o">=</span> <span class="nv">$pid</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">public</span> <span class="k">function</span> <span class="nf">setIsConnected</span><span class="p">(</span><span class="nv">$isConnected</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">isConnected</span> <span class="o">=</span> <span class="nv">$isConnected</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>run.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="sd">/**
+ * A daemon of PHP Push WebSocket
+ * @author Sann-Remy Chea &lt;http://srchea.com&gt;
+ * @license This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ * @version 1.0.0
+ */</span>
+<span class="nb">date_default_timezone_set</span><span class="p">(</span><span class="s1">'PRC'</span><span class="p">);</span>
+<span class="nb">error_reporting</span><span class="p">(</span><span class="k">E_ALL</span><span class="p">);</span>
+<span class="k">require_once</span> <span class="s1">'./server.php'</span><span class="p">;</span> <span class="c1">// Autoload files using Composer autoload</span>
+<span class="k">require_once</span> <span class="s1">'./client.php'</span><span class="p">;</span> <span class="c1">// Autoload files using Composer autoload</span>
+<span class="nb">set_time_limit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="c1">// variables</span>
+<span class="nv">$address</span> <span class="o">=</span> <span class="s1">'0.0.0.0'</span><span class="p">;</span>
+<span class="nv">$port</span> <span class="o">=</span> <span class="mi">8080</span><span class="p">;</span>
+<span class="nv">$verboseMode</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+<span class="nv">$server</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\PushWebSocket\Server</span><span class="p">(</span><span class="nv">$address</span><span class="p">,</span> <span class="nv">$port</span><span class="p">,</span> <span class="nv">$verboseMode</span><span class="p">);</span>
+<span class="nv">$server</span><span class="o">-&gt;</span><span class="na">run</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>client.html</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;title&gt;</span>Test - PHP Push WebSocket<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+<span class="kd">var</span> <span class="nx">ws</span><span class="p">,</span> <span class="nx">url</span> <span class="o">=</span> <span class="s1">'ws://192.168.99.100:8080'</span><span class="p">;</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">onbeforeunload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">'quit'</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">try</span> <span class="p">{</span>
+		<span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="nx">url</span><span class="p">);</span>
+		<span class="nx">write</span><span class="p">(</span><span class="s1">'Connecting... (readyState '</span><span class="o">+</span><span class="nx">ws</span><span class="p">.</span><span class="nx">readyState</span><span class="o">+</span><span class="s1">')'</span><span class="p">);</span>
+		<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nx">write</span><span class="p">(</span><span class="s1">'Connection successfully opened (readyState '</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">readyState</span><span class="o">+</span><span class="s1">')'</span><span class="p">);</span>
+		<span class="p">};</span>
+		<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nx">write</span><span class="p">(</span><span class="s1">'Server says: '</span><span class="o">+</span><span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+		<span class="p">};</span>
+		<span class="nx">ws</span><span class="p">.</span><span class="nx">onclose</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
+				<span class="nx">write</span><span class="p">(</span><span class="s1">'Closing... The connection is going throught the closing handshake (readyState '</span><span class="o">+</span><span class="k">this</span><span class="p">.</span><span class="nx">readyState</span><span class="o">+</span><span class="s1">')'</span><span class="p">);</span>
+			<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span>
+				<span class="nx">write</span><span class="p">(</span><span class="s1">'Connection closed... The connection has been closed or could not be opened (readyState '</span><span class="o">+</span><span class="k">this</span><span class="p">.</span><span class="nx">readyState</span><span class="o">+</span><span class="s1">')'</span><span class="p">);</span>
+			<span class="k">else</span>
+				<span class="nx">write</span><span class="p">(</span><span class="s1">'Connection closed... (unhandled readyState '</span><span class="o">+</span><span class="k">this</span><span class="p">.</span><span class="nx">readyState</span><span class="o">+</span><span class="s1">')'</span><span class="p">);</span>
+		<span class="p">};</span>
+		<span class="nx">ws</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nx">terminal</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">'&lt;li style="color: red;"&gt;'</span><span class="o">+</span><span class="nx">event</span><span class="p">.</span><span class="nx">data</span><span class="o">+</span><span class="s1">'&lt;/li&gt;'</span><span class="o">+</span><span class="nx">terminal</span><span class="p">.</span><span class="nx">innerHTML</span><span class="p">;</span>
+		<span class="p">};</span>
+	<span class="p">}</span>
+	<span class="k">catch</span><span class="p">(</span><span class="nx">exception</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">write</span><span class="p">(</span><span class="nx">exception</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+<span class="kd">function</span> <span class="nx">write</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+	<span class="kd">var</span> <span class="nx">dateText</span> <span class="o">=</span> <span class="s1">'['</span><span class="o">+</span><span class="nx">date</span><span class="p">.</span><span class="nx">getFullYear</span><span class="p">()</span><span class="o">+</span><span class="s1">'-'</span><span class="o">+</span><span class="p">(</span><span class="nx">date</span><span class="p">.</span><span class="nx">getMonth</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="p">?</span> <span class="nx">date</span><span class="p">.</span><span class="nx">getMonth</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span> <span class="p">:</span> <span class="s1">'0'</span><span class="o">+</span><span class="nx">date</span><span class="p">.</span><span class="nx">getMonth</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="s1">'-'</span><span class="o">+</span><span class="p">(</span><span class="nx">date</span><span class="p">.</span><span class="nx">getDate</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="p">?</span> <span class="nx">date</span><span class="p">.</span><span class="nx">getDate</span><span class="p">()</span> <span class="p">:</span> <span class="s1">'0'</span><span class="o">+</span><span class="nx">date</span><span class="p">.</span><span class="nx">getDate</span><span class="p">())</span><span class="o">+</span><span class="s1">' '</span><span class="o">+</span><span class="p">(</span><span class="nx">date</span><span class="p">.</span><span class="nx">getHours</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="p">?</span> <span class="nx">date</span><span class="p">.</span><span class="nx">getHours</span><span class="p">()</span> <span class="p">:</span> <span class="s1">'0'</span><span class="o">+</span><span class="nx">date</span><span class="p">.</span><span class="nx">getHours</span><span class="p">())</span><span class="o">+</span><span class="s1">':'</span><span class="o">+</span><span class="p">(</span><span class="nx">date</span><span class="p">.</span><span class="nx">getMinutes</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="p">?</span> <span class="nx">date</span><span class="p">.</span><span class="nx">getMinutes</span><span class="p">()</span> <span class="p">:</span> <span class="s1">'0'</span><span class="o">+</span><span class="nx">date</span><span class="p">.</span><span class="nx">getMinutes</span><span class="p">())</span><span class="o">+</span><span class="s1">':'</span><span class="o">+</span><span class="p">(</span><span class="nx">date</span><span class="p">.</span><span class="nx">getSeconds</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="p">?</span> <span class="nx">date</span><span class="p">.</span><span class="nx">getSeconds</span><span class="p">()</span> <span class="p">:</span> <span class="s1">'0'</span><span class="o">+</span><span class="nx">date</span><span class="p">.</span><span class="nx">getSeconds</span><span class="p">())</span><span class="o">+</span><span class="s1">']'</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">terminal</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'terminal'</span><span class="p">);</span>
+	<span class="nx">terminal</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">'&lt;li&gt;'</span><span class="o">+</span><span class="nx">dateText</span><span class="o">+</span><span class="s1">' '</span><span class="o">+</span><span class="nx">text</span><span class="o">+</span><span class="s1">'&lt;/li&gt;'</span><span class="o">+</span><span class="nx">terminal</span><span class="p">.</span><span class="nx">innerHTML</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">&lt;/script&gt;</span>
+
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+	<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"client.html"</span> <span class="na">target=</span><span class="s">"_blank"</span><span class="nt">&gt;</span>Add another client<span class="nt">&lt;/a&gt;</span>
+	<span class="nt">&lt;ul</span> <span class="na">id=</span><span class="s">"terminal"</span><span class="nt">&gt;&lt;/ul&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<h4 id="使用swoole">使用swoole</h4>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="nv">$server</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">swoole_websocket_server</span><span class="p">(</span><span class="s2">"0.0.0.0"</span><span class="p">,</span> <span class="mi">8080</span><span class="p">);</span>
+
+<span class="nv">$server</span><span class="o">-&gt;</span><span class="na">on</span><span class="p">(</span><span class="s1">'open'</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nx">swoole_websocket_server</span> <span class="nv">$server</span><span class="p">,</span> <span class="nv">$request</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">file_put_contents</span><span class="p">(</span> <span class="nx">__DIR__</span> <span class="o">.</span><span class="s1">'/log.txt'</span> <span class="p">,</span> <span class="nv">$request</span><span class="o">-&gt;</span><span class="na">fd</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nv">$server</span><span class="o">-&gt;</span><span class="na">on</span><span class="p">(</span><span class="s1">'message'</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nx">swoole_websocket_server</span> <span class="nv">$server</span><span class="p">,</span> <span class="nv">$frame</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">global</span> <span class="nv">$client</span><span class="p">;</span>
+    <span class="nv">$data</span> <span class="o">=</span> <span class="nv">$frame</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">;</span>
+    <span class="nv">$m</span> <span class="o">=</span> <span class="nb">file_get_contents</span><span class="p">(</span> <span class="nx">__DIR__</span> <span class="o">.</span><span class="s1">'/log.txt'</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span><span class="o">=</span><span class="mi">1</span> <span class="p">;</span> <span class="nv">$i</span><span class="o">&lt;=</span> <span class="nv">$m</span> <span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">echo</span> <span class="nx">PHP_EOL</span> <span class="o">.</span> <span class="s1">'  i is  '</span> <span class="o">.</span> <span class="nv">$i</span> <span class="o">.</span>  <span class="s1">'  data  is '</span><span class="o">.</span><span class="nv">$data</span>  <span class="o">.</span> <span class="s1">'  m = '</span> <span class="o">.</span> <span class="nv">$m</span><span class="p">;</span>
+        <span class="nv">$server</span><span class="o">-&gt;</span><span class="na">push</span><span class="p">(</span><span class="nv">$i</span><span class="p">,</span> <span class="nv">$data</span> <span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="p">});</span>
+
+<span class="nv">$server</span><span class="o">-&gt;</span><span class="na">on</span><span class="p">(</span><span class="s1">'close'</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nv">$ser</span><span class="p">,</span> <span class="nv">$fd</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"client </span><span class="si">{</span><span class="nv">$fd</span><span class="si">}</span><span class="s2"> closed</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="nv">$server</span><span class="o">-&gt;</span><span class="na">start</span><span class="p">();</span>
+</code></pre></div></div>
+
+<h2 id="参考文章">参考文章</h2>
+
+<ul>
+  <li><a href="http://www.cnblogs.com/thinksasa/archive/2013/02/26/2934206.html">深入浅出讲解：php的socket通信</a></li>
+  <li><a href="http://www.cnblogs.com/hustskyking/p/websocket-with-php.html">细说websocket - php篇</a></li>
+  <li><a href="http://blog.csdn.net/Im_KK/article/details/45033533">php socket_select() 说明</a></li>
+</ul>
+
+
+                <hr style="visibility: hidden;">
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/02/05/php-daemon/" data-toggle="tooltip" data-placement="top" title="php实现守护进程">
+                        Previous<br>
+                        <span>php实现守护进程</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/06/25/php-remember-login/" data-toggle="tooltip" data-placement="top" title="php实现记住登录">
+                        Next<br>
+                        <span>php实现记住登录</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+
+
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+        				
+                            
+                				<a href="/tags/#php" title="php" rel="11">
+                                    php
+                                </a>
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#算法" title="算法" rel="7">
+                                    算法
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#数据结构" title="数据结构" rel="2">
+                                    数据结构
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#分布式" title="分布式" rel="2">
+                                    分布式
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#区块链" title="区块链" rel="18">
+                                    区块链
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#比特币" title="比特币" rel="7">
+                                    比特币
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#密码学" title="密码学" rel="6">
+                                    密码学
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#以太坊" title="以太坊" rel="4">
+                                    以太坊
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#http" title="http" rel="12">
+                                    http
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#超级账本" title="超级账本" rel="8">
+                                    超级账本
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#fabric" title="fabric" rel="8">
+                                    fabric
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#MYSQL" title="MYSQL" rel="3">
+                                    MYSQL
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#web开发" title="web开发" rel="5">
+                                    web开发
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#计算机" title="计算机" rel="3">
+                                    计算机
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#转载" title="转载" rel="3">
+                                    转载
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#精进" title="精进" rel="3">
+                                    精进
+                                </a>
+                            
+        				
+                            
+        				
+        			</div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    
+
+
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/shadowdragons">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Ben Blog 2019
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async('/js/jquery.tagcloud.js',function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    if (document.domain == 'tudool.com' || document.domain == 'www.tudool.com') {
+        var _gaId = 'UA-89143952-3';
+        var _gaDomain = 'www.tudool.com';
+    } else {
+        var _gaId = 'UA-89143952-2';
+        var _gaDomain = 'shadowdragons.github.io';
+    }
+
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    if (document.domain == 'tudool.com' || document.domain == 'www.tudool.com') {
+        var _baId = '9a5ff48930575f65a9958d6277b9e28e';
+    } else {
+        var _baId = '2a8326534823f90fa4eef816aea2ef08';
+    }
+    
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一个小白的成长学习历程">
+    <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
+    <meta name="theme-color" content="#000000">
+    
+    <title>『构建高性能web站点』网络传输 - ben blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2018/07/14/bhpws-network/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- mermaid CSS -->
+    <link rel="stylesheet" href="/assets/css/mermaid.css">
+
+    <script type="text/javascript"
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Ben Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/book/">Book</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/">Tags</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg.jpg')
+    }
+
+    
+</style>
+<header class="intro-header" >
+    <div class="header-mask"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#web开发" title="web开发">web开发</a>
+                        
+                    </div>
+                    <h1>『构建高性能web站点』网络传输</h1>
+                    
+                    
+                    <h2 class="subheading"></h2>
+                    
+                    <span class="meta">Posted by Ben Blog on July 14, 2018</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<h2 id="osi七层网络协议四层协议">OSI七层网络协议&amp;四层协议</h2>
+
+<p><img src="/assets/img/posts/2018-07-14-bhpws-network/2.png" alt="2.png" /></p>
+
+<p>每层功能如下表所示：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>层</th>
+      <th style="text-align: left">功能</th>
+      <th style="text-align: left">典型设备</th>
+      <th style="text-align: left">典型协议、标准和应用</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>应用层</td>
+      <td style="text-align: left">用户接口、应用程序</td>
+      <td style="text-align: left">网关</td>
+      <td style="text-align: left">TELNET, FTP, HTTP</td>
+    </tr>
+    <tr>
+      <td>表示层</td>
+      <td style="text-align: left">数据的表示、压缩和加密</td>
+      <td style="text-align: left">网关</td>
+      <td style="text-align: left">ASCLL、PICT、TIFF、JPEG、 MIDI、MPEG</td>
+    </tr>
+    <tr>
+      <td>会话层</td>
+      <td style="text-align: left">会话的建立和结束</td>
+      <td style="text-align: left">网关</td>
+      <td style="text-align: left">RPC、SQL、NFS 、X WINDOWS、ASP</td>
+    </tr>
+    <tr>
+      <td>传输层</td>
+      <td style="text-align: left">端到端控制</td>
+      <td style="text-align: left">网关</td>
+      <td style="text-align: left">TCP、UDP、SPX</td>
+    </tr>
+    <tr>
+      <td>网络层</td>
+      <td style="text-align: left">路由，寻址</td>
+      <td style="text-align: left">路由器</td>
+      <td style="text-align: left">IP、IPX、APPLETALK、ICMP</td>
+    </tr>
+    <tr>
+      <td>数据链路层</td>
+      <td style="text-align: left">保证误差错的数据链路data link</td>
+      <td style="text-align: left">交换机、网桥、网卡</td>
+      <td style="text-align: left">802.2、802.3ATM、HDLC、FRAME RELAY</td>
+    </tr>
+    <tr>
+      <td>物理层</td>
+      <td style="text-align: left">传输比特流</td>
+      <td style="text-align: left">集线器、中继器</td>
+      <td style="text-align: left">V.35、EIA/TIA-232</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="tcp网络传输过程">TCP网络传输过程</h2>
+
+<p>以火车货物类比如下图：</p>
+
+<p><a href="/assets/img/posts/2018-07-14-bhpws-network/1.png"><img src="/assets/img/posts/2018-07-14-bhpws-network/1.png" alt="1.png" title="点击查看原图" /></a></p>
+
+<p>drawio源文件<a href="/assets/img/posts/2018-07-14-bhpws-network/drawio1">下载</a></p>
+
+<p>数据封装/解封装如下图：</p>
+
+<script src="/assets/js/mermaid.js"></script>
+<div class="mermaid">
+sequenceDiagram
+    http应用层-&gt;&gt; 传输层: http应用层协议
+    传输层-&gt;&gt; 网络层:分段
+    网络层-&gt;&gt; 数据链路层:IP报文
+    Note right of 传输层: 分成TCP分段并被打上<br />标签，称为头(header)<br />，指定接收方哪一进程<br />接收此消息，并包含能<br />够让接收方重组数据的<br />信息。
+    Note right of 网络层:将整个TCP分段封装成<br />IP报文(添上IP头标签)。<br />包括源和目的IP地址，<br />以及发送报文到目的地<br />址所需信息。
+    Note right of 数据链路层:封装帧头(源和目的物<br />理地址)和帧尾(差错纠<br />正信息)
+    数据链路层-&gt;&gt; 网络层:移除协议头
+    网络层-&gt;&gt; 传输层:移除协议头
+    传输层-&gt;&gt; http应用层:移除协议头
+</div>
+
+<h2 id="带宽">带宽</h2>
+
+<p>首先了解数据发送过程，如下图所示</p>
+
+<p><a href="/assets/img/posts/2018-07-14-bhpws-network/3.png"><img src="/assets/img/posts/2018-07-14-bhpws-network/3.png" alt="1.png" title="点击查看原图" /></a></p>
+
+<p>drawio源文件<a href="/assets/img/posts/2018-07-14-bhpws-network/drawio2">下载</a></p>
+
+<blockquote>
+  <p>约定
+比特(bit)单位缩写为b，字节(byte)缩写位B。  <br />
+1B = 8b  <br />
+1KB = 2^10B = 1024B ~ 1000B  <br />
+1MB = 2^10KB = 1024KB ~ 1000KB</p>
+</blockquote>
+
+<p>我们常说的100M带宽，就是100Mbit/s，或者100Mbps  <br />
+铜线中的电信号传播速度约为2.3<em>10^8m/s, 光纤中的光信号约为2.0×10^8m/s（因为光纤传播光信号是利用了光的全反射原理，所以传播距离要大于光纤长度，不过我们计算还是以光纤长度来计算，这也导致了数值小于实际光传播速度3</em>10^8m/s）</p>
+
+<h4 id="独享共享">独享&amp;共享</h4>
+
+<p>用个例子来解释，假设交换机出口带宽为100M，主机独享10M，表示该主机任何时刻都是以10Mbps在发送数据，这也导致了交换机必须保证其他主机数据发送速度不能超过90M。如果主机共享10M，则表示该主机发送数据的最大值可以达到10Mbps,但如果该交换机有同时50台共享10M带宽的主机，并且同时在发送数据，则那个时刻只能有2Mbps速度。</p>
+
+<h2 id="响应时间">响应时间</h2>
+
+<p>响应时间 = 发送时间(数据量比特数b/带宽) + 传播时间(传播距离/传播速度) + 处理时间(节点数据转发处理\队列排队的时间)
+下载速度 = 数据量字节数B/响应时间</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>主机1 - 交换机1/路由器1 - 节点1 - 节点2 - ... - 节点n - 路由器2/交换机2 - 主机2
+</code></pre></div></div>
+
+<p>通过<code class="highlighter-rouge">traceroute</code>我们可以知道信息从你的计算机到互联网另一端的主机是走的什么路径。当然每次数据包由某一同样的出发点（source）到达某一同样的目的地(destination)走的路径可能会不一样，但基本上来说大部分时候所走的路由是相同的。</p>
+
+<h4 id="实例计算下载速度">实例计算下载速度</h4>
+
+<p>以西安用户下载服务器在北京的100M文件为例</p>
+
+<p>前提:这里忽略处理时间，且假设中间只有1个节点（国家主干网）</p>
+
+<p>[发送时间]主机1(网卡1000Mbps) 800Mbit/1000Mbps = 0.8s  <br />
+[发送时间]交换机1(10Mbps独享带宽) 800Mbit/10Mbps = 80s  <br />
+[发送时间]国家骨干网（40Gbps共享带宽）800Mbit/40Gbps = 0.02s  <br />
+[发送时间]交换机2(1Mbps独享带宽) 800Mbit/1Mbps = 800s  <br />
+[发送时间]主机2(网卡100Mbps) 800Mbit/100Mbps = 8s  <br />
+[传输时间]北京-西安(1000km) 1000km/(2*10^8m/s) = 0.005s</p>
+
+<p>响应时间 = 800s + 0.005s = 800.005s</p>
+
+<p>下载速度 = 100MB / 800.005s = 124.999KB/s</p>
+
+<h4 id="误差">误差</h4>
+
+<ul>
+  <li>100MB数据在传输过程中，并不是完全通过一个节点，才进入下一个节点,而是拆分成每个数据包。</li>
+  <li>节点不止1个，但如果这些节点带宽足够大，可忽略。</li>
+  <li>下载基于TCP协议，会有网络协议附加信息，所以实际传输的数据比100MB要大。</li>
+  <li>忽略了处理时间。</li>
+  <li>长距离传输需要设置中继器来加强信号，它的接收转发也需要时间。</li>
+</ul>
+
+
+                <hr style="visibility: hidden;">
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2018/06/30/mysql-innodb-index/" data-toggle="tooltip" data-placement="top" title="mysql系列教程 - B+Tree索引">
+                        Previous<br>
+                        <span>mysql系列教程 - B+Tree索引</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2018/07/14/perconaToolkit/" data-toggle="tooltip" data-placement="top" title="PerconaToolkit工具集合">
+                        Next<br>
+                        <span>PerconaToolkit工具集合</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+
+
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+        				
+                            
+                				<a href="/tags/#php" title="php" rel="11">
+                                    php
+                                </a>
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#算法" title="算法" rel="7">
+                                    算法
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#数据结构" title="数据结构" rel="2">
+                                    数据结构
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#分布式" title="分布式" rel="2">
+                                    分布式
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#区块链" title="区块链" rel="18">
+                                    区块链
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#比特币" title="比特币" rel="7">
+                                    比特币
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#密码学" title="密码学" rel="6">
+                                    密码学
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#以太坊" title="以太坊" rel="4">
+                                    以太坊
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#http" title="http" rel="12">
+                                    http
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#超级账本" title="超级账本" rel="8">
+                                    超级账本
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#fabric" title="fabric" rel="8">
+                                    fabric
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#MYSQL" title="MYSQL" rel="3">
+                                    MYSQL
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#web开发" title="web开发" rel="5">
+                                    web开发
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#计算机" title="计算机" rel="3">
+                                    计算机
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#转载" title="转载" rel="3">
+                                    转载
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#精进" title="精进" rel="3">
+                                    精进
+                                </a>
+                            
+        				
+                            
+        				
+        			</div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    
+
+
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/shadowdragons">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Ben Blog 2019
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async('/js/jquery.tagcloud.js',function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    if (document.domain == 'tudool.com' || document.domain == 'www.tudool.com') {
+        var _gaId = 'UA-89143952-3';
+        var _gaDomain = 'www.tudool.com';
+    } else {
+        var _gaId = 'UA-89143952-2';
+        var _gaDomain = 'shadowdragons.github.io';
+    }
+
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    if (document.domain == 'tudool.com' || document.domain == 'www.tudool.com') {
+        var _baId = '9a5ff48930575f65a9958d6277b9e28e';
+    } else {
+        var _baId = '2a8326534823f90fa4eef816aea2ef08';
+    }
+    
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

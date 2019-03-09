@@ -1,0 +1,1935 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ben Blog</title>
+    <description>一个小白的成长学习历程</description>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Sat, 09 Mar 2019 20:34:03 +0800</pubDate>
+    <lastBuildDate>Sat, 09 Mar 2019 20:34:03 +0800</lastBuildDate>
+    <generator>Jekyll v3.8.4</generator>
+    
+      <item>
+        <title>Elasticsearch6.x-xpack破解</title>
+        <description>&lt;h3 id=&quot;去掉license校验&quot;&gt;去掉license校验&lt;/h3&gt;
+
+&lt;p&gt;这里有我之前已经破解的6.5.4的包，有需要可以直接&lt;a href=&quot;https://download.csdn.net/download/junbin007/11006208&quot;&gt;下载&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;下载&lt;a href=&quot;https://github.com/deathmarine/Luyten/releases&quot;&gt;luyten&lt;/a&gt;反编译JAVA工具&lt;/p&gt;
+
+&lt;p&gt;用&lt;code class=&quot;highlighter-rouge&quot;&gt;luyent&lt;/code&gt;打开&lt;code class=&quot;highlighter-rouge&quot;&gt;Elasticsearch&lt;/code&gt;目录下的&lt;code class=&quot;highlighter-rouge&quot;&gt;modules/x-pack-core/x-pack-core-x.x.x.jar&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;找到 &lt;code class=&quot;highlighter-rouge&quot;&gt;org.elasticsearch.license.LicenseVerifier&lt;/code&gt;文件，提取出来做以下修改：&lt;br /&gt;
+LicenseVerifier 中有两个静态方法，这就是验证授权文件是否有效的方法，我们把它修改为全部返回true.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;org&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;elasticsearch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;license&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.nio.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.elasticsearch.common.bytes.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.security.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.elasticsearch.common.xcontent.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.apache.lucene.util.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.elasticsearch.core.internal.io.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.io.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LicenseVerifier&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;verifyLicense&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;License&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;license&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;encryptedPublicKeyData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;verifyLicense&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;License&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;license&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;打开&lt;code class=&quot;highlighter-rouge&quot;&gt;org.elasticsearch.xpack.core.XPackBuild&lt;/code&gt;文件，提取出来做以下修改：&lt;br /&gt;
+XPackBuild 中最后一个静态代码块中 try的部分全部删除，这部分会验证jar包是否被修改.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;org&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;elasticsearch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;xpack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;core&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.elasticsearch.common.io.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.net.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.elasticsearch.common.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.nio.file.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.io.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.jar.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;XPackBuild&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;XPackBuild&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CURRENT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shortHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@SuppressForbidden&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reason&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;looks up path of xpack.jar directly&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Path&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getElasticsearchCodebase&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;URL&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;XPackBuild&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getProtectionDomain&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getCodeSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLocation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PathUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toURI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;URISyntaxException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bogus&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RuntimeException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bogus&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;XPackBuild&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shortHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;shortHash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shortHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;shortHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;shortHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Path&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getElasticsearchCodebase&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shortHash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;nl&quot;&gt;Label_0157:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;shortHash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Unknown&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Unknown&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;CURRENT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;XPackBuild&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shortHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;进入上面两个文件的目录，编译这两个修改的文件&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;javac &lt;span class=&quot;nt&quot;&gt;-cp&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;.:{es的源码路径}/modules/x-pack-core/x-pack-core-x.x.x.jar:{es的源码路径}/lib/*&quot;&lt;/span&gt; LicenseVerifier.java
+javac &lt;span class=&quot;nt&quot;&gt;-cp&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;.:{es的源码路径}/modules/x-pack-core/x-pack-core-x.x.x.jar:{es的源码路径}/lib/*&quot;&lt;/span&gt; XPackBuild.java
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;编译后会生成两个文件 &lt;code class=&quot;highlighter-rouge&quot;&gt;LicenseVerifier.class&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;XPackBuild.class&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;解压&lt;code class=&quot;highlighter-rouge&quot;&gt;{es的源码路径}/modules/x-pack-core/x-pack-core-x.x.x.jar&lt;/code&gt;，进入解压后路径，然后将上面生成的两个文件覆盖进去，然后执行打包命令&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ..
+jar &lt;span class=&quot;nt&quot;&gt;-cvf&lt;/span&gt; x-pack-core-x.x.x_new.jar &lt;span class=&quot;nt&quot;&gt;-C&lt;/span&gt; x-pack-core-x.x.x &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;将新包重命名为&lt;code class=&quot;highlighter-rouge&quot;&gt;x-pack-core-x.x.x.jar&lt;/code&gt;,然后覆盖&lt;code class=&quot;highlighter-rouge&quot;&gt;{es的源码路径}/modules/x-pack-core/x-pack-core-x.x.x.jar&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;这样我们的去掉license校验就完成了。&lt;/p&gt;
+
+&lt;h3 id=&quot;导入license&quot;&gt;导入license&lt;/h3&gt;
+
+&lt;p&gt;首先去&lt;a href=&quot;https://license.elastic.co/registration&quot;&gt;官网&lt;/a&gt;申请&lt;code class=&quot;highlighter-rouge&quot;&gt;license&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;打开&lt;code class=&quot;highlighter-rouge&quot;&gt;license&lt;/code&gt;文件，修改以下字段&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&quot;expiry_date_in_millis&quot;: {过期时间时间戳}
+&quot;max_nodes&quot;: {最大节点数}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;导入到elasticsearch&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -u elastic:elastic -XPUT ‘http://{es-ip}:{es-port}/_xpack/license’ -H “Content-Type: application/json” -d @/tmp/license.json
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;完成！&lt;/p&gt;
+</description>
+        <pubDate>Sat, 09 Mar 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/03/09/xpack-crack/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/03/09/xpack-crack/</guid>
+        
+        <category>Elastic</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>「转载」OAuth2.0</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;转载自&lt;a href=&quot;http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html&quot;&gt;理解OAuth 2.0&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/OAuth&quot;&gt;OAuth&lt;/a&gt;是一个关于授权（authorization）的开放网络标准，在全世界得到广泛应用，目前的版本是2.0版。&lt;/p&gt;
+
+&lt;p&gt;本文对OAuth 2.0的设计思路和运行流程，做一个简明通俗的解释，主要参考材料为&lt;a href=&quot;http://www.rfcreader.com/#rfc6749&quot;&gt;RFC 6749&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h3 id=&quot;应用场景&quot;&gt;应用场景&lt;/h3&gt;
+
+&lt;p&gt;为了理解OAuth的适用场合，让我举一个假设的例子。&lt;/p&gt;
+
+&lt;p&gt;有一个”云冲印”的网站，可以将用户储存在Google的照片，冲印出来。用户为了使用该服务，必须让”云冲印”读取自己储存在Google上的照片。&lt;/p&gt;
+
+&lt;p&gt;问题是只有得到用户的授权，Google才会同意”云冲印”读取这些照片。那么，”云冲印”怎样获得用户的授权呢？&lt;/p&gt;
+
+&lt;p&gt;传统方法是，用户将自己的Google用户名和密码，告诉”云冲印”，后者就可以读取用户的照片了。这样的做法有以下几个严重的缺点。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;“云冲印”为了后续的服务，会保存用户的密码，这样很不安全。&lt;/li&gt;
+  &lt;li&gt;Google不得不部署密码登录，而我们知道，单纯的密码登录并不安全。&lt;/li&gt;
+  &lt;li&gt;“云冲印”拥有了获取用户储存在Google所有资料的权力，用户没法限制”云冲印”获得授权的范围和有效期。&lt;/li&gt;
+  &lt;li&gt;用户只有修改密码，才能收回赋予”云冲印”的权力。但是这样做，会使得其他所有获得用户授权的第三方应用程序全部失效。&lt;/li&gt;
+  &lt;li&gt;只要有一个第三方应用程序被破解，就会导致用户密码泄漏，以及所有被密码保护的数据泄漏。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;OAuth就是为了解决上面这些问题而诞生的。&lt;/p&gt;
+
+&lt;h3 id=&quot;名词定义&quot;&gt;名词定义&lt;/h3&gt;
+
+&lt;p&gt;在详细讲解OAuth 2.0之前，需要了解几个专用名词。它们对读懂后面的讲解，尤其是几张图，至关重要。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Third-party application&lt;/strong&gt; 第三方应用程序，本文中又称”客户端”（client），即上一节例子中的”云冲印”。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;HTTP service&lt;/strong&gt; HTTP服务提供商，本文中简称”服务提供商”，即上一节例子中的Google。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Resource Owner&lt;/strong&gt; 资源所有者，本文中又称”用户”（user）。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;User Agent&lt;/strong&gt; 用户代理，本文中就是指浏览器。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Authorization server&lt;/strong&gt; 认证服务器，即服务提供商专门用来处理认证的服务器。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Resource server&lt;/strong&gt; 资源服务器，即服务提供商存放用户生成的资源的服务器。它与认证服务器，可以是同一台服务器，也可以是不同的服务器。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;知道了上面这些名词，就不难理解，OAuth的作用就是让”客户端”安全可控地获取”用户”的授权，与”服务商提供商”进行互动。&lt;/p&gt;
+
+&lt;h3 id=&quot;oauth的思路&quot;&gt;OAuth的思路&lt;/h3&gt;
+
+&lt;p&gt;OAuth在”客户端”与”服务提供商”之间，设置了一个授权层（authorization layer）。”客户端”不能直接登录”服务提供商”，只能登录授权层，以此将用户与客户端区分开来。”客户端”登录授权层所用的令牌（token），与用户的密码不同。用户可以在登录的时候，指定授权层令牌的权限范围和有效期。&lt;/p&gt;
+
+&lt;p&gt;“客户端”登录授权层以后，”服务提供商”根据令牌的权限范围和有效期，向”客户端”开放用户储存的资料。&lt;/p&gt;
+
+&lt;h3 id=&quot;运行流程&quot;&gt;运行流程&lt;/h3&gt;
+
+&lt;p&gt;OAuth 2.0的运行流程如下图，摘自RFC 6749。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-02-24-oauth2/1.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-02-24-oauth2/1.png&quot; alt=&quot;1.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;用户打开客户端以后，客户端要求用户给予授权。&lt;/li&gt;
+  &lt;li&gt;用户同意给予客户端授权。&lt;/li&gt;
+  &lt;li&gt;客户端使用上一步获得的授权，向认证服务器申请令牌。&lt;/li&gt;
+  &lt;li&gt;认证服务器对客户端进行认证以后，确认无误，同意发放令牌。&lt;/li&gt;
+  &lt;li&gt;客户端使用令牌，向资源服务器申请获取资源。&lt;/li&gt;
+  &lt;li&gt;资源服务器确认令牌无误，同意向客户端开放资源。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;不难看出来，上面六个步骤之中，B是关键，即用户怎样才能给于客户端授权。有了这个授权以后，客户端就可以获取令牌，进而凭令牌获取资源。&lt;/p&gt;
+
+&lt;p&gt;下面一一讲解客户端获取授权的四种模式。&lt;/p&gt;
+
+&lt;h3 id=&quot;客户端的授权模式&quot;&gt;客户端的授权模式&lt;/h3&gt;
+
+&lt;p&gt;客户端必须得到用户的授权（authorization grant），才能获得令牌（access token）。OAuth 2.0定义了四种授权方式。&lt;/p&gt;
+
+&lt;h5 id=&quot;授权码模式&quot;&gt;授权码模式&lt;/h5&gt;
+
+&lt;p&gt;授权码模式（authorization code）是功能最完整、流程最严密的授权模式。它的特点就是通过客户端的后台服务器，与”服务提供商”的认证服务器进行互动。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-02-24-oauth2/2.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-02-24-oauth2/2.png&quot; alt=&quot;2.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;它的步骤如下：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;用户访问客户端，后者将前者导向认证服务器。&lt;/li&gt;
+  &lt;li&gt;用户选择是否给予客户端授权。&lt;/li&gt;
+  &lt;li&gt;假设用户给予授权，认证服务器将用户导向客户端事先指定的”重定向URI”（redirection URI），同时附上一个授权码。&lt;/li&gt;
+  &lt;li&gt;客户端收到授权码，附上早先的”重定向URI”，向认证服务器申请令牌。这一步是在客户端的后台的服务器上完成的，对用户不可见。&lt;/li&gt;
+  &lt;li&gt;认证服务器核对了授权码和重定向URI，确认无误后，向客户端发送访问令牌（access token）和更新令牌（refresh token）。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;下面是上面这些步骤所需要的参数。&lt;/p&gt;
+
+&lt;p&gt;1步骤中，客户端申请认证的URI，包含以下参数：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;response_type：表示授权类型，必选项，此处的值固定为”code”&lt;/li&gt;
+  &lt;li&gt;client_id：表示客户端的ID，必选项&lt;/li&gt;
+  &lt;li&gt;redirect_uri：表示重定向URI，可选项&lt;/li&gt;
+  &lt;li&gt;scope：表示申请的权限范围，可选项&lt;/li&gt;
+  &lt;li&gt;state：表示客户端的当前状态，可以指定任意值，认证服务器会原封不动地返回这个值。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;GET /authorize?response_type=code&amp;amp;client_id=s6BhdRkqt3&amp;amp;state=xyz&amp;amp;redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb HTTP/1.1
+Host: server.example.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;3步骤中，服务器回应客户端的URI，包含以下参数：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;code：表示授权码，必选项。该码的有效期应该很短，通常设为10分钟，客户端只能使用该码一次，否则会被授权服务器拒绝。该码与客户端ID和重定向URI，是一一对应关系。&lt;/li&gt;
+  &lt;li&gt;state：如果客户端的请求中包含这个参数，认证服务器的回应也必须一模一样包含这个参数。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HTTP/1.1 302 Found
+Location: https://client.example.com/cb?code=SplxlOBeZQQYbYS6WxSbIA&amp;amp;state=xyz
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;4步骤中，客户端向认证服务器申请令牌的HTTP请求，包含以下参数：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;grant_type：表示使用的授权模式，必选项，此处的值固定为”authorization_code”。&lt;/li&gt;
+  &lt;li&gt;code：表示上一步获得的授权码，必选项。&lt;/li&gt;
+  &lt;li&gt;redirect_uri：表示重定向URI，必选项，且必须与A步骤中的该参数值保持一致。&lt;/li&gt;
+  &lt;li&gt;client_id：表示客户端ID，必选项。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;POST /token HTTP/1.1
+Host: server.example.com
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&amp;amp;code=SplxlOBeZQQYbYS6WxSbIA&amp;amp;redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;5步骤中，认证服务器发送的HTTP回复，包含以下参数：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;access_token：表示访问令牌，必选项。&lt;/li&gt;
+  &lt;li&gt;token_type：表示令牌类型，该值大小写不敏感，必选项，可以是bearer类型或mac类型。&lt;/li&gt;
+  &lt;li&gt;expires_in：表示过期时间，单位为秒。如果省略该参数，必须其他方式设置过期时间。&lt;/li&gt;
+  &lt;li&gt;refresh_token：表示更新令牌，用来获取下一次的访问令牌，可选项。&lt;/li&gt;
+  &lt;li&gt;scope：表示权限范围，如果与客户端申请的范围一致，此项可省略。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+    &quot;access_token&quot;:&quot;2YotnFZFEjr1zCsicMWpAA&quot;,
+    &quot;token_type&quot;:&quot;example&quot;,
+    &quot;expires_in&quot;:3600,
+    &quot;refresh_token&quot;:&quot;tGzv3JOkF0XG5Qx2TlKWIA&quot;,
+    &quot;example_parameter&quot;:&quot;example_value&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;从上面代码可以看到，相关参数使用JSON格式发送（Content-Type: application/json）。此外，HTTP头信息中明确指定不得缓存。&lt;/p&gt;
+
+&lt;h5 id=&quot;简化模式&quot;&gt;简化模式&lt;/h5&gt;
+
+&lt;p&gt;简化模式（implicit grant type）不通过第三方应用程序的服务器，直接在浏览器中向认证服务器申请令牌，跳过了”授权码”这个步骤，因此得名。所有步骤在浏览器中完成，令牌对访问者是可见的，且客户端不需要认证。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-02-24-oauth2/3.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-02-24-oauth2/3.png&quot; alt=&quot;3.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;它的步骤如下：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;客户端将用户导向认证服务器。&lt;/li&gt;
+  &lt;li&gt;用户决定是否给于客户端授权。&lt;/li&gt;
+  &lt;li&gt;假设用户给予授权，认证服务器将用户导向客户端指定的”重定向URI”，并在URI的Hash部分包含了访问令牌。&lt;/li&gt;
+  &lt;li&gt;浏览器向资源服务器发出请求，其中不包括上一步收到的Hash值。&lt;/li&gt;
+  &lt;li&gt;资源服务器返回一个网页，其中包含的代码可以获取Hash值中的令牌。&lt;/li&gt;
+  &lt;li&gt;浏览器执行上一步获得的脚本，提取出令牌。&lt;/li&gt;
+  &lt;li&gt;浏览器将令牌发给客户端。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;下面是上面这些步骤所需要的参数。&lt;/p&gt;
+
+&lt;p&gt;1步骤中，客户端发出的HTTP请求，包含以下参数：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;response_type：表示授权类型，此处的值固定为”token”，必选项。&lt;/li&gt;
+  &lt;li&gt;client_id：表示客户端的ID，必选项。&lt;/li&gt;
+  &lt;li&gt;redirect_uri：表示重定向的URI，可选项。&lt;/li&gt;
+  &lt;li&gt;scope：表示权限范围，可选项。&lt;/li&gt;
+  &lt;li&gt;state：表示客户端的当前状态，可以指定任意值，认证服务器会原封不动地返回这个值。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;GET /authorize?response_type=token&amp;amp;client_id=s6BhdRkqt3&amp;amp;state=xyz&amp;amp;redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb HTTP/1.1
+Host: server.example.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;3步骤中，认证服务器回应客户端的URI，包含以下参数：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;access_token：表示访问令牌，必选项。&lt;/li&gt;
+  &lt;li&gt;token_type：表示令牌类型，该值大小写不敏感，必选项。&lt;/li&gt;
+  &lt;li&gt;expires_in：表示过期时间，单位为秒。如果省略该参数，必须其他方式设置过期时间。&lt;/li&gt;
+  &lt;li&gt;scope：表示权限范围，如果与客户端申请的范围一致，此项可省略。&lt;/li&gt;
+  &lt;li&gt;state：如果客户端的请求中包含这个参数，认证服务器的回应也必须一模一样包含这个参数。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HTTP/1.1 302 Found
+Location: http://example.com/cb#access_token=2YotnFZFEjr1zCsicMWpAA&amp;amp;state=xyz&amp;amp;token_type=example&amp;amp;expires_in=3600
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在上面的例子中，认证服务器用HTTP头信息的Location栏，指定浏览器重定向的网址。注意，在这个网址的Hash部分包含了令牌。&lt;/p&gt;
+
+&lt;p&gt;根据上面的4步骤，下一步浏览器会访问Location指定的网址，但是Hash部分不会发送。接下来的E步骤，服务提供商的资源服务器发送过来的代码，会提取出Hash中的令牌。&lt;/p&gt;
+
+&lt;h5 id=&quot;密码模式&quot;&gt;密码模式&lt;/h5&gt;
+
+&lt;p&gt;密码模式（Resource Owner Password Credentials Grant）中，用户向客户端提供自己的用户名和密码。客户端使用这些信息，向”服务商提供商”索要授权。&lt;/p&gt;
+
+&lt;p&gt;在这种模式中，用户必须把自己的密码给客户端，但是客户端不得储存密码。这通常用在用户对客户端高度信任的情况下，比如客户端是操作系统的一部分，或者由一个著名公司出品。而认证服务器只有在其他授权模式无法执行的情况下，才能考虑使用这种模式。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-02-24-oauth2/4.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-02-24-oauth2/4.png&quot; alt=&quot;4.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;它的步骤如下：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;用户向客户端提供用户名和密码。&lt;/li&gt;
+  &lt;li&gt;客户端将用户名和密码发给认证服务器，向后者请求令牌。&lt;/li&gt;
+  &lt;li&gt;认证服务器确认无误后，向客户端提供访问令牌。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;2步骤中，客户端发出的HTTP请求，包含以下参数：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;grant_type：表示授权类型，此处的值固定为”password”，必选项。&lt;/li&gt;
+  &lt;li&gt;username：表示用户名，必选项。&lt;/li&gt;
+  &lt;li&gt;password：表示用户的密码，必选项。&lt;/li&gt;
+  &lt;li&gt;scope：表示权限范围，可选项。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;POST /token HTTP/1.1
+Host: server.example.com
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&amp;amp;username=johndoe&amp;amp;password=A3ddj3w
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;3步骤中，认证服务器向客户端发送访问令牌，下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+    &quot;access_token&quot;:&quot;2YotnFZFEjr1zCsicMWpAA&quot;,
+    &quot;token_type&quot;:&quot;example&quot;,
+    &quot;expires_in&quot;:3600,
+    &quot;refresh_token&quot;:&quot;tGzv3JOkF0XG5Qx2TlKWIA&quot;,
+    &quot;example_parameter&quot;:&quot;example_value&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;上面代码中，各个参数的含义参见《授权码模式》一节。&lt;/p&gt;
+
+&lt;p&gt;整个过程中，客户端不得保存用户的密码。&lt;/p&gt;
+
+&lt;h5 id=&quot;客户端模式&quot;&gt;客户端模式&lt;/h5&gt;
+
+&lt;p&gt;客户端模式（Client Credentials Grant）指客户端以自己的名义，而不是以用户的名义，向”服务提供商”进行认证。严格地说，客户端模式并不属于OAuth框架所要解决的问题。在这种模式中，用户直接向客户端注册，客户端以自己的名义要求”服务提供商”提供服务，其实不存在授权问题。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-02-24-oauth2/5.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-02-24-oauth2/5.png&quot; alt=&quot;5.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;它的步骤如下：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;客户端向认证服务器进行身份认证，并要求一个访问令牌。&lt;/li&gt;
+  &lt;li&gt;认证服务器确认无误后，向客户端提供访问令牌。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;1步骤中，客户端发出的HTTP请求，包含以下参数：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;granttype：表示授权类型，此处的值固定为”clientcredentials”，必选项。&lt;/li&gt;
+  &lt;li&gt;scope：表示权限范围，可选项。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;POST /token HTTP/1.1
+Host: server.example.com
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;认证服务器必须以某种方式，验证客户端身份。&lt;/p&gt;
+
+&lt;p&gt;2步骤中，认证服务器向客户端发送访问令牌，下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+    &quot;access_token&quot;:&quot;2YotnFZFEjr1zCsicMWpAA&quot;,
+    &quot;token_type&quot;:&quot;example&quot;,
+    &quot;expires_in&quot;:3600,
+    &quot;example_parameter&quot;:&quot;example_value&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;上面代码中，各个参数的含义参见《授权码模式》一节。&lt;/p&gt;
+
+&lt;h3 id=&quot;更新令牌&quot;&gt;更新令牌&lt;/h3&gt;
+
+&lt;p&gt;如果用户访问的时候，客户端的”访问令牌”已经过期，则需要使用”更新令牌”申请一个新的访问令牌。&lt;/p&gt;
+
+&lt;p&gt;客户端发出更新令牌的HTTP请求，包含以下参数：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;granttype：表示使用的授权模式，此处的值固定为”refreshtoken”，必选项。&lt;/li&gt;
+  &lt;li&gt;refresh_token：表示早前收到的更新令牌，必选项。&lt;/li&gt;
+  &lt;li&gt;scope：表示申请的授权范围，不可以超出上一次申请的范围，如果省略该参数，则表示与上一次一致。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;POST /token HTTP/1.1
+Host: server.example.com
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=refresh_token&amp;amp;refresh_token=tGzv3JOkF0XG5Qx2TlKW
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Sun, 24 Feb 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/02/24/oauth2/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/02/24/oauth2/</guid>
+        
+        <category>web开发</category>
+        
+        <category>转载</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>「转载」JSON Web Token(JWT)</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;转载自&lt;a href=&quot;http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html&quot;&gt;JSON Web Token 入门教程&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;JSON Web Token（缩写 JWT）是目前最流行的跨域认证解决方案，本文介绍它的原理和用法。&lt;/p&gt;
+
+&lt;h3 id=&quot;跨域认证的问题&quot;&gt;跨域认证的问题&lt;/h3&gt;
+
+&lt;p&gt;互联网服务离不开用户认证。一般流程是下面这样。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;用户向服务器发送用户名和密码。&lt;/li&gt;
+  &lt;li&gt;服务器验证通过后，在当前对话（session）里面保存相关数据，比如用户角色、登录时间等等。&lt;/li&gt;
+  &lt;li&gt;服务器向用户返回一个 session_id，写入用户的 Cookie。&lt;/li&gt;
+  &lt;li&gt;用户随后的每一次请求，都会通过 Cookie，将 session_id 传回服务器。&lt;/li&gt;
+  &lt;li&gt;服务器收到 session_id，找到前期保存的数据，由此得知用户的身份。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;这种模式的问题在于，扩展性（scaling）不好。单机当然没有问题，如果是服务器集群，或者是跨域的服务导向架构，就要求 session 数据共享，每台服务器都能够读取 session。&lt;/p&gt;
+
+&lt;p&gt;举例来说，A 网站和 B 网站是同一家公司的关联服务。现在要求，用户只要在其中一个网站登录，再访问另一个网站就会自动登录，请问怎么实现？&lt;/p&gt;
+
+&lt;p&gt;一种解决方案是 session 数据持久化，写入数据库或别的持久层。各种服务收到请求后，都向持久层请求数据。这种方案的优点是架构清晰，缺点是工程量比较大。另外，持久层万一挂了，就会单点失败。&lt;/p&gt;
+
+&lt;p&gt;另一种方案是服务器索性不保存 session 数据了，所有数据都保存在客户端，每次请求都发回服务器。JWT 就是这种方案的一个代表。&lt;/p&gt;
+
+&lt;h3 id=&quot;jwt-的原理&quot;&gt;JWT 的原理&lt;/h3&gt;
+
+&lt;p&gt;JWT 的原理是，服务器认证以后，生成一个 JSON 对象，发回给用户，就像下面这样。&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;姓名&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;张三&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;角色&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;管理员&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;到期时间&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2018年7月1日0点0分&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;以后，用户与服务端通信的时候，都要发回这个 JSON 对象。服务器完全只靠这个对象认定用户身份。为了防止用户篡改数据，服务器在生成这个对象的时候，会加上签名（详见后文）。&lt;/p&gt;
+
+&lt;p&gt;服务器就不保存任何 session 数据了，也就是说，服务器变成无状态了，从而比较容易实现扩展。&lt;/p&gt;
+
+&lt;h3 id=&quot;jwt-的数据结构&quot;&gt;JWT 的数据结构&lt;/h3&gt;
+
+&lt;p&gt;实际的 JWT 大概就像下面这样。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-02-24-jwt/1.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-02-24-jwt/1.jpg&quot; alt=&quot;1.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;它是一个很长的字符串，中间用点（.）分隔成三个部分。注意，JWT 内部是没有换行的，这里只是为了便于展示，将它写成了几行。&lt;/p&gt;
+
+&lt;p&gt;JWT 的三个部分依次如下。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Header（头部）&lt;/li&gt;
+  &lt;li&gt;Payload（负载）&lt;/li&gt;
+  &lt;li&gt;Signature（签名）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;写成一行，就是下面的样子。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Header.Payload.Signature
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-02-24-jwt/2.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-02-24-jwt/2.jpg&quot; alt=&quot;2.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;下面依次介绍这三个部分。&lt;/p&gt;
+
+&lt;h4 id=&quot;header&quot;&gt;Header&lt;/h4&gt;
+
+&lt;p&gt;Header 部分是一个 JSON 对象，描述 JWT 的元数据，通常是下面的样子。&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;alg&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;HS256&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;typ&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;JWT&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;上面代码中，alg属性表示签名的算法（algorithm），默认是 HMAC SHA256（写成 HS256）；typ属性表示这个令牌（token）的类型（type），JWT 令牌统一写为JWT。&lt;/p&gt;
+
+&lt;p&gt;最后，将上面的 JSON 对象使用 Base64URL 算法（详见后文）转成字符串。&lt;/p&gt;
+
+&lt;h5 id=&quot;payload&quot;&gt;Payload&lt;/h5&gt;
+
+&lt;p&gt;Payload 部分也是一个 JSON 对象，用来存放实际需要传递的数据。JWT 规定了7个官方字段，供选用。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;iss (issuer)：签发人&lt;/li&gt;
+  &lt;li&gt;exp (expiration time)：过期时间&lt;/li&gt;
+  &lt;li&gt;sub (subject)：主题&lt;/li&gt;
+  &lt;li&gt;aud (audience)：受众&lt;/li&gt;
+  &lt;li&gt;nbf (Not Before)：生效时间&lt;/li&gt;
+  &lt;li&gt;iat (Issued At)：签发时间&lt;/li&gt;
+  &lt;li&gt;jti (JWT ID)：编号&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;除了官方字段，你还可以在这个部分定义私有字段，下面就是一个例子。&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;sub&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;1234567890&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;John Doe&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;admin&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;注意，JWT 默认是不加密的，任何人都可以读到，所以不要把秘密信息放在这个部分。&lt;/p&gt;
+
+&lt;p&gt;这个 JSON 对象也要使用 Base64URL 算法转成字符串。&lt;/p&gt;
+
+&lt;h5 id=&quot;signature&quot;&gt;Signature&lt;/h5&gt;
+
+&lt;p&gt;Signature 部分是对前两部分的签名，防止数据篡改。&lt;/p&gt;
+
+&lt;p&gt;首先，需要指定一个密钥（secret）。这个密钥只有服务器才知道，不能泄露给用户。然后，使用 Header 里面指定的签名算法（默认是 HMAC SHA256），按照下面的公式产生签名。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HMACSHA256(
+  base64UrlEncode(header) + &quot;.&quot; +
+  base64UrlEncode(payload),
+  secret)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;算出签名以后，把 Header、Payload、Signature 三个部分拼成一个字符串，每个部分之间用”点”（.）分隔，就可以返回给用户。&lt;/p&gt;
+
+&lt;h5 id=&quot;base64url&quot;&gt;Base64URL&lt;/h5&gt;
+
+&lt;p&gt;前面提到，Header 和 Payload 串型化的算法是 Base64URL。这个算法跟 Base64 算法基本类似，但有一些小的不同。&lt;/p&gt;
+
+&lt;p&gt;JWT 作为一个令牌（token），有些场合可能会放到 URL（比如 api.example.com/?token=xxx）。Base64 有三个字符+、/和=，在 URL 里面有特殊含义，所以要被替换掉：=被省略、+替换成-，/替换成_ 。这就是 Base64URL 算法。&lt;/p&gt;
+
+&lt;h3 id=&quot;jwt-的使用方式&quot;&gt;JWT 的使用方式&lt;/h3&gt;
+
+&lt;p&gt;客户端收到服务器返回的 JWT，可以储存在 Cookie 里面，也可以储存在 localStorage。&lt;/p&gt;
+
+&lt;p&gt;此后，客户端每次与服务器通信，都要带上这个 JWT。你可以把它放在 Cookie 里面自动发送，但是这样不能跨域，所以更好的做法是放在 HTTP 请求的头信息Authorization字段里面。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Authorization: Bearer &amp;lt;token&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;另一种做法是，跨域的时候，JWT 就放在 POST 请求的数据体里面。&lt;/p&gt;
+
+&lt;h3 id=&quot;jwt-的几个特点&quot;&gt;JWT 的几个特点&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;JWT 默认是不加密，但也是可以加密的。生成原始 Token 以后，可以用密钥再加密一次。&lt;/li&gt;
+  &lt;li&gt;JWT 不加密的情况下，不能将秘密数据写入 JWT。&lt;/li&gt;
+  &lt;li&gt;JWT 不仅可以用于认证，也可以用于交换信息。有效使用 JWT，可以降低服务器查询数据库的次数。&lt;/li&gt;
+  &lt;li&gt;JWT 的最大缺点是，由于服务器不保存 session 状态，因此无法在使用过程中废止某个 token，或者更改 token 的权限。也就是说，一旦 JWT 签发了，在到期之前就会始终有效，除非服务器部署额外的逻辑。&lt;/li&gt;
+  &lt;li&gt;JWT 本身包含了认证信息，一旦泄露，任何人都可以获得该令牌的所有权限。为了减少盗用，JWT 的有效期应该设置得比较短。对于一些比较重要的权限，使用时应该再次对用户进行认证。&lt;/li&gt;
+  &lt;li&gt;为了减少盗用，JWT 不应该使用 HTTP 协议明码传输，要使用 HTTPS 协议传输。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;六、参考链接&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://jwt.io/introduction/&quot;&gt;Introduction to JSON Web Tokens&lt;/a&gt;， by Auth0&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://medium.com/@bryanmanuele/sessionless-authentication-withe-jwts-with-node-express-passport-js-69b059e4b22c&quot;&gt;Sessionless Authentication using JWTs (with Node + Express + Passport JS)&lt;/a&gt;, by Bryan Manuele&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/dwyl/learn-json-web-tokens/blob/master/README.md&quot;&gt;Learn how to use JSON Web Tokens&lt;/a&gt;, by dwyl&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Sun, 24 Feb 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/02/24/jwt/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/02/24/jwt/</guid>
+        
+        <category>web开发</category>
+        
+        <category>转载</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>多平台任务管理工具 - Taskwarrior</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;Taskwarrior是一个免费、开源通过命令行来做任务管理的工具。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;安装&quot;&gt;安装&lt;/h3&gt;
+
+&lt;h5 id=&quot;ubuntu&quot;&gt;Ubuntu&lt;/h5&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;sudo apt-get install taskwarrior&lt;/code&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;mac-os-x&quot;&gt;Mac OS X&lt;/h5&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;brew install task&lt;/code&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;win10&quot;&gt;Win10&lt;/h5&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;apt-get install task&lt;/code&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;windows其他版本&quot;&gt;Windows其他版本&lt;/h5&gt;
+
+&lt;p&gt;通过Cygwin安装&lt;/p&gt;
+
+&lt;h3 id=&quot;同步&quot;&gt;同步&lt;/h3&gt;
+
+&lt;p&gt;可以通过&lt;a href=&quot;https://freecinc.com/generated_keys&quot;&gt;freecinc&lt;/a&gt;来进行同步。&lt;/p&gt;
+
+&lt;p&gt;按照里面的步骤即可，需要注意的事，每次访问都会生成新的key，所以需要在第一次访问，把网页保存下来，其他设备都使用保存下来的网页即可。&lt;/p&gt;
+
+&lt;h3 id=&quot;使用&quot;&gt;使用&lt;/h3&gt;
+
+&lt;p&gt;具体的详细文档，可参考&lt;a href=&quot;https://taskwarrior.org/docs/&quot;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;显示&quot;&gt;显示&lt;/h5&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;task&lt;/code&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;添加&quot;&gt;添加&lt;/h5&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;task add 任务名 [pro:工程名] [tag:标签名或简写为+][due:到期时间] [pri:优先级] [dep:依赖任务id]&lt;/code&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;开始结束删除&quot;&gt;开始/结束/删除&lt;/h5&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;task 任务id start/done/del&lt;/code&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;统计&quot;&gt;统计&lt;/h5&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;task sum&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;task ghistory&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;task calendar&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;task burndown.daily&lt;/code&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 24 Jan 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/01/24/task/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/01/24/task/</guid>
+        
+        <category>精进</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>成为人脉管理高手</title>
+        <description>&lt;h3 id=&quot;可视化盘点自己的人脉&quot;&gt;可视化盘点自己的人脉&lt;/h3&gt;
+
+&lt;p&gt;有一个理论称为六度理论。&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;世界人不论你想认识谁，只要通过六个人就可以认识到。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;在开展六度人脉时，你首先需要明白的两点： 
+第一：你的目标人物是谁？&lt;br /&gt;
+第二：让你的人脉圈多元化&lt;/p&gt;
+
+&lt;h5 id=&quot;四步追问法&quot;&gt;四步追问法&lt;/h5&gt;
+
+&lt;p&gt;在你想要认识某一位人物之前，不妨先自己回答这四个问题，当你清晰明白了自己到动机，你就知道你的目标人物是谁？该从哪个方向着手。&lt;/p&gt;
+
+&lt;p&gt;1、你想做什么？&lt;br /&gt;
+2、你为谁而做？&lt;br /&gt;
+3、他们需要什么？&lt;br /&gt;
+4、因为你，他们有什么改变？&lt;/p&gt;
+
+&lt;h5 id=&quot;人脉归档表&quot;&gt;人脉归档表&lt;/h5&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-01-13-management-of-connections/1.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-01-13-management-of-connections/1.jpg&quot; alt=&quot;1.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;营造六大生态圈&quot;&gt;营造【六大生态圈】&lt;/h5&gt;
+
+&lt;p&gt;1、与你兴趣爱好的圈&lt;br /&gt;
+2、工作相关：客户、供应商、竞争对手等等&lt;br /&gt;
+3、政府：去了解宏观政策&lt;br /&gt;
+4、金融：与金钱做朋友&lt;br /&gt;
+5、媒体：有助于品牌、公共危机&lt;br /&gt;
+6、社区：能让你更接地气&lt;/p&gt;
+
+&lt;h5 id=&quot;155人的黄金人脉圈&quot;&gt;155人的黄金人脉圈&lt;/h5&gt;
+
+&lt;p&gt;&lt;strong&gt;命友（5人）&lt;/strong&gt;  &lt;br /&gt;
+我们和这五个人，彼此&lt;strong&gt;分享生命&lt;/strong&gt;，我们是对方一辈子的铁杆拉拉队。这5个人可以是亲人，也可以是闺蜜或哥们儿。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;密友（50人）&lt;/strong&gt;&lt;br /&gt;
+有&lt;strong&gt;强烈吸引&lt;/strong&gt;你的地方，原因可能是他喜欢你（这是排名第一的原因）、你们个性相似、他有智慧、他有专业能力。
+想和他们走的亲密，要努力&lt;strong&gt;为他们创造价值&lt;/strong&gt;。&lt;br /&gt;
+你们的联系频率至少&lt;strong&gt;每周一次&lt;/strong&gt;， 比如微信点赞，微博私信，喝喝咖啡，约着一起打羽毛球，等等。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;好友100人&lt;/strong&gt;&lt;br /&gt;
+联系频率&lt;strong&gt;每月一次&lt;/strong&gt;，与他相关的&lt;strong&gt;重大事件&lt;/strong&gt;发生时，包括节日、生日等等，一定要联系。&lt;/p&gt;
+
+&lt;h3 id=&quot;维护和升级长久到有益&quot;&gt;维护和升级长久到有益&lt;/h3&gt;
+
+&lt;h5 id=&quot;联系人全息背景卡&quot;&gt;联系人全息背景卡&lt;/h5&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-01-13-management-of-connections/2.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-01-13-management-of-connections/2.jpg&quot; alt=&quot;2.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;建立终生有效的关系&quot;&gt;建立终生有效的关系&lt;/h5&gt;
+
+&lt;p&gt;&lt;strong&gt;1、欣赏&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;第一步、你赞美别人时的词汇不应该是“好”“棒”“颜值高”等，去看看同义词词典，那里有很多更细化的同义词。你的赞美要特别、要生动、要精准，比如“玉树临风”“IT界徐静蕾”“楚楚动人”等。&lt;br /&gt;
+第二步、将赞美埋伏在句子里，频繁使用，并脱口而出。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2、分享&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;首先，你透露的一个关于你的&lt;strong&gt;小秘密&lt;/strong&gt;，仿佛是送给对方的一份亲密礼物。 （注意，只袒露小缺点。 如果刚刚接触，你就告诉对方，你曾被勒令退学，或婚内出轨，他会迅速失去对你的好感。）&lt;br /&gt;
+另外，这里的秘密还包括你们俩的一些私密的玩笑、用语等等。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;3、陪伴&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;在你和他交往过程中，要跳出默认的初始类别，找到其他方面的类别，做到持续的高质量的陪伴。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;4、推荐&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;你的推荐能不能带着他做新的尝试，给他意想不到的体验？&lt;/p&gt;
+
+&lt;p&gt;如果他有点宅，你约他去漂流。如果他爱体育，你约他去音乐会感受一下。&lt;br /&gt;
+我是个生活比较简单的人，所以我永远记得带我去首次体验全身spa的那位闺蜜。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;5、支持&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;别人向你寻求支持的时候，如果你没有答案，请你至少在你的人脉圈里，挑出五个可能有答案的朋友，帮他问问。&lt;/p&gt;
+
+&lt;p&gt;第一类：策略支持，这些文章能帮他们从新的认知角度分析问题、解决问题；&lt;br /&gt;
+第二类：资讯支持，增加他新的谈资，尤其是那些反直觉，反预期的信息；&lt;br /&gt;
+第三类：情感支持，这些文章能够精准地帮他喊出他心中的想法，让他有共鸣。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;6、保护&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这个动作很厉害。 让对方感觉到：“一只温暖的手拍在了我的肩膀上”。&lt;/p&gt;
+
+&lt;h3 id=&quot;5个网络工具帮你联系上你想找的那个人&quot;&gt;5个网络工具，帮你联系上你想找的那个人&lt;/h3&gt;
+
+&lt;h5 id=&quot;微博&quot;&gt;微博&lt;/h5&gt;
+
+&lt;p&gt;你可以直接给大V私信，观察他的个性域名，可能是一个有意义的名字，也可能是你看不懂的字母加数字组合，有趣的是，很有可能这就是他的微信号或者是QQ号。&lt;/p&gt;
+
+&lt;h5 id=&quot;公司主页&quot;&gt;公司主页&lt;/h5&gt;
+
+&lt;p&gt;一般会找到当地公司到地址和电话。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;比如，小米官网上显示的邮箱地址是：shouquanhezuo@xiaomi.com。那不难推断，小米的员工们的邮箱地址都是以@xiaomi.com 结尾的。如果你想找出小米公司里某位大佬的邮箱，你可以百度一下这个邮箱后缀，结果会跳出小米公司别的同事的邮箱地址，根据这些邮箱地址，你很容易能找到规律。你发现，它们的前缀都是用拼音的全称构成，姓在前，名在后，姓和名中间没有符号。 这下，你要找的那位大咖的邮箱地址不是已经被你推导出来了吗？退一步讲，如果你用邮箱后缀，百度之后，找不到这家公司任何人的个人工作邮箱地址，那就猜测一下吧。
+这三个网站验证一下你猜测的邮箱地址中哪些是正确的：
+&lt;a href=&quot;www.mailtester.com&quot;&gt;www.mailtester.com&lt;/a&gt;
+&lt;a href=&quot;www.verifyemailaddress.org&quot;&gt;www.verifyemailaddress.org&lt;/a&gt;
+&lt;a href=&quot;https://verify-email.org&quot;&gt;https://verify-email.org&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h5 id=&quot;邮件模板&quot;&gt;邮件模板&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;你是谁&lt;/li&gt;
+  &lt;li&gt;你仰慕他&lt;/li&gt;
+  &lt;li&gt;你能给他带来价值&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h5 id=&quot;创造至少3次见面机会&quot;&gt;创造至少3次见面机会&lt;/h5&gt;
+
+&lt;p&gt;只见一次面，聊9分钟，不如分开三次见面，每次聊3分钟。反复曝光，会增加你的积极形象，人们更喜欢他们熟悉的东西。他记住你了，就等于他选择了你。&lt;/p&gt;
+
+&lt;p&gt;重要人物经常出现在这么几个重要场合：开业典礼或周年庆典活动；行业峰会；产品说明会、发布会；TED演讲；艺术沙龙；热销作家见面会，等等。&lt;/p&gt;
+
+&lt;p&gt;并且，你的目标人物所处的生态圈也会受到地理要素的影响。 比如，北京的政治圈，深圳的科技圈，上海的外企圈。&lt;/p&gt;
+
+&lt;p&gt;另外，高尔夫球场、五星宾馆、高级俱乐部、银行的VIP客户部，都可能是大咖常出现的地方。 你如果有在这些地方工作的联系人，这是很宝贵的资源，请他们给你提供信息，让你适时地出现在这些地方。&lt;/p&gt;
+
+&lt;p&gt;如果你了解到自己的某一类目标人物可能会出席某些活动， 你还可以积极参与其中做志愿者。当你在这些活动中提供高质量的服务时，他自然会注意到你。&lt;/p&gt;
+
+&lt;p&gt;另外， 你还可以利用你的工作平台，去创造与大咖接触的机会。 比如代表公司参加各种活动，获得接触他们的机会。&lt;/p&gt;
+
+&lt;p&gt;或者，联系主办方，表示有兴趣做此类活动的赞助方，利用这次机会去现场了解一下情况。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;主动创造和目标人物见面的机会，这是一次高级的考验，考验你的勇气和智慧。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;多角度尝试百度搜索&quot;&gt;多角度尝试百度搜索&lt;/h5&gt;
+
+&lt;p&gt;除了百度网页，你也可以试一试图片搜索和文库搜索，有时大V在哪里讲课后上传上去的PPT会遗留下邮箱或者是个人联系方式哦。&lt;/p&gt;
+
+&lt;h5 id=&quot;天眼查&quot;&gt;天眼查&lt;/h5&gt;
+
+&lt;p&gt;天眼查是一个APP，可以帮助你挖掘到商业信息。&lt;/p&gt;
+
+&lt;h5 id=&quot;领英&quot;&gt;领英&lt;/h5&gt;
+
+&lt;p&gt;很多人在领英上会直接放上自己的微信公众号。如果你想要找外国人的信息，可以去这个网站直接搜索：rocketreach.co&lt;/p&gt;
+
+&lt;h3 id=&quot;让新朋友喜欢你愿意帮你&quot;&gt;让新朋友喜欢你，愿意帮你&lt;/h3&gt;
+
+&lt;p&gt;3个方法可以让对方对你留下&lt;strong&gt;积极印象&lt;/strong&gt;：&lt;br /&gt;
+1、找到他的需求点，贡献你的价值。   &lt;br /&gt;
+2、把你或你的目标放在更宏大的背景当中，吸引他的支持。  &lt;br /&gt;
+3、聊些长远的发展，让对方觉得你是一个有长期交往价值的人。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;24小时内再次互动&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;可以通过邮件沟通，模板如下：
+首先，感谢他和你交谈，邀请他和你保持联系；
+其次，提供一些对他有价值的东西。可以是某条链接，某个他可以联系的人，或某条信息。
+接着，再次给出自己完整的联系方式，比如手机号、微信号等等。
+最后，发出再次见面的邀请。&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;很高兴在昨天的活动中认识了您，您关于各地文化活动开幕式的专业点评，让我印象深刻。
+我记得您提到贵公司马上要承办本市文化节的开幕式，主题是让文化和科技互动。我今天正好看到一则新闻，西安1374架无人机在国际文化节做的光影盛宴，用这个代替焰火，很壮观，也很环保。这里是链接：&lt;strong&gt;**&lt;/strong&gt;。
+我有朋友在大疆。如果您有兴趣找赞助商，我可以帮忙连线。
+南京路上有一家星巴克，离您和我上班的地方都不远，我经常在那里会朋友。请您抽空喝杯咖啡吧。我下周三四五都有时间，您看是否方便？
+我的电话是&lt;strong&gt;**&lt;/strong&gt;。
+期待和您有更多的交流。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;如何优雅的求助&quot;&gt;如何优雅的求助&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;1、寻找成熟的时机&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;套用肯尼迪的那句话&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;“不要问别人能为我们做什么，要先问自己能为别人做什么。”&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;全球最大的商界人脉组织BNI的指导原则是 “付出者收获”。&lt;/p&gt;
+
+&lt;p&gt;所以，不同的社交专家给出的指导很类似，有的是3:2原则，你要帮助他至少三次，才可以求助两次，有的是6:4原则，你要帮助他六次，才可以求助四次。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2、求助时，用巧妙的提问，唤起他那种“对小弟”的情怀&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;谁不爱过去那个青涩的、有些野心的，甚至莽撞的自己呢？用你巧妙的提问，让他们和过去的自己相遇。&lt;/p&gt;
+
+&lt;p&gt;你还可以这么问：&lt;br /&gt;
+“说起来，您当年好像也有一段类似的经历，请教一下，当时的您是怎样应对的呢？”&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;3、求助时，告而不求&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;如果是面对面的求助，你可以“告之而不请求”，这是一种足够委婉的请求方法， 让对方零压力。&lt;/p&gt;
+
+&lt;p&gt;我向人求助的时候，不会一上去就问“你能赞助我吗？” 而是说：&lt;br /&gt;
+“我有一家管理咨询公司，专提供跨文化沟通的培训和咨询服务。我们在上海和深圳都有办公室，我们正在寻找合作伙伴，将业务扩展到美国。”&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;4、不求一步到位，而是分步实现&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;影响力专家罗伯特·西奥迪尼把这个叫做&lt;strong&gt;持续法则&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;当对方回应了你的一个小小请求后，他会倾向于持续地兑现帮助你的承诺，你也持续地向他做进展汇报。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;帮忙从小到大，一步一步，可以是这样的：从一个微信名片的推送，或对你的一句话建议开始，然后，是10分钟的电话，然后，是20分钟的见面，等等。&lt;/p&gt;
+
+&lt;p&gt;一个有实力的人，可以把一个又一个的小机会，撬开成一个又一个的大机会。小机会如果利用得好，会形成神奇的马太效应。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;5、轻松一些，给他退路&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;求助的同时，请表达出： 如果您没有时间，或不感兴趣，我完全理解。 让他有主动选择权，而不是把他放在一个不得不作出回应的境地。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;6、让对方用最方便的方式帮到你&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;优雅地求助不是低人一等，不是自尊缺失，不是地位缺失或独立性缺失。你要成就大事，必须有求助的动作。&lt;/p&gt;
+
+&lt;p&gt;优雅求助，不仅不会损耗你们的关系，还会加深关系。&lt;/p&gt;
+
+&lt;p&gt;人们不仅在观察别人，也在观察自己。当我们发现自己为某人做了一件事情，并且不求当即的回报，那么自我对话会告诉我们，这意味着我们喜欢他。&lt;/p&gt;
+
+&lt;h3 id=&quot;通过会议和社群加速社交效率&quot;&gt;通过会议和社群，加速社交效率&lt;/h3&gt;
+
+&lt;h5 id=&quot;参加会议的十一条行动清单&quot;&gt;参加会议的十一条行动清单&lt;/h5&gt;
+
+&lt;p&gt;会议前的行动清单：&lt;br /&gt;
+1、选定正确的、高手云集的会议。 &lt;br /&gt;
+2、想办法获得邀请。  &lt;br /&gt;
+3、拿到演讲者名单和参与者名单，做好调研。&lt;/p&gt;
+
+&lt;p&gt;会议中的行动清单:&lt;br /&gt;
+1.早到十分钟，获得现场掌控感。&lt;br /&gt;
+2.以圈内人的衣着、气质融入会场。&lt;br /&gt;
+3.开启你的观察力，找出谁是核心人物。&lt;br /&gt;
+4.让自己被看到，被听到。&lt;br /&gt;
+5.不要现场兜售你的业务，而是切换成，为他人解决问题的姿态。&lt;br /&gt;
+6.用“播种”的方式来结束谈话。&lt;/p&gt;
+
+&lt;p&gt;会议后的行动清单：&lt;br /&gt;
+1.制作联系人背景全息卡片。&lt;br /&gt;
+2.24小时内再次联络。&lt;/p&gt;
+
+&lt;h5 id=&quot;线上寻找和创立社群&quot;&gt;线上寻找和创立社群&lt;/h5&gt;
+
+&lt;p&gt;1.这个群的主题越小众，黏性越大&lt;br /&gt;
+2.不要盲目追求规模，要把控好加入的标准和规则&lt;/p&gt;
+
+&lt;h3 id=&quot;更新人脉的三个原则&quot;&gt;更新人脉的三个原则&lt;/h3&gt;
+
+&lt;h5 id=&quot;体面地离开老朋友&quot;&gt;体面地离开老朋友&lt;/h5&gt;
+
+&lt;p&gt;如果你发现这155人中，有人总是过多地叹息、吐槽。你每次都不由自主地跟随他们一起，关注到生活的灰暗面，于是你也不停地叹息，就像气体从气球中漏出来。这样的朋友不仅没有给你赋能，反而在耗尽你的能量。那么，请把他们放在155人黄金圈之外。&lt;/p&gt;
+
+&lt;p&gt;当你从一个人脉圈中退出，加入新人脉圈的时候，该怎样给这个背影呢？&lt;br /&gt;
+我的建议是， 要给&lt;strong&gt;一个体面而华丽的背影&lt;/strong&gt;。&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;我第一次换工作时，当时很年轻，只顾着奔赴更好的前程，忽略了老领导，至今追悔莫及。那个时候，我应该向他表达最高程度的感激。 哪怕你觉得老领导待你不公，但是，你也在他这里获得了难得的成长。表达感激之后，这样的话要记得说：&lt;br /&gt;
+“刘总，我会一直在这个行业的，相信咱们未来还会有交集，我很期待啊！如果我能在任何方面为您尽些微薄之力，不管是职业上，还是生活上，请一定让我第一时间知道。”&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;不断流动的人脉圈才是健康的。所谓战略性管理人脉，不是积累联系名单，而是不断更新那个最适合你当下的状态的155人。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;遇到损友分三步走&quot;&gt;遇到损友分三步走&lt;/h5&gt;
+
+&lt;p&gt;第一步， 你问问自己，是不是已经对他们表达了你的友善&lt;/p&gt;
+
+&lt;p&gt;第二步， 如果你之前确实从未对他们表达过友善，我建议你补上这个动作，因为你想让别人怎样对待你，你就应该怎样对待他人。&lt;/p&gt;
+
+&lt;p&gt;第三步， 如果一段时间之后，他转变了态度，想过来和你交朋友，那就尽释前嫌。&lt;/p&gt;
+
+&lt;h5 id=&quot;两个标准甄选新朋友&quot;&gt;两个标准甄选新朋友&lt;/h5&gt;
+
+&lt;p&gt;第一点，有温度。 有温度的人，能让周围的人很自在，很开心。&lt;/p&gt;
+
+&lt;p&gt;第二点，有见识。&lt;/p&gt;
+
+&lt;h3 id=&quot;在圈子之间串联起新格局&quot;&gt;在圈子之间，串联起新格局&lt;/h3&gt;
+
+&lt;h5 id=&quot;串联者的四个特征&quot;&gt;串联者的四个特征&lt;/h5&gt;
+
+&lt;p&gt;第一，他们知道自己的价值不可估量。&lt;/p&gt;
+
+&lt;p&gt;第二，串联者是“资源盈余”思维，他的身份是“问题的终极解决者”。&lt;/p&gt;
+
+&lt;p&gt;第三，串联者的终生习惯是，持续有规律地帮助缩短物理距离或社交距离。&lt;/p&gt;
+
+&lt;p&gt;第四，串联者认识新朋友的目的就是为了实现更多的串联。&lt;/p&gt;
+
+&lt;h5 id=&quot;打造铁三角关系&quot;&gt;打造铁三角关系。&lt;/h5&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-01-13-management-of-connections/4.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-01-13-management-of-connections/4.jpg&quot; alt=&quot;4.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;为他人引荐注意点&quot;&gt;为他人引荐注意点&lt;/h5&gt;
+
+&lt;p&gt;1.为双方提供可担保的可靠人品。
+2.有搜寻和甄选的能力。
+3.记得先问问他们是不是已经相互认识了。
+4.你需要跟踪你的每一次推荐。
+5.口头推荐完以后，别忘了书面也表达一下。&lt;/p&gt;
+
+&lt;h5 id=&quot;被引荐注意点&quot;&gt;被引荐注意点&lt;/h5&gt;
+
+&lt;p&gt;1.被推荐后请立即采取行动，这是基本礼节。&lt;/p&gt;
+
+&lt;p&gt;2.被引荐后，和对方搭上了线，不能把推荐人忘得一干二净，一定要表示感谢，并向他更新进展。&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 13 Jan 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/01/13/management-of-connections/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/01/13/management-of-connections/</guid>
+        
+        <category>精进</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>「转载」你思考问题的方式，决定了你的层次</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;转载自&lt;a href=&quot;https://mp.weixin.qq.com/s?__biz=MzA5NzQ2MjMxMQ==&amp;amp;mid=2705046770&amp;amp;idx=1&amp;amp;sn=c7a0c96819c02a4ce002611cdd626687&amp;amp;chksm=b46f6dba8318e4acc4c1016764e18a4fad59ac0511868e0639ab0b48acec51ecd1eb80ae6f3d&amp;amp;s_q_s_h_a_r_e_1=MTAzOTE0MjcxNTQ2NTE5MzQ0MTU0NTg1MzY2JjhEajBq&quot;&gt;知乎7万赞回答：你思考问题的方式，决定了你的层次&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;一家零售店的困境&quot;&gt;一家零售店的困境&lt;/h3&gt;
+
+&lt;p&gt;假设你是一个「某品牌运动鞋」的线下门店代理商，门店开在上海的闹市区有好几年了，你雇佣了几个伙计在经营着自己的小店面，你每周来店里一次了解经营情况，一直以来都比较稳定。&lt;/p&gt;
+
+&lt;p&gt;可是最近，你发现生意越来越差，&lt;strong&gt;销售额一直在下滑，而且你还发现，某几款鞋子的「进货价」竟然比淘宝上的「零售价」还要高&lt;/strong&gt;，很多客人来店里试了一圈鞋子，结果都跑去网上下单了。&lt;/p&gt;
+
+&lt;p&gt;伙计们的士气也开始变的低落，客人进来了，都不太愿意主动去搭理，你刚要发火，一名员工却突然提出了辞职…&lt;/p&gt;
+
+&lt;p&gt;你非常苦恼，这个地段的&lt;strong&gt;房租开始变得越来越贵；库存也因为滞销越积越多；甚至本来热闹的地段，现在逛街的人都开始变少了…&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;店铺已经开始亏损，而你投入了大量的装修成本和库存，现在关门损失极大，你焦头烂额…&lt;/p&gt;
+
+&lt;p&gt;请在这里停顿30秒，想象自己就是这个代理商，请问在这个时候，你会怎么办？&lt;/p&gt;
+
+&lt;p&gt;有些人说可能会说：&lt;/p&gt;
+
+&lt;p&gt;“都是万恶的淘宝惹的祸，马云毁掉了实体经济！”&lt;/p&gt;
+
+&lt;p&gt;“线下房租越来越高，卖一月的鞋还不够付房租，线下店谁做谁赔钱…”&lt;/p&gt;
+
+&lt;p&gt;“现在的年轻人太不负责任了！生意有点波动，稍微有点压力，人就跑了…”&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;还是你会这样思考？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;“员工不积极，我就提高员工的销售提成呗，有钱能使鬼推磨，冰箱都能卖给爱斯基摩人，就不相信卖不出去几双鞋子，明天开始我亲自来盯店。”&lt;/p&gt;
+
+&lt;p&gt;“我们上个月不是有几个企业定了一批鞋子吗？这个月我们多打点电话，联系更多的企业，做企业客户！”&lt;/p&gt;
+
+&lt;p&gt;“我也可以开个淘宝店啊，把我的生意也搬到网上…”&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;或者你选择另辟蹊径？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;“时代变化太快，新时代一定有我不知道的新方法和技巧，我要去学习一下…像什么新零售啊，O2O，体验经济、短路经济、社群经济… 听说都是能解决目前这种困境的方法！”&lt;/p&gt;
+
+&lt;p&gt;“其他同行他们是怎么解决的？有没有同行的资源，我去交流学习一下”&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;为什么面对同一个困境，每个人的反应和解决方法会如此不同？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;有些人抱怨环境，有些人变得勤奋，有些人却选择开始补习功课，寻找新的解决办法？到底哪种方式才是正确的？&lt;/p&gt;
+
+&lt;p&gt;这里，我们就需要用到一个新概念「NLP理解层次」来解释这个现象：&lt;/p&gt;
+
+&lt;p&gt;#注释：NLP（神经语言程序学）是由理查德·班德勒和约翰·格林德在1976年创办的一门学问，美国前总统克林顿、微软领袖比尔盖茨、大导演斯皮尔博格等许多世界名人都接受过 NLP培训,世界500强企业中的 60%采用NLP培训员工，理解层次是NLP中的一个核心概念。&lt;/p&gt;
+
+&lt;p&gt;在这个世界上，每一件与我们有关系的事，我们都会赋予其一些意义。比如前面的例子，你可能会觉得造成这一切都是马云的错。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;由于每个人赋予的意义都会有所不同，因此我们的理解也会不一样，理解不一样，解决办法当然就会不同。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;「NLP理解层次」说，对一件事情的理解，我们可以分成6个不同的层次，而这个层次是有高低之分的。&lt;/p&gt;
+
+&lt;p&gt;如果你用低维度的视角去看这个问题的时候，感觉它无法解决。&lt;strong&gt;但当你站在更高的一个维度去看它，也许就变成了一个很简单的问题，甚至连问题本身也消失了。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;就像马车的时代，大家都在寻找更快的马，但当汽车被发明出来后，这个问题就不存在了。&lt;/p&gt;
+
+&lt;p&gt;为了便于你理解，我们以每个人所处的不同「理解层次」，把人分成6种不同的类型。理解层次越高的人，解决问题的能力也就越强，就越是我们社会需要的人才。&lt;/p&gt;
+
+&lt;p&gt;接下来，我们就从这个线下门店的案例出发，看看这6类人，分别会如何思考，如何解决这个问题。&lt;/p&gt;
+
+&lt;h3 id=&quot;你是第几流人才&quot;&gt;你是第几流人才？&lt;/h3&gt;
+
+&lt;h5 id=&quot;第5流人才&quot;&gt;第5流人才&lt;/h5&gt;
+
+&lt;p&gt;&lt;strong&gt;别名：怨妇&lt;/strong&gt;  &lt;br /&gt;
+&lt;strong&gt;所处理解层次：环境&lt;/strong&gt;  &lt;br /&gt;
+&lt;strong&gt;典型思考模式：都是你们的错！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-01-05-reprinte-enhancement/1.webp&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-01-05-reprinte-enhancement/1.webp&quot; alt=&quot;1.webp&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;理解层次的最低层是「环境」&lt;/p&gt;
+
+&lt;p&gt;什么是环境？就是除你自己之外的一切都算是环境：你身边的人；你的领导、同事；你的公司；你的竞争对手；市场环境；天气；大众舆论……等等诸如此类。&lt;/p&gt;
+
+&lt;p&gt;处在这个理解层次的人，当问题发生的时候，&lt;strong&gt;他首先会把问题归结成「因为环境的不好」而产生的问题。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;比如：&lt;/p&gt;
+
+&lt;p&gt;工作不顺利，是因为领导是个蠢蛋…&lt;/p&gt;
+
+&lt;p&gt;没有晋升机会，是因为公司的办公室政治严重，没有好的晋升机制…&lt;/p&gt;
+
+&lt;p&gt;房子太贵买不起，都是因为那些黑心炒房团、政府调控无能、没有一个富爸爸…&lt;/p&gt;
+
+&lt;p&gt;总之，发生了现在的这个困局，不是我的问题，是别人的问题，是公司的问题，是市场的问题，是政府的问题，是运气的问题，都是我命不好，生在了这样的一个时代，遇到了这样一群人….&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;而他寻找解决办法的路径，也会从改变环境的角度去思考。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;比如：&lt;/p&gt;
+
+&lt;p&gt;这家公司不好，导致我没有晋升机会，那我就换个公司呗…&lt;/p&gt;
+
+&lt;p&gt;找了一个男朋友，他现在对我越来越差了，又是一个渣男，再换一个呗…&lt;/p&gt;
+
+&lt;p&gt;不知道你身边有没有接触过这种人，只要一与他们接触，就会感受到这「满满的负能量」，感觉这人世间的不幸都被他们碰巧遇上了，命运多舛的不行，分分钟生活就无法继续了…&lt;/p&gt;
+
+&lt;p&gt;我们通常称这种行为叫做「抱怨」，但你是不是也曾劝说过这些人不要抱怨？她们似乎好像也知道抱怨不好？但为什么他们还是在不断抱怨呢？&lt;/p&gt;
+
+&lt;p&gt;那就是因为他们的理解层次处在了最低的「环境层」，他们对世界的理解被死死的困在了这个层次，&lt;strong&gt;并不是他们想抱怨，而是在他眼里，除了看到环境之外，再也无法看到其他的了。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;因此，他们能想到的最好办法，也就只能是换个更好的环境了。&lt;/p&gt;
+
+&lt;p&gt;如果是第五流的人才遇到了案例中的困境，他似乎除了抱怨房租、淘宝、员工，他是真找不到还有什么原因能解释这个问题…&lt;/p&gt;
+
+&lt;h5 id=&quot;第4流人才&quot;&gt;第4流人才&lt;/h5&gt;
+
+&lt;p&gt;&lt;strong&gt;别名：行动派&lt;/strong&gt;  &lt;br /&gt;
+&lt;strong&gt;所处理解层次：行动&lt;/strong&gt;  &lt;br /&gt;
+&lt;strong&gt;典型思考模式：我还不够努力！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-01-05-reprinte-enhancement/2.webp&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-01-05-reprinte-enhancement/2.webp&quot; alt=&quot;2.webp&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;我们往上走一层，来到第二个层次「行为」&lt;/p&gt;
+
+&lt;p&gt;想要解决问题，那你就得开始行动啊！你不能改变环境，你能改变的只有你自己！&lt;strong&gt;你为什么还没有成功？就是因为你还不够努力！你不改变，环境如何改变？你不行动，环境如何改善？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;是不是听着很鸡汤？有点像成功学？&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;处在这个理解层次的人，在外人看来是一位非常乐观，充满正能量的人，他们从不对环境妥协，他们相信上天不负有心人，只要我持续努力，事情一定会有转机！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;他们是人们眼中的「行动派」、「实干家」，是新时代的斜杠青年…&lt;/p&gt;
+
+&lt;p&gt;处在这个理解层次的人，当问题发生的时候，他首先会把问题归结成「因为我的努力还不够」而产生的问题。&lt;/p&gt;
+
+&lt;p&gt;比如：&lt;/p&gt;
+
+&lt;p&gt;收入太低？因为我还不够努力…&lt;/p&gt;
+
+&lt;p&gt;买不起房子？是因为我还不够努力….&lt;/p&gt;
+
+&lt;p&gt;创业失败了？是因为我还不够努力….&lt;/p&gt;
+
+&lt;p&gt;总之，发生了问题，先从自身找原因，看看是不是因为自己偷懒了？是不是努力程度还不够？是不是要加大工作量？&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;如果你处在「行动」这个层次上，「环境」的问题就变得不是那么重要了，因为一切都是自己的原因，因为自己还不够努力。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;要解决问题，你就会从「行为」这个层面去寻找解决办法，看看还有什么事情是可以去做，去改变的？&lt;/p&gt;
+
+&lt;p&gt;比如：&lt;/p&gt;
+
+&lt;p&gt;都一年没涨工资了，今晚开始多加1个小时的班；&lt;/p&gt;
+
+&lt;p&gt;女朋友为什么最近对我变得冷淡了？我要多发些消息，多打些电话去关心她；&lt;/p&gt;
+
+&lt;p&gt;公司业绩变差了？一定是我睡觉睡的太多了，明天开始不睡觉；&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;回到最初的线下门店的案例，如果是这第4流的人才遇到了这个困境，他会怎么办呢？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;我付24小时的房租，只营业8小时！那怎么行？明天开始24小时营业，我全天待在店里亲自销售！员工两班倒，空闲时间拼命打电话找企业，我就不信了！&lt;/p&gt;
+
+&lt;p&gt;员工偷懒？那我就加工资，加提成，每天请吃夜宵，只要你肯努力，有业绩，我就对你比亲儿子还好！&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;但是，我们不禁要问，是不是努力了，所有问题就都能被解决了呢？是不是越努力的人，获得的成就也就会越大？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;200年前，人们的平均工作时间是16个小时；5000年前，人们也是每天日出而作，日落才息…&lt;/p&gt;
+
+&lt;p&gt;他们也许比你更加勤奋，可产生的价值却不足现代社会的万分之一，这是为什么？&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;努力，的确是成功的一个必要条件，但远远不是充分条件。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;为什么那么多人不喜欢鸡汤？反对成功学？就是因为它们只告诉了你要努力，却没有给你方法，它们只是帮助你脱离了最低的「环境」层，来到了第二低的「行为」层！以为给你打一针鸡血，你就开始奋斗了，就一定能成功了！&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;问题的解决，时代的进步，并不是只靠「努力」就能完成的，&lt;/strong&gt;一定有更重要的因素在背后推动，我们需要进入下一个理解层次…&lt;/p&gt;
+
+&lt;h5 id=&quot;第3流人才&quot;&gt;第3流人才&lt;/h5&gt;
+
+&lt;p&gt;&lt;strong&gt;别名：战术家&lt;/strong&gt;   &lt;br /&gt;
+&lt;strong&gt;所处理解层次：能力&lt;/strong&gt;  &lt;br /&gt;
+&lt;strong&gt;典型思考模式：方法总比问题多！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-01-05-reprinte-enhancement/3.webp&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-01-05-reprinte-enhancement/3.webp&quot; alt=&quot;3.webp&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;农业时代的人，比你更努力，但生产力不足现在的万分之一，这是为什么？&lt;/p&gt;
+
+&lt;p&gt;因为现在的人更勤奋吗？&lt;/p&gt;
+
+&lt;p&gt;当然不是，是因为他们没有经历过工业革命、信息革命，他们不会使用机器，也不会使用互联网来提高工作效率、协作效率。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;机器和互联网是什么？看似是工具，本质是扩展了你的能力。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;5000年前，你想要告诉一个人一件事情，你得策马奔腾三天三夜，而现在通过互联网不需要1秒钟，互联网扩展了你的沟通能力。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;什么是能力？就是你能用更简单、更高效的方式解决同样的问题，有选择便是有能力。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;理解层次处在「能力」层次的人，当问题发生的时候，首先会把问题归结成是「因为我的能力不足」而产生的。&lt;/p&gt;
+
+&lt;p&gt;所以，他们也会在「能力」这个层次里去寻找更好的「方法」来解决问题。&lt;/p&gt;
+
+&lt;p&gt;比如：&lt;/p&gt;
+
+&lt;p&gt;线下门店生意不好，是因为我的经营模式太陈旧，我需要学习新的方法…比如，可以通过社群经济的方式来降低我的获客成本，提高客户复购率….&lt;/p&gt;
+
+&lt;p&gt;和男朋友关系处理不好，一定是我的沟通能力有问题，我要去学习能改善亲密关系的沟通技巧，比如《关键对话》、《幸福的婚姻》….&lt;/p&gt;
+
+&lt;p&gt;以前我是做业务的，现在刚成为部门经理，团队业绩下滑，一定是我的管理能力有问题，我以前根本没有系统的学习过管理的方法，我得去报个MBA，从「古狄逊定理」开始学起…&lt;/p&gt;
+
+&lt;p&gt;这类人有非常强大的学习能力和应用能力，能把学习到的知识，转化为可操作的方法，进而改善效率，解决问题。&lt;/p&gt;
+
+&lt;p&gt;他们明白，任何问题都不是孤立存在的，一定有人曾经遇到过，并且已经有更好的解决办法了，只是我还不知道；我不应该在黑暗中独自前行，去重新发明轮子，也许我的顿悟，只是别人的基本功。&lt;/p&gt;
+
+&lt;p&gt;我应该要站在巨人的肩膀上，学习更成熟的经验和方法，然后再来解决这个问题。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;如果你能走到这个层次，既有「行为层」的勤奋努力，又有「能力层」的方法套路，一般就能成为公司里的中高层了。&lt;/strong&gt;普通的问题已经难不倒你了，你总能找到办法来解决它们。&lt;/p&gt;
+
+&lt;p&gt;当然，这里说的每提高一个层次，并不是说就不要下一个层次了，&lt;strong&gt;比如有了方法就不需要努力了，而是在原来的基础上，上升了一个思考层次。&lt;/strong&gt;不然就会变成空中楼阁，纸上谈兵。&lt;/p&gt;
+
+&lt;p&gt;「能力」这个理解层次，是我们「意识」能想到的最高层次了。再往上走，就要进入到我们的「潜意识」区域，内容会变得比较模糊，之前你可能很少接触到这些层面，所以可能会比较难理解。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;那什么问题，是你有「能力」也解决不了的呢？就是你选择错了问题。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;什么意思？&lt;/p&gt;
+
+&lt;p&gt;你在着手解决问题之前，你得先清楚，你要解决的问题是什么？&lt;/p&gt;
+
+&lt;p&gt;比如开始的案例，导致现状的原因看上去有很多，哪个才是最重要的问题？&lt;/p&gt;
+
+&lt;p&gt;是团队管理的问题？营销方式的问题？还是商业模式的问题？&lt;/p&gt;
+
+&lt;p&gt;是应该打折清库存减少损失，准备关门？还是战略转型，坚持到底？&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;每一个选择，都意味着人生的不同走向，一旦选择错了问题，你那优秀的「能力」和「行动力」只会让你越走越远。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;那如何提高做选择题的能力呢？我们就需要进入到下一个层次…&lt;/p&gt;
+
+&lt;h5 id=&quot;第2流人才&quot;&gt;第2流人才&lt;/h5&gt;
+
+&lt;p&gt;&lt;strong&gt;别名：战略家&lt;/strong&gt;  &lt;br /&gt;
+&lt;strong&gt;所处理解层次：BVR（信念/价值观/规条）&lt;/strong&gt;  &lt;br /&gt;
+&lt;strong&gt;典型思考模式：什么才是更重要的？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-01-05-reprinte-enhancement/4.webp&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-01-05-reprinte-enhancement/4.webp&quot; alt=&quot;4.webp&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;如果说「能力层」是做解答题的能力，「BVR层」就是做选择题的能力，什么可以做，什么不可以做，什么更重要，什么可以忽略不管？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;什么是BVR？&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;B（Believe）：信念，你相信什么是对的？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;你相信这个世界应该是怎么样的？从大了说可以是世界观，从小了说就是一个个概念。&lt;/p&gt;
+
+&lt;p&gt;为什么我们的专栏第一季度全是围绕概念来讲的？就是在帮你构筑一个更完整的世界观，这是你的硬件，是你所有能力能够得以发挥的基石。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;V（Value）：价值观，你认为A和B哪个更重要？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;人生的不同是因为一次次选择的不同，那我们依靠什么来做选择的呢？就是我们的价值观。&lt;/p&gt;
+
+&lt;p&gt;我们内心对每一个人、每一件事、每一个概念都会有一定的价值衡量。东西不同，价值就会有高低，每个人衡量的标准也不一样。最终我们会形成自己的价值排序，这就是你的价值观。&lt;/p&gt;
+
+&lt;p&gt;因此，当出现A/B选择的时候，选择我们认为更有价值的一项。&lt;/p&gt;
+
+&lt;p&gt;比如，你遭遇抢劫，别人问你「要钱还是要命？」通常你会选择要命，因为你的价值观是：命&amp;gt;钱&lt;/p&gt;
+
+&lt;p&gt;但是当你现在有1个小时空闲时间，你打算用来看书？还是刷朋友圈？还是睡觉？每个人的选择就不一样了。因为每个人对这3者的价值衡量是不同的。&lt;/p&gt;
+
+&lt;p&gt;为什么有些人有选择困难症？&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;那是因为他内在的价值观是混乱的，缺少某些概念，或者对某些概念的理解不清楚，没有价值衡量的标准，因此他也就无法知道哪个更有价值，他就不知道该如何选择了。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;R（Rule）：规条，做人做事的原则。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这就像是公司的规章制度，每个人也有自己的规则，这些规则是怎么来的？就是来自于信念和价值观。&lt;/p&gt;
+
+&lt;p&gt;比如我的一条行为准则是「做时间的朋友」，这个规则是怎么来的？&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;就是来自于我的一个信念，因为我相信「复利效应」，我只做有积累的事，能彼此增益的事，然后耐心等待复利的出现。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;比如很多人都有的一条行为准则「我答应你的一定会做到」，背后其实是源于两条价值观：「说道做到=诚信」而「诚信&amp;gt;一切」&lt;/p&gt;
+
+&lt;p&gt;规条存在的意义，就是帮助你更高效的做出选择，不用每次都思考、讨论、互相权衡比较…&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;因此，「能力」层是让你把事情做对，而「BVR」层则是帮你选择做对的事情。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;处在「BVR层」的人，当问题发生的时候，首先会先思考「哪个是最重要的问题？」、「除了我看到的这些问题，还有什么更重要的问题是我没有看到的？」&lt;/p&gt;
+
+&lt;p&gt;回到开头的案例，第二流的人才可能会这样思考：&lt;/p&gt;
+
+&lt;p&gt;门店的出现业绩下滑，可能有以下多方面的因素对其造成影响：&lt;/p&gt;
+
+&lt;p&gt;1、成本：房租越来越贵；库存积压；已投入的装修成本；进货成本高于淘宝售价；&lt;/p&gt;
+
+&lt;p&gt;2、团队：员工士气低落，一个人提出辞职；&lt;/p&gt;
+
+&lt;p&gt;3、市场：门店人流越来越少，客户们现在习惯在网上购物，网上购物更便宜；&lt;/p&gt;
+
+&lt;p&gt;4、营销：目前营销的方式比较单一，就是门店等客户。&lt;/p&gt;
+
+&lt;p&gt;5、渠道：目前只有线下门店这单一渠道。&lt;/p&gt;
+
+&lt;p&gt;没有看到的问题可能是什么？&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;1、互联网时代的交易结构已经发生变化：&lt;/strong&gt;淘宝之所以能那么便宜，因为短路掉了中间环节，工厂直接到消费者，不需要再经过总代、省代、区代…价值传递效率大大提升，所以价格才能如此便宜。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2、线下门店也有独特的优势：&lt;/strong&gt;我们的产品摸得到，能试穿，用户的体验感非常好，可信度高；&lt;/p&gt;
+
+&lt;p&gt;那其中到底哪个是最关键的问题呢？经过一番思考，你画出了如下关系图：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-01-05-reprinte-enhancement/5.webp&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-01-05-reprinte-enhancement/5.webp&quot; alt=&quot;5.webp&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;原来，一切的罪魁祸首，是因为互联网的连接效率变高，导致交易结构发生了变化，淘宝店家「短路」掉了中间总代、省代、区代等环节，直接面对消费者，所以价格才能那么低。由此导致了后面的一连串反应…&lt;/p&gt;
+
+&lt;p&gt;好在我还有一个杀手锏，&lt;strong&gt;实体店的「体验感」你无法获得。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;因此，你制定了2条核心战略：&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;1、短路经济：既然淘宝店家能短路中间环节，我实体店为什么不可以？尽一切可能短路掉中间环节，把售价降下来。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2、体验经济：提高线下门店体验感，让用户来了就不想走，让用户在逛的时候，体验到乐趣与快感，而不仅仅是来这里购物。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;只要这2个问题得以解决，其他问题都会迎刃而解。（现实生活中已有成功案例，这里篇幅有限就不再赘述具体方法，大家可以上网自己查找）&lt;/p&gt;
+
+&lt;p&gt;这就是理解层次在「BVR」的人给出的一种解决方案。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;而处在「能力」层的人很可能就会胡子眉毛一把抓，遇到问题解决问题，像摊大饼一样，面多了加水，水多了加面。看似有无穷的方法来应对，但问题却也变得越来越多，永远也解决不完。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;BVR层也有缺陷。细心的同学看到这里，可能会心生疑问，能做出这样的选择，是因为几个选项都有客观的价值标准，可有时候2个选择看似都是对，或者带有比较大的主观性，怎么办？&lt;/p&gt;
+
+&lt;p&gt;比如你还是那个经销商，你是否会考虑这样一个问题：「我一定要当老板吗？还是回去打工？以我的能力至少也能百万年薪，还没有风险，何必那么辛苦？」&lt;/p&gt;
+
+&lt;p&gt;你的答案会是什么呢？要解决这个主观选择的问题，就需要再往上走一个层次。&lt;/p&gt;
+
+&lt;h5 id=&quot;第1流人才&quot;&gt;第1流人才&lt;/h5&gt;
+
+&lt;p&gt;&lt;strong&gt;别名：觉醒者&lt;/strong&gt;  &lt;br /&gt;
+&lt;strong&gt;所处理解层次：身份&lt;/strong&gt;  &lt;br /&gt;
+&lt;strong&gt;典型思考模式：因为我是XXX，所以我会XXX&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-01-05-reprinte-enhancement/6.webp&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-01-05-reprinte-enhancement/6.webp&quot; alt=&quot;6.webp&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;理解层次的第五层「身份」这是一个很高的层次，一般人很少能清楚的回答以下这个问题：&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;“你是谁？你想成为一个怎么样的人？”&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;为什么身份层次那么高，因为不同的身份层次，就意味着拥有着不同的BVR，它决定了你当下的每次选择，决定了你未来的人生方向。&lt;/p&gt;
+
+&lt;p&gt;比如，你是想成为一名运动鞋设计师？还是想成为一名成功的商人，赚很多钱？或者是想开创一个新的运动品牌，成为新品牌的创始人？&lt;/p&gt;
+
+&lt;p&gt;你把自己定义成不同的身份，案例中那个问题的选择就会完全不同。&lt;/p&gt;
+
+&lt;p&gt;比如你想成为一名运动鞋设计师，你可能就会选择去打工，而把门店关掉；而如果你想成为一位新品牌的创始人，你可能就会选择去找代工厂，直接生产自己品牌的鞋子，短路掉所有中间环节，全渠道销售；&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;你之所以有时候会不知道该如何选择，除了对某些概念不清楚之外，最重要的就是你不知道自己想成为怎么样的一个人。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;如果你不知道你想成为谁，你就不知道自己要什么，你不知道自己要什么，你就无法做出选择，你无法做出选择，你就什么也得不到。&lt;/p&gt;
+
+&lt;p&gt;通常身份定义清楚了，答案也就出来了。&lt;/p&gt;
+
+&lt;p&gt;说到这里，你可能会想到我们讲过的「角色」话题，「角色」和「身份」有什么不同？&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;角色是被动的，是别人给你的；身份是主动的，是你自己想成为的。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;你可能有很多角色，但是你只有一个自己想成为的身份。每个角色或者身份，都对应着一套帮助他「能够更好的成为这个身份」的BVR体系。&lt;/p&gt;
+
+&lt;p&gt;由于「角色」是被动获得的，所以你会觉得这套BVR是一种「束缚」；而「身份」是你主动想成为的，因此它的这套BVR会成为一种助力。&lt;/p&gt;
+
+&lt;p&gt;「身份」这个层次，其实是对应着「存在感知层」，你希望自己是一个怎么样的存在？&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;之所以想让你「去角色化」，就是想让你突破角色的束缚，获得一个更「主动」的人生，找到自己的「身份」层次。因为你身上的「角色」太多，会阻碍你看见自己真实的「身份」。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;当你想清楚自己的「身份」定位后，就应该围绕它配套相应的BVR，再构建你的能力圈，并做出相应的计划与行动，你就会成为第一流的人才。&lt;/p&gt;
+
+&lt;p&gt;你能开创出一番自己的事业，设计出令人尖叫的产品，成为上市公司的领军人物。&lt;/p&gt;
+
+&lt;p&gt;而在他们之上，还存在一类人，他们在人类历史的长河中都屈指可数，他们创造着奇迹，他们改变着世界，他们引领着时代，他们可以为了理想，放弃自己的生命。&lt;/p&gt;
+
+&lt;p&gt;让我们再往上走一层，来观摩一下最顶级的人才是怎么样的。&lt;/p&gt;
+
+&lt;p&gt;6、顶级人才&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;别名：领袖/伟人&lt;/strong&gt;  &lt;br /&gt;
+&lt;strong&gt;所处理解层次：精神/使命&lt;/strong&gt;  &lt;br /&gt;
+&lt;strong&gt;典型思考模式：人活着就是为了改变世界&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-01-05-reprinte-enhancement/7.webp&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-01-05-reprinte-enhancement/7.webp&quot; alt=&quot;7.webp&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;理解层次的最高层次「精神」。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;精神是什么意思？就是你与世界的关系。也就是我们经常听到的「人生使命」，你来到这个世界是为了什么？你能为别人，为社会，为整个人类带来什么？这个世界会因为你而有什么不同？&lt;/p&gt;
+
+&lt;p&gt;在这个层次，所有的思考，都围绕着2个字&lt;strong&gt;「利他」，我如何选择能够让更多的人获益？如何才能够推动时代的进步？如果能达成这些，我愿意用我的所有来交换，包括我的生命。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;当然，这里还是要重申一下，&lt;strong&gt;理解层次的逐级上升，不能脱离低层次而单独存在高层次，&lt;/strong&gt;不然就是空中楼阁，变得不切实际，这里的「精神」就会变成一种「情怀」了。&lt;/p&gt;
+
+&lt;p&gt;「精神」层次一定要有「身份」层次的支撑，换句话说，如果你在身份层次，想不清楚自己要成为谁，可以试着来到「精神」层次，想想你能为这个世界做些什么？可以不用那么大，哪怕只是在某一方面，能帮助到为数不多的人，那一方面是什么？&lt;/p&gt;
+
+&lt;p&gt;也许，这个就能成为你的人生使命，然后再去思考，什么样的身份能够更好的帮你完成这个使命？&lt;/p&gt;
+
+&lt;p&gt;你就能想清楚身份层次的问题了。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;一旦踏入「精神」这个层次，我已经不知道能用什么语言来描述这类伟大的人物，唯有崇拜与敬仰，他们的名字就如同人类上空的繁星点点，照耀着人类的前行。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;请允许我借用其中的一位时代领袖「乔布斯」在1997年发布的一则苹果广告语来送给他们：&lt;strong&gt;活着就为改变世界。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;向那些疯狂的家伙们致敬，&lt;strong&gt;他们特立独行，他们桀骜不驯，他们惹是生非，他们格格不入，他们用与众不同的眼光看待事物，他们不喜欢墨守成规，他们也不愿安于现状。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;你可以赞美他们，引用他们，反对他们，质疑他们，颂扬或是诋毁他们，但唯独不能漠视他们。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;因为他们改变了事物。他们发明，他们想象，他们治愈，他们探索，他们创造，他们启迪，他们推动人类向前发展。也许，他们必需要疯狂。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;你能盯着白纸，就看到美妙的画作么？你能静静坐着，就听见美妙的歌曲么？你能凝视火星，就想到神奇的太空轮么？&lt;/p&gt;
+
+&lt;p&gt;我们为这些家伙制造良机。或许他们是别人眼里的疯子，但他们却是我们眼中的天才。&lt;strong&gt;因为只有那些疯狂到以为自己能够改变世界的人，才能真正地改变世界。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;希望未来的某一天，你也有机会成为改变世界的人，登上这片神圣的星空，引领着我们前进。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;回到最初的那个案例，如果是一个已经处在「精神」层次的人，遇到这样的情况会如何思考呢？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;我也不知道，就把这个问题留给这个时代的伟人吧。&lt;/p&gt;
+
+&lt;h3 id=&quot;如何才能成为顶级人才&quot;&gt;如何才能成为顶级人才？&lt;/h3&gt;
+
+&lt;p&gt;以上对人才的分类只是为了让你更容易理解「理解层次」这个概念而做的极端化划分，&lt;strong&gt;现实情况中每个人其实6个层次都会涉及，只是会主要集中在某些层次中思考，而忽略其他层次，甚至根本不知道某些层次的存在。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;那我们应该如何从低层次，不断晋升到一流人才，甚至是顶级人才呢？一级级往上打怪升级吗？不是。&lt;/p&gt;
+
+&lt;p&gt;当你处在低层次的时候，你的思维会被限制住，无法看到更多的可能性，就像处在「环境」层的人，经常抱怨而不自知，完全看不到上方还有「行为层」可以帮助自己改变现状；更看不到「能力层」里还有其他办法可以解决眼下的问题。&lt;/p&gt;
+
+&lt;p&gt;最可悲的人生，莫过于不知道自己不知道，还以为自己全都知道。&lt;/p&gt;
+
+&lt;p&gt;那应该怎么办呢？&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;答：直接让自己成为一流人才或者顶级人才。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;对，你需要对你的人生做顶层设计，从精神层开始往下规划：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-01-05-reprinte-enhancement/8.webp&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-01-05-reprinte-enhancement/8.webp&quot; alt=&quot;8.webp&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;从自己理想的「精神层次 / 身份层次」发展出来的人生规划，可能会与你的现实生活有很大的不同，将更具挑战性，但却能让你身心统一，因而能激发出你更强大的潜能。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-01-05-reprinte-enhancement/9.webp&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-01-05-reprinte-enhancement/9.webp&quot; alt=&quot;9.webp&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;愿你从今天开始，重新定义自己的人生！&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;这个过程可能会很困难，不会一蹴而就，也许需要你花费1天、1个月甚至1年的时间才能想清楚，然而你千万别放弃，努力去探寻。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;因为一旦想清楚，你的人生可能就会发生质的变化，我自己用了3年，希望你能比我更快！&lt;/strong&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sat, 05 Jan 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/01/05/reprinte-enhancement/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/01/05/reprinte-enhancement/</guid>
+        
+        <category>精进</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>「Docker」基础</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;本篇主要让大家知道如何安装、 Docker的基本知识点、Docker的基本使用&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;安装&quot;&gt;安装&lt;/h3&gt;
+
+&lt;h4 id=&quot;docker&quot;&gt;Docker&lt;/h4&gt;
+
+&lt;p&gt;由于我本机是mac系统，所以这里以mac安装为例子。其他系统的安装请自行查看&lt;a href=&quot;https://docs.docker.com/&quot;&gt;官方文档&amp;gt;&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;进入&lt;a href=&quot;https://docs.docker.com/docker-for-mac/install/&quot;&gt;官网下载页面&amp;gt;&lt;/a&gt;下载。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-11-12-docker-base/1.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-11-12-docker-base/1.jpg&quot; alt=&quot;1.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;下载完成后，直接安装。&lt;/p&gt;
+
+&lt;p&gt;完成后，直接打开Docker应用程序，如果这时顶部导航会显示Docker图标，说明已经启动了。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-11-12-docker-base/2.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-11-12-docker-base/2.jpg&quot; alt=&quot;2.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;查看版本，输入以下命令查看。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-11-12-docker-base/3.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-11-12-docker-base/3.jpg&quot; alt=&quot;3.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;kitematic&quot;&gt;Kitematic&lt;/h4&gt;
+
+&lt;p&gt;Kitematic是Docker可视化界面工具，可以很轻易的来管理容器。&lt;/p&gt;
+
+&lt;p&gt;点击顶部导航&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker&lt;/code&gt;图标，在下拉菜单中选中&lt;code class=&quot;highlighter-rouge&quot;&gt;Kitematic&lt;/code&gt;，即可下载。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-11-12-docker-base/4.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-11-12-docker-base/4.jpg&quot; alt=&quot;4.jpg&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;下载完成，直接解压并拖到应用程序即可。&lt;/p&gt;
+
+&lt;h3 id=&quot;基本概念&quot;&gt;基本概念&lt;/h3&gt;
+
+&lt;h4 id=&quot;镜像image&quot;&gt;镜像（Image）&lt;/h4&gt;
+
+&lt;p&gt;镜像是一个特殊的文件系统，除了提供容器运行时所需的程序、库、资源、配置等文件外，还包含了一些为运行时准备的一些配置参数（如匿名卷、环境变量、用户等）。镜像不包含任何动态数据，其内容在构建之后也不会被改变。&lt;/p&gt;
+
+&lt;h4 id=&quot;容器container&quot;&gt;容器（Container）&lt;/h4&gt;
+
+&lt;p&gt;镜像和容器的关系，就像是面向对象程序设计中的 类 和 实例 一样，镜像是静态的定义，容器是镜像运行时的实体。容器可以被创建、启动、停止、删除、暂停等。&lt;/p&gt;
+
+&lt;p&gt;容器的实质是进程，但与直接在宿主执行的进程不同，容器进程运行于属于自己的独立的 命名空间。因此容器可以拥有自己的 root 文件系统、自己的网络配置、自己的进程空间，甚至自己的用户 ID 空间。容器内的进程是运行在一个隔离的环境里，使用起来，就好像是在一个独立于宿主的系统下操作一样。这种特性使得容器封装的应用比直接在宿主运行更加安全。也因为这种隔离的特性，很多人初学 Docker 时常常会混淆容器和虚拟机。&lt;/p&gt;
+
+&lt;h4 id=&quot;仓库repository&quot;&gt;仓库（Repository）&lt;/h4&gt;
+
+&lt;p&gt;镜像构建完成后，可以很容易的在当前宿主机上运行，但是，如果需要在其它服务器上使用这个镜像，我们就需要一个集中的存储、分发镜像的服务，Docker Registry 就是这样的服务。&lt;/p&gt;
+
+&lt;p&gt;一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker Registry&lt;/code&gt;中可以包含多个仓库；每个仓库可以包含多个标签（Tag）；每个标签对应一个镜像。&lt;/p&gt;
+
+&lt;p&gt;通常，一个仓库会包含同一个软件不同版本的镜像，而标签就常用于对应该软件的各个版本。我们可以通过 &lt;仓库名&gt;:&lt;标签&gt; 的格式来指定具体是这个软件哪个版本的镜像。如果不给出标签，将以 latest 作为默认标签。&lt;/标签&gt;&lt;/仓库名&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;使用镜像&quot;&gt;使用镜像&lt;/h3&gt;
+
+&lt;h3 id=&quot;使用容器&quot;&gt;使用容器&lt;/h3&gt;
+
+</description>
+        <pubDate>Mon, 12 Nov 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/11/12/docker-base/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/11/12/docker-base/</guid>
+        
+        <category>docker</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>“老鼠试药”算法</title>
+        <description>&lt;p&gt;昨天在网上看到一个视频，了解到了一个很有趣的算法。&lt;/p&gt;
+
+&lt;h4 id=&quot;老鼠试药&quot;&gt;“老鼠试药”&lt;/h4&gt;
+
+&lt;p&gt;题目是这样的：有100瓶药水，只有1瓶毒药。毒性发作需要1周时间，请问至少需要机智老鼠才能用1周时间找到那瓶毒药。&lt;/p&gt;
+
+&lt;p&gt;我们可以用二进制来轻松的解决这个问题。&lt;/p&gt;
+
+&lt;p&gt;1、首先把100瓶药水按1到100排号。&lt;br /&gt;
+2、将序号转换为二进制。如下表所示：&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;药品序号&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;二进制&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;1&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;0000001&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;2&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;0000010&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;…&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;…&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;100&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;1100100&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;3、可以看到，这些二进制总共有7位，所以我们只需要7只老鼠，每只老鼠喝对应位置为1的毒药，如果老鼠死亡，则把对应位置为1，否则置为0。&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;位数1&lt;/td&gt;
+      &lt;td&gt;位数2&lt;/td&gt;
+      &lt;td&gt;位数3&lt;/td&gt;
+      &lt;td&gt;位数4&lt;/td&gt;
+      &lt;td&gt;位数5&lt;/td&gt;
+      &lt;td&gt;位数6&lt;/td&gt;
+      &lt;td&gt;位数7&lt;/td&gt;
+      &lt;td&gt;对应序号&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;.&lt;/td&gt;
+      &lt;td&gt;.&lt;/td&gt;
+      &lt;td&gt;.&lt;/td&gt;
+      &lt;td&gt;.&lt;/td&gt;
+      &lt;td&gt;.&lt;/td&gt;
+      &lt;td&gt;.&lt;/td&gt;
+      &lt;td&gt;.&lt;/td&gt;
+      &lt;td&gt;.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;100&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;1号老鼠&lt;/td&gt;
+      &lt;td&gt;2号老鼠&lt;/td&gt;
+      &lt;td&gt;3号老鼠&lt;/td&gt;
+      &lt;td&gt;4号老鼠&lt;/td&gt;
+      &lt;td&gt;5号老鼠&lt;/td&gt;
+      &lt;td&gt;6号老鼠&lt;/td&gt;
+      &lt;td&gt;7号老鼠&lt;/td&gt;
+      &lt;td&gt;-&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;举个例子，如果第3，4，7号到老鼠死亡，则可以算出二进制数为0011001的药瓶有毒，也即是25号。&lt;/p&gt;
+
+&lt;h4 id=&quot;奇数枪毙&quot;&gt;“奇数枪毙”&lt;/h4&gt;
+
+&lt;p&gt;有100个人按序号排列，从序号1开始依次报数，念到奇数的枪毙。剩余的人重新按序号排列，依次执行。问如果想活命，应该一开始站在哪一序号？&lt;/p&gt;
+
+&lt;p&gt;这个问题我们依旧可以用二进制来解决这个问题。&lt;/p&gt;
+
+&lt;p&gt;1、先列出100个人对应序号的二进制&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;序号&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;二进制&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;1&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;0000001&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;2&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;0000010&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;…&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;…&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;100&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;1100100&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;2、从这里可以看出，末位为1的人需要被枪毙。&lt;br /&gt;
+3、接下来剩余的人都是末位为0，由于需要重新排序，新的序号刚好是去掉末位后的数。所以我们把那些人到末位去掉，再按照第2步的逻辑枪毙，以此类推。&lt;br /&gt;
+4、所以我们得出1000000会是最后胜出的人，即一开始序号为64的人。&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 29 Oct 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/10/29/mouse-algorithm/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/10/29/mouse-algorithm/</guid>
+        
+        <category>算法</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>swoole 学习笔记</title>
+        <description>&lt;p&gt;最近需要用到多进程处理任务，先学习一番。&lt;/p&gt;
+
+&lt;h3 id=&quot;安装&quot;&gt;安装&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pecl &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;swoole
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;安装遇到的问题&quot;&gt;安装遇到的问题&lt;/h5&gt;
+
+&lt;p&gt;我选择了支持openssl，安装过程中遇到了两个错误&lt;/p&gt;
+
+&lt;p&gt;1、 &lt;code class=&quot;highlighter-rouge&quot;&gt;fatal error: 'openssl/ssl.h' file not found&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;解决方法： &lt;br /&gt;
+一般用brew安装的软件，都会把需要include的文件自动放到/usr/local/include里的，但是不知为什么安装openssl的时候没有放到那里。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;cp -R /usr/local/opt/openssl/include/openssl /usr/local/include&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ln -s /usr/local/opt/openssl/include/openssl /usr/local/include/openssl&lt;/code&gt;（推荐）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;2、&lt;code class=&quot;highlighter-rouge&quot;&gt;Enable openssl support, require openssl library.&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;查看 openssl 信息 &lt;code class=&quot;highlighter-rouge&quot;&gt;brew info openssl&lt;/code&gt;，可以查看一下信息&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;For compilers to find openssl you may need to &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;:
+  &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;LDFLAGS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;-L/usr/local/opt/openssl/lib&quot;&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CPPFLAGS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;-I/usr/local/opt/openssl/include&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;添加环境变量即可修复这个问题。&lt;/p&gt;
+
+&lt;h3 id=&quot;多进程&quot;&gt;多进程&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://wiki.swoole.com/wiki/page/p-process.html&quot;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$url_arr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$url_arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;www.baidu.com?wd=&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$workers&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// 创建子进程&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;$process&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;swoole_process&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'getContents'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;$pid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$process&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;// 向管道内写入数据&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;$process&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;$workers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$pid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$process&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;//主进程数据结果&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$workers&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$process&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$process&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;PHP_EOL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getContents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;swoole_process&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$worker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// 从管道中读取数据&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$worker&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;global&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$url_arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$res1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;execCurl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$url_arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]);&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;rand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$res2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;execCurl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$url_arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$res1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;PHP_EOL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$res2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;execCurl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;handle &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$url&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot; finished&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;////回收子进程&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$workers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)){&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$workers&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$pid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$worker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$ret&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;swoole_process&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;wait&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ret&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;worker exit: &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$pid&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;unset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$workers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$pid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Mon, 15 Oct 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/10/15/swoole-note/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/10/15/swoole-note/</guid>
+        
+        <category>php</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>『构建高性能web站点』浏览器缓存</title>
+        <description>&lt;p&gt;我们可以通过http头信息来实现浏览器缓存。&lt;/p&gt;
+
+&lt;h3 id=&quot;last-modified&quot;&gt;Last-Modified&lt;/h3&gt;
+
+&lt;p&gt;这种信息需要后台来判定是否过期。流程如下：&lt;/p&gt;
+
+&lt;script src=&quot;/assets/js/mermaid.js&quot;&gt;&lt;/script&gt;
+&lt;div class=&quot;mermaid&quot;&gt;
+sequenceDiagram;
+    participant 客户端
+    participant 服务端
+    客户端-&amp;gt;服务端: 请求静态文件
+    服务端-&amp;gt;客户端: 返回头信息 Last-Modified: {最后修改时间} GMT
+    Note left of 客户端: 确认文件是否过期
+    客户端-&amp;gt;服务端: 返回头信息If-Modified-Since: {上一步获取的最后修改时间} GMT 
+    Note right of 服务端: 获取客户端的头信息，根据设定的过期时间判断
+    服务端-&amp;gt;客户端: 返回静态文件是否过期
+&lt;/div&gt;
+
+&lt;p&gt;缺点：需要请求服务器，确认是否过期&lt;/p&gt;
+
+&lt;h3 id=&quot;etag&quot;&gt;ETag&lt;/h3&gt;
+
+&lt;p&gt;同样需要后台来判定是否过期。流程如下：&lt;/p&gt;
+
+&lt;script src=&quot;/assets/js/mermaid.js&quot;&gt;&lt;/script&gt;
+&lt;div class=&quot;mermaid&quot;&gt;
+sequenceDiagram;
+    participant 客户端
+    participant 服务端
+    客户端-&amp;gt;服务端: 请求静态文件
+    服务端-&amp;gt;客户端: 返回头信息 ETag: {根据文件内容计算出来的值} 
+    Note left of 客户端: 确认文件是否过期
+    客户端-&amp;gt;服务端: 返回头信息If-None-Match: {上一步获取的ETag值}
+    Note right of 服务端: 获取客户端的头信息，计算目前文件内容的ETag值做对比
+    服务端-&amp;gt;客户端: 返回静态文件是否过期
+&lt;/div&gt;
+
+&lt;p&gt;缺点：需要请求服务器，确认是否过期&lt;/p&gt;
+
+&lt;h3 id=&quot;expires&quot;&gt;Expires&lt;/h3&gt;
+
+&lt;p&gt;这种方式可以彻底消灭服务器请求，流程如下：&lt;/p&gt;
+
+&lt;script src=&quot;/assets/js/mermaid.js&quot;&gt;&lt;/script&gt;
+&lt;div class=&quot;mermaid&quot;&gt;
+sequenceDiagram;
+    participant 客户端
+    participant 服务端
+    客户端-&amp;gt;服务端: 请求静态文件
+    服务端-&amp;gt;客户端: 返回头信息 Expires: {过期时间} GMT
+    loop 判断过期
+        客户端-&amp;gt;客户端: 根据Expires过期时间判断
+    end
+&lt;/div&gt;
+
+&lt;p&gt;缺点：依赖本地时间、无法实时更新静态文件内容。&lt;/p&gt;
+
+&lt;h3 id=&quot;cache-control&quot;&gt;Cache-control&lt;/h3&gt;
+
+&lt;p&gt;HTTP1.1 的Cache-control可以弥补Expires依赖本地时间的不足。格式如下：&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Cache-control: max-age=&lt;span class=&quot;nt&quot;&gt;&amp;lt;second&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;max-age&lt;/code&gt;指定了缓存过期的相对时间，单位秒，并且是相对于本地时间。浏览器根据本地当前时间是否大于max-age+上次访问时间&lt;/p&gt;
+
+&lt;p&gt;流程如下：&lt;/p&gt;
+
+&lt;script src=&quot;/assets/js/mermaid.js&quot;&gt;&lt;/script&gt;
+&lt;div class=&quot;mermaid&quot;&gt;
+sequenceDiagram;
+    participant 客户端
+    participant 服务端
+    客户端-&amp;gt;服务端: 请求静态文件
+    服务端-&amp;gt;客户端: 返回头信息 Expires: {过期时间} GMT、Cache-control: max-age={有效时长}
+    loop 判断过期
+        客户端-&amp;gt;客户端: 优先判断max-age
+    end
+&lt;/div&gt;
+</description>
+        <pubDate>Thu, 11 Oct 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/10/11/bhpws-brower-cache/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/10/11/bhpws-brower-cache/</guid>
+        
+        <category>web开发</category>
+        
+        
+      </item>
+    
+  </channel>
+</rss>

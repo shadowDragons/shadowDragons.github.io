@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一个小白的成长学习历程">
+    <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
+    <meta name="theme-color" content="#000000">
+    
+    <title>加密散列-PIPEMD160 - ben blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2018/04/05/ripemd160/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- mermaid CSS -->
+    <link rel="stylesheet" href="/assets/css/mermaid.css">
+
+    <script type="text/javascript"
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Ben Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/book/">Book</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/">Tags</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg.jpg')
+    }
+
+    
+</style>
+<header class="intro-header" >
+    <div class="header-mask"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#区块链" title="区块链">区块链</a>
+                        
+                        <a class="tag" href="/tags/#密码学" title="密码学">密码学</a>
+                        
+                    </div>
+                    <h1>加密散列-PIPEMD160</h1>
+                    
+                    
+                    <h2 class="subheading"></h2>
+                    
+                    <span class="meta">Posted by Ben Blog on April 5, 2018</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<blockquote>
+  <p>RIPEMD (RACE原始完整性校验讯息摘要)是一种加密哈希函数，由 鲁汶大学 Hans Dobbertin,Antoon Bosselaers 和 Bart Prenee组成的COSIC 研究小组发布于1996年。 RIPEMD是以MD4为基础原则所设计的 ，而且其表现与更有名的SHA-1类似.</p>
+</blockquote>
+
+<p>RIPEMD-160是以原始版RIPEMD所改进的160位元版本，而且是RIPEMD系列中最常见的版本。 RIPEMD-160是设计给学术社群所使用的，刚好相对于 国家安全局 所设计 SHA-1 和 SHA-2 算法。 另一方面，RIPEMD-160比SHA-1较少使用，所以可能造成RIPEMD-160比SHA还不常被审查。另外，RIPEMD-160并没有任何专利所限制。</p>
+
+<p>同时也存在着128,256,320位元的这种算法，称为RIPEMD-128,RIPEMD-256和RIPEMD-320。 128位版本的用意仅是取代原始版RIPEMD，因为原版也同样是128位元，并且被发现有潜在的安全问题。 而256和320位版本只有减少碰撞发生的机率，但没有提升安全等级(以 preimage举例)。不过，RIPEMD的设计者们没有真正设计256和320位元这2种标准，他们只是在128位元和160位元的基础上，修改了初始参数和s-box来达到输出为256和320位元。所以，256位的强度和128相当，而320位的强度和160位相当。且RIPEMD建立在md的基础之上，所以其添加数据的方式和md5完全一样。</p>
+
+<h3 id="伪代码">伪代码</h3>
+
+<p>原始消息分为N个512bit的消息块。每个消息块分成16个32bit。</p>
+
+<p>1.补位  <br />
+由于必须分成n个512bit块，所以必须进行补位。  <br />
+最后还需要预留64bit记录消息块的长度，所以消息块的长度不能大于2^64</p>
+
+<p>补位使其长度 <script type="math/tex">l mod 512 = 448</script></p>
+
+<p>先补一个1，然后再补0，直到长度满足对512取模后余数是448。总而言之，补位是至少补一位，最多补512位。以信息“abc”为例显示补位的过程。  <br />
+原始信息：01100001 01100010 01100011  <br />
+补位第一步：0110000101100010 01100011 1  <br />
+首先补一个“1”  <br />
+补位第二步：0110000101100010 01100011 10…..0  <br />
+然后补423个“0”  <br />
+我们可以把最后补位完成后的数据用16进制写成下面的样子  <br />
+61626380 0000000000000000 00000000  <br />
+00000000 0000000000000000 00000000  <br />
+00000000 0000000000000000 00000000  <br />
+00000000 00000000</p>
+
+<p>2.补长度  <br />
+所谓的补长度是将原始数据的长度补到已经进行了补位操作的消息后面。通常用一个64位的数据来表示原始消息的长度。如果消息长度不大于2^64，那么第一个字就是0。在进行了补长度的操作以后，整个消息就变成下面这样了（16进制格式）</p>
+
+<p>61626380 0000000000000000 00000000  <br />
+00000000 0000000000000000 00000000  <br />
+00000000 0000000000000000 00000000  <br />
+00000000 0000000000000000 00000018</p>
+
+<p>如果原始的消息长度超过了512，我们需要将它补成512的倍数。然后我们把整个消息分成一个一个512位的数据块，分别处理每一个数据块，从而得到消息摘要。</p>
+
+<p>2.函数定义</p>
+
+<p>f(j, x, y, z) = x XOR y XOR z (0 &lt;= j &lt;= 15)   <br />
+f(j, x, y, z) = (x AND y) OR (NOT(x) AND z) (16 &lt;= j &lt;= 31)   <br />
+f(j, x, y, z) = (x OR NOT(y)) XOR z (32 &lt;= j &lt;= 47)   <br />
+f(j, x, y, z) = (x AND z) OR (y AND NOT(z)) (48 &lt;= j &lt;= 63)   <br />
+f(j, x, y, z) = x XOR (y OR NOT(z)) (64 &lt;= j &lt;= 79)</p>
+
+<p>3.常量定义</p>
+
+<p>added constants (hexadecimal)</p>
+
+<p>K(j) = 0x00000000 (0 &lt;= j &lt;= 15)   <br />
+K(j) = 0x5A827999 (16 &lt;= j &lt;= 31) int(2<strong>30 x sqrt(2))   <br />
+K(j) = 0x6ED9EBA1 (32 &lt;= j &lt;= 47) int(2</strong>30 x sqrt(3))   <br />
+K(j) = 0x8F1BBCDC (48 &lt;= j &lt;= 63) int(2<strong>30 x sqrt(5))   <br />
+K(j) = 0xA953FD4E (64 &lt;= j &lt;= 79) int(2</strong>30 x sqrt(7))   <br />
+K’(j) = 0x50A28BE6 (0 &lt;= j &lt;= 15) int(2<strong>30 x cbrt(2))   <br />
+K’(j) = 0x5C4DD124 (16 &lt;= j &lt;= 31) int(2</strong>30 x cbrt(3))   <br />
+K’(j) = 0x6D703EF3 (32 &lt;= j &lt;= 47) int(2<strong>30 x cbrt(5))   <br />
+K’(j) = 0x7A6D76E9 (48 &lt;= j &lt;= 63) int(2</strong>30 x cbrt(7))   <br />
+K’(j) = 0x00000000 (64 &lt;= j &lt;= 79)</p>
+
+<p>selection of message word</p>
+
+<p>r(j) = j (0 &lt;= j &lt;= 15)   <br />
+r(16..31) = 7, 4, 13, 1, 10, 6, 15, 3, 12, 0, 9, 5, 2, 14, 11, 8   <br />
+r(32..47) = 3, 10, 14, 4, 9, 15, 8, 1, 2, 7, 0, 6, 13, 11, 5, 12   <br />
+r(48..63) = 1, 9, 11, 10, 0, 8, 12, 4, 13, 3, 7, 15, 14, 5, 6, 2   <br />
+r(64..79) = 4, 0, 5, 9, 7, 12, 2, 10, 14, 1, 3, 8, 11, 6, 15, 13   <br />
+r’(0..15) = 5, 14, 7, 0, 9, 2, 11, 4, 13, 6, 15, 8, 1, 10, 3, 12   <br />
+r’(16..31)= 6, 11, 3, 7, 0, 13, 5, 10, 14, 15, 8, 12, 4, 9, 1, 2   <br />
+r’(32..47)= 15, 5, 1, 3, 7, 14, 6, 9, 11, 8, 12, 2, 10, 0, 4, 13   <br />
+r’(48..63)= 8, 6, 4, 1, 3, 11, 15, 0, 5, 12, 2, 13, 9, 7, 10, 14   <br />
+r’(64..79)= 12, 15, 10, 4, 1, 5, 8, 7, 6, 2, 13, 14, 0, 3, 9, 11</p>
+
+<p>amount for rotate left (rol)</p>
+
+<p>s(0..15)  = 11, 14, 15, 12, 5, 8, 7, 9, 11, 13, 14, 15, 6, 7, 9, 8   <br />
+s(16..31) = 7, 6, 8, 13, 11, 9, 7, 15, 7, 12, 15, 9, 11, 7, 13, 12   <br />
+s(32..47) = 11, 13, 6, 7, 14, 9, 13, 15, 14, 8, 13, 6, 5, 12, 7, 5   <br />
+s(48..63) = 11, 12, 14, 15, 14, 15, 9, 8, 9, 14, 5, 6, 8, 6, 5, 12   <br />
+s(64..79) = 9, 15, 5, 11, 6, 8, 13, 12, 5, 12, 13, 14, 11, 8, 5, 6   <br />
+s’(0..15) = 8, 9, 9, 11, 13, 15, 15, 5, 7, 7, 8, 11, 14, 14, 12, 6   <br />
+s’(16..31)= 9, 13, 15, 7, 12, 8, 9, 11, 7, 7, 12, 7, 6, 15, 13, 11   <br />
+s’(32..47)= 9, 7, 15, 11, 8, 6, 6, 14, 12, 13, 5, 14, 13, 13, 7, 5   <br />
+s’(48..63)= 15, 5, 8, 11, 14, 14, 6, 14, 6, 9, 12, 9, 12, 5, 15, 8   <br />
+s’(64..79)= 8, 5, 12, 9, 12, 5, 14, 6, 8, 13, 6, 5, 15, 13, 11, 11</p>
+
+<p>4.哈希初值</p>
+
+<p>这些初值是对自然数中前8个质数3、5、7、11等的平方根的小数部分取前32bit而来。</p>
+
+<p>h0 = 0x67452301   <br />
+h1 = 0xEFCDAB89   <br />
+h2 = 0x98BADCFE   <br />
+h3 = 0x10325476   <br />
+h4 = 0xC3D2E1F0</p>
+
+<h3 id="实现伪代码">实现伪代码</h3>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#It is assumed that the message after padding consists of t 16-word blocks</span>
+<span class="c1">#that will be denoted with X[i][j], with 0 &lt;= i &lt;= t-1 and 0 &lt;= j &lt;= 15. </span>
+<span class="c1">#The symbol [+] denotes addition modulo 2**32 and rol_s denotes cyclic left</span>
+<span class="c1">#shift (rotate) over s positions.</span>
+
+<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span> <span class="nx">to</span> <span class="nx">t</span><span class="o">-</span><span class="mi">1</span> <span class="p">{</span>
+    <span class="nx">A</span> <span class="o">:=</span> <span class="nx">h0</span><span class="p">;</span> <span class="nx">B</span> <span class="o">:=</span> <span class="nx">h1</span><span class="p">;</span> <span class="nx">C</span> <span class="o">:=</span> <span class="nx">h2</span><span class="p">;</span> <span class="nx">D</span> <span class="o">=</span> <span class="nx">h3</span><span class="p">;</span> <span class="nx">E</span> <span class="o">=</span> <span class="nx">h4</span><span class="p">;</span>
+    <span class="nx">A</span><span class="s1">' := h0; B'</span> <span class="o">:=</span> <span class="nx">h1</span><span class="p">;</span> <span class="nx">C</span><span class="s1">' := h2; D'</span> <span class="o">=</span> <span class="nx">h3</span><span class="p">;</span> <span class="nx">E</span><span class="s1">' = h4;
+    for j := 0 to 79 {
+        T := rol_s(j)(A [+] f(j, B, C, D) [+] X[i][r(j)] [+] K(j)) [+] E;
+        A := E; E := D; D := rol_10(C); C := B; B := T;
+        T := rol_s'</span><span class="p">(</span><span class="nx">j</span><span class="p">)(</span><span class="nx">A</span><span class="s1">' [+] f(79-j, B'</span><span class="p">,</span> <span class="nx">C</span><span class="s1">', D'</span><span class="p">)</span> <span class="p">[</span><span class="o">+</span><span class="p">]</span> <span class="nx">X</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">r</span><span class="s1">'(j)] [+] K'</span><span class="p">(</span><span class="nx">j</span><span class="p">))</span> <span class="p">[</span><span class="o">+</span><span class="p">]</span> <span class="nx">E</span><span class="s1">';
+        A'</span> <span class="o">:=</span> <span class="nx">E</span><span class="s1">'; E'</span> <span class="o">:=</span> <span class="nx">D</span><span class="s1">'; D'</span> <span class="o">:=</span> <span class="nx">rol_10</span><span class="p">(</span><span class="nx">C</span><span class="s1">'); C'</span> <span class="o">:=</span> <span class="nx">B</span><span class="s1">'; B'</span> <span class="o">:=</span> <span class="nx">T</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">T</span> <span class="o">:=</span> <span class="nx">h1</span> <span class="p">[</span><span class="o">+</span><span class="p">]</span> <span class="nx">C</span> <span class="p">[</span><span class="o">+</span><span class="p">]</span> <span class="nx">D</span><span class="s1">'; h1 := h2 [+] D [+] E'</span><span class="p">;</span> <span class="nx">h2</span> <span class="o">:=</span> <span class="nx">h3</span> <span class="p">[</span><span class="o">+</span><span class="p">]</span> <span class="nx">E</span> <span class="p">[</span><span class="o">+</span><span class="p">]</span> <span class="nx">A</span><span class="s1">';
+    h3 := h4 [+] A [+] B'</span><span class="p">;</span> <span class="nx">h4</span> <span class="o">:=</span> <span class="nx">h0</span> <span class="p">[</span><span class="o">+</span><span class="p">]</span> <span class="nx">B</span> <span class="p">[</span><span class="o">+</span><span class="p">]</span> <span class="nx">C</span><span class="err">'</span><span class="p">;</span> <span class="nx">h0</span> <span class="o">:=</span> <span class="nx">T</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1"># 输出结果</span>
+<span class="nx">digest</span> <span class="o">=</span> <span class="nb">hash</span> <span class="o">=</span> <span class="nx">h0</span> <span class="nx">append</span> <span class="nx">h1</span> <span class="nx">append</span> <span class="nx">h2</span> <span class="nx">append</span> <span class="nx">h3</span> <span class="nx">append</span> <span class="nx">h4</span>
+</code></pre></div></div>
+
+<h3 id="输出值">输出值</h3>
+
+<p>160bit的二进制值或者40个16进制的ascii码。</p>
+
+
+                <hr style="visibility: hidden;">
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2018/04/05/merkle-tree/" data-toggle="tooltip" data-placement="top" title="Merkle树">
+                        Previous<br>
+                        <span>Merkle树</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2018/04/05/sha1/" data-toggle="tooltip" data-placement="top" title="加密散列-sha1">
+                        Next<br>
+                        <span>加密散列-sha1</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+
+
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+        				
+                            
+                				<a href="/tags/#php" title="php" rel="11">
+                                    php
+                                </a>
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#算法" title="算法" rel="7">
+                                    算法
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#数据结构" title="数据结构" rel="2">
+                                    数据结构
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#分布式" title="分布式" rel="2">
+                                    分布式
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#区块链" title="区块链" rel="18">
+                                    区块链
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#比特币" title="比特币" rel="7">
+                                    比特币
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#密码学" title="密码学" rel="6">
+                                    密码学
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#以太坊" title="以太坊" rel="4">
+                                    以太坊
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#http" title="http" rel="12">
+                                    http
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#超级账本" title="超级账本" rel="8">
+                                    超级账本
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#fabric" title="fabric" rel="8">
+                                    fabric
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#MYSQL" title="MYSQL" rel="3">
+                                    MYSQL
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#web开发" title="web开发" rel="5">
+                                    web开发
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#计算机" title="计算机" rel="3">
+                                    计算机
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#转载" title="转载" rel="3">
+                                    转载
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#精进" title="精进" rel="3">
+                                    精进
+                                </a>
+                            
+        				
+                            
+        				
+        			</div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    
+
+
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/shadowdragons">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Ben Blog 2019
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async('/js/jquery.tagcloud.js',function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    if (document.domain == 'tudool.com' || document.domain == 'www.tudool.com') {
+        var _gaId = 'UA-89143952-3';
+        var _gaDomain = 'www.tudool.com';
+    } else {
+        var _gaId = 'UA-89143952-2';
+        var _gaDomain = 'shadowdragons.github.io';
+    }
+
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    if (document.domain == 'tudool.com' || document.domain == 'www.tudool.com') {
+        var _baId = '9a5ff48930575f65a9958d6277b9e28e';
+    } else {
+        var _baId = '2a8326534823f90fa4eef816aea2ef08';
+    }
+    
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
