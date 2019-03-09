@@ -5,9 +5,144 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 24 Feb 2019 01:13:00 +0800</pubDate>
-    <lastBuildDate>Sun, 24 Feb 2019 01:13:00 +0800</lastBuildDate>
+    <pubDate>Sat, 09 Mar 2019 20:30:06 +0800</pubDate>
+    <lastBuildDate>Sat, 09 Mar 2019 20:30:06 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
+    
+      <item>
+        <title>Elasticsearch6.x-xpack破解</title>
+        <description>&lt;h3 id=&quot;去掉license校验&quot;&gt;去掉license校验&lt;/h3&gt;
+
+&lt;p&gt;这里有我之前已经破解的6.5.4的包，有需要可以直接&lt;a href=&quot;https://download.csdn.net/download/junbin007/11006208&quot;&gt;下载&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;下载&lt;a href=&quot;https://github.com/deathmarine/Luyten/releases&quot;&gt;luyten&lt;/a&gt;反编译JAVA工具&lt;/p&gt;
+
+&lt;p&gt;用&lt;code class=&quot;highlighter-rouge&quot;&gt;luyent&lt;/code&gt;打开&lt;code class=&quot;highlighter-rouge&quot;&gt;Elasticsearch&lt;/code&gt;目录下的&lt;code class=&quot;highlighter-rouge&quot;&gt;modules/x-pack-core/x-pack-core-x.x.x.jar&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;找到 &lt;code class=&quot;highlighter-rouge&quot;&gt;org.elasticsearch.license.LicenseVerifier&lt;/code&gt;文件，提取出来做以下修改：&lt;br /&gt;
+LicenseVerifier 中有两个静态方法，这就是验证授权文件是否有效的方法，我们把它修改为全部返回true.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;org&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;elasticsearch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;license&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.nio.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.elasticsearch.common.bytes.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.security.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.elasticsearch.common.xcontent.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.apache.lucene.util.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.elasticsearch.core.internal.io.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.io.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LicenseVerifier&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;verifyLicense&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;License&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;license&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;encryptedPublicKeyData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;verifyLicense&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;License&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;license&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;打开&lt;code class=&quot;highlighter-rouge&quot;&gt;org.elasticsearch.xpack.core.XPackBuild&lt;/code&gt;文件，提取出来做以下修改：&lt;br /&gt;
+XPackBuild 中最后一个静态代码块中 try的部分全部删除，这部分会验证jar包是否被修改.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;org&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;elasticsearch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;xpack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;core&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.elasticsearch.common.io.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.net.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.elasticsearch.common.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.nio.file.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.io.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.jar.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;XPackBuild&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;XPackBuild&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CURRENT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shortHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@SuppressForbidden&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reason&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;looks up path of xpack.jar directly&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Path&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getElasticsearchCodebase&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;URL&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;XPackBuild&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getProtectionDomain&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getCodeSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLocation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PathUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toURI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;URISyntaxException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bogus&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RuntimeException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bogus&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;XPackBuild&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shortHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;shortHash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shortHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;shortHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;shortHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Path&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getElasticsearchCodebase&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shortHash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;nl&quot;&gt;Label_0157:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;shortHash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Unknown&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Unknown&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;CURRENT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;XPackBuild&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shortHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;进入上面两个文件的目录，编译这两个修改的文件&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;javac &lt;span class=&quot;nt&quot;&gt;-cp&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;.:{es的源码路径}/modules/x-pack-core/x-pack-core-x.x.x.jar:{es的源码路径}/lib/*&quot;&lt;/span&gt; LicenseVerifier.java
+javac &lt;span class=&quot;nt&quot;&gt;-cp&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;.:{es的源码路径}/modules/x-pack-core/x-pack-core-x.x.x.jar:{es的源码路径}/lib/*&quot;&lt;/span&gt; XPackBuild.java
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;编译后会生成两个文件 &lt;code class=&quot;highlighter-rouge&quot;&gt;LicenseVerifier.class&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;XPackBuild.class&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;解压&lt;code class=&quot;highlighter-rouge&quot;&gt;{es的源码路径}/modules/x-pack-core/x-pack-core-x.x.x.jar&lt;/code&gt;，进入解压后路径，然后将上面生成的两个文件覆盖进去，然后执行打包命令&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ..
+jar &lt;span class=&quot;nt&quot;&gt;-cvf&lt;/span&gt; x-pack-core-x.x.x_new.jar &lt;span class=&quot;nt&quot;&gt;-C&lt;/span&gt; x-pack-core-x.x.x &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;将新包重命名为&lt;code class=&quot;highlighter-rouge&quot;&gt;x-pack-core-x.x.x.jar&lt;/code&gt;,然后覆盖&lt;code class=&quot;highlighter-rouge&quot;&gt;{es的源码路径}/modules/x-pack-core/x-pack-core-x.x.x.jar&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;这样我们的去掉license校验就完成了。&lt;/p&gt;
+
+&lt;h3 id=&quot;导入license&quot;&gt;导入license&lt;/h3&gt;
+
+&lt;p&gt;首先去&lt;a href=&quot;https://license.elastic.co/registration&quot;&gt;官网&lt;/a&gt;申请&lt;code class=&quot;highlighter-rouge&quot;&gt;license&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;打开&lt;code class=&quot;highlighter-rouge&quot;&gt;license&lt;/code&gt;文件，修改以下字段&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&quot;expiry_date_in_millis&quot;: {过期时间时间戳}
+&quot;max_nodes&quot;: {最大节点数}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;导入到elasticsearch&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -u elastic:elastic -XPUT ‘http://{es-ip}:{es-port}/_xpack/license’ -H “Content-Type: application/json” -d @/tmp/license.json
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;完成！&lt;/p&gt;
+</description>
+        <pubDate>Sat, 09 Mar 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/03/09/xpack-crack/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/03/09/xpack-crack/</guid>
+        
+        <category>Elastic</category>
+        
+        
+      </item>
     
       <item>
         <title>「转载」OAuth2.0</title>
@@ -1792,202 +1927,6 @@ sequenceDiagram;
         <guid isPermaLink="true">http://localhost:4000/2018/10/11/bhpws-brower-cache/</guid>
         
         <category>web开发</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>系统调用跟踪 - strace、dtruss</title>
-        <description>&lt;h3 id=&quot;linux工具strace&quot;&gt;linux工具strace&lt;/h3&gt;
-
-&lt;h5 id=&quot;语法&quot;&gt;语法&lt;/h5&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;strace [-dffhiqrtttTvVxx] [-a column] [-e expr] ... [-o file]
-
-              [-p pid] ... [-s strsize] [-u username] [-E var&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;val] ...
-
-              [command [arg ...]]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;或者&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;strace &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;expr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; ... &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-O&lt;/span&gt; overhead] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; sortby] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-E&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;var&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;val] ...
-
-              &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;command&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;arg ...]]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h5 id=&quot;参数说明&quot;&gt;参数说明&lt;/h5&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
--c 统计每一系统调用的所执行的时间,次数和出错的次数等.
-
--d 输出strace关于标准错误的调试信息.
-
--f 跟踪由fork调用所产生的子进程.
-
--ff 如果提供-o filename,则所有进程的跟踪结果输出到相应的filename.pid中,pid是各进程的进程号.
-
--F 尝试跟踪vfork调用.在-f时,vfork不被跟踪.
-
--h 输出简要的帮助信息.
-
--i 输出系统调用的入口指针.
-
--q 禁止输出关于脱离的消息.
-
--r 打印出相对时间关于每一个系统调用.
-
--t 在输出中的每一行前加上时间信息.
-
--tt 在输出中的每一行前加上时间信息,微秒级.
-
--ttt 微秒级输出,以秒了表示时间.
-
--T 显示每一调用所耗的时间.
-
--v 输出所有的系统调用.一些调用关于环境变量,状态,输入输出等调用由于使用频繁,默认不输出.
-
--V 输出strace的版本信息.
-
--x 以十六进制形式输出非标准字符串.
-
--xx 所有字符串以十六进制形式输出.
-
--a column 设置返回值的输出位置.默认 为40.
-
--e expr 指定一个表达式,用来控制如何跟踪.格式如下:
-
-[qualifier=][!]value1[,value2]...
-
-qualifier只能是 trace,abbrev,verbose,raw,signal,read,write其中之一.value是用来限定的符号或数字.默认的 qualifier是 trace.感叹号是否定符号.例如-eopen等价于 -e trace=open,表示只跟踪open调用.而-etrace!=open表示跟踪除了open以外的其它调用.有两个特殊的符号 all 和 none. 注意有些shell使用!来执行历史记录里的命令,所以要使用\\.
-
--e trace=set 只跟踪指定的系统调用.例如:-e trace=open,close,rean,write表示只跟踪这四个系统调用.默认的为set=all.
-
--e trace=file 只跟踪有关文件操作的系统调用.
-
--e trace=process 只跟踪有关进程控制的系统调用.
-
--e trace=network 跟踪与网络有关的所有系统调用.
-
--e strace=signal 跟踪所有与系统信号有关的系统调用.
-
--e trace=ipc 跟踪所有与进程通讯有关的系统调用.
-
--e abbrev=set 设定strace输出的系统调用的结果集.-v 等与 abbrev=none.默认为abbrev=all.
-
--e raw=set 将指定的系统调用的参数以十六进制显示.
-
--e signal=set 指定跟踪的系统信号.默认为all.如 signal=!SIGIO(或者signal=!io),表示不跟踪SIGIO信号.
-
--e read=set 输出从指定文件中读出的数据.例如-e read=3,5
-
--e write=set 输出写入到指定文件中的数据.
-
--o filename 将strace的输出写入文件filename
-
--p pid 跟踪指定的进程pid.
-
--s strsize 指定输出的字符串的最大长度.默认为32.文件名一直全部输出.
-
--u username 以username 的UID和GID执行被跟踪的命令.   
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h5 id=&quot;例子&quot;&gt;例子&lt;/h5&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://huoding.com/2013/10/06/288&quot;&gt;通过Strace定位故障原因&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;调试PHP进程并打印到日志文件&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;1、运行命令&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ps -ef|grep php-fpm|awk '{print &quot; -p &quot; $2&quot; -s 10000 -o /tmp/strace_&quot;$2&quot;.log&quot;}'|xargs sudo strace
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;2、执行代码&lt;/p&gt;
-
-&lt;p&gt;3、直接ctrl+c退出&lt;/p&gt;
-
-&lt;p&gt;输出结果如下：&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-10-07-strace、dtruss/1.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-10-07-strace、dtruss/1.png&quot; alt=&quot;1.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;通过查看进程调用，我们了解进程的执行顺序，调试数据库等连接的情况。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;统计PHP进程的系统调用并打印到日志文件&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;1、运行命令&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ps -ef|grep php-fpm|awk '{print &quot; -p &quot; $2&quot; -s 10000 -o /tmp/strace_&quot;$2&quot;.log&quot;}'|xargs sudo strace
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;2、执行代码&lt;/p&gt;
-
-&lt;p&gt;3、直接ctrl+c退出&lt;/p&gt;
-
-&lt;p&gt;输出结果如下：&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2018-10-07-strace、dtruss/2.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2018-10-07-strace、dtruss/1.png&quot; alt=&quot;2.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;通过统计系统调用，我们可以知道进程在哪些系统操作上调用、耗时较多，方便做优化。&lt;/p&gt;
-
-&lt;h3 id=&quot;mac工具dtruss&quot;&gt;mac工具dtruss&lt;/h3&gt;
-
-&lt;h5 id=&quot;语法-1&quot;&gt;语法&lt;/h5&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dtruss [-acdefholLs] [-t syscall] { -p PID | -n name | command | -W name }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h5 id=&quot;参数说明-1&quot;&gt;参数说明&lt;/h5&gt;
-
-&lt;p&gt;-a 输出全部&lt;/p&gt;
-
-&lt;p&gt;-b bufsize&lt;br /&gt;
-dynamic variable buffer size. Increase this if you notice
-dynamic variable drop errors. The default is “4m” for 4
-megabytes per CPU.&lt;/p&gt;
-
-&lt;p&gt;-c 输出系统调用数&lt;/p&gt;
-
-&lt;p&gt;-d 输出时间消耗&lt;/p&gt;
-
-&lt;p&gt;-e 输出剩余多少时间&lt;/p&gt;
-
-&lt;p&gt;-f 监视fork出来的进程调用&lt;/p&gt;
-
-&lt;p&gt;-l force printing of pid/lwpid per line&lt;/p&gt;
-
-&lt;p&gt;-L don’t print pid/lwpid per line&lt;/p&gt;
-
-&lt;p&gt;-n name 跟踪名为name的进程&lt;/p&gt;
-
-&lt;p&gt;-o 输出花在cpu上的时间&lt;/p&gt;
-
-&lt;p&gt;-s 输出栈跟踪&lt;/p&gt;
-
-&lt;p&gt;-p PID 监视某个pid&lt;/p&gt;
-
-&lt;p&gt;-t syscall 只监视某个系统调用&lt;/p&gt;
-
-&lt;h5 id=&quot;例子-1&quot;&gt;例子&lt;/h5&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dtruss &lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt;       &lt;span class=&quot;c&quot;&gt;# run and examine &quot;df -h&quot;  &lt;/span&gt;
-dtruss &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 1871     &lt;span class=&quot;c&quot;&gt;# examine PID 1871  &lt;/span&gt;
-dtruss &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;tar&lt;/span&gt;      &lt;span class=&quot;c&quot;&gt;# examine all processes called &quot;tar&quot;  &lt;/span&gt;
-dtruss &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; test.sh  &lt;span class=&quot;c&quot;&gt;# run test.sh and follow children&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;参考&quot;&gt;参考&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/qq_38712943/article/details/82149045&quot;&gt;strace&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/kfy2011/article/details/48102843&quot;&gt;系统调用跟踪命令strace和dtruss&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Sun, 07 Oct 2018 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/10/07/strace-dtruss/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/10/07/strace-dtruss/</guid>
-        
-        <category>工具</category>
         
         
       </item>

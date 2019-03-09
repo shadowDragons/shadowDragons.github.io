@@ -10,7 +10,7 @@
     <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
     <meta name="theme-color" content="#000000">
     
-    <title>「转载」JSON Web Token(JWT) - ben blog</title>
+    <title>Elasticsearch6.x-xpack破解 - ben blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2019/02/24/jwt/">
+    <link rel="canonical" href="http://localhost:4000/2019/03/09/xpack-crack/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -169,17 +169,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#web开发" title="web开发">web开发</a>
-                        
-                        <a class="tag" href="/tags/#转载" title="转载">转载</a>
+                        <a class="tag" href="/tags/#Elastic" title="Elastic">Elastic</a>
                         
                     </div>
-                    <h1>「转载」JSON Web Token(JWT)</h1>
+                    <h1>Elasticsearch6.x-xpack破解</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Ben Blog on February 24, 2019</span>
+                    <span class="meta">Posted by Ben Blog on March 9, 2019</span>
                 </div>
             </div>
         </div>
@@ -200,162 +198,129 @@
                 <!-- Multi-Lingual -->
                 
 
-				<blockquote>
-  <p>转载自<a href="http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html">JSON Web Token 入门教程</a></p>
-</blockquote>
+				<h3 id="去掉license校验">去掉license校验</h3>
 
-<p>JSON Web Token（缩写 JWT）是目前最流行的跨域认证解决方案，本文介绍它的原理和用法。</p>
+<p>这里有我之前已经破解的6.5.4的包，有需要可以直接<a href="https://download.csdn.net/download/junbin007/11006208">下载</a></p>
 
-<h3 id="跨域认证的问题">跨域认证的问题</h3>
+<p>下载<a href="https://github.com/deathmarine/Luyten/releases">luyten</a>反编译JAVA工具</p>
 
-<p>互联网服务离不开用户认证。一般流程是下面这样。</p>
+<p>用<code class="highlighter-rouge">luyent</code>打开<code class="highlighter-rouge">Elasticsearch</code>目录下的<code class="highlighter-rouge">modules/x-pack-core/x-pack-core-x.x.x.jar</code></p>
 
-<ol>
-  <li>用户向服务器发送用户名和密码。</li>
-  <li>服务器验证通过后，在当前对话（session）里面保存相关数据，比如用户角色、登录时间等等。</li>
-  <li>服务器向用户返回一个 session_id，写入用户的 Cookie。</li>
-  <li>用户随后的每一次请求，都会通过 Cookie，将 session_id 传回服务器。</li>
-  <li>服务器收到 session_id，找到前期保存的数据，由此得知用户的身份。</li>
-</ol>
+<p>找到 <code class="highlighter-rouge">org.elasticsearch.license.LicenseVerifier</code>文件，提取出来做以下修改：<br />
+LicenseVerifier 中有两个静态方法，这就是验证授权文件是否有效的方法，我们把它修改为全部返回true.</p>
 
-<p>这种模式的问题在于，扩展性（scaling）不好。单机当然没有问题，如果是服务器集群，或者是跨域的服务导向架构，就要求 session 数据共享，每台服务器都能够读取 session。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">org</span><span class="o">.</span><span class="na">elasticsearch</span><span class="o">.</span><span class="na">license</span><span class="o">;</span>
 
-<p>举例来说，A 网站和 B 网站是同一家公司的关联服务。现在要求，用户只要在其中一个网站登录，再访问另一个网站就会自动登录，请问怎么实现？</p>
+<span class="kn">import</span> <span class="nn">java.nio.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.elasticsearch.common.bytes.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.security.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.elasticsearch.common.xcontent.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.lucene.util.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.elasticsearch.core.internal.io.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.*</span><span class="o">;</span>
 
-<p>一种解决方案是 session 数据持久化，写入数据库或别的持久层。各种服务收到请求后，都向持久层请求数据。这种方案的优点是架构清晰，缺点是工程量比较大。另外，持久层万一挂了，就会单点失败。</p>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LicenseVerifier</span>
+<span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="nf">verifyLicense</span><span class="o">(</span><span class="kd">final</span> <span class="n">License</span> <span class="n">license</span><span class="o">,</span> <span class="kd">final</span> <span class="kt">byte</span><span class="o">[]</span> <span class="n">encryptedPublicKeyData</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
 
-<p>另一种方案是服务器索性不保存 session 数据了，所有数据都保存在客户端，每次请求都发回服务器。JWT 就是这种方案的一个代表。</p>
-
-<h3 id="jwt-的原理">JWT 的原理</h3>
-
-<p>JWT 的原理是，服务器认证以后，生成一个 JSON 对象，发回给用户，就像下面这样。</p>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"姓名"</span><span class="p">:</span><span class="w"> </span><span class="s2">"张三"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"角色"</span><span class="p">:</span><span class="w"> </span><span class="s2">"管理员"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"到期时间"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018年7月1日0点0分"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
-
-<p>以后，用户与服务端通信的时候，都要发回这个 JSON 对象。服务器完全只靠这个对象认定用户身份。为了防止用户篡改数据，服务器在生成这个对象的时候，会加上签名（详见后文）。</p>
-
-<p>服务器就不保存任何 session 数据了，也就是说，服务器变成无状态了，从而比较容易实现扩展。</p>
-
-<h3 id="jwt-的数据结构">JWT 的数据结构</h3>
-
-<p>实际的 JWT 大概就像下面这样。</p>
-
-<p><a href="/assets/img/posts/2019-02-24-jwt/1.jpg"><img src="/assets/img/posts/2019-02-24-jwt/1.jpg" alt="1.jpg" title="点击查看原图" /></a></p>
-
-<p>它是一个很长的字符串，中间用点（.）分隔成三个部分。注意，JWT 内部是没有换行的，这里只是为了便于展示，将它写成了几行。</p>
-
-<p>JWT 的三个部分依次如下。</p>
-
-<ul>
-  <li>Header（头部）</li>
-  <li>Payload（负载）</li>
-  <li>Signature（签名）</li>
-</ul>
-
-<p>写成一行，就是下面的样子。</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Header.Payload.Signature
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="nf">verifyLicense</span><span class="o">(</span><span class="kd">final</span> <span class="n">License</span> <span class="n">license</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></div></div>
 
-<p><a href="/assets/img/posts/2019-02-24-jwt/2.jpg"><img src="/assets/img/posts/2019-02-24-jwt/2.jpg" alt="2.jpg" title="点击查看原图" /></a></p>
+<p>打开<code class="highlighter-rouge">org.elasticsearch.xpack.core.XPackBuild</code>文件，提取出来做以下修改：<br />
+XPackBuild 中最后一个静态代码块中 try的部分全部删除，这部分会验证jar包是否被修改.</p>
 
-<p>下面依次介绍这三个部分。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">org</span><span class="o">.</span><span class="na">elasticsearch</span><span class="o">.</span><span class="na">xpack</span><span class="o">.</span><span class="na">core</span><span class="o">;</span>
 
-<h4 id="header">Header</h4>
+<span class="kn">import</span> <span class="nn">org.elasticsearch.common.io.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.net.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.elasticsearch.common.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.nio.file.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.jar.*</span><span class="o">;</span>
 
-<p>Header 部分是一个 JSON 对象，描述 JWT 的元数据，通常是下面的样子。</p>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">XPackBuild</span>
+<span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">XPackBuild</span> <span class="n">CURRENT</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">shortHash</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">date</span><span class="o">;</span>
 
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"alg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HS256"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"typ"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JWT"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
+    <span class="nd">@SuppressForbidden</span><span class="o">(</span><span class="n">reason</span> <span class="o">=</span> <span class="s">"looks up path of xpack.jar directly"</span><span class="o">)</span>
+    <span class="kd">static</span> <span class="n">Path</span> <span class="nf">getElasticsearchCodebase</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">URL</span> <span class="n">url</span> <span class="o">=</span> <span class="n">XPackBuild</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getProtectionDomain</span><span class="o">().</span><span class="na">getCodeSource</span><span class="o">().</span><span class="na">getLocation</span><span class="o">();</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">PathUtils</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">url</span><span class="o">.</span><span class="na">toURI</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="k">catch</span> <span class="o">(</span><span class="n">URISyntaxException</span> <span class="n">bogus</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="n">bogus</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
 
-<p>上面代码中，alg属性表示签名的算法（algorithm），默认是 HMAC SHA256（写成 HS256）；typ属性表示这个令牌（token）的类型（type），JWT 令牌统一写为JWT。</p>
+    <span class="n">XPackBuild</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">shortHash</span><span class="o">,</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">date</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">shortHash</span> <span class="o">=</span> <span class="n">shortHash</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">date</span> <span class="o">=</span> <span class="n">date</span><span class="o">;</span>
+    <span class="o">}</span>
 
-<p>最后，将上面的 JSON 对象使用 Base64URL 算法（详见后文）转成字符串。</p>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">shortHash</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">shortHash</span><span class="o">;</span>
+    <span class="o">}</span>
 
-<h5 id="payload">Payload</h5>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">date</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">date</span><span class="o">;</span>
+    <span class="o">}</span>
 
-<p>Payload 部分也是一个 JSON 对象，用来存放实际需要传递的数据。JWT 规定了7个官方字段，供选用。</p>
-
-<ul>
-  <li>iss (issuer)：签发人</li>
-  <li>exp (expiration time)：过期时间</li>
-  <li>sub (subject)：主题</li>
-  <li>aud (audience)：受众</li>
-  <li>nbf (Not Before)：生效时间</li>
-  <li>iat (Issued At)：签发时间</li>
-  <li>jti (JWT ID)：编号</li>
-</ul>
-
-<p>除了官方字段，你还可以在这个部分定义私有字段，下面就是一个例子。</p>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"sub"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234567890"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"admin"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
-
-<p>注意，JWT 默认是不加密的，任何人都可以读到，所以不要把秘密信息放在这个部分。</p>
-
-<p>这个 JSON 对象也要使用 Base64URL 算法转成字符串。</p>
-
-<h5 id="signature">Signature</h5>
-
-<p>Signature 部分是对前两部分的签名，防止数据篡改。</p>
-
-<p>首先，需要指定一个密钥（secret）。这个密钥只有服务器才知道，不能泄露给用户。然后，使用 Header 里面指定的签名算法（默认是 HMAC SHA256），按照下面的公式产生签名。</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HMACSHA256(
-  base64UrlEncode(header) + "." +
-  base64UrlEncode(payload),
-  secret)
+    <span class="kd">static</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">Path</span> <span class="n">path</span> <span class="o">=</span> <span class="n">getElasticsearchCodebase</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">shortHash</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="n">String</span> <span class="n">date</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="nl">Label_0157:</span> <span class="o">{</span>
+            <span class="n">shortHash</span> <span class="o">=</span> <span class="s">"Unknown"</span><span class="o">;</span>
+            <span class="n">date</span> <span class="o">=</span> <span class="s">"Unknown"</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">CURRENT</span> <span class="o">=</span> <span class="k">new</span> <span class="n">XPackBuild</span><span class="o">(</span><span class="n">shortHash</span><span class="o">,</span> <span class="n">date</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></div></div>
 
-<p>算出签名以后，把 Header、Payload、Signature 三个部分拼成一个字符串，每个部分之间用”点”（.）分隔，就可以返回给用户。</p>
+<p>进入上面两个文件的目录，编译这两个修改的文件</p>
 
-<h5 id="base64url">Base64URL</h5>
-
-<p>前面提到，Header 和 Payload 串型化的算法是 Base64URL。这个算法跟 Base64 算法基本类似，但有一些小的不同。</p>
-
-<p>JWT 作为一个令牌（token），有些场合可能会放到 URL（比如 api.example.com/?token=xxx）。Base64 有三个字符+、/和=，在 URL 里面有特殊含义，所以要被替换掉：=被省略、+替换成-，/替换成_ 。这就是 Base64URL 算法。</p>
-
-<h3 id="jwt-的使用方式">JWT 的使用方式</h3>
-
-<p>客户端收到服务器返回的 JWT，可以储存在 Cookie 里面，也可以储存在 localStorage。</p>
-
-<p>此后，客户端每次与服务器通信，都要带上这个 JWT。你可以把它放在 Cookie 里面自动发送，但是这样不能跨域，所以更好的做法是放在 HTTP 请求的头信息Authorization字段里面。</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Authorization: Bearer &lt;token&gt;
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>javac <span class="nt">-cp</span> <span class="s2">".:{es的源码路径}/modules/x-pack-core/x-pack-core-x.x.x.jar:{es的源码路径}/lib/*"</span> LicenseVerifier.java
+javac <span class="nt">-cp</span> <span class="s2">".:{es的源码路径}/modules/x-pack-core/x-pack-core-x.x.x.jar:{es的源码路径}/lib/*"</span> XPackBuild.java
 </code></pre></div></div>
 
-<p>另一种做法是，跨域的时候，JWT 就放在 POST 请求的数据体里面。</p>
+<p>编译后会生成两个文件 <code class="highlighter-rouge">LicenseVerifier.class</code>，<code class="highlighter-rouge">XPackBuild.class</code></p>
 
-<h3 id="jwt-的几个特点">JWT 的几个特点</h3>
+<p>解压<code class="highlighter-rouge">{es的源码路径}/modules/x-pack-core/x-pack-core-x.x.x.jar</code>，进入解压后路径，然后将上面生成的两个文件覆盖进去，然后执行打包命令</p>
 
-<ul>
-  <li>JWT 默认是不加密，但也是可以加密的。生成原始 Token 以后，可以用密钥再加密一次。</li>
-  <li>JWT 不加密的情况下，不能将秘密数据写入 JWT。</li>
-  <li>JWT 不仅可以用于认证，也可以用于交换信息。有效使用 JWT，可以降低服务器查询数据库的次数。</li>
-  <li>JWT 的最大缺点是，由于服务器不保存 session 状态，因此无法在使用过程中废止某个 token，或者更改 token 的权限。也就是说，一旦 JWT 签发了，在到期之前就会始终有效，除非服务器部署额外的逻辑。</li>
-  <li>JWT 本身包含了认证信息，一旦泄露，任何人都可以获得该令牌的所有权限。为了减少盗用，JWT 的有效期应该设置得比较短。对于一些比较重要的权限，使用时应该再次对用户进行认证。</li>
-  <li>为了减少盗用，JWT 不应该使用 HTTP 协议明码传输，要使用 HTTPS 协议传输。</li>
-</ul>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ..
+jar <span class="nt">-cvf</span> x-pack-core-x.x.x_new.jar <span class="nt">-C</span> x-pack-core-x.x.x <span class="nb">.</span>
+</code></pre></div></div>
 
-<p>六、参考链接</p>
+<p>将新包重命名为<code class="highlighter-rouge">x-pack-core-x.x.x.jar</code>,然后覆盖<code class="highlighter-rouge">{es的源码路径}/modules/x-pack-core/x-pack-core-x.x.x.jar</code>。</p>
 
-<ul>
-  <li><a href="https://jwt.io/introduction/">Introduction to JSON Web Tokens</a>， by Auth0</li>
-  <li><a href="https://medium.com/@bryanmanuele/sessionless-authentication-withe-jwts-with-node-express-passport-js-69b059e4b22c">Sessionless Authentication using JWTs (with Node + Express + Passport JS)</a>, by Bryan Manuele</li>
-  <li><a href="https://github.com/dwyl/learn-json-web-tokens/blob/master/README.md">Learn how to use JSON Web Tokens</a>, by dwyl</li>
-</ul>
+<p>这样我们的去掉license校验就完成了。</p>
+
+<h3 id="导入license">导入license</h3>
+
+<p>首先去<a href="https://license.elastic.co/registration">官网</a>申请<code class="highlighter-rouge">license</code></p>
+
+<p>打开<code class="highlighter-rouge">license</code>文件，修改以下字段</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"expiry_date_in_millis": {过期时间时间戳}
+"max_nodes": {最大节点数}
+</code></pre></div></div>
+
+<p>导入到elasticsearch</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -u elastic:elastic -XPUT ‘http://{es-ip}:{es-port}/_xpack/license’ -H “Content-Type: application/json” -d @/tmp/license.json
+</code></pre></div></div>
+
+<p>完成！</p>
 
 
                 <hr style="visibility: hidden;">
@@ -363,19 +328,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2019/01/24/task/" data-toggle="tooltip" data-placement="top" title="多平台任务管理工具 - Taskwarrior">
-                        Previous<br>
-                        <span>多平台任务管理工具 - Taskwarrior</span>
-                        </a>
-                    </li>
-                    
-                    
-                    <li class="next">
                         <a href="/2019/02/24/oauth2/" data-toggle="tooltip" data-placement="top" title="「转载」OAuth2.0">
-                        Next<br>
+                        Previous<br>
                         <span>「转载」OAuth2.0</span>
                         </a>
                     </li>
+                    
                     
                 </ul>
 
