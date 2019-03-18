@@ -230,20 +230,18 @@
                 <!-- Multi-Lingual -->
                 
 
-				<p>守护进程应该能达到的要求 不依赖于当前会话，且无法打开控制终端。</p>
+				<p>守护进程应该能达到的要求<strong>脱离当前会话，且无法打开控制终端</strong>。</p>
 
 <h3 id="编写过程">编写过程</h3>
 
-<p>1.假设当前进程为p  <br />
-2.创建子进程c1，然后退出父进程p(进程组组长无法创建会话，这样c1就不是进程组组长)。  <br />
-3.在c1进程中创建会话，此时进程c1为会话组长，并且可以打开控制终端。  <br />
-4.在c1进程中创建子进程c2,退出父进程c1。  <br />
-5.在c2进程中进行逻辑处理。</p>
+<p>1、假设当前进程为p  <br />
+2、创建p的子进程c1，退出p（为了保证c1不是进程组组长，为下一步做铺垫）  <br />
+3、使用setsid来创建一个新会话（这样就可以脱离当前会话，由于setsid必须保证不是进程组组长调用，所以才有了第二步的铺垫）  <br />
+4、创建c1的子进程c2，退出c1（因为新会化是c1创建的，所以它是该会话的控制进程和控制进程组组长，可以打开控制终端）</p>
 
 <h3 id="实现">实现</h3>
 
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
-<span class="c1">// 创建子进程</span>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 创建子进程</span>
 <span class="nv">$pid</span> <span class="o">=</span> <span class="nb">pcntl_fork</span><span class="p">();</span>
 <span class="c1">// 如果是父进程，退出</span>
 <span class="k">if</span> <span class="p">(</span><span class="nv">$pid</span><span class="p">)</span> <span class="p">{</span>
@@ -259,6 +257,23 @@
 <span class="k">if</span> <span class="p">(</span><span class="nv">$pid</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">exit</span><span class="p">(</span><span class="nv">$pid</span><span class="p">);</span>
 <span class="p">}</span>
+
+     
+<span class="c1">//进程从创建它的父进程那里继承了打开的文件描述符。     </span>
+<span class="c1">//如不关闭，将会浪费系统资源，造成进程所在的文件系统无法卸下以及引起无法预料的错误     </span>
+<span class="nb">fclose</span><span class="p">(</span><span class="nx">STDIN</span><span class="p">);</span>
+<span class="nb">fclose</span><span class="p">(</span><span class="nx">STDOUT</span><span class="p">);</span>
+<span class="nb">fclose</span><span class="p">(</span><span class="nx">STDERR</span><span class="p">);</span>
+
+     
+<span class="c1">//进程活动时，其工作目录所在的文件系统不能卸下。     </span>
+<span class="c1">//一般需要将工作目录改变到根目录。对于需要转储核心，写运行日志的进程将工作目录改变到特定目录     </span>
+<span class="nb">chdir</span><span class="p">(</span><span class="s2">"/"</span><span class="p">);</span>
+
+<span class="c1">//进程从创建它的父进程那里继承了文件创建掩模。     </span>
+<span class="c1">//它可能修改守护进程所创建的文件的存取位。     </span>
+<span class="c1">//为防止这一点，将文件创建掩模清除     </span>
+<span class="nb">umask</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
 <span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">//逻辑处理</span>
