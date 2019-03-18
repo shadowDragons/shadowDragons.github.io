@@ -211,6 +211,36 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2018/10/15/swoole-note/">
+        <h2 class="post-title">
+            swoole 学习笔记
+        </h2>
+        
+        <div class="post-content-preview">
+            最近需要用到多进程处理任务，先学习一番。
+
+安装
+
+pecl install swoole
+
+
+安装遇到的问题
+
+我选择了支持openssl，安装过程中遇到了两个错误
+
+1、 fatal error: 'openssl/ssl.h' file not found
+
+解决方法： 
+一般用brew安装的软件，都会把需要include的文件自动放到/usr/local/include里的，但是不知...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on October 15, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/10/11/bhpws-brower-cache/">
         <h2 class="post-title">
             『构建高性能web站点』浏览器缓存
@@ -477,44 +507,6 @@ I/O发生过程步骤：
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2018/07/14/perconaToolkit/">
-        <h2 class="post-title">
-            PerconaToolkit工具集合
-        </h2>
-        
-        <div class="post-content-preview">
-            pt-align
-
-将其它工具的输出按列对齐。
-
-pt-archiver
-
-将数据归档到另一张表或者文件。
-
-pt-config-diff
-
-对比数据库配置、环境变量差异
-
-pt-deadlock-logger
-
-记录死锁日志，并保存到文件或者数据表
-
-pt-diskstats
-
-功能和iostat类似，给出磁盘的I/O统计信息
-
-pt-duplicate-key-checker
-
-检测表中...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on July 14, 2018
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -662,6 +654,8 @@ pt-duplicate-key-checker
                                 <a href="/tags/#精进" title="精进" rel="3">
                                     精进
                                 </a>
+                            
+                        
                             
                         
                             

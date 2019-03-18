@@ -211,6 +211,25 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2018/03/03/bitcoin-chain/">
+        <h2 class="post-title">
+            比特币区块链
+        </h2>
+        
+        <div class="post-content-preview">
+            
+
+drow.io源文件下载
+
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on March 3, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/02/25/bitcoin-exchange/">
         <h2 class="post-title">
             比特币交易
@@ -350,14 +369,17 @@ wget --no-check-certificate -O shadowsocks-all.sh https://raw....
         </h2>
         
         <div class="post-content-preview">
-            守护进程应该能达到的要求脱离当前会话，且无法打开控制终端。
+            
+  本文涉及到进程组、会话、控制终端，如果不清楚它们的联系，可以先查看进程、进程组、会话与控制终端
+
+
+守护进程应该能达到的要求脱离当前会话，且无法打开控制终端。
 
 编写过程
 
 1、假设当前进程为p  
 2、创建p的子进程c1，退出p（为了保证c1不是进程组组长，为下一步做铺垫）  
-3、使用setsid来创建一个新会话（这样就可以脱离当前会话，由于setsid必须保证不是进程组组长调用，所以才有了第二步的铺垫）  
-4、创建c1的子进程c2，退出c1（因为新会化是c1创建的，所以它是该会话的...
+3、使用setsid来创建一个新会话（这样就可以脱离当前会话，由于setsid必须保证不是进程组组长调用，...
         </div>
     </a>
     <p class="post-meta">
@@ -418,35 +440,6 @@ po...
 最理想的状态是，数据提交后，所有的更改能立刻生效，但由于cpu运算，磁盘写入，内存写入需要时间，所以不可能达到立刻生效。  
 所以一般说的是逻辑上同时生效。  
 比如修改a，b两行数据，要保证一致性，对a，b加锁，修改数据，...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 24, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/11/24/consistency-highavailability/">
-        <h2 class="post-title">
-            数据库的一致性与高可用
-        </h2>
-        
-        <div class="post-content-preview">
-            在给定多台计算机，他们相互之间由网络相互连通，能够做到：
-
-
-  数据每次成功写入，数据不会丢失，并且按照写入的顺序排列
-  给定安全级别，保证服务可用性，并尽可能减少机器消耗。
-
-
-2PC
-
-所谓的两个阶段是指：第一阶段：准备阶段(投票阶段)和第二阶段：提交阶段（执行阶段）。
-
-准备阶段
-
-事务协调者(事务管理器)给每个参与者(资源管理器)发送Prepare消息，每个参与者要么直接返回失败...
         </div>
     </a>
     <p class="post-meta">
@@ -602,6 +595,8 @@ po...
                                 <a href="/tags/#精进" title="精进" rel="3">
                                     精进
                                 </a>
+                            
+                        
                             
                         
                             
