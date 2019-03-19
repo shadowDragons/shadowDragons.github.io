@@ -211,6 +211,42 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2018/07/27/bhpws-service/">
+        <h2 class="post-title">
+            『构建高性能web站点』服务器并发
+        </h2>
+        
+        <div class="post-content-preview">
+            吞吐率
+
+单位时间内服务器处理的请求数 reqs/s
+
+用户并发数
+
+服务器最大并发数是有一定的利益前提的，就是服务器和用户双方所能接受的最大利益下。
+每个用户可以在同一时间发起不止一个请求（与浏览器、http版本有关），所以用户并发数 &gt; 请求并发数。
+
+请求等待时间
+
+分为以下两种
+
+
+  用户平均请求等待时间。
+  服务器平均请求处理时间（等于吞吐率的倒数）。
+
+
+线程与进程
+
+...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on July 27, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/07/14/perconaToolkit/">
         <h2 class="post-title">
             PerconaToolkit工具集合
@@ -489,31 +525,6 @@ peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric-samples/c
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2018/05/13/hyperledger-fabric-4/">
-        <h2 class="post-title">
-            fabric入门（四）启动网络
-        </h2>
-        
-        <div class="post-content-preview">
-            启动网络
-
-我们将利用docker-compose脚本来启动我们的区块链网络。
-
-在开始前，我们先注释掉docker-compose-cli.yml的一段command: /bin/bash代码，不然该脚本将在网络启动时执行所有命令.
-
- cli:
-    container_name: cli
-    image: hyperledger/fabric-tools:$IMAGE_TAG
- ...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on May 13, 2018
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -548,7 +559,7 @@ peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric-samples/c
                     <div class="tags">
                         
                             
-                                <a href="/tags/#php" title="php" rel="11">
+                                <a href="/tags/#php" title="php" rel="12">
                                     php
                                 </a>
                             
