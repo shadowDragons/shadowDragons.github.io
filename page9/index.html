@@ -211,6 +211,33 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2016/11/13/hash-table/">
+        <h2 class="post-title">
+            哈希表
+        </h2>
+        
+        <div class="post-content-preview">
+            线性探查
+
+查找
+
+i = base = key%HT.length // get hashed index
+while (true)
+  if (HT[i] == EMPTY) return "not found"
+  else if (HT[i] == key) return "found at index i"
+  else i = (base+step*1)%HT.length
+
+
+...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on November 13, 2016
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2016/11/13/bit-cal/">
         <h2 class="post-title">
             位运算
@@ -325,7 +352,7 @@ j = 0000001
                     <div class="tags">
                         
                             
-                                <a href="/tags/#php" title="php" rel="12">
+                                <a href="/tags/#php" title="php" rel="13">
                                     php
                                 </a>
                             

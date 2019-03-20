@@ -10,7 +10,7 @@
     <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
     <meta name="theme-color" content="#000000">
     
-    <title>『构建高性能web站点』服务器并发 - ben blog</title>
+    <title>「Swoole」Timer 毫秒精度的定时器 - ben blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2018/07/27/bhpws-service/">
+    <link rel="canonical" href="http://localhost:4000/2019/03/19/swoole-timer/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -201,15 +201,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#web开发" title="web开发">web开发</a>
+                        <a class="tag" href="/tags/#php" title="php">php</a>
                         
                     </div>
-                    <h1>『构建高性能web站点』服务器并发</h1>
+                    <h1>「Swoole」Timer 毫秒精度的定时器</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Ben Blog on July 27, 2018</span>
+                    <span class="meta">Posted by Ben Blog on March 19, 2019</span>
                 </div>
             </div>
         </div>
@@ -230,64 +230,215 @@
                 <!-- Multi-Lingual -->
                 
 
-				<h4 id="吞吐率">吞吐率</h4>
+				<blockquote>
+  <p>毫秒精度的定时器。底层基于<code class="highlighter-rouge">epoll_wait</code>和<code class="highlighter-rouge">setitimer</code>实现，数据结构使用最小堆，可支持添加大量定时器。   <br />
+在同步进程中使用<code class="highlighter-rouge">setitimer</code>和信号实现，如<code class="highlighter-rouge">Manager</code>和<code class="highlighter-rouge">TaskWorker</code>进程。  <br />
+在异步进程中使用<code class="highlighter-rouge">epoll_wait/kevent/poll/select</code>超时时间实现。</p>
+</blockquote>
 
-<p>单位时间内服务器处理的请求数 reqs/s</p>
+<h3 id="间隔时钟定时器-tick">间隔时钟定时器 tick</h3>
 
-<h4 id="用户并发数">用户并发数</h4>
+<blockquote>
+  <p>设置一个间隔时钟定时器，与after定时器不同的是tick定时器会持续触发，直到调用swoole_timer_clear清除。</p>
+</blockquote>
 
-<p>服务器最大并发数是有一定的利益前提的，就是服务器和用户双方所能接受的最大利益下。<br />
-每个用户可以在同一时间发起不止一个请求（与浏览器、http版本有关），所以用户并发数 &gt; 请求并发数。</p>
-
-<h4 id="请求等待时间">请求等待时间</h4>
-
-<p>分为以下两种</p>
-
-<ul>
-  <li>用户平均请求等待时间。</li>
-  <li>服务器平均请求处理时间（等于吞吐率的倒数）。</li>
-</ul>
-
-<h4 id="线程与进程">线程与进程</h4>
-
-<p>参考这篇文章<a href="/2018/07/29/computer-thread/">进程与线程</a></p>
-
-<h4 id="系统负载">系统负载</h4>
-
-<p>可以通过 <code class="highlighter-rouge">cat /proc/loadavg</code> 或者 <code class="highlighter-rouge">top</code> 查看。</p>
-
-<p><img src="/assets/img/posts/2018-07-27-bhpws-service/1.jpg" alt="1.jpg" /></p>
-
-<p>上面数字的含义：</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">swoole_timer_tick</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$msec</span><span class="p">,</span> <span class="nx">callable</span> <span class="nv">$callback</span><span class="p">,</span> <span class="p">[</span><span class="nv">$mixed</span> <span class="nv">$param</span><span class="p">]);</span>
+</code></pre></div></div>
 
 <table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
   <tbody>
     <tr>
-      <td>10/200</td>
-      <td>10表示此时运行队列中的进程个数；200表示此时的进程总数</td>
+      <td style="text-align: left"><code class="highlighter-rouge">$msec</code></td>
+      <td style="text-align: left">指定时间，单位为毫秒。如1000表示1秒，最大不得超过 86400000</td>
     </tr>
     <tr>
-      <td>17145</td>
-      <td>目前创建的最后一个进程ID</td>
+      <td style="text-align: left"><code class="highlighter-rouge">$callback_function</code></td>
+      <td style="text-align: left">时间到期后所执行的函数，必须是可以调用的</td>
     </tr>
     <tr>
-      <td>1.63</td>
-      <td>1分钟内运行队列中就绪等待的进程数平均值</td>
+      <td style="text-align: left"><code class="highlighter-rouge">$param</code></td>
+      <td style="text-align: left">回调函数使用参数</td>
     </tr>
     <tr>
-      <td>0.48</td>
-      <td>5分钟内运行队列中就绪等待的进程数平均值</td>
-    </tr>
-    <tr>
-      <td>0.21</td>
-      <td>10分钟内运行队列中就绪等待的进程数平均值</td>
+      <td style="text-align: left">返回</td>
+      <td style="text-align: left">当前定时器id</td>
     </tr>
   </tbody>
 </table>
 
-<h4 id="io模型">I/O模型</h4>
+<h5 id="回调函数">回调函数</h5>
 
-<p>参考这篇文章<a href="/2018/08/04/computer-io/">I/O模型</a></p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">callbackFunction</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$timer_id</span><span class="p">,</span> <span class="p">[</span><span class="nv">$mixed</span> <span class="nv">$param</span><span class="p">]);</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$timer_id</code></td>
+      <td style="text-align: left">定时器的ID，可用于swoole_timer_clear清除此定时器</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$param</code></td>
+      <td style="text-align: left">由swoole_timer_tick传入的第三个参数$param，此参数也为可选参数</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>注意点：</p>
+<ul>
+  <li>定时器仅在当前进程空间内有效</li>
+  <li>定时器是纯异步实现的，不能与阻塞IO的函数一起使用，否则定时器的执行时间会发生错乱</li>
+  <li>定时器在执行的过程中可能存在一定误差</li>
+</ul>
+
+<p><strong>实例</strong></p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">timeout</span><span class="p">(</span><span class="nv">$id</span><span class="p">,</span> <span class="nv">$param</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">echo</span> <span class="nb">time</span><span class="p">()</span> <span class="o">.</span> <span class="s2">": Timeout #</span><span class="nv">$id</span><span class="s2"> #</span><span class="nv">$param</span><span class="s2">"</span> <span class="o">.</span> <span class="nx">PHP_EOL</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nv">$tickid</span> <span class="o">=</span> <span class="nx">swoole_timer_tick</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="s1">'timeout'</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+<span class="k">echo</span> <span class="nv">$tickid</span><span class="p">;</span>
+</code></pre></div></div>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$tickid</span> <span class="o">=</span> <span class="nx">swoole_timer_tick</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="nv">$id</span><span class="p">)</span> <span class="k">use</span> <span class="p">(</span><span class="nv">$str</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="nb">time</span><span class="p">()</span> <span class="o">.</span> <span class="s2">": Timeout #</span><span class="nv">$id</span><span class="s2"> #</span><span class="nv">$str</span><span class="s2">"</span> <span class="o">.</span> <span class="nx">PHP_EOL</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="k">echo</span> <span class="nv">$tickid</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h5 id="校正">校正</h5>
+
+<p>定时器回调函数的执行时间不影响下一次定时器执行的时间。实例：在0.002s设置了10ms的tick定时器，第一次会在0.012s执行回调函数，如果回调函数执行了5ms，下一次定时器仍然会在0.022s时触发，而不是0.027s。</p>
+
+<p>但如果定时器回调函数的执行时间过长，甚至覆盖了下一次定时器执行的时间。底层会进行时间校正，丢弃已过期的行为，在下一时间回调。如上面例子中0.012s时的回调函数执行了15ms，本该在0.022s产生一次定时回调。实际上本次定时器在0.027s才返回，这时定时早已过期。底层会在0.032s时再次触发定时器回调。</p>
+
+<p><strong>正确实例</strong></p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">swoole_timer_tick</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"after 3000ms.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="nx">swoole_timer_after</span><span class="p">(</span><span class="mi">14000</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"after 14000ms.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">});</span>
+
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p><strong>错误实例</strong></p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">swoole_timer_tick</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"after 3000ms.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+   <span class="nb">sleep</span><span class="p">(</span><span class="mi">14</span><span class="p">);</span>
+   <span class="k">echo</span> <span class="s2">"after 14000ms.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h3 id="一次性定时器-after">一次性定时器 after</h3>
+
+<blockquote>
+  <p>swoole_timer_after函数是一个一次性定时器，执行完成后就会销毁。此函数与PHP标准库提供的sleep函数不同，after是非阻塞的。而sleep调用后会导致当前的进程进入阻塞，将无法处理新的请求。</p>
+</blockquote>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">int</span> <span class="nx">swoole_timer_after</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$after_time_ms</span><span class="p">,</span> <span class="nx">mixed</span> <span class="nv">$callback_function</span><span class="p">);</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$after_time_ms</code></td>
+      <td style="text-align: left">指定时间，单位为毫秒，最大不得超过 86400000</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$callback_function</code></td>
+      <td style="text-align: left">时间到期后所执行的函数，必须是可以调用的。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">返回</td>
+      <td style="text-align: left">当前定时器id</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>实例</strong></p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">swoole_timer_after</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="k">function</span><span class="p">()</span> <span class="k">use</span> <span class="p">(</span><span class="nv">$str</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"timeout, </span><span class="nv">$str</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h3 id="删除">删除</h3>
+
+<blockquote>
+  <p>使用定时器ID来删除定时器。  <br />
+不能用于清除其他进程的定时器，只作用于当前进程</p>
+</blockquote>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">bool</span> <span class="nx">swoole_timer_clear</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$timer_id</span><span class="p">)</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$timer_id</code></td>
+      <td style="text-align: left">定时器ID，调用swoole_timer_tick、swoole_timer_after后会返回一个整数的ID</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">返回</td>
+      <td style="text-align: left">成功<code class="highlighter-rouge">true</code> 失败<code class="highlighter-rouge">false</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>实例</strong></p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$timer</span> <span class="o">=</span> <span class="nx">swoole_timer_after</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="k">function</span><span class="p">(){</span>
+    <span class="k">echo</span> <span class="s2">"timeout</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="nb">var_dump</span><span class="p">(</span><span class="nx">swoole_timer_clear</span><span class="p">(</span><span class="nv">$timer</span><span class="p">));</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$timer</span><span class="p">);</span>
+
+<span class="c1">// 输出：bool(true) int(1)</span>
+<span class="c1">// 不输出：timeout</span>
+</code></pre></div></div>
+
+<h3 id="协程">协程</h3>
+
+<p>在协程环境下<code class="highlighter-rouge">swoole_timer_tick</code>和<code class="highlighter-rouge">swoole_timer_after</code>回调中会自动创建一个协程，可以直接使用协程相关API，无需调用go创建协程。</p>
+
+<p>可设置<code class="highlighter-rouge">enable_coroutine</code>关闭自动创建协程。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">swoole_async_set</span><span class="p">([</span>
+    <span class="s1">'enable_coroutine'</span> <span class="o">=&gt;</span> <span class="kc">false</span>
+<span class="p">]);</span>
+</code></pre></div></div>
 
 
                 <hr style="visibility: hidden;">
@@ -295,19 +446,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/07/14/perconaToolkit/" data-toggle="tooltip" data-placement="top" title="PerconaToolkit工具集合">
+                        <a href="/2019/03/19/swoole-atomic/" data-toggle="tooltip" data-placement="top" title="「Swoole」atomic 计数器">
                         Previous<br>
-                        <span>PerconaToolkit工具集合</span>
+                        <span>「Swoole」atomic 计数器</span>
                         </a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2018/07/29/computer-thread/" data-toggle="tooltip" data-placement="top" title="进程与线程">
-                        Next<br>
-                        <span>进程与线程</span>
-                        </a>
-                    </li>
                     
                 </ul>
 
