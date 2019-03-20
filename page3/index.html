@@ -211,6 +211,28 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2018/08/05/computer-select-poll-epoll/">
+        <h2 class="post-title">
+            「转载」select、poll与epoll
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  转载自大话 Select、Poll、Epoll
+
+
+Linux的socket 事件wakeup callback机制
+
+言归正传，在介绍select、poll、epoll前，有必要说说linux(2.6+)内核的事件wakeup callback机制，这是IO多路复用机制存在的本质。Linux通过socket睡眠队列来管理所有等待socket的某个事件的process，同时通过wake...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on August 5, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/08/04/computer-io/">
         <h2 class="post-title">
             I/O模型
@@ -524,24 +546,6 @@ docker-compose -f artifacts/docker-compose.yaml up
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2018/05/27/hyperledger-fabric-chaincode/">
-        <h2 class="post-title">
-            fabric - chaincode(链码)
-        </h2>
-        
-        <div class="post-content-preview">
-            Chaincode是一段由Go语言编写（支持其他编程语言，如Java），并能实现预定义接口的程序。Chaincode运行在一个受保护的Docker容器当中，与背书节点的运行互相隔离。Chaincode可通过应用提交的交易对账本状态初始化并进行管理。
-
-一段chaincode通常处理由网络中的成员一致认可的业务逻辑，故我们很可能用“智能合约”来代指chaincode。一段chiancode创建...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on May 27, 2018
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -576,7 +580,7 @@ docker-compose -f artifacts/docker-compose.yaml up
                     <div class="tags">
                         
                             
-                                <a href="/tags/#php" title="php" rel="14">
+                                <a href="/tags/#php" title="php" rel="15">
                                     php
                                 </a>
                             
