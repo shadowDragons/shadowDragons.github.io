@@ -211,6 +211,32 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2017/02/05/php-daemon/">
+        <h2 class="post-title">
+            php实现守护进程
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  本文涉及到进程组、会话、控制终端，如果不清楚它们的联系，可以先查看进程、进程组、会话与控制终端
+
+
+守护进程应该能达到的要求脱离当前会话，且无法打开控制终端。
+
+编写过程
+
+1、假设当前进程为p  
+2、创建p的子进程c1，退出p（为了保证c1不是进程组组长，为下一步做铺垫）  
+3、使用setsid来创建一个新会话（这样就可以脱离当前会话，由于setsid必须保证不是进程组组长调用，...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on February 5, 2017
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2017/02/02/mac-rsync-fswatch/">
         <h2 class="post-title">
             mac使用rsync+fswatch实现目录文件实时同步
@@ -482,35 +508,6 @@ while (--k!=0)
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2016/11/13/jsonp/">
-        <h2 class="post-title">
-            jsonp实现异步请求跨域
-        </h2>
-        
-        <div class="post-content-preview">
-            ajax 和 jsonp的区别  
-ajax是通过XmlHttpRequest来获取非本页内容，而jsonp是通过动态添加&lt;script&gt;来调用服务器提供的脚本。
-
-为什么jsonp能够跨服  
-因为在web调用js文件是不受跨服影响的，不仅如此，凡是拥有src属性的都有跨服的能力。
-
-方案1
-
-www.b.com/remote.js
-
-alert(1)
-
-
-www.a.com/...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 13, 2016
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -545,7 +542,7 @@ www.a.com/...
                     <div class="tags">
                         
                             
-                                <a href="/tags/#php" title="php" rel="13">
+                                <a href="/tags/#php" title="php" rel="14">
                                     php
                                 </a>
                             
