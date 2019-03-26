@@ -10,7 +10,7 @@
     <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
     <meta name="theme-color" content="#000000">
     
-    <title>fabric入门（四）启动网络 - ben blog</title>
+    <title>「Swoole」Process 进程 - ben blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2018/05/13/hyperledger-fabric-4/">
+    <link rel="canonical" href="http://localhost:4000/2019/03/25/swoole-process/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -201,17 +201,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#超级账本" title="超级账本">超级账本</a>
-                        
-                        <a class="tag" href="/tags/#fabric" title="fabric">fabric</a>
+                        <a class="tag" href="/tags/#php" title="php">php</a>
                         
                     </div>
-                    <h1>fabric入门（四）启动网络</h1>
+                    <h1>「Swoole」Process 进程</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Ben Blog on May 13, 2018</span>
+                    <span class="meta">Posted by Ben Blog on March 25, 2019</span>
                 </div>
             </div>
         </div>
@@ -232,109 +230,43 @@
                 <!-- Multi-Lingual -->
                 
 
-				<h4 id="启动网络">启动网络</h4>
+				<h3 id="接口">接口</h3>
 
-<p>我们将利用docker-compose脚本来启动我们的区块链网络。</p>
+<h5 id="构造-__construct">构造 __construct</h5>
 
-<p>在开始前，我们先注释掉<strong>docker-compose-cli.yml</strong>的一段<strong>command: /bin/bash</strong>代码，不然该脚本将在网络启动时执行所有命令.</p>
+<p>创建子进程</p>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> cli:
-    container_name: cli
-    image: hyperledger/fabric-tools:<span class="nv">$IMAGE_TAG</span>
-    <span class="nb">tty</span>: <span class="nb">true
-    </span>stdin_open: <span class="nb">true
-    </span>environment:
-      - <span class="nv">GOPATH</span><span class="o">=</span>/opt/gopath
-      - <span class="nv">CORE_VM_ENDPOINT</span><span class="o">=</span>unix:///host/var/run/docker.sock
-      <span class="c">#- CORE_LOGGING_LEVEL=DEBUG</span>
-      - <span class="nv">CORE_LOGGING_LEVEL</span><span class="o">=</span>INFO
-      - <span class="nv">CORE_PEER_ID</span><span class="o">=</span>cli
-      - <span class="nv">CORE_PEER_ADDRESS</span><span class="o">=</span>peer0.org1.example.com:7051
-      - <span class="nv">CORE_PEER_LOCALMSPID</span><span class="o">=</span>Org1MSP
-      - <span class="nv">CORE_PEER_TLS_ENABLED</span><span class="o">=</span><span class="nb">true</span>
-      - <span class="nv">CORE_PEER_TLS_CERT_FILE</span><span class="o">=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt
-      - <span class="nv">CORE_PEER_TLS_KEY_FILE</span><span class="o">=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.key
-      - <span class="nv">CORE_PEER_TLS_ROOTCERT_FILE</span><span class="o">=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
-      - <span class="nv">CORE_PEER_MSPCONFIGPATH</span><span class="o">=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
-    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-    <span class="c">#command: /bin/bash</span>
-    volumes:
-        - /var/run/:/host/var/run/
-        - ./../chaincode/:/opt/gopath/src/github.com/chaincode
-        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
-        - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
-        - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
-    depends_on:
-      - orderer.example.com
-      - peer0.org1.example.com
-      - peer1.org1.example.com
-      - peer0.org2.example.com
-      - peer1.org2.example.com
-    networks:
-      - byfn
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">swoole_process</span><span class="o">::</span><span class="na">__construct</span><span class="p">(</span><span class="nx">callable</span> <span class="nv">$function</span><span class="p">,</span> <span class="nx">bool</span> <span class="nv">$redirect_stdin_stdout</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">int</span> <span class="nv">$pipe_type</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">bool</span> <span class="nv">$enable_coroutine</span> <span class="o">=</span> <span class="kc">false</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>启动网络</p>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$function</code></td>
+      <td style="text-align: left">子进程创建成功后要执行的函数，底层会自动将函数保存到对象的<code class="highlighter-rouge">callback</code>属性上。如果希望更改执行的函数，可赋值新的函数到对象的<code class="highlighter-rouge">callback</code>属性</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$redirect_stdin_stdout</code></td>
+      <td style="text-align: left">重定向子进程的标准输入和输出。启用此选项后，在子进程内输出内容将不是打印屏幕，而是写入到主进程管道。读取键盘输入将变为从管道中读取数据。默认为阻塞读取。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$pipe_type</code></td>
+      <td style="text-align: left">管道类型：<br /><code class="highlighter-rouge">0</code>：不创建管道启用<br /><code class="highlighter-rouge">1</code>：创建<code class="highlighter-rouge">SOCK_STREAM(TCP)</code>类型管道<br /><code class="highlighter-rouge">2</code>：创建<code class="highlighter-rouge">SOCK_DGRAM(UDP)</code>类型管道<br /><code class="highlighter-rouge">$redirect_stdin_stdout</code>后，此选项将忽略用户参数，强制为<code class="highlighter-rouge">1</code>。如果子进程内没有进程间通信，可以设置为<code class="highlighter-rouge">0</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$enable_coroutine</code></td>
+      <td style="text-align: left">默认为<code class="highlighter-rouge">false</code>，在<code class="highlighter-rouge">callback function</code>中启用协程，开启后可以直接在子进程的函数中使用协程<code class="highlighter-rouge">API</code></td>
+    </tr>
+  </tbody>
+</table>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">CHANNEL_NAME</span><span class="o">=</span><span class="nv">$CHANNEL_NAME</span> <span class="nv">TIMEOUT</span><span class="o">=</span>&lt;pick_a_value&gt; docker-compose <span class="nt">-f</span> docker-compose-cli.yaml up <span class="nt">-d</span>
-</code></pre></div></div>
-
-<p>执行完如图所示：</p>
-
-<p><img src="/assets/img/posts/2018-05-13-hyperledger-fabric-1/1.jpg" alt="1.jpg" /></p>
-
-<h4 id="创建加入信息">创建&amp;加入信息</h4>
-
-<p>进入cli容器，后面命令都是在cli容器中进行</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker <span class="nb">exec</span> <span class="nt">-it</span> cli bash
-</code></pre></div></div>
-
-<p>回想一下，我们使用configtxgen工具生成信道配置-channel.tx。我们将这个配置作为请求的一部分传递给order。</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">CHANNEL_NAME</span><span class="o">=</span>mychannel
-peer channel create <span class="nt">-o</span> orderer.example.com:7050 <span class="nt">-c</span> <span class="nv">$CHANNEL_NAME</span> <span class="nt">-f</span> ./channel-artifacts/channel.tx <span class="nt">--tls</span> <span class="nv">$CORE_PEER_TLS_ENABLED</span> <span class="nt">--cafile</span> /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
-</code></pre></div></div>
-
-<p>返回一个创世区块-<channel-ID.block>-我们将使用它加入信道。它包含了channel.tx中的配置信息。</channel-ID.block></p>
-
-<p>接下来让其他节点加入信道</p>
-
-<p>org1.peer1</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">CORE_PEER_MSPCONFIGPATH</span><span class="o">=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
-<span class="nb">export </span><span class="nv">CORE_PEER_ADDRESS</span><span class="o">=</span>peer0.org1.example.com:7051
-<span class="nb">export </span><span class="nv">CORE_PEER_LOCALMSPID</span><span class="o">=</span><span class="s2">"Org1MSP"</span>
-<span class="nb">export </span><span class="nv">CORE_PEER_TLS_ROOTCERT_FILE</span><span class="o">=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
-peer channel <span class="nb">join</span> <span class="nt">-b</span> mychannel.block
-</code></pre></div></div>
-
-<p>org1.peer1</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">CORE_PEER_MSPCONFIGPATH</span><span class="o">=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
-<span class="nb">export </span><span class="nv">CORE_PEER_ADDRESS</span><span class="o">=</span>peer1.org1.example.com:7051
-<span class="nb">export </span><span class="nv">CORE_PEER_LOCALMSPID</span><span class="o">=</span><span class="s2">"Org1MSP"</span>
-<span class="nb">export </span><span class="nv">CORE_PEER_TLS_ROOTCERT_FILE</span><span class="o">=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt
-peer channel <span class="nb">join</span> <span class="nt">-b</span> mychannel.block
-</code></pre></div></div>
-
-<p>org2.peer0</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">CORE_PEER_MSPCONFIGPATH</span><span class="o">=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
-<span class="nb">export </span><span class="nv">CORE_PEER_ADDRESS</span><span class="o">=</span>peer0.org2.example.com:7051
-<span class="nb">export </span><span class="nv">CORE_PEER_LOCALMSPID</span><span class="o">=</span><span class="s2">"Org2MSP"</span>
-<span class="nb">export </span><span class="nv">CORE_PEER_TLS_ROOTCERT_FILE</span><span class="o">=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
-peer channel <span class="nb">join</span> <span class="nt">-b</span> mychannel.block
-</code></pre></div></div>
-
-<p>org2.peer1</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">CORE_PEER_MSPCONFIGPATH</span><span class="o">=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
-<span class="nb">export </span><span class="nv">CORE_PEER_ADDRESS</span><span class="o">=</span>peer1.org2.example.com:7051
-<span class="nb">export </span><span class="nv">CORE_PEER_LOCALMSPID</span><span class="o">=</span><span class="s2">"Org2MSP"</span>
-<span class="nb">export </span><span class="nv">CORE_PEER_TLS_ROOTCERT_FILE</span><span class="o">=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/ca.crt
-peer channel <span class="nb">join</span> <span class="nt">-b</span> mychannel.block
-</code></pre></div></div>
+<p>未完待续！</p>
 
 
                 <hr style="visibility: hidden;">
@@ -342,17 +274,17 @@ peer channel <span class="nb">join</span> <span class="nt">-b</span> mychannel.b
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/05/13/hyperledger-fabric-3/" data-toggle="tooltip" data-placement="top" title="fabric入门（三）加密&交易生成器">
+                        <a href="/2019/03/25/linux-sign/" data-toggle="tooltip" data-placement="top" title="linux 信号字典">
                         Previous<br>
-                        <span>fabric入门（三）加密&交易生成器</span>
+                        <span>linux 信号字典</span>
                         </a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2018/05/13/hyperledger-fabric-5/" data-toggle="tooltip" data-placement="top" title="fabric入门（五）安装和实例化链码">
+                        <a href="/2019/03/26/start-learn-en/" data-toggle="tooltip" data-placement="top" title="「转载」十分钟后开始使用英语">
                         Next<br>
-                        <span>fabric入门（五）安装和实例化链码</span>
+                        <span>「转载」十分钟后开始使用英语</span>
                         </a>
                     </li>
                     

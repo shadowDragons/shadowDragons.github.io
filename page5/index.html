@@ -211,6 +211,57 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2018/05/13/hyperledger-fabric-1/">
+        <h2 class="post-title">
+            fabric入门（一）安装
+        </h2>
+        
+        <div class="post-content-preview">
+            安装镜像
+
+镜像可以自己安装，也可以借助官网的samples来帮我们实现。
+
+从官网可以看到，安装需要执行一个脚本：
+
+curl -sSL https://goo.gl/6wtTN5 | bash -s 1.1.0
+
+
+不过这个需要翻墙，可以直接把文本下载下来。
+
+#!/bin/bash
+#
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPD...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on May 13, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/30/network-udp/">
+        <h2 class="post-title">
+            网络基础 - 用户数据报协议(UDP)
+        </h2>
+        
+        <div class="post-content-preview">
+            介绍
+
+用户数据报协议（User Datagram Protocol, UDP）是在现代网络中最常使用的另外一种第4层协议。如果说TCP是为了满足带有内在错误检测的可靠数据传输，那么UDP主要是为了提供高速的传输。处于这个原因，UDP是一种尽力服务，通常会被称为无连接协议。一个无连接协议并不会正式的建立和结束主机之前的连接，也不会像TCP那样存在握手和终止进程。
+
+无连接协议意味着不可靠服务...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 30, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/04/30/network-tcp/">
         <h2 class="post-title">
             网络基础 - 传输控制协议(TCP)
@@ -427,69 +478,6 @@ TCP是分段、由...
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2018/04/27/http-message-status/">
-        <h2 class="post-title">
-            HTTP - 报文 - 状态码
-        </h2>
-        
-        <div class="post-content-preview">
-            本文对HTTP报文中常见的状态码做下说明。所有状态码参见HTTP状态码
-
-100~199 信息性状态码
-
-HTTP/1.1 向协议中引⼊了信息性状态码。这些状态码相对较新，关于其复杂性和感知价值存在⼀些争议。
-
-已定义的信息性状态码如下：
-
-
-  
-    
-      状态码
-      原因短语
-      含义
-    
-    
-      100
-      Continue
-  ...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on April 27, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/04/27/http-message-method/">
-        <h2 class="post-title">
-            HTTP - 报文 - 方法
-        </h2>
-        
-        <div class="post-content-preview">
-            本文对HTTP报文中常见的方法做下说明。
-
-GET
-
-是最常⽤的⽅法。通常⽤于请求服务器发送某个资源。HTTP/1.1 要求服务器实现此⽅法。
-
-
-
-HEAD
-
-HEAD ⽅法与 GET ⽅法的⾏为很类似，但服务器在响应中只返回⾸部。不会返回实体的主体部分。这就允许客户端在未获取实际资源的情况下，对资源的⾸部进⾏检查。使⽤ HEAD，可以：
-
-
-  在不获取资源的情况下了解资源的情况（⽐如，...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on April 27, 2018
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -524,7 +512,7 @@ HEAD ⽅法与 GET ⽅法的⾏为很类似，但服务器在响应中只返回�
                     <div class="tags">
                         
                             
-                                <a href="/tags/#php" title="php" rel="16">
+                                <a href="/tags/#php" title="php" rel="18">
                                     php
                                 </a>
                             

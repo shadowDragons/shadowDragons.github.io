@@ -211,6 +211,75 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2018/06/30/mysql-innodb-index/">
+        <h2 class="post-title">
+            mysql系列教程 - B+Tree索引
+        </h2>
+        
+        <div class="post-content-preview">
+            了解B+树前，我们先了解下二叉查找树、平衡二叉查找树、B-Tree。
+
+二叉查找树
+
+二叉查找树具有以下性质：左子树的键值小于根的键值，右子树的键值大于根的键值。如下图所示：
+
+
+
+由于它可以任意构造，所以也可以按照赢下方式构建二叉树。
+
+
+
+我们知道，二叉树查找一个节点所需的最大时间取决于树高，所以如果像上图所示进行查找，效率会非常低。所以，要提高查找效率，需要这颗树是平衡的，从而引出了平...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on June 30, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/06/23/mysql-innodb-lock/">
+        <h2 class="post-title">
+            mysql系列教程 - innodb锁
+        </h2>
+        
+        <div class="post-content-preview">
+            lock和latch
+
+锁分为两种类型 lock 和 latch ，它们之间的差异如下表所示：
+
+
+  
+    
+      -
+      lock
+      latch
+    
+  
+  
+    
+      对象
+      事务
+      线程
+    
+    
+      保护
+      数据库内容
+      内存数据结构
+    
+    
+      持续时间
+...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on June 23, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/05/27/hyperledger-fabric/">
         <h2 class="post-title">
             fabric - 架构&执行流程
@@ -417,57 +486,6 @@ cd $GOPATH/src/github.com/hyperledger/fabric-samples/first-network
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2018/05/13/hyperledger-fabric-1/">
-        <h2 class="post-title">
-            fabric入门（一）安装
-        </h2>
-        
-        <div class="post-content-preview">
-            安装镜像
-
-镜像可以自己安装，也可以借助官网的samples来帮我们实现。
-
-从官网可以看到，安装需要执行一个脚本：
-
-curl -sSL https://goo.gl/6wtTN5 | bash -s 1.1.0
-
-
-不过这个需要翻墙，可以直接把文本下载下来。
-
-#!/bin/bash
-#
-# Copyright IBM Corp. All Rights Reserved.
-#
-# SPD...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on May 13, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/04/30/network-udp/">
-        <h2 class="post-title">
-            网络基础 - 用户数据报协议(UDP)
-        </h2>
-        
-        <div class="post-content-preview">
-            介绍
-
-用户数据报协议（User Datagram Protocol, UDP）是在现代网络中最常使用的另外一种第4层协议。如果说TCP是为了满足带有内在错误检测的可靠数据传输，那么UDP主要是为了提供高速的传输。处于这个原因，UDP是一种尽力服务，通常会被称为无连接协议。一个无连接协议并不会正式的建立和结束主机之前的连接，也不会像TCP那样存在握手和终止进程。
-
-无连接协议意味着不可靠服务...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on April 30, 2018
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -502,7 +520,7 @@ curl -sSL https://goo.gl/6wtTN5 | bash -s 1.1.0
                     <div class="tags">
                         
                             
-                                <a href="/tags/#php" title="php" rel="16">
+                                <a href="/tags/#php" title="php" rel="18">
                                     php
                                 </a>
                             
