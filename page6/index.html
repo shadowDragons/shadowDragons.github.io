@@ -211,6 +211,100 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2018/04/30/network-dhcp/">
+        <h2 class="post-title">
+            网络基础 - 动态主机设置协议(DHCP)
+        </h2>
+        
+        <div class="post-content-preview">
+            动态主机配置协议（Dynamic Host Configuration Protocol）是一个应用层协议，能够让设备自动获取IP地址（以及其他重要网络资源，比如DNS服务器和路由网关的地址）。大多数的DHCP服务器都向客户端提供一些其他的参数，比如网络上的默认网关和DNS服务器的地址。
+
+通常被应用在大型的局域网络环境中，主要作用是集中的管理、分配IP地址，使网络环境中的主机动态的获得IP...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 30, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/29/network-arp/">
+        <h2 class="post-title">
+            网络基础 - 地址解析协议(ARP)
+        </h2>
+        
+        <div class="post-content-preview">
+            介绍
+
+在以太网协议中规定，同一局域网中的一台主机要和另一台主机进行直接通信，必须要知道目标主机的MAC地址。而在TCP/IP协议中，网络层和传输层只关心目标主机的IP地址。这就导致在以太网中使用IP协议时，数据链路层的以太网协议接到上层IP协议提供的数据中，只包含目的主机的IP地址。于是需要一种方法，根据目的主机的IP地址，获得其MAC地址。这就是ARP协议要做的事情。所谓地址解析（add...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 29, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/29/http-headers/">
+        <h2 class="post-title">
+            HTTP - 报文 - 首部
+        </h2>
+        
+        <div class="post-content-preview">
+            本文对HTTP报文中常见的首部做下说明。
+
+通用首部
+
+有些⾸部提供了与报⽂相关的最基本的信息，它们被称为通⽤⾸部。它们像和事佬⼉⼀样，不论报⽂是何类型，都为其提供⼀些有⽤信息。
+
+通用信息性首部如下：
+
+
+  
+    
+      ⾸部
+      描述
+    
+    
+      Connection
+      允许客户端和服务器指定与请求/响应连接有关的选项
+    
+    ...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 29, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/29/http-connect/">
+        <h2 class="post-title">
+            HTTP - 连接管理
+        </h2>
+        
+        <div class="post-content-preview">
+            TCP连接
+
+世界上⼏乎所有的 HTTP 通信都是由 TCP/IP 承载的，TCP/IP 是全球计算机及⽹络设备都在使⽤的⼀种常⽤的分组交换⽹络分层协议集。客户端应⽤程序可以打开⼀条 TCP/IP 连接，连接到可能运⾏在世界任何地⽅的服务器应⽤程序。⼀旦连接建⽴起来了，在客户端和服务器的计算机之间交换的报⽂就永远不会丢失、受损或失序。
+
+完整的连接执行流程如下图所示:
+
+
+
+TCP是分段、由...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 29, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/04/27/http-message-status/">
         <h2 class="post-title">
             HTTP - 报文 - 状态码
@@ -381,102 +475,6 @@ contract MyToken {
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2018/04/05/sha1/">
-        <h2 class="post-title">
-            加密散列-sha1
-        </h2>
-        
-        <div class="post-content-preview">
-            
-  SHA-1（英语：Secure Hash Algorithm 1，中文名：安全散列算法1）是一种密码散列函数，美国国家安全局设计，并由美国国家标准技术研究所（NIST）发布为联邦数据处理标准（FIPS）[2]。SHA-1可以生成一个被称为消息摘要的160位（20字节）散列值，散列值通常的呈现形式为40个十六进制数。
-
-
-算法步骤
-
-原始消息分为N个512bit的消息块。每个消息块分成1...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on April 5, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/04/05/ripemd160/">
-        <h2 class="post-title">
-            加密散列-PIPEMD160
-        </h2>
-        
-        <div class="post-content-preview">
-            
-  RIPEMD (RACE原始完整性校验讯息摘要)是一种加密哈希函数，由 鲁汶大学 Hans Dobbertin,Antoon Bosselaers 和 Bart Prenee组成的COSIC 研究小组发布于1996年。 RIPEMD是以MD4为基础原则所设计的 ，而且其表现与更有名的SHA-1类似.
-
-
-RIPEMD-160是以原始版RIPEMD所改进的160位元版本，而且是RIPEM...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on April 5, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/04/05/merkle-tree/">
-        <h2 class="post-title">
-            Merkle树
-        </h2>
-        
-        <div class="post-content-preview">
-            
-  Merkle树是一种哈希二叉树，它是一种用作快速归纳和校验大规模数据完整性的数据结构。
-
-
-比特币校验区块交易数据就是使用这种算法。
-
-Merkle树是自底向上构建的。如图所示
-
-
-
-Merkle树一般用来进行完整性验证处理。在处理完整性验证的应用场景中，Merkle树会大大减少数据的传输量及计算的复杂度。
-
-成如果想要证明一个确切的数据块是Merkle树中的一员。通常，只需要树根及这...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on April 5, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/04/05/md5/">
-        <h2 class="post-title">
-            加密散列-md5
-        </h2>
-        
-        <div class="post-content-preview">
-            
-  MD5消息摘要算法（英语：MD5 Message-Digest Algorithm），一种被广泛使用的密码散列函数，可以产生出一个128位（16字节）的散列值（hash value），用于确保信息传输完整一致。
-
-
-算法步骤
-
-原始消息分为N个512bit的消息块。每个消息块分成16个32bit。
-
-1.补位  
-由于必须分成n个512bit块，所以必须进行补位。  
-最后还需要预留6...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on April 5, 2018
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -611,7 +609,7 @@ Merkle树一般用来进行完整性验证处理。在处理完整性验证的�
                             
                         
                             
-                                <a href="/tags/#转载" title="转载" rel="4">
+                                <a href="/tags/#转载" title="转载" rel="8">
                                     转载
                                 </a>
                             
@@ -621,7 +619,7 @@ Merkle树一般用来进行完整性验证处理。在处理完整性验证的�
                             
                         
                             
-                                <a href="/tags/#精进" title="精进" rel="4">
+                                <a href="/tags/#精进" title="精进" rel="8">
                                     精进
                                 </a>
                             

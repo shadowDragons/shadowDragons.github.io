@@ -211,6 +211,123 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2017/02/02/mac-rsync-fswatch/">
+        <h2 class="post-title">
+            mac使用rsync+fswatch实现目录文件实时同步
+        </h2>
+        
+        <div class="post-content-preview">
+            安装rsync
+
+brew install rsync
+
+
+创建用户
+
+创建用户配置文件\etc\rsyncd.secrets  
+添加用户名:密码  
+这里我们设置用户名为root，密码123456，即root:123456
+
+配置
+
+创建配置文件 \etc\rsyncd.conf
+
+uid = root                   #守护进程的用户权限
+gid = root
+po...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on February 2, 2017
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2016/11/24/transaction-deal/">
+        <h2 class="post-title">
+            数据库的事务处理
+        </h2>
+        
+        <div class="post-content-preview">
+            事务四个核心要素
+
+原子性
+
+一组操作，要么都成功，要么都失败，不存在中间状态。
+
+一致性
+
+事务在提交或回滚时，对其他人来说，数据的状态是统一的，不存在其他状态。  
+最理想的状态是，数据提交后，所有的更改能立刻生效，但由于cpu运算，磁盘写入，内存写入需要时间，所以不可能达到立刻生效。  
+所以一般说的是逻辑上同时生效。  
+比如修改a，b两行数据，要保证一致性，对a，b加锁，修改数据，...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on November 24, 2016
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2016/11/24/consistency-highavailability/">
+        <h2 class="post-title">
+            数据库的一致性与高可用
+        </h2>
+        
+        <div class="post-content-preview">
+            在给定多台计算机，他们相互之间由网络相互连通，能够做到：
+
+
+  数据每次成功写入，数据不会丢失，并且按照写入的顺序排列
+  给定安全级别，保证服务可用性，并尽可能减少机器消耗。
+
+
+2PC
+
+所谓的两个阶段是指：第一阶段：准备阶段(投票阶段)和第二阶段：提交阶段（执行阶段）。
+
+准备阶段
+
+事务协调者(事务管理器)给每个参与者(资源管理器)发送Prepare消息，每个参与者要么直接返回失败...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on November 24, 2016
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2016/11/18/php-about-thred-safe/">
+        <h2 class="post-title">
+            php线程安全
+        </h2>
+        
+        <div class="post-content-preview">
+            线程不安全
+
+线程不安全就是不提供数据访问保护，有可能出现多个线程先后更改数据造成所得到的数据是脏数据。  
+比如一个 ArrayList 类，在添加一个元素的时候，它可能会有两步来完成：
+
+
+  在 Items[Size] 的位置存放此元素；
+  增大 Size 的值。
+
+
+在单线程运行的情况下，如果 Size = 0，添加一个元素后，此元素在位置 0，而且 Size=1；
+
+而如果是在多...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on November 18, 2016
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2016/11/14/machinelearning-supervised/">
         <h2 class="post-title">
             监督学习与梯度下降
@@ -394,118 +511,6 @@ www.a.com/...
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2016/11/13/hash-table/">
-        <h2 class="post-title">
-            哈希表
-        </h2>
-        
-        <div class="post-content-preview">
-            线性探查
-
-查找
-
-i = base = key%HT.length // get hashed index
-while (true)
-  if (HT[i] == EMPTY) return "not found"
-  else if (HT[i] == key) return "found at index i"
-  else i = (base+step*1)%HT.length
-
-
-...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 13, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/11/13/bit-cal/">
-        <h2 class="post-title">
-            位运算
-        </h2>
-        
-        <div class="post-content-preview">
-            以S = 1001011,j = 0000000为例。
-
-获取第 i 标志位
-
-j = 0000001
-(shift left j) * i
-S AND j
-
-
-切换第 i 标志位
-
-j = 0000001
-(shift left j) * i
-S XOR j
-(XOR: 11 = 0 10 = 1 01 = 1 00 = 0)
-
-
-清除第 i 标志位
-
-j = 0000001
-(shift...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 13, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/11/12/php-async/">
-        <h2 class="post-title">
-            php实现异步
-        </h2>
-        
-        <div class="post-content-preview">
-            php在处理异步执行主要有以下四种方式来处理，其中第四种方式是最好的，推荐使用。
-
-1.ajax或嵌入img标签，在src中指向异步地址。
-
-缺点 不能算是真正异步，主要用户关闭浏览器，异步脚本也就被终止掉了
-
-&lt;html&gt;
-&lt;head&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;img src="b.php"&gt; 
-&lt;script sr...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 12, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/11/11/php-nginx/">
-        <h2 class="post-title">
-            NGINX+PHP运行原理
-        </h2>
-        
-        <div class="post-content-preview">
-            前向代理与反向代理
-
-前向代理作为客户端的代理，将从互联网上获取的资源返回给一个或多个的客户端，服务器端（如Web服务器）只知道代理的IP地址而不知道客户端的IP地址。
-
-
-
-而反向代理是作为服务器端（如Web服务器）的代理使用，而不是客户端。客户端借由前向代理可以间接访问很多不同互联网服务器（簇）的资源，而反向代理是供很多客户端都通过它间接访问不同后端服务器上的资源，而不需要知道这些后端服...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 11, 2016
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -515,6 +520,10 @@ j = 0000001
         <a href="/page8">&larr; Newer Posts</a>
     </li>
     
+    
+    <li class="next">
+        <a href="/page10">Older Posts &rarr;</a>
+    </li>
     
 </ul>
 
@@ -636,7 +645,7 @@ j = 0000001
                             
                         
                             
-                                <a href="/tags/#转载" title="转载" rel="4">
+                                <a href="/tags/#转载" title="转载" rel="8">
                                     转载
                                 </a>
                             
@@ -646,7 +655,7 @@ j = 0000001
                             
                         
                             
-                                <a href="/tags/#精进" title="精进" rel="4">
+                                <a href="/tags/#精进" title="精进" rel="8">
                                     精进
                                 </a>
                             

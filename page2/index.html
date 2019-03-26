@@ -211,6 +211,98 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2019/03/19/swoole-timer/">
+        <h2 class="post-title">
+            「Swoole」Timer 毫秒精度的定时器
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  毫秒精度的定时器。底层基于epoll_wait和setitimer实现，数据结构使用最小堆，可支持添加大量定时器。   
+在同步进程中使用setitimer和信号实现，如Manager和TaskWorker进程。  
+在异步进程中使用epoll_wait/kevent/poll/select超时时间实现。
+
+
+间隔时钟定时器 tick
+
+
+  设置一个间隔时钟定时器，与after定时器...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on March 19, 2019
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2019/03/19/swoole-atomic/">
+        <h2 class="post-title">
+            「Swoole」atomic 计数器
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  swoole_atomic是swoole扩展提供的原子计数操作类，可以方便整数的无锁原子增减。  
+使用共享内存，可以在不同的进程之间操作计数。  
+swoole_atomic基于gcc提供的CPU原子指令，无需加锁。  
+swoole_atomic在服务器程序中必须在swoole_server-&gt;start前创建才能在Worker进程中使用。
+
+
+接口
+
+构造方法 __cons...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on March 19, 2019
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2019/03/18/thread-group-session-terminal/">
+        <h2 class="post-title">
+            进程、进程组、会话与控制终端
+        </h2>
+        
+        <div class="post-content-preview">
+            
+
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on March 18, 2019
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2019/03/09/xpack-crack/">
+        <h2 class="post-title">
+            Elasticsearch6.x-xpack破解
+        </h2>
+        
+        <div class="post-content-preview">
+            去掉license校验
+
+这里有我之前已经破解的6.5.4的包，有需要可以直接下载
+
+下载luyten反编译JAVA工具
+
+用luyent打开Elasticsearch目录下的modules/x-pack-core/x-pack-core-x.x.x.jar
+
+找到 org.elasticsearch.license.LicenseVerifier文件，提取出来做以下修改：
+LicenseV...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on March 9, 2019
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2019/03/09/serverless/">
         <h2 class="post-title">
             微服务框架技术选型
@@ -384,136 +476,6 @@ Windows其他版本
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2018/11/12/docker-base/">
-        <h2 class="post-title">
-            「Docker」基础
-        </h2>
-        
-        <div class="post-content-preview">
-            
-  本篇主要让大家知道如何安装、 Docker的基本知识点、Docker的基本使用
-
-
-安装
-
-Docker
-
-由于我本机是mac系统，所以这里以mac安装为例子。其他系统的安装请自行查看官方文档&gt;。
-
-进入官网下载页面&gt;下载。
-
-
-
-下载完成后，直接安装。
-
-完成后，直接打开Docker应用程序，如果这时顶部导航会显示Docker图标，说明已经启动了。
-
-
-
-查看版本，输入以...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 12, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/10/29/mouse-algorithm/">
-        <h2 class="post-title">
-            “老鼠试药”算法
-        </h2>
-        
-        <div class="post-content-preview">
-            昨天在网上看到一个视频，了解到了一个很有趣的算法。
-
-“老鼠试药”
-
-题目是这样的：有100瓶药水，只有1瓶毒药。毒性发作需要1周时间，请问至少需要机智老鼠才能用1周时间找到那瓶毒药。
-
-我们可以用二进制来轻松的解决这个问题。
-
-1、首先把100瓶药水按1到100排号。
-2、将序号转换为二进制。如下表所示：
-
-
-  
-    
-      药品序号
-      二进制
-    
-  
-  
-...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on October 29, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/10/15/swoole-note/">
-        <h2 class="post-title">
-            swoole 学习笔记
-        </h2>
-        
-        <div class="post-content-preview">
-            最近需要用到多进程处理任务，先学习一番。
-
-安装
-
-pecl install swoole
-
-
-安装遇到的问题
-
-我选择了支持openssl，安装过程中遇到了两个错误
-
-1、 fatal error: 'openssl/ssl.h' file not found
-
-解决方法： 
-一般用brew安装的软件，都会把需要include的文件自动放到/usr/local/include里的，但是不知...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on October 15, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/10/11/bhpws-brower-cache/">
-        <h2 class="post-title">
-            『构建高性能web站点』浏览器缓存
-        </h2>
-        
-        <div class="post-content-preview">
-            我们可以通过http头信息来实现浏览器缓存。
-
-Last-Modified
-
-这种信息需要后台来判定是否过期。流程如下：
-
-
-
-sequenceDiagram;
-    participant 客户端
-    participant 服务端
-    客户端-&gt;服务端: 请求静态文件
-    服务端-&gt;客户端: 返回头信息 Last-Modified: {最后修改时间} GMT
- ...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on October 11, 2018
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -648,7 +610,7 @@ sequenceDiagram;
                             
                         
                             
-                                <a href="/tags/#转载" title="转载" rel="4">
+                                <a href="/tags/#转载" title="转载" rel="8">
                                     转载
                                 </a>
                             
@@ -658,7 +620,7 @@ sequenceDiagram;
                             
                         
                             
-                                <a href="/tags/#精进" title="精进" rel="4">
+                                <a href="/tags/#精进" title="精进" rel="8">
                                     精进
                                 </a>
                             

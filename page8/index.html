@@ -211,6 +211,82 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2018/03/09/Byzantine-failures/">
+        <h2 class="post-title">
+            拜占庭算法
+        </h2>
+        
+        <div class="post-content-preview">
+            
+
+drow.io源文件下载
+
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on March 9, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/03/03/bitcoin-network/">
+        <h2 class="post-title">
+            比特币网络
+        </h2>
+        
+        <div class="post-content-preview">
+            
+
+drow.io源文件下载
+
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on March 3, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/03/03/bitcoin-chain/">
+        <h2 class="post-title">
+            比特币区块链
+        </h2>
+        
+        <div class="post-content-preview">
+            
+
+drow.io源文件下载
+
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on March 3, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/02/25/bitcoin-exchange/">
+        <h2 class="post-title">
+            比特币交易
+        </h2>
+        
+        <div class="post-content-preview">
+            
+
+drow.io源文件下载
+
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on February 25, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/02/21/bitcoin-wallet/">
         <h2 class="post-title">
             比特币钱包
@@ -350,123 +426,6 @@ wget --no-check-certificate -O shadowsocks-all.sh https://raw....
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2017/02/02/mac-rsync-fswatch/">
-        <h2 class="post-title">
-            mac使用rsync+fswatch实现目录文件实时同步
-        </h2>
-        
-        <div class="post-content-preview">
-            安装rsync
-
-brew install rsync
-
-
-创建用户
-
-创建用户配置文件\etc\rsyncd.secrets  
-添加用户名:密码  
-这里我们设置用户名为root，密码123456，即root:123456
-
-配置
-
-创建配置文件 \etc\rsyncd.conf
-
-uid = root                   #守护进程的用户权限
-gid = root
-po...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on February 2, 2017
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/11/24/transaction-deal/">
-        <h2 class="post-title">
-            数据库的事务处理
-        </h2>
-        
-        <div class="post-content-preview">
-            事务四个核心要素
-
-原子性
-
-一组操作，要么都成功，要么都失败，不存在中间状态。
-
-一致性
-
-事务在提交或回滚时，对其他人来说，数据的状态是统一的，不存在其他状态。  
-最理想的状态是，数据提交后，所有的更改能立刻生效，但由于cpu运算，磁盘写入，内存写入需要时间，所以不可能达到立刻生效。  
-所以一般说的是逻辑上同时生效。  
-比如修改a，b两行数据，要保证一致性，对a，b加锁，修改数据，...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 24, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/11/24/consistency-highavailability/">
-        <h2 class="post-title">
-            数据库的一致性与高可用
-        </h2>
-        
-        <div class="post-content-preview">
-            在给定多台计算机，他们相互之间由网络相互连通，能够做到：
-
-
-  数据每次成功写入，数据不会丢失，并且按照写入的顺序排列
-  给定安全级别，保证服务可用性，并尽可能减少机器消耗。
-
-
-2PC
-
-所谓的两个阶段是指：第一阶段：准备阶段(投票阶段)和第二阶段：提交阶段（执行阶段）。
-
-准备阶段
-
-事务协调者(事务管理器)给每个参与者(资源管理器)发送Prepare消息，每个参与者要么直接返回失败...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 24, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/11/18/php-about-thred-safe/">
-        <h2 class="post-title">
-            php线程安全
-        </h2>
-        
-        <div class="post-content-preview">
-            线程不安全
-
-线程不安全就是不提供数据访问保护，有可能出现多个线程先后更改数据造成所得到的数据是脏数据。  
-比如一个 ArrayList 类，在添加一个元素的时候，它可能会有两步来完成：
-
-
-  在 Items[Size] 的位置存放此元素；
-  增大 Size 的值。
-
-
-在单线程运行的情况下，如果 Size = 0，添加一个元素后，此元素在位置 0，而且 Size=1；
-
-而如果是在多...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 18, 2016
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -601,7 +560,7 @@ po...
                             
                         
                             
-                                <a href="/tags/#转载" title="转载" rel="4">
+                                <a href="/tags/#转载" title="转载" rel="8">
                                     转载
                                 </a>
                             
@@ -611,7 +570,7 @@ po...
                             
                         
                             
-                                <a href="/tags/#精进" title="精进" rel="4">
+                                <a href="/tags/#精进" title="精进" rel="8">
                                     精进
                                 </a>
                             

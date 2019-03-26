@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一个小白的成长学习历程">
+    <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
+    <meta name="theme-color" content="#000000">
+    
+    <title>「转载」当生活变成你并没想过要的…… - 李笑来 - ben blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2019/03/26/when-life-turns-out-to-be-what-wasnt-expected/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- mermaid CSS -->
+    <link rel="stylesheet" href="/assets/css/mermaid.css">
+
+    <script type="text/javascript"
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- google adsense -->
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-4009748690576137",
+        enable_page_level_ads: true
+      });
+    </script>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-4009748690576137",
+              enable_page_level_ads: true
+        });
+    </script>
+
+    <!-- 百度收录 -->
+    <script>
+      (function(){
+          var bp = document.createElement('script');
+          var curProtocol = window.location.protocol.split(':')[0];
+          if (curProtocol === 'https') {
+              bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+          }
+          else {
+              bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+          }
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(bp, s);
+      })();
+    </script>
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Ben Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/book/">Book</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/">Tags</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg.jpg')
+    }
+
+    
+</style>
+<header class="intro-header" >
+    <div class="header-mask"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#精进" title="精进">精进</a>
+                        
+                        <a class="tag" href="/tags/#转载" title="转载">转载</a>
+                        
+                    </div>
+                    <h1>「转载」当生活变成你并没想过要的…… - 李笑来</h1>
+                    
+                    
+                    <h2 class="subheading"></h2>
+                    
+                    <span class="meta">Posted by Ben Blog on March 26, 2019</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<blockquote>
+  <p>转载自 <a href="http://lixiaolai.com/2018/10/05/when-life-turns-out-to-be-what-wasnt-expected/">当生活变成你并没想过要的……</a></p>
+</blockquote>
+
+<p>生活的诡异之处在于：</p>
+
+<blockquote>
+  <p>一切的巨大的变化都是坏的 —— 无论是好的变化，还是坏的变化……</p>
+</blockquote>
+
+<p>这并不是我的总结，这是《Story》的作者，著名编剧大师麦基在他的课上经常讲的一句话。</p>
+
+<p>为什么会出现这种情况呢？因为你每时每刻所具备的特质、技能，都是渐进积累的，都是为了你的彼时彼刻的“现状”所定制的…… 一旦巨大的变化发生，你的特质、你的技能，只能变成突然之间“不适用”了。</p>
+
+<p>于是，那变化越大，你需要积累、学会的技能就越大、越难；而留给你的时间常常并不多，甚至，那变化越大，你的时间越少…… 这就好像你车速 30 迈的时候，已经是老司机的你当然处理任何意外都“游刃有余”，可突然之间速度变成了 300 迈（类比上来看，甚至可能更高，比如 30,000 迈）的时候，你过往积累的所有经验所有技能不仅可能突然失效，甚至干脆会成为“威胁”…… 你说，这能不是坏事儿吗？</p>
+
+<p>而生活中最可怕的变化，很可能是与金钱相关的变化。你突然变得很富有，本质上来看和你突然变得很贫穷一样，不是什么好事儿。如果你的年收入从 20 万人民币变成了 30 万人民币，这谈不上是“巨大”的变化，只能是好事；可如果是 20 万到 200 万，甚至 2000 万的变化，那肯定是坏事儿，绝大多数人只不过是没机会“通过体验承认这个事实”而已。</p>
+
+<p>那种变化就好像是在院子里无忧无虑地生活的小白兔突然有一天被“放生”到亚马逊丛林里一样…… 食物结构变了，居住条件变了，面对的物种数量和种类也全都变了 —— 都是不熟悉的。</p>
+
+<p>当巨大变化发生的时候，避免自己被它绞杀的方法，没有人教我…… 幸亏我还有个自我保护的意识，所以，验证了一些有效的经验，归结起来只有一句话：</p>
+
+<blockquote>
+  <p>尽量保持一些重要的生活部分“<strong>坚决不变</strong>”。</p>
+</blockquote>
+
+<p>生活中有什么特别重要的部分呢？在我看来，其实就这么两个：</p>
+
+<blockquote>
+  <ol>
+    <li>亲情、友情</li>
+    <li>大脑的运作方式</li>
+  </ol>
+</blockquote>
+
+<p>在巨变之后，保持原有的“亲情、友情”不变，并不像很多人想象得那么简单。需要很多“站在对方角度思考”的努力，很多的时候，很少有人意识到“若是你不主动”，那么“情谊”其实是相当脆弱的一个东西。</p>
+
+<p>而第二个，“大脑的运作方式”，这一点太重要了。我原来写书，巨变发生之后，我还照样写书；我原来爱好读书，巨变发生之后照样读书；我原来喜欢宅在家里不去旅游，那么就依然宅在家里不去旅游；原来靠稿费生存，那么就依然靠稿费生存（于是，生活开销渐渐提高了一些，因为稿费更多了）……</p>
+
+<p>几年下来，回头细看，发现几乎所有“巨变之前没做过的事情，巨变之后做了的”，绝大部分都是失败的 —— 为什么呢？因为之前的经验和技能完全不适用么！</p>
+
+<p>幸运的是，过去的五年里我学会了一件事情，“<strong>资本管理</strong>”。不仅是管自己的钱，更重要的是有能力管别人托管的钱 —— 这一点，实际上是过去的我完全没有机会体验的事情。五年后的某一天，我向当初向我托管资金的人们说：</p>
+
+<blockquote>
+  <p>这五年来，我最感激的是你们。感谢绝大部分“以沉默作为支持”的人；同样也感激那些在这个过程中“捣乱、扯淡、甚至挖坑”的少数那么几个人 —— 为什么呢？因为没有你们，没有你们中的任何一个，我都不可能变成今天的我。支持的人，让我感受到责任；捣乱的人，让我感受到责任的同时也明白其中的不容易；挖坑的人，既然没有坑死我，那就只能让我变得更强…… 总之，全是感谢，没有任何其它一丝一毫。</p>
+</blockquote>
+
+<p>然后给这些人一个“大家只能感谢”的交代。</p>
+
+<p>从另外一个角度，与金钱相关的能力无非以下几个阶段：</p>
+
+<blockquote>
+  <ul>
+    <li>赚到钱</li>
+    <li>攒下钱</li>
+    <li>能让钱生钱</li>
+    <li>能管理更多的钱（即，不止自己的钱）</li>
+    <li>能长期做到好的管理成绩……</li>
+  </ul>
+</blockquote>
+
+<p>现在回头看，幸亏在 2013 年的时候，我意识到“巨变”可能并不是好事，开启了“自我保护”的过程 —— 用学习（一个之前不可能有机会学习的技能）作为自己逃出“巨变诅咒”的方式。</p>
+
+<p>五年过去，在与金钱相关的技能上，像打游戏一样终于“通关”。</p>
+
+<p>然而，“通关”再一次是个巨大的变化，希望之前的诀窍（尽量保持一些重要的生活部分“坚决不变”）继续生效……</p>
+
+
+
+                <hr style="visibility: hidden;">
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/03/26/start-learn-en/" data-toggle="tooltip" data-placement="top" title="「转载」十分钟后开始使用英语 - 李笑来">
+                        Previous<br>
+                        <span>「转载」十分钟后开始使用英语 - 李笑来</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2019/03/26/you-re-not-qulified-if-you-are-thinking-like-this/" data-toggle="tooltip" data-placement="top" title="「转载」只要你有这样的闪念就说明暂时还不适合做投资…… - 李笑来">
+                        Next<br>
+                        <span>「转载」只要你有这样的闪念就说明暂时还不适合做投资…… - 李笑来</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+
+
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+        				
+                            
+                				<a href="/tags/#php" title="php" rel="17">
+                                    php
+                                </a>
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#算法" title="算法" rel="7">
+                                    算法
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#数据结构" title="数据结构" rel="2">
+                                    数据结构
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#分布式" title="分布式" rel="2">
+                                    分布式
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#区块链" title="区块链" rel="18">
+                                    区块链
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#比特币" title="比特币" rel="7">
+                                    比特币
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#密码学" title="密码学" rel="6">
+                                    密码学
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#以太坊" title="以太坊" rel="4">
+                                    以太坊
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#http" title="http" rel="12">
+                                    http
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#超级账本" title="超级账本" rel="8">
+                                    超级账本
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#fabric" title="fabric" rel="8">
+                                    fabric
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#MYSQL" title="MYSQL" rel="3">
+                                    MYSQL
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#web开发" title="web开发" rel="5">
+                                    web开发
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#计算机" title="计算机" rel="3">
+                                    计算机
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#转载" title="转载" rel="8">
+                                    转载
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#精进" title="精进" rel="8">
+                                    精进
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#操作系统" title="操作系统" rel="2">
+                                    操作系统
+                                </a>
+                            
+        				
+        			</div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    
+
+
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/shadowdragons">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Ben Blog 2019
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async('/js/jquery.tagcloud.js',function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    if (document.domain == 'tudool.com' || document.domain == 'www.tudool.com') {
+        var _gaId = 'UA-89143952-3';
+        var _gaDomain = 'www.tudool.com';
+    } else {
+        var _gaId = 'UA-89143952-2';
+        var _gaDomain = 'shadowdragons.github.io';
+    }
+
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    if (document.domain == 'tudool.com' || document.domain == 'www.tudool.com') {
+        var _baId = '9a5ff48930575f65a9958d6277b9e28e';
+    } else {
+        var _baId = '2a8326534823f90fa4eef816aea2ef08';
+    }
+    
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

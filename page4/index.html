@@ -211,6 +211,153 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2018/07/29/computer-thread/">
+        <h2 class="post-title">
+            进程与线程
+        </h2>
+        
+        <div class="post-content-preview">
+            先理解一下，什么是进程和线程：
+
+在现代操作系统中，进程支持多线程。
+
+
+  进程是资源管理的最小单元；
+  线程是程序执行的最小单元。
+
+
+它们之间的关系如下图所示：
+
+
+
+那么什么是程序执行的最小单位呢？
+
+线程作为调度和分配的基本单位（也被称为轻量级进程），这是因为他们共享进程的资源，所以没有太多的内存消耗。
+
+当多个程序同时在执行的时候，我们的cpu（当cpu数小于程序数）并不能同时...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on July 29, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/07/27/bhpws-service/">
+        <h2 class="post-title">
+            『构建高性能web站点』服务器并发
+        </h2>
+        
+        <div class="post-content-preview">
+            吞吐率
+
+单位时间内服务器处理的请求数 reqs/s
+
+用户并发数
+
+服务器最大并发数是有一定的利益前提的，就是服务器和用户双方所能接受的最大利益下。
+每个用户可以在同一时间发起不止一个请求（与浏览器、http版本有关），所以用户并发数 &gt; 请求并发数。
+
+请求等待时间
+
+分为以下两种
+
+
+  用户平均请求等待时间。
+  服务器平均请求处理时间（等于吞吐率的倒数）。
+
+
+线程与进程
+
+...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on July 27, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/07/14/perconaToolkit/">
+        <h2 class="post-title">
+            PerconaToolkit工具集合
+        </h2>
+        
+        <div class="post-content-preview">
+            pt-align
+
+将其它工具的输出按列对齐。
+
+pt-archiver
+
+将数据归档到另一张表或者文件。
+
+pt-config-diff
+
+对比数据库配置、环境变量差异
+
+pt-deadlock-logger
+
+记录死锁日志，并保存到文件或者数据表
+
+pt-diskstats
+
+功能和iostat类似，给出磁盘的I/O统计信息
+
+pt-duplicate-key-checker
+
+检测表中...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on July 14, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/07/14/bhpws-network/">
+        <h2 class="post-title">
+            『构建高性能web站点』网络传输
+        </h2>
+        
+        <div class="post-content-preview">
+            OSI七层网络协议&amp;四层协议
+
+
+
+每层功能如下表所示：
+
+
+  
+    
+      层
+      功能
+      典型设备
+      典型协议、标准和应用
+    
+  
+  
+    
+      应用层
+      用户接口、应用程序
+      网关
+      TELNET, FTP, HTTP
+    
+    
+      表示层
+      数据的表示、压缩...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on July 14, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/06/30/mysql-innodb-index/">
         <h2 class="post-title">
             mysql系列教程 - B+Tree索引
@@ -388,104 +535,6 @@ sudo npm i -g n
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2018/05/13/hyperledger-fabric-5/">
-        <h2 class="post-title">
-            fabric入门（五）安装和实例化链码
-        </h2>
-        
-        <div class="post-content-preview">
-            安装启动链码
-
-首先，在将示例代码安装到4个peer节点中的其中一个。这个命令将源代码放到peer节点的文件系统中。
-
-peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric-samples/chaincode/chaincode_example02/go/chaincode_example02
-
-
-接下来...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on May 13, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/05/13/hyperledger-fabric-4/">
-        <h2 class="post-title">
-            fabric入门（四）启动网络
-        </h2>
-        
-        <div class="post-content-preview">
-            启动网络
-
-我们将利用docker-compose脚本来启动我们的区块链网络。
-
-在开始前，我们先注释掉docker-compose-cli.yml的一段command: /bin/bash代码，不然该脚本将在网络启动时执行所有命令.
-
- cli:
-    container_name: cli
-    image: hyperledger/fabric-tools:$IMAGE_TAG
- ...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on May 13, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/05/13/hyperledger-fabric-3/">
-        <h2 class="post-title">
-            fabric入门（三）加密&交易生成器
-        </h2>
-        
-        <div class="post-content-preview">
-            通过查看./byfn.sh这个shell启动脚本，我们知道一开始的执行流程。
-
-#Create the network using docker compose
-if [ "${MODE}" == "up" ]; then
-  networkUp
-elif [ "${MODE}" == "down" ]; then ## Clear the network
-  networkDown
-eli...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on May 13, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/05/13/hyperledger-fabric-2/">
-        <h2 class="post-title">
-            fabric入门（二）启动&关闭网络
-        </h2>
-        
-        <div class="post-content-preview">
-            进入官方示例
-
-cd $GOPATH/src/github.com/hyperledger/fabric-samples/first-network
-
-
-第一步生成我们各种网络实体的所有证书和密钥，genesis block用于引导排序服务，以及配置Channel所需要的一组交易配置集合。
-运行以下命令：
-
-./byfn.sh -m generate
-
-
-接下来可以使用以下命令来启动整个网络...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on May 13, 2018
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -620,7 +669,7 @@ cd $GOPATH/src/github.com/hyperledger/fabric-samples/first-network
                             
                         
                             
-                                <a href="/tags/#转载" title="转载" rel="4">
+                                <a href="/tags/#转载" title="转载" rel="8">
                                     转载
                                 </a>
                             
@@ -630,7 +679,7 @@ cd $GOPATH/src/github.com/hyperledger/fabric-samples/first-network
                             
                         
                             
-                                <a href="/tags/#精进" title="精进" rel="4">
+                                <a href="/tags/#精进" title="精进" rel="8">
                                     精进
                                 </a>
                             
