@@ -266,6 +266,378 @@
   </tbody>
 </table>
 
+<h5 id="启动-start">启动 start</h5>
+
+<p>执行<code class="highlighter-rouge">fork</code>系统调用，启动进程。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">swoole_process</span><span class="o">-&gt;</span><span class="na">start</span><span class="p">()</span> <span class="o">:</span> <span class="nx">int</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">返回</td>
+      <td style="text-align: left">创建成功返回子进程的<code class="highlighter-rouge">PID</code>，创建失败返回<code class="highlighter-rouge">false</code>。<br />可使用<code class="highlighter-rouge">swoole_errno</code>和<code class="highlighter-rouge">swoole_strerror</code>得到错误码和错误信息。</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <ul>
+    <li>子进程启动后会自动清除父进程中swoole_timer_tick创建的定时器、swoole_process::signal监听的信号和swoole_event_add添加的事件监听</li>
+    <li>子进程会继承父进程创建的$redis连接对象，父子进程使用的连接是同一个</li>
+  </ul>
+</blockquote>
+
+<h5 id="命名-name">命名 name</h5>
+
+<p>修改进程名称。此函数是<code class="highlighter-rouge">swoole_set_process_name</code>的别名。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$process</span><span class="o">-&gt;</span><span class="na">name</span><span class="p">(</span><span class="s2">"php server.php: worker"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h5 id="执行外部程序-exec">执行外部程序 exec</h5>
+
+<p>执行一个外部程序，此函数是exec系统调用的封装。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">bool</span> <span class="nx">Process</span><span class="o">-&gt;</span><span class="na">exec</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$execfile</span><span class="p">,</span> <span class="k">array</span> <span class="nv">$args</span><span class="p">)</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$execfile</code></td>
+      <td style="text-align: left">指定可执行文件的绝对路径，如 <code class="highlighter-rouge">"/usr/bin/python"</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$args</code></td>
+      <td style="text-align: left">是一个数组，是exec的参数列表，如 <code class="highlighter-rouge">array('test.py', 123)</code>，相当于<code class="highlighter-rouge">python test.py 123</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <ul>
+    <li>$execfile必须使用绝对路径，否则会报文件不存在错误</li>
+    <li>由于exec系统调用会使用指定的程序覆盖当前程序，子进程需要读写标准输出与父进程进行通信</li>
+    <li>如果未指定redirect_stdin_stdout = true，执行exec后子进程与父进程无法通信</li>
+  </ul>
+</blockquote>
+
+<h5 id="向管道写数据-write">向管道写数据 write</h5>
+
+<p>向管道内写入数据。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">int</span> <span class="nx">Process</span><span class="o">-&gt;</span><span class="na">write</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$data</span><span class="p">);</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$data</code></td>
+      <td style="text-align: left">写入的数据。它的长度在<code class="highlighter-rouge">Linux</code>系统下最大不超过<code class="highlighter-rouge">8K</code>，<code class="highlighter-rouge">MacOS/FreeBSD</code>下最大不超过<code class="highlighter-rouge">2K</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <ul>
+    <li>在子进程内调用write，父进程可以调用read接收此数据</li>
+    <li>在父进程内调用write，子进程可以调用read接收此数据</li>
+  </ul>
+</blockquote>
+
+<h5 id="从管道读取数据-read">从管道读取数据 read</h5>
+
+<p>从管道中读取数据。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">Process</span><span class="o">-&gt;</span><span class="na">read</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$buffer_size</span><span class="o">=</span><span class="mi">8192</span><span class="p">)</span> <span class="o">:</span> <span class="nx">string</span> <span class="o">|</span> <span class="nx">bool</span><span class="p">;</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$buffer_size</code></td>
+      <td style="text-align: left">缓冲区的大小，默认为<code class="highlighter-rouge">8192</code>，最大不超过<code class="highlighter-rouge">64K</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">返回</td>
+      <td style="text-align: left">成功返回二进制数据字符串，读取失败返回<code class="highlighter-rouge">false</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <ul>
+    <li>管道类型为<code class="highlighter-rouge">DGRAM</code>数据报时，<code class="highlighter-rouge">read</code>可以读取完整的一个数据包</li>
+    <li>管道类型为<code class="highlighter-rouge">STREAM</code>时，<code class="highlighter-rouge">read</code>是流式的，需要自行处理包完整性问题</li>
+  </ul>
+</blockquote>
+
+<h5 id="管道读写超时-settimeout">管道读写超时 setTimeout</h5>
+
+<p>设置管道读写操作的超时时间。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">Process</span><span class="o">-&gt;</span><span class="na">setTimeout</span><span class="p">(</span><span class="nx">double</span> <span class="nv">$timeout</span><span class="p">)</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$timeout</code></td>
+      <td style="text-align: left">单位为秒，支持浮点型，如<code class="highlighter-rouge">1.5</code>表示<code class="highlighter-rouge">1s+500ms</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">返回</td>
+      <td style="text-align: left">成功返回<code class="highlighter-rouge">true</code>，失败返回<code class="highlighter-rouge">false</code>，可使用<code class="highlighter-rouge">swoole_errno</code>获取错误码</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="阻塞模式-setblocking">阻塞模式 setBlocking</h5>
+
+<p>设置管道是否为阻塞模式。默认<code class="highlighter-rouge">Process</code>的管道为同步阻塞。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">Process</span><span class="o">-&gt;</span><span class="na">setBlocking</span><span class="p">(</span><span class="nx">bool</span> <span class="nv">$blocking</span> <span class="o">=</span> <span class="kc">true</span><span class="p">);</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$blocking</code></td>
+      <td style="text-align: left">布尔型，默认为<code class="highlighter-rouge">true</code>，设置为<code class="highlighter-rouge">false</code>时管道为非阻塞模式</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>非阻塞模式</strong></p>
+
+<ul>
+  <li>在异步程序中使用<code class="highlighter-rouge">swoole_event_add</code>添加管道事件监听时底层会自动将管道设置为非阻塞</li>
+  <li>在异步程序中使用<code class="highlighter-rouge">swoole_event_write</code>异步写入数据时底层会自动将管道设置为非阻塞</li>
+</ul>
+
+<h5 id="启用消息队列-usequeue">启用消息队列 useQueue</h5>
+
+<p>启用消息队列作为进程间通信。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">bool</span> <span class="nx">swoole_process</span><span class="o">-&gt;</span><span class="na">useQueue</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$msgkey</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">int</span> <span class="nv">$mode</span> <span class="o">=</span> <span class="mi">2</span><span class="p">);</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$msgkey</code></td>
+      <td style="text-align: left">消息队列的key，默认会使用<code class="highlighter-rouge">ftok(__FILE__, 1)</code>作为<code class="highlighter-rouge">KEY</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$mode</code></td>
+      <td style="text-align: left">通信模式，默认为<code class="highlighter-rouge">2</code>，表示争抢模式，所有创建的子进程都会从队列中取数据</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">返回</td>
+      <td style="text-align: left">创建消息队列失败，会返回<code class="highlighter-rouge">false</code>，反之，返回成功。可使用<code class="highlighter-rouge">swoole_strerror(swoole_errno())</code>得到错误码和错误信息。</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>非阻塞</strong></p>
+
+<p>在<code class="highlighter-rouge">1.9.2</code>或更高版本中增加了<code class="highlighter-rouge">swoole_process::IPC_NOWAIT</code>的支持，可将队列设置为非阻塞。在非阻塞模式下，队列已满调用<code class="highlighter-rouge">push</code>方法、队列已空调用<code class="highlighter-rouge">pop</code>方法时将不再阻塞立即返回。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//设置为非阻塞模式</span>
+<span class="nv">$process</span><span class="o">-&gt;</span><span class="na">useQueue</span><span class="p">(</span><span class="nv">$key</span><span class="p">,</span> <span class="nv">$mode</span> <span class="o">|</span> <span class="nx">swoole_process</span><span class="o">::</span><span class="na">IPC_NOWAIT</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h5 id="消息队列状态-statqueue">消息队列状态 statQueue</h5>
+
+<p>查看消息队列状态。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">array</span> <span class="nx">swoole_process</span><span class="o">-&gt;</span><span class="na">statQueue</span><span class="p">();</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">返回</td>
+      <td style="text-align: left">返回一个数组，包括2项信息<br />* <code class="highlighter-rouge">queue_num</code> 队列中的任务数量<br /> * <code class="highlighter-rouge">queue_bytes</code> 队列数据的总字节数</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="删除消息队列-freequeue">删除消息队列 freeQueue</h5>
+
+<p>删除队列。此方法与<code class="highlighter-rouge">useQueue</code>成对使用，<code class="highlighter-rouge">useQueue</code>创建队列，使用<code class="highlighter-rouge">freeQueue</code>销毁队列。销毁队列后队列中的数据会被清空。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">swoole_process</span><span class="o">-&gt;</span><span class="na">freeQueue</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>如果程序中只调用了<code class="highlighter-rouge">useQueue</code>方法，未调用<code class="highlighter-rouge">freeQueue</code>在程序结束时并不会清除数据。重新运行程序时可以继续读取上次运行时留下的数据。</p>
+
+<p>系统重启时消息队列中的数据会被丢弃。</p>
+
+<h5 id="推送消息队列-push">推送消息队列 push</h5>
+
+<p>投递数据到消息队列中。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">bool</span> <span class="nx">Process</span><span class="o">-&gt;</span><span class="na">push</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$data</span><span class="p">);</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$data</code></td>
+      <td style="text-align: left">要投递的数据，长度受限与操作系统内核参数的限制。默认为<code class="highlighter-rouge">8192</code>，最大不超过<code class="highlighter-rouge">65536</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">返回</td>
+      <td style="text-align: left">操作失败会返回<code class="highlighter-rouge">false</code>，成功返回<code class="highlighter-rouge">true</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <ul>
+    <li>默认模式下（阻塞模式），如果队列已满，push方法会阻塞等待</li>
+    <li>非阻塞模式下，如果队列已满，push方法会立即返回false</li>
+  </ul>
+</blockquote>
+
+<h5 id="拉取消息队列-pop">拉取消息队列 pop</h5>
+
+<p>从队列中提取数据。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">string</span> <span class="nx">Process</span><span class="o">-&gt;</span><span class="na">pop</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$maxsize</span> <span class="o">=</span> <span class="mi">8192</span><span class="p">);</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$maxsize</code></td>
+      <td style="text-align: left">表示获取数据的最大尺寸，默认为<code class="highlighter-rouge">8192</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">返回</td>
+      <td style="text-align: left">操作失败会返回<code class="highlighter-rouge">false</code>，成功返回<code class="highlighter-rouge">true</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <ul>
+    <li>默认模式下，如果队列中没有数据，<code class="highlighter-rouge">pop</code>方法会阻塞等待</li>
+    <li>非阻塞模式下，如果队列中没有数据，<code class="highlighter-rouge">pop</code>方法会立即返回<code class="highlighter-rouge">false</code>，并设置错误码为<code class="highlighter-rouge">ENOMSG</code></li>
+  </ul>
+</blockquote>
+
+<h5 id="关闭管道-close">关闭管道 close</h5>
+
+<p>用于关闭创建的好的管道。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">bool</span> <span class="nx">Process</span><span class="o">-&gt;</span><span class="na">close</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$which</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$which</code></td>
+      <td style="text-align: left">指定关闭哪一个管道:<br />0:同时关闭读和写(默认)<br />1:关闭写<br />2:关闭读</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">返回</td>
+      <td style="text-align: left">操作失败会返回<code class="highlighter-rouge">false</code>，成功返回<code class="highlighter-rouge">true</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="退出">退出</h5>
+
+<p>退出子进程</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">int</span> <span class="nx">Process</span><span class="o">-&gt;</span><span class="na">exit</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$status</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$status</code></td>
+      <td style="text-align: left">退出进程的状态码。<br />如果为<code class="highlighter-rouge">0</code>表示正常结束，会继续执行<code class="highlighter-rouge">PHP</code>的<code class="highlighter-rouge">shutdown_function</code>，其他扩展的清理工作。<br />如果不为<code class="highlighter-rouge">0</code>，表示异常退出，会立即终止进程。不再执行<code class="highlighter-rouge">PHP</code>的<code class="highlighter-rouge">shutdown_function</code>，其他扩展的清理工作。</td>
+    </tr>
+  </tbody>
+</table>
+
 <p>未完待续！</p>
 
 
@@ -427,7 +799,7 @@
                             
         				
                             
-                				<a href="/tags/#转载" title="转载" rel="8">
+                				<a href="/tags/#转载" title="转载" rel="9">
                                     转载
                                 </a>
                             
@@ -437,7 +809,7 @@
                             
         				
                             
-                				<a href="/tags/#精进" title="精进" rel="8">
+                				<a href="/tags/#精进" title="精进" rel="9">
                                     精进
                                 </a>
                             
