@@ -5,13 +5,17 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 27 Mar 2019 16:34:51 +0800</pubDate>
-    <lastBuildDate>Wed, 27 Mar 2019 16:34:51 +0800</lastBuildDate>
+    <pubDate>Wed, 27 Mar 2019 16:38:01 +0800</pubDate>
+    <lastBuildDate>Wed, 27 Mar 2019 16:38:01 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
         <title>「转载」提问的智慧</title>
-        <description>&lt;h3 id=&quot;简介&quot;&gt;简介&lt;/h3&gt;
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;转载自 &lt;a href=&quot;https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way&quot;&gt;https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;简介&quot;&gt;简介&lt;/h3&gt;
 
 &lt;p&gt;在&lt;a href=&quot;http://www.catb.org/~esr/faqs/hacker-howto.html&quot;&gt;黑客&lt;/a&gt;的世界里，当你拋出一个技术问题时，最终是否能得到有用的回答，往往取决于你所提问和追问的方式。本指南将教你如何正确的提问以获得你满意的答案。&lt;/p&gt;
 
