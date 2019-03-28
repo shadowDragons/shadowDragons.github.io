@@ -211,6 +211,38 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2019/03/20/swoole-lock/">
+        <h2 class="post-title">
+            「Swoole」Lock 锁
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  创建一个锁，用来实现数据同步。
+
+
+支持五种类型锁：
+
+
+  文件锁 SWOOLE_FILELOCK
+  读写锁 SWOOLE_RWLOCK
+  信号量 SWOOLE_SEM
+  互斥锁 SWOOLE_MUTEX
+  自旋锁 SWOOLE_SPINLOCK
+
+
+请勿在onReceive等回调函数中创建锁，否则底层的GlobalMemory内存会持续增长，造成内存泄漏。
+
+不要循环创建/...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on March 20, 2019
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2019/03/20/swoole-buffer/">
         <h2 class="post-title">
             「Swoole」Buffer 内存
@@ -455,39 +487,6 @@ Windows其他版本
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2019/01/13/management-of-connections/">
-        <h2 class="post-title">
-            成为人脉管理高手
-        </h2>
-        
-        <div class="post-content-preview">
-            可视化盘点自己的人脉
-
-有一个理论称为六度理论。
-
-  世界人不论你想认识谁，只要通过六个人就可以认识到。
-
-
-在开展六度人脉时，你首先需要明白的两点： 
-第一：你的目标人物是谁？
-第二：让你的人脉圈多元化
-
-四步追问法
-
-在你想要认识某一位人物之前，不妨先自己回答这四个问题，当你清晰明白了自己到动机，你就知道你的目标人物是谁？该从哪个方向着手。
-
-1、你想做什么？
-2、你为谁而做？
-3、他...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on January 13, 2019
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -555,6 +554,10 @@ Windows其他版本
                         
                             
                         
+                            
+                                <a href="/tags/#工具" title="工具" rel="3">
+                                    工具
+                                </a>
                             
                         
                             
@@ -625,8 +628,6 @@ Windows其他版本
                                 <a href="/tags/#转载" title="转载" rel="9">
                                     转载
                                 </a>
-                            
-                        
                             
                         
                             

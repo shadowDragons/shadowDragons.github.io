@@ -10,7 +10,7 @@
     <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
     <meta name="theme-color" content="#000000">
     
-    <title>NGINX+PHP运行原理 - ben blog</title>
+    <title>shadowsock部署 V2 - ben blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2016/11/11/php-nginx/">
+    <link rel="canonical" href="http://localhost:4000/2019/03/28/shadowsock-v2/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -201,17 +201,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#php" title="php">php</a>
-                        
-                        <a class="tag" href="/tags/#nginx" title="nginx">nginx</a>
+                        <a class="tag" href="/tags/#工具" title="工具">工具</a>
                         
                     </div>
-                    <h1>NGINX+PHP运行原理</h1>
+                    <h1>shadowsock部署 V2</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Ben Blog on November 11, 2016</span>
+                    <span class="meta">Posted by Ben Blog on March 28, 2019</span>
                 </div>
             </div>
         </div>
@@ -232,134 +230,142 @@
                 <!-- Multi-Lingual -->
                 
 
-				<h3 id="前向代理与反向代理">前向代理与反向代理</h3>
+				<h3 id="主机选择">主机选择</h3>
 
-<p>前向代理作为客户端的代理，将从互联网上获取的资源返回给一个或多个的客户端，服务器端（如Web服务器）只知道代理的IP地址而不知道客户端的IP地址。</p>
+<p><a href="https://bwg.net/">搬瓦工</a></p>
 
-<p><img src="/assets/img/posts/2016-11-11-php-nginx/1.png" alt="1.png" /></p>
+<p>最好选择CN2线路的较稳定，里面有很多优惠活动，可以多留意下～</p>
 
-<p>而反向代理是作为服务器端（如Web服务器）的代理使用，而不是客户端。客户端借由前向代理可以间接访问很多不同互联网服务器（簇）的资源，而反向代理是供很多客户端都通过它间接访问不同后端服务器上的资源，而不需要知道这些后端服务器的存在，而以为所有资源都来自于这个反向代理服务器。</p>
+<h3 id="shadowsocks部署">shadowsocks部署</h3>
 
-<p><img src="/assets/img/posts/2016-11-11-php-nginx/2.png" alt="2.png" /></p>
+<p>使用<code class="highlighter-rouge">ssh</code>进入你购买主机的终端</p>
 
-<h3 id="cgi">CGI</h3>
+<h5 id="安装">安装</h5>
 
-<p>通用网关接口（Common Gateway Interface/CGI）是一种重要的互联网技术，可以让一个客户端，从网页浏览器向执行在网络服务器上的程序请求数据。CGI描述了服务器和请求处理程序之间传输数据的一种标准。</p>
+<p>Debian / Ubuntu:</p>
 
-<p>CGI程序可以用任何脚本语言或者是完全独立编程语言实现，只要这个语言可以在这个系统上运行。除Perl外，像Unix shell script, Python, Ruby, PHP, Tcl, C/C++,和Visual Basic都可以用来编写CGI程序。</p>
-
-<p>工作方式  <br />
-从Web服务器的角度看，是在特定的位置（比如：http://www.example.com/wiki.cgi）定义了可以运行CGI程序。当收到一个匹配URL的请求，相应的程序就会被调用，并将客户端发送的数据作为输入。程序的输出会由Web服务器收集，并加上合适的档头，再发送回客户端。</p>
-
-<p>缺点  <br />
-一般每次的CGI请求都需要新生成一个程序的副本来运行，这样大的工作量会很快将服务器压垮，因此一些更有效的技术像mod_php，可以让脚本解释器直接作为模块集成在Web服务器（例如：Apache）中，这样就能避免重复载入和初始化解释器。不过这只是就那些需要解释器的高级语言（即解释语言）而言的，使用诸如C一类的编译语言则可以避免这种额外负荷。由于C及其他编译语言的程序与解释语言程序相比，前者的运行速度更快、对操作系统的负荷更小，使用编译语言程序是可能达到更高执行效率的，然而因为开发效率等原因，在目前直译性语言还是最合适的。</p>
-
-<h3 id="fast-cgi">FAST-CGI</h3>
-
-<p>快速通用网关接口（Fast Common Gateway Interface／FastCGI）是一种让交互程序与Web服务器通信的协议。FastCGI是早期通用网关接口（CGI）的增强版本。  <br />
-FastCGI致力于减少网页服务器与CGI程序之间交互的开销，从而使服务器可以同时处理更多的网页请求。</p>
-
-<p>CGI使外部程序与Web服务器之间交互成为可能。CGI程序运行在独立的进程中，并对每个Web请求创建一个进程，这种方法非常容易实现，但效率很差，难以扩展。面对大量请求，进程的大量创建和消亡使操作系统性能大大下降。此外，由于地址空间无法共享，也限制了资源重用。</p>
-
-<p>与为每个请求创建一个新的进程不同，FastCGI使用持续的进程来处理一连串的请求。这些进程由FastCGI服务器管理，而不是web服务器。 当进来一个请求时，web服务器把环境变量和这个页面请求通过一个socket比如FastCGI进程与web服务器（都位于本地）或者一个TCP connection（FastCGI进程在远端的server farm）传递给FastCGI进程。</p>
-
-<h3 id="php-fpm">PHP-FPM</h3>
-
-<p>全称php-Fastcgi Process Manager，是对FastCGI的实现，并提供了进程管理的功能。</p>
-
-<p>进程包含 master 进程和 worker 进程两种进程。master 进程只有一个，负责监听端口，接收来自 Web Server 的请求，而 worker 进程则一般有多个(具体数量根据实际需要配置)，每个进程内部都嵌入了一个 PHP 解释器，是 PHP 代码真正执行的地方。</p>
-
-<h3 id="执行流程">执行流程</h3>
-
-<p>Nginx 不仅仅是一个 Web 服务器，也是一个功能强大的 Proxy 服务器，除了进行 http 请求的代理，也可以进行许多其他协议请求的代理，包括本文与 fpm 相关的 fastcgi 协议。为了能够使 Nginx 理解 fastcgi 协议，Nginx 提供了 fastcgi 模块来将 http 请求映射为对应的 fastcgi 请求。</p>
-
-<p>Nginx 的 fastcgi 模块提供了 fastcgi_param 指令来主要处理这些映射关系，下面 Ubuntu 下 Nginx 的一个配置文件，其主要完成的工作是将 Nginx 中的变量翻译成 PHP 中能够理解的变量。</p>
-
-<p>Nginx 的 fastcgi 模块提供了 fastcgi_param 指令来主要处理这些映射关系，下面 Ubuntu 下 Nginx 的一个配置文件，其主要完成的工作是将 Nginx 中的变量翻译成 PHP 中能够理解的变量。</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fastcgi_param  QUERY_STRING       <span class="nv">$query_string</span><span class="p">;</span>
-fastcgi_param  REQUEST_METHOD     <span class="nv">$request_method</span><span class="p">;</span>
-fastcgi_param  CONTENT_TYPE       <span class="nv">$content_type</span><span class="p">;</span>
-fastcgi_param  CONTENT_LENGTH     <span class="nv">$content_length</span><span class="p">;</span>
-
-fastcgi_param  SCRIPT_NAME        <span class="nv">$fastcgi_script_name</span><span class="p">;</span>
-fastcgi_param  REQUEST_URI        <span class="nv">$request_uri</span><span class="p">;</span>
-fastcgi_param  DOCUMENT_URI       <span class="nv">$document_uri</span><span class="p">;</span>
-fastcgi_param  DOCUMENT_ROOT      <span class="nv">$document_root</span><span class="p">;</span>
-fastcgi_param  SERVER_PROTOCOL    <span class="nv">$server_protocol</span><span class="p">;</span>
-fastcgi_param  REQUEST_SCHEME     <span class="nv">$scheme</span><span class="p">;</span>
-fastcgi_param  HTTPS              <span class="nv">$https</span> if_not_empty<span class="p">;</span>
-
-fastcgi_param  GATEWAY_INTERFACE  CGI/1.1<span class="p">;</span>
-fastcgi_param  SERVER_SOFTWARE    nginx/<span class="nv">$nginx_version</span><span class="p">;</span>
-
-fastcgi_param  REMOTE_ADDR        <span class="nv">$remote_addr</span><span class="p">;</span>
-fastcgi_param  REMOTE_PORT        <span class="nv">$remote_port</span><span class="p">;</span>
-fastcgi_param  SERVER_ADDR        <span class="nv">$server_addr</span><span class="p">;</span>
-fastcgi_param  SERVER_PORT        <span class="nv">$server_port</span><span class="p">;</span>
-fastcgi_param  SERVER_NAME        <span class="nv">$server_name</span><span class="p">;</span>
-
-<span class="c"># PHP only, required if PHP was built with --enable-force-cgi-redirect</span>
-fastcgi_param  REDIRECT_STATUS    200<span class="p">;</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt-get <span class="nb">install </span>python-pip
+pip <span class="nb">install </span>shadowsocks
 </code></pre></div></div>
 
-<p>除此之外，非常重要的就是 fastcgi_pass 指令了，这个指令用于指定 fpm 进程监听的地址，Nginx 会把所有的 php 请求翻译成 fastcgi 请求之后再发送到这个地址。下面一个简单的可以工作的 Nginx 配置文件：</p>
+<p>CentOS:</p>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>server <span class="o">{</span>
-    listen       80<span class="p">;</span> <span class="c">#监听80端口，接收http请求</span>
-    server_name  www.example.com<span class="p">;</span> <span class="c">#就是网站地址</span>
-    root /usr/local/etc/nginx/www/huxintong_admin<span class="p">;</span> <span class="c"># 准备存放代码工程的路径</span>
-    <span class="c">#路由到网站根目录www.example.com时候的处理</span>
-    location / <span class="o">{</span>
-        index index.php<span class="p">;</span> <span class="c">#跳转到www.example.com/index.php</span>
-        autoindex on<span class="p">;</span>
-    <span class="o">}</span>   
-
-    <span class="c">#当请求网站下php文件的时候，反向代理到php-fpm</span>
-    location ~ <span class="se">\.</span>php<span class="nv">$ </span><span class="o">{</span>
-        include /usr/local/etc/nginx/fastcgi.conf<span class="p">;</span> <span class="c">#加载nginx的fastcgi模块</span>
-        fastcgi_intercept_errors on<span class="p">;</span>
-        fastcgi_pass   127.0.0.1:9000<span class="p">;</span> <span class="c">#这个指令用于指定 fpm 进程监听的地址，Nginx 会把所有的 php 请求翻译成 fastcgi 请求之后再发送到这个地址</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum <span class="nb">install </span>python-setuptools <span class="o">&amp;&amp;</span> easy_install pip
+pip <span class="nb">install </span>shadowsocks
 </code></pre></div></div>
 
-<p>具体流程如下：</p>
+<h5 id="启动">启动</h5>
 
-<script src="/assets/js/mermaid.js"></script>
-<div class="mermaid">
-graph TD;
-    www.example.com--&gt;Nginx
-    Nginx--&gt;路由到www.example.com/index.php
-    路由到www.example.com/index.php--&gt;加载nginx的fast-cgi模块
-    加载nginx的fast-cgi模块--&gt;发送到127.0.0.1:9000地址
-    发送到127.0.0.1:9000地址--&gt;PHP-FPM监听到发送到这个端口的请求
-    PHP-FPM监听到发送到这个端口的请求--&gt;等待处理
-</div>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ssserver <span class="nt">-p</span> <span class="o">{</span>端口号<span class="o">}</span> <span class="nt">-k</span> <span class="o">{</span>密码<span class="o">}</span> <span class="nt">-m</span> <span class="o">{</span>加密方式<span class="o">}</span> <span class="nt">-d</span> start
+</code></pre></div></div>
 
-<h3 id="参考链接">参考链接</h3>
+<p>示例</p>
 
-<ul>
-  <li><a href="https://zh.wikipedia.org/wiki/%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8">代理服务器-wiki</a></li>
-  <li><a href="https://zh.wikipedia.org/wiki/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86">反向代理-wiki</a></li>
-  <li><a href="https://zh.wikipedia.org/wiki/%E9%80%9A%E7%94%A8%E7%BD%91%E5%85%B3%E6%8E%A5%E5%8F%A3">通用网关接口-wiki</a></li>
-  <li><a href="https://zh.wikipedia.org/wiki/FastCGI">FastCGI-wiki</a></li>
-  <li><a href="https://segmentfault.com/a/1190000007322358">Nginx+Php-fpm运行原理详解</a></li>
-  <li><a href="https://zhuanlan.zhihu.com/p/20694204">深入理解PHP之：Nginx 与 FPM 的工作机制</a></li>
-</ul>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ssserver <span class="nt">-p</span> 443 <span class="nt">-k</span> 123456 <span class="nt">-m</span> aes-256-cfb <span class="nt">-d</span> start
+</code></pre></div></div>
+
+<p>这样我们的ss服务器就已经部署完成了～</p>
+
+<h3 id="客户端部署">客户端部署</h3>
+
+<h5 id="shadowsocks工具">shadowsocks工具</h5>
+
+<p>mac</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install </span>shadowsocks-libev
+</code></pre></div></div>
+
+<p>ubuntu</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>shadowsocks
+</code></pre></div></div>
+
+<p>使用</p>
+
+<p>1、创建新连接  <br />
+2、设置ip、端口、加密方式</p>
+
+<p>这样就可以使用我们搭建的<code class="highlighter-rouge">ss</code>服务了，其他应用如果要走<code class="highlighter-rouge">ss</code>，只需连上我们的<code class="highlighter-rouge">shadowsocks</code>即可。 默认<code class="highlighter-rouge">shadowsocks</code>的端口为<code class="highlighter-rouge">1080</code></p>
+
+<p>我以<code class="highlighter-rouge">dropbox</code>为例  <br />
+只要在首选项&gt;网络&gt;设置代理即可  <br />
+<img src="/assets/img/posts/2019-03-28-shadowsock-v2/1.png" alt="1.png" /></p>
+
+<h5 id="命令行使用ss">命令行使用ss</h5>
+
+<p>以<code class="highlighter-rouge">zsh</code>作为说明</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~ vim ~/.zshrc 
+</code></pre></div></div>
+
+<p>添加如下代理配置:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># proxy list</span>
+<span class="nb">alias </span><span class="nv">proxy</span><span class="o">=</span><span class="s1">'export all_proxy=socks5://127.0.0.1:1080'</span>
+<span class="nb">alias </span><span class="nv">unproxy</span><span class="o">=</span><span class="s1">'unset all_proxy'</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">:wq</code>保存退出</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~ <span class="nb">source</span> ~/.zshrc
+</code></pre></div></div>
+
+<p>使用<code class="highlighter-rouge">proxy</code>前先查看下当前的ip地址：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~ curl ip.cn
+当前 IP：112.64.xxx.xx 来自：上海市 联通
+</code></pre></div></div>
+
+<p>或者</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>~ curl cip.cc
+IP	: 140.206.97.42
+地址	: 中国  上海
+
+数据二	: 上海市 | 联通
+
+URL	: http://www.cip.cc/140.206.97.42
+</code></pre></div></div>
+
+<p>执行:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~ proxy
+➜  ~ curl ip.cn
+当前 IP：47.89.xx.xxx 来自：香港特别行政区 阿里云
+</code></pre></div></div>
+
+<p>如果<code class="highlighter-rouge">ip.cn</code>不能用，可以换个类似的站点查询</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>~ curl cip.cc
+IP	: 45.78.47.19
+地址	: 美国  加利福尼亚
+
+数据二	: 美国 | 加利福尼亚州洛杉矶市 IT7 Networks
+
+URL	: http://www.cip.cc/45.78.47.19
+</code></pre></div></div>
+
+<p>没问题，终端走了代理，<code class="highlighter-rouge">brew update</code>顺畅了- -</p>
+
+<p>如果不需要走代理，执行：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~ unproxy   
+➜  ~ curl ip.cn
+当前 IP：112.64.xxx.xx 来自：上海市 联通
+</code></pre></div></div>
 
 
                 <hr style="visibility: hidden;">
 
                 <ul class="pager">
                     
-                    
-                    <li class="next">
-                        <a href="/2016/11/12/php-async/" data-toggle="tooltip" data-placement="top" title="php实现异步">
-                        Next<br>
-                        <span>php实现异步</span>
+                    <li class="previous">
+                        <a href="/2019/03/27/How-To-Ask-Questions-The-Smart-Way/" data-toggle="tooltip" data-placement="top" title="「转载」提问的智慧">
+                        Previous<br>
+                        <span>「转载」提问的智慧</span>
                         </a>
                     </li>
+                    
                     
                 </ul>
 

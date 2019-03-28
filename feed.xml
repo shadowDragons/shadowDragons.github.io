@@ -5,9 +5,144 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 28 Mar 2019 19:46:35 +0800</pubDate>
-    <lastBuildDate>Thu, 28 Mar 2019 19:46:35 +0800</lastBuildDate>
-    <generator>Jekyll v3.8.5</generator>
+    <pubDate>Thu, 28 Mar 2019 22:59:04 +0800</pubDate>
+    <lastBuildDate>Thu, 28 Mar 2019 22:59:04 +0800</lastBuildDate>
+    <generator>Jekyll v3.8.4</generator>
+    
+      <item>
+        <title>shadowsock部署 V2</title>
+        <description>&lt;h3 id=&quot;主机选择&quot;&gt;主机选择&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://bwg.net/&quot;&gt;搬瓦工&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;最好选择CN2线路的较稳定，里面有很多优惠活动，可以多留意下～&lt;/p&gt;
+
+&lt;h3 id=&quot;shadowsocks部署&quot;&gt;shadowsocks部署&lt;/h3&gt;
+
+&lt;p&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;ssh&lt;/code&gt;进入你购买主机的终端&lt;/p&gt;
+
+&lt;h5 id=&quot;安装&quot;&gt;安装&lt;/h5&gt;
+
+&lt;p&gt;Debian / Ubuntu:&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt-get &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;python-pip
+pip &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;shadowsocks
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;CentOS:&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yum &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;python-setuptools &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; easy_install pip
+pip &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;shadowsocks
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;启动&quot;&gt;启动&lt;/h5&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;ssserver &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;端口号&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;密码&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;加密方式&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; start
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;示例&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;ssserver &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 443 &lt;span class=&quot;nt&quot;&gt;-k&lt;/span&gt; 123456 &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; aes-256-cfb &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; start
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这样我们的ss服务器就已经部署完成了～&lt;/p&gt;
+
+&lt;h3 id=&quot;客户端部署&quot;&gt;客户端部署&lt;/h3&gt;
+
+&lt;h5 id=&quot;shadowsocks工具&quot;&gt;shadowsocks工具&lt;/h5&gt;
+
+&lt;p&gt;mac&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;shadowsocks-libev
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;ubuntu&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;shadowsocks
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;使用&lt;/p&gt;
+
+&lt;p&gt;1、创建新连接  &lt;br /&gt;
+2、设置ip、端口、加密方式&lt;/p&gt;
+
+&lt;p&gt;这样就可以使用我们搭建的&lt;code class=&quot;highlighter-rouge&quot;&gt;ss&lt;/code&gt;服务了，其他应用如果要走&lt;code class=&quot;highlighter-rouge&quot;&gt;ss&lt;/code&gt;，只需连上我们的&lt;code class=&quot;highlighter-rouge&quot;&gt;shadowsocks&lt;/code&gt;即可。 默认&lt;code class=&quot;highlighter-rouge&quot;&gt;shadowsocks&lt;/code&gt;的端口为&lt;code class=&quot;highlighter-rouge&quot;&gt;1080&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;我以&lt;code class=&quot;highlighter-rouge&quot;&gt;dropbox&lt;/code&gt;为例  &lt;br /&gt;
+只要在首选项&amp;gt;网络&amp;gt;设置代理即可  &lt;br /&gt;
+&lt;img src=&quot;/assets/img/posts/2019-03-28-shadowsock-v2/1.png&quot; alt=&quot;1.png&quot; /&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;命令行使用ss&quot;&gt;命令行使用ss&lt;/h5&gt;
+
+&lt;p&gt;以&lt;code class=&quot;highlighter-rouge&quot;&gt;zsh&lt;/code&gt;作为说明&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  ~ vim ~/.zshrc 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;添加如下代理配置:&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# proxy list&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;proxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'export all_proxy=socks5://127.0.0.1:1080'&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;unproxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'unset all_proxy'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;:wq&lt;/code&gt;保存退出&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  ~ &lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; ~/.zshrc
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;proxy&lt;/code&gt;前先查看下当前的ip地址：&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  ~ curl ip.cn
+当前 IP：112.64.xxx.xx 来自：上海市 联通
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;或者&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;~ curl cip.cc
+IP	: 140.206.97.42
+地址	: 中国  上海
+
+数据二	: 上海市 | 联通
+
+URL	: http://www.cip.cc/140.206.97.42
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;执行:&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  ~ proxy
+➜  ~ curl ip.cn
+当前 IP：47.89.xx.xxx 来自：香港特别行政区 阿里云
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;如果&lt;code class=&quot;highlighter-rouge&quot;&gt;ip.cn&lt;/code&gt;不能用，可以换个类似的站点查询&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;~ curl cip.cc
+IP	: 45.78.47.19
+地址	: 美国  加利福尼亚
+
+数据二	: 美国 | 加利福尼亚州洛杉矶市 IT7 Networks
+
+URL	: http://www.cip.cc/45.78.47.19
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;没问题，终端走了代理，&lt;code class=&quot;highlighter-rouge&quot;&gt;brew update&lt;/code&gt;顺畅了- -&lt;/p&gt;
+
+&lt;p&gt;如果不需要走代理，执行：&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  ~ unproxy   
+➜  ~ curl ip.cn
+当前 IP：112.64.xxx.xx 来自：上海市 联通
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Thu, 28 Mar 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/03/28/shadowsock-v2/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/03/28/shadowsock-v2/</guid>
+        
+        <category>工具</category>
+        
+        
+      </item>
     
       <item>
         <title>「转载」提问的智慧</title>
@@ -2627,247 +2762,6 @@
         <pubDate>Wed, 20 Mar 2019 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2019/03/20/swoole-table/</link>
         <guid isPermaLink="true">http://localhost:4000/2019/03/20/swoole-table/</guid>
-        
-        <category>php</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>「Swoole」Lock 锁</title>
-        <description>&lt;blockquote&gt;
-  &lt;p&gt;创建一个锁，用来实现数据同步。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;支持五种类型锁：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;文件锁 &lt;code class=&quot;highlighter-rouge&quot;&gt;SWOOLE_FILELOCK&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;读写锁 &lt;code class=&quot;highlighter-rouge&quot;&gt;SWOOLE_RWLOCK&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;信号量 &lt;code class=&quot;highlighter-rouge&quot;&gt;SWOOLE_SEM&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;互斥锁 &lt;code class=&quot;highlighter-rouge&quot;&gt;SWOOLE_MUTEX&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;自旋锁 &lt;code class=&quot;highlighter-rouge&quot;&gt;SWOOLE_SPINLOCK&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;请勿在&lt;code class=&quot;highlighter-rouge&quot;&gt;onReceive&lt;/code&gt;等回调函数中创建锁，否则底层的&lt;code class=&quot;highlighter-rouge&quot;&gt;GlobalMemory&lt;/code&gt;内存会持续增长，造成内存泄漏。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;不要循环创建/销毁锁的对象，否则会发生内存泄漏&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;接口&quot;&gt;接口&lt;/h3&gt;
-
-&lt;h5 id=&quot;构造方法-__construct&quot;&gt;构造方法 __construct&lt;/h5&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;swoole_lock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;__construct&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$lockfile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;参数&lt;/th&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;说明&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$type&lt;/code&gt;&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;锁的类型&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$lockfile&lt;/code&gt;&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;当类型为&lt;code class=&quot;highlighter-rouge&quot;&gt;SWOOLE_FILELOCK&lt;/code&gt;时必须传入，指定文件锁的路径&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h5 id=&quot;加锁阻塞-lock&quot;&gt;加锁（阻塞） lock&lt;/h5&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;加锁操作。如果有其他进程持有锁，那这里将进入阻塞，直到持有锁的进程&lt;code class=&quot;highlighter-rouge&quot;&gt;unlock&lt;/code&gt;。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$lock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;lock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;参数&lt;/th&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;说明&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;返回&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;成功&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt; 失败&lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h5 id=&quot;加锁非阻塞-trylock&quot;&gt;加锁（非阻塞） trylock&lt;/h5&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;加锁操作。与&lt;code class=&quot;highlighter-rouge&quot;&gt;lock&lt;/code&gt;方法不同的是，&lt;code class=&quot;highlighter-rouge&quot;&gt;trylock&lt;/code&gt;不会阻塞，它会立即返回。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$lock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;trylock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;参数&lt;/th&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;说明&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;返回&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;成功&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt; 失败&lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h5 id=&quot;释放锁-unlock&quot;&gt;释放锁 unlock&lt;/h5&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$lock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;unlock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;参数&lt;/th&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;说明&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;返回&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;成功&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt; 失败&lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h5 id=&quot;加读锁阻塞-lock_read&quot;&gt;加读锁（阻塞） lock_read&lt;/h5&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;只读加锁。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;bool&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$lock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;lock_read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;参数&lt;/th&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;说明&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;返回&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;成功&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt; 失败&lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h5 id=&quot;加读锁非阻塞-trylock_read&quot;&gt;加读锁（非阻塞） trylock_read&lt;/h5&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;只读加锁。此方法与&lt;code class=&quot;highlighter-rouge&quot;&gt;lock_read&lt;/code&gt;相同，但是非阻塞的。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;bool&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$lock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;trylock_read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;参数&lt;/th&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;说明&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;返回&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;成功&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt; 失败&lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h5 id=&quot;加锁等待-lockwait&quot;&gt;加锁等待 lockwait&lt;/h5&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;加锁操作，作用与swoole_lock-&amp;gt;lock一致，但lockwait可以设置超时时间。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;swoole_lock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;lockwait&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;float&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$timeout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;参数&lt;/th&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;说明&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$timeout&lt;/code&gt;&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;传入超时时间，默认为1秒&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;返回&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;成功&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt; 失败&lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h3 id=&quot;注意点&quot;&gt;注意点&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;只有&lt;code class=&quot;highlighter-rouge&quot;&gt;SWOOLE_RWLOCK&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;SWOOLE_FILELOCK&lt;/code&gt;支持&lt;code class=&quot;highlighter-rouge&quot;&gt;lock_read&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SWOOlE_SEM&lt;/code&gt;不支持&lt;code class=&quot;highlighter-rouge&quot;&gt;trylock&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;lock&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;trylock&lt;/code&gt;属于独占锁&lt;/li&gt;
-  &lt;li&gt;只有&lt;code class=&quot;highlighter-rouge&quot;&gt;SWOOLE_MUTEX&lt;/code&gt;支持lockwait&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;实例&quot;&gt;实例&lt;/h3&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt;/**
- * SWOOLE_MUTEX 互斥锁
- * SWOOLE_FILELOCK 文件锁，需要在第二个参数传入一个锁文件
- * SWOOLE_SPINLOCK 自旋锁(请查看swoole扩展信息，检测是否支持)
- * SWOOLE_SEM 信号量
- * SWOOLE_RWLOCK 读写锁
- */&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;$lock&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;swoole_lock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;SWOOLE_MUTEX&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;[Master]create lock&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;$lock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;lock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;pcntl_fork&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;nv&quot;&gt;$lock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;unlock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;[Child] Wait Lock&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;nv&quot;&gt;$lock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;lock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;[Child] Get Lock&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;nv&quot;&gt;$lock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;unlock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;[Child] exit&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;[Master]release lock&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;unset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$lock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;[Master]exit&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-        <pubDate>Wed, 20 Mar 2019 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2019/03/20/swoole-lock/</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/03/20/swoole-lock/</guid>
         
         <category>php</category>
         
