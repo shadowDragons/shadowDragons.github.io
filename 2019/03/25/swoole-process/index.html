@@ -616,7 +616,7 @@
   </tbody>
 </table>
 
-<h5 id="退出">退出</h5>
+<h5 id="退出-exit">退出 exit</h5>
 
 <p>退出子进程</p>
 
@@ -638,7 +638,247 @@
   </tbody>
 </table>
 
-<p>未完待续！</p>
+<h5 id="终止-kill">终止 kill</h5>
+
+<p>向指定<code class="highlighter-rouge">pid</code>进程发送信号</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">bool</span> <span class="nx">Process</span><span class="o">::</span><span class="na">kill</span><span class="p">(</span><span class="nv">$pid</span><span class="p">,</span> <span class="nv">$signo</span> <span class="o">=</span> <span class="nx">SIGTERM</span><span class="p">);</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$pid</code></td>
+      <td style="text-align: left">进程id</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$signo</code></td>
+      <td style="text-align: left">默认的信号为<code class="highlighter-rouge">SIGTERM</code>，表示终止进程<br /><code class="highlighter-rouge">$signo=0</code>，可以检测进程是否存在，不会发送信号</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="回收子进程-wait">回收子进程 wait</h5>
+
+<p>回收结束运行的子进程。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">Process</span><span class="o">::</span><span class="na">wait</span><span class="p">(</span><span class="nx">bool</span> <span class="nv">$blocking</span> <span class="o">=</span> <span class="kc">true</span><span class="p">);</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$blocking</code></td>
+      <td style="text-align: left">参数可以指定是否阻塞等待，默认为阻塞</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">返回</td>
+      <td style="text-align: left">失败返回<code class="highlighter-rouge">false</code>,成功返回数组：<br /><code class="highlighter-rouge">code</code> 退出状态码<br /><code class="highlighter-rouge">pid</code> 子进程id<br /><code class="highlighter-rouge">signal</code> 被哪种信号<code class="highlighter-rouge">KILL</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <p>子进程结束必须要执行<code class="highlighter-rouge">wait</code>进行回收，否则子进程会变成僵尸进程
+使用<code class="highlighter-rouge">Process</code>作为监控父进程，创建管理子进程时，父类必须注册信号<code class="highlighter-rouge">SIGCHLD</code>对退出的进程执行<code class="highlighter-rouge">wait</code>，否则子进程一旦被<code class="highlighter-rouge">kill</code>会引起父进程退出</p>
+</blockquote>
+
+<p>实例</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">Process</span><span class="o">::</span><span class="na">signal</span><span class="p">(</span><span class="nx">SIGCHLD</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="nv">$sig</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">//必须为false，非阻塞模式</span>
+  <span class="k">while</span><span class="p">(</span><span class="nv">$ret</span> <span class="o">=</span>  <span class="nx">Process</span><span class="o">::</span><span class="na">wait</span><span class="p">(</span><span class="kc">false</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">echo</span> <span class="s2">"PID=</span><span class="si">{</span><span class="nv">$ret</span><span class="p">[</span><span class="s1">'pid'</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<ul>
+  <li>信号发生时可能同时有多个子进程退出</li>
+  <li>必须循环执行wait直到返回false</li>
+</ul>
+
+<h5 id="变成守护进程-daemon">变成守护进程 daemon</h5>
+
+<p>使当前进程蜕变为一个守护进程。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">bool</span> <span class="nx">Process</span><span class="o">::</span><span class="na">daemon</span><span class="p">(</span><span class="nx">bool</span> <span class="nv">$nochdir</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">bool</span> <span class="nv">$noclose</span> <span class="o">=</span> <span class="kc">true</span><span class="p">);</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$nochdir</code></td>
+      <td style="text-align: left">为<code class="highlighter-rouge">true</code>表示不要切换当前目录到根目录。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$noclose</code></td>
+      <td style="text-align: left">为<code class="highlighter-rouge">true</code>表示不要关闭标准输入输出文件描述符。</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <p>蜕变为守护进程时，该进程的PID将发生变化，可以使用getmypid()来获取当前的PID</p>
+</blockquote>
+
+<h5 id="异步信号监听-signal">异步信号监听 signal</h5>
+
+<p>设置异步信号监听。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">bool</span> <span class="nx">Process</span><span class="o">::</span><span class="na">signal</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$signo</span><span class="p">,</span> <span class="nx">callable</span> <span class="nv">$callback</span><span class="p">);</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$signo</code></td>
+      <td style="text-align: left">监听的信号</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$callback</code></td>
+      <td style="text-align: left">回调函数。如果为<code class="highlighter-rouge">null</code>，表示移除信号监听</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>实例</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">Process</span><span class="o">::</span><span class="na">signal</span><span class="p">(</span><span class="nx">SIGTERM</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="nv">$signo</span><span class="p">)</span> <span class="p">{</span>
+     <span class="k">echo</span> <span class="s2">"shutdown."</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h5 id="定时器-alarm">定时器 alarm</h5>
+
+<p>高精度定时器，是操作系统<code class="highlighter-rouge">setitimer</code>系统调用的封装，可以设置微秒级别的定时器。定时器会触发信号，需要与<code class="highlighter-rouge">Process::signal</code>或<code class="highlighter-rouge">pcntl_signal</code>配合使用。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">Process</span><span class="o">::</span><span class="na">alarm</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$interval_usec</span><span class="p">,</span> <span class="nx">int</span> <span class="nv">$type</span> <span class="o">=</span> <span class="nx">ITIMER_REAL</span><span class="p">)</span> <span class="o">:</span> <span class="nx">bool</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$interval_usec</code></td>
+      <td style="text-align: left">定时器间隔时间，单位为微秒。如果为负数表示清除定时器</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$type</code></td>
+      <td style="text-align: left">定时器类型<br /><code class="highlighter-rouge">0</code> 表示为真实时间,触发<code class="highlighter-rouge">SIGALAM</code>信号<br /><code class="highlighter-rouge">1</code> 表示用户态<code class="highlighter-rouge">CPU</code>时间，触发<code class="highlighter-rouge">SIGVTALAM</code>信号<br /><code class="highlighter-rouge">2</code> 表示用户态+内核态时间，触发<code class="highlighter-rouge">SIGPROF</code>信号</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">返回</td>
+      <td style="text-align: left">设置成功返回<code class="highlighter-rouge">true</code>，失败返回<code class="highlighter-rouge">false</code>，可以使用<code class="highlighter-rouge">swoole_errno</code>得到错误码</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>实例</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">use</span> <span class="nx">Swoole\Process</span><span class="p">;</span>
+
+<span class="nx">Process</span><span class="o">::</span><span class="na">signal</span><span class="p">(</span><span class="nx">SIGALRM</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">static</span> <span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">echo</span> <span class="s2">"#</span><span class="si">{</span><span class="nv">$i</span><span class="si">}</span><span class="se">\t</span><span class="s2">alarm</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="nv">$i</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">&gt;</span> <span class="mi">20</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">Process</span><span class="o">::</span><span class="na">alarm</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="c1">//100ms</span>
+<span class="nx">Process</span><span class="o">::</span><span class="na">alarm</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h5 id="cpu亲和性-setaffinity">CPU亲和性 setAffinity</h5>
+
+<p>设置<code class="highlighter-rouge">CPU</code>亲和性，可以将进程绑定到特定的<code class="highlighter-rouge">CPU</code>核上。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">Process</span><span class="o">::</span><span class="na">setAffinity</span><span class="p">(</span><span class="k">array</span> <span class="nv">$cpu_set</span><span class="p">);</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$cpu_set</code></td>
+      <td style="text-align: left">接受一个数组参数表示绑定哪些<code class="highlighter-rouge">CPU</code>核，如<code class="highlighter-rouge">array(0,2,3)</code>表示绑定<code class="highlighter-rouge">CPU0/CPU2/CPU3</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">返回</td>
+      <td style="text-align: left">设置成功返回<code class="highlighter-rouge">true</code>，失败返回<code class="highlighter-rouge">false</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="导出coroutinesocket对象-exportsocket">导出Coroutine\Socket对象 exportSocket</h5>
+
+<p>将管道导出为<code class="highlighter-rouge">Coroutine\Socket</code>对象。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">Process</span><span class="o">::</span><span class="na">exportSocket</span><span class="p">()</span> <span class="o">:</span> <span class="nx">Swoole\Coroutine\Socket</span><span class="p">;</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">返回</td>
+      <td style="text-align: left">成功Coroutine\Socket对象(多次调用此方法，返回的对象是同一个)<br />进程未创建管道，操作失败，返回false</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>实例</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$proc1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Swoole\Process</span><span class="p">(</span><span class="k">function</span> <span class="p">(</span><span class="nx">Swoole\Process</span> <span class="nv">$proc</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$socket</span> <span class="o">=</span> <span class="nv">$proc</span><span class="o">-&gt;</span><span class="na">exportSocket</span><span class="p">();</span>
+    <span class="k">echo</span> <span class="nv">$socket</span><span class="o">-&gt;</span><span class="na">recv</span><span class="p">();</span>
+    <span class="nv">$socket</span><span class="o">-&gt;</span><span class="na">send</span><span class="p">(</span><span class="s2">"hello proc2</span><span class="se">\n</span><span class="s2">"</span><span class="p">);</span>
+    <span class="k">echo</span> <span class="s2">"proc1 stop</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">},</span> <span class="kc">false</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>未完待续!</p>
 
 
                 <hr style="visibility: hidden;">
