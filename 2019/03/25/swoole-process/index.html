@@ -336,6 +336,25 @@
   </ul>
 </blockquote>
 
+<p>示例</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nv">$process</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">swoole_process</span><span class="p">(</span><span class="s1">'callback_function'</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="nv">$pid</span> <span class="o">=</span> <span class="nv">$process</span><span class="o">-&gt;</span><span class="na">start</span><span class="p">();</span>
+
+<span class="k">function</span> <span class="nf">callback_function</span><span class="p">(</span><span class="nx">swoole_process</span> <span class="nv">$worker</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nv">$worker</span><span class="o">-&gt;</span><span class="na">exec</span><span class="p">(</span><span class="s1">'/usr/local/bin/php'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="nx">__DIR__</span><span class="o">.</span><span class="s1">'/stdin_stdout.php'</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="k">echo</span> <span class="s2">"From Worker: "</span><span class="o">.</span><span class="nv">$process</span><span class="o">-&gt;</span><span class="na">read</span><span class="p">();</span>
+<span class="nv">$process</span><span class="o">-&gt;</span><span class="na">write</span><span class="p">(</span><span class="s2">"hello worker</span><span class="se">\n</span><span class="s2">"</span><span class="p">);</span>
+<span class="k">echo</span> <span class="s2">"From Worker: "</span><span class="o">.</span><span class="nv">$process</span><span class="o">-&gt;</span><span class="na">read</span><span class="p">();</span>
+
+<span class="nv">$ret</span> <span class="o">=</span> <span class="nx">swoole_process</span><span class="o">::</span><span class="na">wait</span><span class="p">();</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$ret</span><span class="p">);</span>
+</code></pre></div></div>
+
 <h5 id="向管道写数据-write">向管道写数据 write</h5>
 
 <p>向管道内写入数据。</p>
@@ -423,6 +442,17 @@
     </tr>
   </tbody>
 </table>
+
+<p>示例</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$process</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\swoole_process</span><span class="p">(</span><span class="k">function</span><span class="p">(</span><span class="nx">\swoole_process</span> <span class="nv">$process</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="nv">$process</span><span class="o">-&gt;</span><span class="na">start</span><span class="p">();</span>
+
+<span class="nv">$process</span><span class="o">-&gt;</span><span class="na">setTimeout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">);</span>
+<span class="nv">$ret</span> <span class="o">=</span> <span class="nv">$process</span><span class="o">-&gt;</span><span class="na">read</span><span class="p">();</span>
+</code></pre></div></div>
 
 <h5 id="阻塞模式-setblocking">阻塞模式 setBlocking</h5>
 
@@ -616,6 +646,27 @@
   </tbody>
 </table>
 
+<p>示例</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nv">$process</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">swoole_process</span><span class="p">(</span><span class="k">function</span> <span class="p">(</span><span class="nx">swoole_process</span> <span class="nv">$worker</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"Worker: start. PID="</span> <span class="o">.</span> <span class="nv">$worker</span><span class="o">-&gt;</span><span class="na">pid</span> <span class="o">.</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="nb">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+    <span class="nv">$worker</span><span class="o">-&gt;</span><span class="na">close</span><span class="p">(</span><span class="nx">swoole_process</span><span class="o">::</span><span class="na">PIPE_READ</span><span class="p">);</span>
+    <span class="nv">$worker</span><span class="o">-&gt;</span><span class="na">write</span><span class="p">(</span><span class="s2">"hello master</span><span class="se">\n</span><span class="s2">"</span><span class="p">);</span>
+    <span class="nv">$worker</span><span class="o">-&gt;</span><span class="na">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">},</span> <span class="kc">false</span><span class="p">);</span>
+
+<span class="nv">$pid</span> <span class="o">=</span> <span class="nv">$process</span><span class="o">-&gt;</span><span class="na">start</span><span class="p">();</span>
+<span class="nv">$r</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="nv">$process</span><span class="p">);</span>
+<span class="nv">$w</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+<span class="nv">$e</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+<span class="nv">$ret</span> <span class="o">=</span> <span class="nx">swoole_select</span><span class="p">(</span><span class="nv">$r</span><span class="p">,</span> <span class="nv">$w</span><span class="p">,</span> <span class="nv">$e</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$ret</span><span class="p">);</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$process</span><span class="o">-&gt;</span><span class="na">read</span><span class="p">());</span>
+</code></pre></div></div>
+
 <h5 id="退出-exit">退出 exit</h5>
 
 <p>退出子进程</p>
@@ -739,6 +790,18 @@
 <blockquote>
   <p>蜕变为守护进程时，该进程的PID将发生变化，可以使用getmypid()来获取当前的PID</p>
 </blockquote>
+
+<p>示例</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nx">swoole_process</span><span class="o">::</span><span class="na">daemon</span><span class="p">();</span>
+
+<span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"hello"</span><span class="p">;</span>
+    <span class="nb">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <h5 id="异步信号监听-signal">异步信号监听 signal</h5>
 
@@ -878,7 +941,155 @@
 <span class="p">},</span> <span class="kc">false</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>未完待续!</p>
+<h3 id="实例">实例</h3>
+
+<h5 id="利用alarm实现超时">利用alarm实现超时</h5>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">declare</span><span class="p">(</span><span class="nx">ticks</span> <span class="o">=</span> <span class="mi">1</span><span class="p">);</span>
+<span class="nx">Swoole\Async</span><span class="o">::</span><span class="na">set</span><span class="p">([</span>
+    <span class="s1">'enable_signalfd'</span> <span class="o">=&gt;</span> <span class="kc">false</span><span class="p">,</span>
+<span class="p">]);</span>
+
+<span class="k">class</span> <span class="nc">FunctionTimeoutException</span> <span class="k">extends</span> <span class="nx">RuntimeException</span>
+<span class="p">{</span>
+
+<span class="p">}</span>
+
+<span class="k">function</span> <span class="nf">test</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nb">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nv">$serv</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Swoole\Http\Server</span><span class="p">(</span><span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="mi">9502</span><span class="p">);</span>
+
+<span class="nv">$serv</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">([</span><span class="s1">'worker_num'</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">]);</span>
+
+<span class="nv">$serv</span><span class="o">-&gt;</span><span class="na">on</span><span class="p">(</span><span class="s1">'WorkerStart'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="nv">$serv</span><span class="p">,</span> <span class="nv">$workerId</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">pcntl_signal</span><span class="p">(</span><span class="nx">SIGALRM</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">Swoole\Process</span><span class="o">::</span><span class="na">alarm</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nx">FunctionTimeoutException</span><span class="p">;</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="nv">$serv</span><span class="o">-&gt;</span><span class="na">on</span><span class="p">(</span><span class="s1">'Request'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="nv">$request</span><span class="p">,</span> <span class="nv">$response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span>
+    <span class="p">{</span>
+        <span class="nx">Swoole\Process</span><span class="o">::</span><span class="na">alarm</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">);</span>
+        <span class="nx">test</span><span class="p">();</span>
+        <span class="nx">Swoole\Process</span><span class="o">::</span><span class="na">alarm</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="nv">$response</span><span class="o">-&gt;</span><span class="na">end</span><span class="p">(</span><span class="s2">"&lt;h1&gt;Finish&lt;/h1&gt;"</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">catch</span><span class="p">(</span><span class="nx">FunctionTimeoutException</span> <span class="nv">$e</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$response</span><span class="o">-&gt;</span><span class="na">end</span><span class="p">(</span><span class="s2">"&lt;h1&gt;Timeout&lt;/h1&gt;"</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="p">});</span>
+
+<span class="nv">$serv</span><span class="o">-&gt;</span><span class="na">start</span><span class="p">();</span>
+</code></pre></div></div>
+
+<h5 id="使用队列">使用队列</h5>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nv">$worker_num</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="nv">$process_pool</span> <span class="o">=</span> <span class="p">[];</span>
+
+<span class="nv">$process</span><span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nv">$pid</span> <span class="o">=</span> <span class="nb">posix_getpid</span><span class="p">();</span>
+
+<span class="k">function</span> <span class="nf">sub_process</span><span class="p">(</span><span class="nx">swoole_process</span> <span class="nv">$worker</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nb">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">//防止父进程还未往消息队列中加入内容直接退出</span>
+    <span class="k">echo</span> <span class="s2">"worker "</span><span class="o">.</span><span class="nv">$worker</span><span class="o">-&gt;</span><span class="na">pid</span><span class="o">.</span><span class="s2">" started"</span><span class="o">.</span><span class="nx">PHP_EOL</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="nv">$msg</span> <span class="o">=</span> <span class="nv">$worker</span><span class="o">-&gt;</span><span class="na">pop</span><span class="p">()){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$msg</span> <span class="o">===</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nv">$sub_pid</span> <span class="o">=</span> <span class="nv">$worker</span><span class="o">-&gt;</span><span class="na">pid</span><span class="p">;</span>
+        <span class="k">echo</span> <span class="s2">"[</span><span class="nv">$sub_pid</span><span class="s2">] msg : </span><span class="nv">$msg</span><span class="s2">"</span><span class="o">.</span><span class="nx">PHP_EOL</span><span class="p">;</span>
+        <span class="nb">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="c1">//这里的sleep模拟任务耗时，否则可能1个worker就把所有信息全接受了</span>
+    <span class="p">}</span>
+    <span class="k">echo</span> <span class="s2">"worker "</span><span class="o">.</span><span class="nv">$worker</span><span class="o">-&gt;</span><span class="na">pid</span><span class="o">.</span><span class="s2">" exit"</span><span class="o">.</span><span class="nx">PHP_EOL</span><span class="p">;</span>
+    <span class="nv">$worker</span><span class="o">-&gt;</span><span class="na">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nv">$customMsgKey</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="nv">$mod</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">|</span> <span class="nx">swoole_process</span><span class="o">::</span><span class="na">IPC_NOWAIT</span><span class="p">;</span><span class="c1">//这里设置消息队列为非阻塞模式</span>
+
+<span class="c1">//创建worker进程</span>
+<span class="k">for</span><span class="p">(</span><span class="nv">$i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nv">$i</span><span class="o">&lt;</span><span class="nv">$worker_num</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$process</span><span class="o">=</span><span class="k">new</span> <span class="nx">swoole_process</span><span class="p">(</span><span class="s1">'sub_process'</span><span class="p">);</span>
+    <span class="nv">$process</span><span class="o">-&gt;</span><span class="na">useQueue</span><span class="p">(</span><span class="nv">$customMsgKey</span><span class="p">,</span> <span class="nv">$mod</span><span class="p">);</span>
+    <span class="nv">$process</span><span class="o">-&gt;</span><span class="na">start</span><span class="p">();</span>
+    <span class="nv">$pid</span> <span class="o">=</span> <span class="nv">$process</span><span class="o">-&gt;</span><span class="na">pid</span><span class="p">;</span>
+    <span class="nv">$process_pool</span><span class="p">[</span><span class="nv">$pid</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$process</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nv">$messages</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"Hello World!"</span><span class="p">,</span>
+    <span class="s2">"Hello Cat!"</span><span class="p">,</span>
+    <span class="s2">"Hello King"</span><span class="p">,</span>
+    <span class="s2">"Hello Leon"</span><span class="p">,</span>
+    <span class="s2">"Hello Rose"</span>
+<span class="p">];</span>
+<span class="c1">//由于所有进程是共享使用一个消息队列，所以只需向一个子进程发送消息即可</span>
+<span class="nv">$process</span> <span class="o">=</span> <span class="nb">current</span><span class="p">(</span><span class="nv">$process_pool</span><span class="p">);</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$messages</span> <span class="k">as</span> <span class="nv">$msg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$process</span><span class="o">-&gt;</span><span class="na">push</span><span class="p">(</span><span class="nv">$msg</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">swoole_process</span><span class="o">::</span><span class="na">wait</span><span class="p">();</span>
+<span class="nx">swoole_process</span><span class="o">::</span><span class="na">wait</span><span class="p">();</span>
+
+<span class="k">echo</span> <span class="s2">"master exit"</span><span class="o">.</span><span class="nx">PHP_EOL</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h5 id="异步读写">异步读写</h5>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nv">$workers</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nv">$worker_num</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+
+<span class="c1">//swoole_process::daemon(0, 1);</span>
+
+<span class="k">function</span> <span class="nf">onReceive</span><span class="p">(</span><span class="nv">$pipe</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">global</span> <span class="nv">$workers</span><span class="p">;</span>
+    <span class="nv">$worker</span> <span class="o">=</span> <span class="nv">$workers</span><span class="p">[</span><span class="nv">$pipe</span><span class="p">];</span>
+    <span class="nv">$data</span> <span class="o">=</span> <span class="nv">$worker</span><span class="o">-&gt;</span><span class="na">read</span><span class="p">();</span>
+    <span class="k">echo</span> <span class="s2">"RECV: "</span> <span class="o">.</span> <span class="nv">$data</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">//循环创建进程</span>
+<span class="k">for</span><span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nv">$worker_num</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nv">$process</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">swoole_process</span><span class="p">(</span><span class="k">function</span><span class="p">(</span><span class="nx">swoole_process</span> <span class="nv">$process</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="nv">$i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nv">$process</span><span class="o">-&gt;</span><span class="na">write</span><span class="p">(</span><span class="s2">"Worker#</span><span class="si">{</span><span class="nv">$process</span><span class="o">-&gt;</span><span class="na">id</span><span class="si">}</span><span class="s2">: hello master</span><span class="se">\n</span><span class="s2">"</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">)</span> <span class="nv">$process</span><span class="o">-&gt;</span><span class="na">exit</span><span class="p">();</span>
+            <span class="nb">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+    <span class="nv">$process</span><span class="o">-&gt;</span><span class="na">id</span> <span class="o">=</span> <span class="nv">$i</span><span class="p">;</span>
+    <span class="nv">$pid</span> <span class="o">=</span> <span class="nv">$process</span><span class="o">-&gt;</span><span class="na">start</span><span class="p">();</span>
+    <span class="nv">$workers</span><span class="p">[</span><span class="nv">$process</span><span class="o">-&gt;</span><span class="na">pipe</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$process</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">swoole_process</span><span class="o">::</span><span class="na">signal</span><span class="p">(</span><span class="nx">SIGCHLD</span><span class="p">,</span> <span class="k">function</span><span class="p">(){</span>
+    <span class="c1">//表示子进程已关闭，回收它</span>
+    <span class="nv">$status</span> <span class="o">=</span> <span class="nx">swoole_process</span><span class="o">::</span><span class="na">wait</span><span class="p">();</span>
+    <span class="k">echo</span> <span class="s2">"Worker#</span><span class="si">{</span><span class="nv">$status</span><span class="p">[</span><span class="s1">'pid'</span><span class="p">]</span><span class="si">}</span><span class="s2"> exit</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="c1">//将子进程的管道加入EventLoop</span>
+<span class="k">foreach</span><span class="p">(</span><span class="nv">$workers</span> <span class="k">as</span> <span class="nv">$process</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nx">swoole_event_add</span><span class="p">(</span><span class="nv">$process</span><span class="o">-&gt;</span><span class="na">pipe</span><span class="p">,</span> <span class="s1">'onReceive'</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 
                 <hr style="visibility: hidden;">
