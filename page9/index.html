@@ -211,293 +211,199 @@
             ">
     			
 <div class="post-preview">
-    <a href="/2017/06/11/php-websocket/">
+    <a href="/2018/03/18/bitcoin-51attach/">
         <h2 class="post-title">
-            php实现webSocket
-        </h2>
-        
-        <div class="post-content-preview">
-            socket
-
-
-  Socket是应用层与TCP/IP协议族通信的中间软件抽象层，它是一组接口。在设计模式中，Socket其实就是一个门面模式，它把复杂的TCP/IP协议族隐藏在Socket接口后面，对用户来说，一组简单的接口就是全部，让Socket去组织数据，以符合指定的协议。
-
-
-执行流程
-
-
-
-服务器端  
-1.初始化  
-2.绑定端口(bind)  
-3.进入监听(listen) ...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on June 11, 2017
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2017/02/05/php-daemon/">
-        <h2 class="post-title">
-            php实现守护进程
+            比特币51攻击
         </h2>
         
         <div class="post-content-preview">
             
-  本文涉及到进程组、会话、控制终端，如果不清楚它们的联系，可以先查看进程、进程组、会话与控制终端
 
+drow.io源文件下载
 
-守护进程应该能达到的要求脱离当前会话，且无法打开控制终端。
-
-编写过程
-
-1、假设当前进程为p  
-2、创建p的子进程c1，退出p（为了保证c1不是进程组组长，为下一步做铺垫）  
-3、使用setsid来创建一个新会话（这样就可以脱离当前会话，由于setsid必须保证不是进程组组长调用，...
         </div>
     </a>
     <p class="post-meta">
-        Posted by Ben Blog on February 5, 2017
+        Posted by Ben Blog on March 18, 2018
     </p>
 </div>
 <hr>
 
 <div class="post-preview">
-    <a href="/2017/02/02/mac-rsync-fswatch/">
+    <a href="/2018/03/17/rsa/">
         <h2 class="post-title">
-            mac使用rsync+fswatch实现目录文件实时同步
-        </h2>
-        
-        <div class="post-content-preview">
-            安装rsync
-
-brew install rsync
-
-
-创建用户
-
-创建用户配置文件\etc\rsyncd.secrets  
-添加用户名:密码  
-这里我们设置用户名为root，密码123456，即root:123456
-
-配置
-
-创建配置文件 \etc\rsyncd.conf
-
-uid = root                   #守护进程的用户权限
-gid = root
-po...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on February 2, 2017
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/11/24/transaction-deal/">
-        <h2 class="post-title">
-            数据库的事务处理
-        </h2>
-        
-        <div class="post-content-preview">
-            事务四个核心要素
-
-原子性
-
-一组操作，要么都成功，要么都失败，不存在中间状态。
-
-一致性
-
-事务在提交或回滚时，对其他人来说，数据的状态是统一的，不存在其他状态。  
-最理想的状态是，数据提交后，所有的更改能立刻生效，但由于cpu运算，磁盘写入，内存写入需要时间，所以不可能达到立刻生效。  
-所以一般说的是逻辑上同时生效。  
-比如修改a，b两行数据，要保证一致性，对a，b加锁，修改数据，...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 24, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/11/24/consistency-highavailability/">
-        <h2 class="post-title">
-            数据库的一致性与高可用
-        </h2>
-        
-        <div class="post-content-preview">
-            在给定多台计算机，他们相互之间由网络相互连通，能够做到：
-
-
-  数据每次成功写入，数据不会丢失，并且按照写入的顺序排列
-  给定安全级别，保证服务可用性，并尽可能减少机器消耗。
-
-
-2PC
-
-所谓的两个阶段是指：第一阶段：准备阶段(投票阶段)和第二阶段：提交阶段（执行阶段）。
-
-准备阶段
-
-事务协调者(事务管理器)给每个参与者(资源管理器)发送Prepare消息，每个参与者要么直接返回失败...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 24, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/11/18/php-about-thred-safe/">
-        <h2 class="post-title">
-            php线程安全
-        </h2>
-        
-        <div class="post-content-preview">
-            线程不安全
-
-线程不安全就是不提供数据访问保护，有可能出现多个线程先后更改数据造成所得到的数据是脏数据。  
-比如一个 ArrayList 类，在添加一个元素的时候，它可能会有两步来完成：
-
-
-  在 Items[Size] 的位置存放此元素；
-  增大 Size 的值。
-
-
-在单线程运行的情况下，如果 Size = 0，添加一个元素后，此元素在位置 0，而且 Size=1；
-
-而如果是在多...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 18, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/11/14/machinelearning-supervised/">
-        <h2 class="post-title">
-            监督学习与梯度下降
-        </h2>
-        
-        <div class="post-content-preview">
-            假设一个问题有n个特征，线性函数为
-  
-其中   
-差值计算，其中m为训练数据  
-所以我们要求出当最小值时的特征参数值。
-
-主要有两种方式来求出  
-1.梯度下降  
-2.正则方程组
-
-梯度下降
-
-把计算结果与真实结果的差值比做山顶，通过找寻山的最大坡度下降，达到最快到达山脚，从而实现最小差值。
-
-对每个求导，得出最快下降梯度，然后沿着这梯度下降。学习速度或下降速度。
-
-
-python实...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 14, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/11/13/time-complexity/">
-        <h2 class="post-title">
-            时间复杂度计算
+            RSA算法
         </h2>
         
         <div class="post-content-preview">
             
-  用大写O()来体现算法时间复杂度，称之为大O记法。
 
+drow.io源文件下载
 
-推导大O阶
-
-1.用常数1取代运行时间中的所有加法常数。  
-2.在修改后的运行次数函数中，只保留最高阶项。  
-3.如果最高阶项存在且不是1，则去除与这个项相乘的常数。  
-4.得出大O阶。
-
-算法分析
-
-1.计算所有情况的平均值，称为平均时间复杂度
-2.计算最坏情况下的时间复杂度，称为最坏时间复杂度
-
-计算实例
-
-常数阶 O(...
         </div>
     </a>
     <p class="post-meta">
-        Posted by Ben Blog on November 13, 2016
+        Posted by Ben Blog on March 17, 2018
     </p>
 </div>
 <hr>
 
 <div class="post-preview">
-    <a href="/2016/11/13/sort/">
+    <a href="/2018/03/09/Byzantine-failures/">
         <h2 class="post-title">
-            排序
+            拜占庭算法
         </h2>
         
         <div class="post-content-preview">
-            冒泡算法
+            
 
-do
-  swapped = false
-  for i = 1 to indexOfLastUnsortedElement
-    if leftElement &gt; rightElement
-      swap(leftElement, rightElement)
-      swapped = true
-while swapped
+drow.io源文件下载
 
-
-选择排序
-
-repeat (nu...
         </div>
     </a>
     <p class="post-meta">
-        Posted by Ben Blog on November 13, 2016
+        Posted by Ben Blog on March 9, 2018
     </p>
 </div>
 <hr>
 
 <div class="post-preview">
-    <a href="/2016/11/13/php-session/">
+    <a href="/2018/03/03/bitcoin-network/">
         <h2 class="post-title">
-            php实现session跨域
+            比特币网络
         </h2>
         
         <div class="post-content-preview">
-            session跨域
+            
 
-在*.a.com上保存session，在客户端浏览器中会生成一个sessionID，作用范围仅仅是在a.com这个域名下，这个sessionID就是对应该服务器存储session文件的文件名，在用户打开浏览器访问a.com，浏览器会发送该sessionID去服务器找到该文件名，然后获取session。
+drow.io源文件下载
 
-同服务器
-
-跨主域
-
-由于sessionID只会在一个主域下面有效...
         </div>
     </a>
     <p class="post-meta">
-        Posted by Ben Blog on November 13, 2016
+        Posted by Ben Blog on March 3, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/03/03/bitcoin-chain/">
+        <h2 class="post-title">
+            比特币区块链
+        </h2>
+        
+        <div class="post-content-preview">
+            
+
+drow.io源文件下载
+
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on March 3, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/02/25/bitcoin-exchange/">
+        <h2 class="post-title">
+            比特币交易
+        </h2>
+        
+        <div class="post-content-preview">
+            
+
+drow.io源文件下载
+
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on February 25, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/02/21/bitcoin-wallet/">
+        <h2 class="post-title">
+            比特币钱包
+        </h2>
+        
+        <div class="post-content-preview">
+            
+
+drow.io源文件下载
+
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on February 21, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/02/21/bitcoin-address/">
+        <h2 class="post-title">
+            比特币地址&密钥
+        </h2>
+        
+        <div class="post-content-preview">
+            
+
+drow.io源文件下载
+
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on February 21, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2017/12/11/shadowsock/">
+        <h2 class="post-title">
+            shadowsock部署
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  本文介绍的方案对我这种需要经常google来说还是不太友好，加上由于OSX升级后的SIP限制，在proxychains.conf文件中设置ss的socks5代理，无效了。我也不想再折腾这个proxychains，所以写了shadowsock部署 V2，推荐大家前往～
+
+
+部署
+
+我是选了网上大多数人推荐的vultr，性价比高，而且还有很骚的操作，后面讲。  
+1.选服务器，直接选最便...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on December 11, 2017
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2017/06/25/php-remember-login/">
+        <h2 class="post-title">
+            php实现记住登录
+        </h2>
+        
+        <div class="post-content-preview">
+            流程
+
+1.用户通过点击“记住密码”，提交登陆表单传递给服务器。  
+2.服务器生成唯一标识token，保存到数据库  
+3.写cookie，设置失效时间（这样token就保存到了客户端）  
+4.如果用户登陆失效，服务器取客户端token进行校验  
+5.token与服务器保存的token一致，且没有失效，则判定用户登录成功  
+6.token与服务器保存的token不一致或超过失效时间，...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on June 25, 2017
     </p>
 </div>
 <hr>
@@ -648,7 +554,7 @@ repeat (nu...
                             
                         
                             
-                                <a href="/tags/#精进" title="精进" rel="9">
+                                <a href="/tags/#精进" title="精进" rel="11">
                                     精进
                                 </a>
                             
@@ -660,6 +566,12 @@ repeat (nu...
                             
                                 <a href="/tags/#操作系统" title="操作系统" rel="2">
                                     操作系统
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#书籍" title="书籍" rel="8">
+                                    书籍
                                 </a>
                             
                         

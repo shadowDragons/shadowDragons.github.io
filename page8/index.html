@@ -211,9 +211,259 @@
             ">
     			
 <div class="post-preview">
-    <a href="/2018/03/18/bitcoin-51attach/">
+    <a href="/2018/04/07/ethereum-crypto-currency-1/">
         <h2 class="post-title">
-            比特币51攻击
+            以太坊发行代币(一)
+        </h2>
+        
+        <div class="post-content-preview">
+            本文使用到的工具geth、Mist，并通过私有链来做测试。
+如果你不知道还不了解，请先阅读这篇文章《搭建以太坊私有网络》
+
+创建合约
+
+先从最基本的开始，打开Mist，进入到 Contract 标签页，然后点击 Deploy New Contract
+
+
+
+在Solidity Contract Source code输入框，输入以下代码：
+
+contract MyToken {
+    /*...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 7, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/05/sha256/">
+        <h2 class="post-title">
+            加密散列-sha256
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  SHA256是安全散列算法SHA（Secure Hash Algorithm）系列算法之一，其摘要长度为256bits，即32个字节，故称SHA256（1个字节=8位）。
+
+
+算法步骤
+
+原始消息分为N个512bit的消息块。每个消息块分成16个32bit，标记为M(i)0、M(i)1、M(i)2、…、M(i)15然后对这N个消息块依次进行处理。
+
+1.补位  
+由于必须分成n个51...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 5, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/05/sha1/">
+        <h2 class="post-title">
+            加密散列-sha1
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  SHA-1（英语：Secure Hash Algorithm 1，中文名：安全散列算法1）是一种密码散列函数，美国国家安全局设计，并由美国国家标准技术研究所（NIST）发布为联邦数据处理标准（FIPS）[2]。SHA-1可以生成一个被称为消息摘要的160位（20字节）散列值，散列值通常的呈现形式为40个十六进制数。
+
+
+算法步骤
+
+原始消息分为N个512bit的消息块。每个消息块分成1...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 5, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/05/ripemd160/">
+        <h2 class="post-title">
+            加密散列-PIPEMD160
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  RIPEMD (RACE原始完整性校验讯息摘要)是一种加密哈希函数，由 鲁汶大学 Hans Dobbertin,Antoon Bosselaers 和 Bart Prenee组成的COSIC 研究小组发布于1996年。 RIPEMD是以MD4为基础原则所设计的 ，而且其表现与更有名的SHA-1类似.
+
+
+RIPEMD-160是以原始版RIPEMD所改进的160位元版本，而且是RIPEM...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 5, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/05/merkle-tree/">
+        <h2 class="post-title">
+            Merkle树
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  Merkle树是一种哈希二叉树，它是一种用作快速归纳和校验大规模数据完整性的数据结构。
+
+
+比特币校验区块交易数据就是使用这种算法。
+
+Merkle树是自底向上构建的。如图所示
+
+
+
+Merkle树一般用来进行完整性验证处理。在处理完整性验证的应用场景中，Merkle树会大大减少数据的传输量及计算的复杂度。
+
+成如果想要证明一个确切的数据块是Merkle树中的一员。通常，只需要树根及这...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 5, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/05/md5/">
+        <h2 class="post-title">
+            加密散列-md5
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  MD5消息摘要算法（英语：MD5 Message-Digest Algorithm），一种被广泛使用的密码散列函数，可以产生出一个128位（16字节）的散列值（hash value），用于确保信息传输完整一致。
+
+
+算法步骤
+
+原始消息分为N个512bit的消息块。每个消息块分成16个32bit。
+
+1.补位  
+由于必须分成n个512bit块，所以必须进行补位。  
+最后还需要预留6...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 5, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/01/ether-private-network/">
+        <h2 class="post-title">
+            搭建以太坊私有网络
+        </h2>
+        
+        <div class="post-content-preview">
+            Geth
+
+可以通过命令行方式实现以太坊的各种功能,如账户的新建编辑删除，开启挖矿，ether币的转移，智能合约的部署和执行等等。
+
+安装
+
+brew tap ethereum/ethereum
+brew install ethereum
+
+
+安装完成后检查，输入geth version
+
+
+
+创建私有网络
+
+1.创建一个目录，如geth-private-test
+
+2.进入该目录下，创建文...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 1, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/01/cryptography/">
+        <h2 class="post-title">
+            密码学
+        </h2>
+        
+        <div class="post-content-preview">
+            对称加密
+
+加密 
+
+解密 
+
+优点  
+加解密效率高（速度快，空间占用小），加密强度高。
+
+缺点  
+安全性弱，密钥由多方管理，密钥容易泄露。
+
+常见加密算法  
+DES、3DES、Blowfish、RC2、AES以及国密的SM4。
+
+非对称加密
+
+加密 
+
+解密 
+
+优点  
+安全性高，公私钥分离。
+
+缺点  
+加解密效率低。
+
+常见加密算法  
+RSA、椭圆曲线算法
+
+同态加密
+
+是一...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on April 1, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/03/23/agreement/">
+        <h2 class="post-title">
+            共识算法
+        </h2>
+        
+        <div class="post-content-preview">
+            
+
+drow.io源文件下载
+
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on March 23, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/03/18/bitcoin-mining/">
+        <h2 class="post-title">
+            比特币挖矿
         </h2>
         
         <div class="post-content-preview">
@@ -225,185 +475,6 @@ drow.io源文件下载
     </a>
     <p class="post-meta">
         Posted by Ben Blog on March 18, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/03/17/rsa/">
-        <h2 class="post-title">
-            RSA算法
-        </h2>
-        
-        <div class="post-content-preview">
-            
-
-drow.io源文件下载
-
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on March 17, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/03/09/Byzantine-failures/">
-        <h2 class="post-title">
-            拜占庭算法
-        </h2>
-        
-        <div class="post-content-preview">
-            
-
-drow.io源文件下载
-
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on March 9, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/03/03/bitcoin-network/">
-        <h2 class="post-title">
-            比特币网络
-        </h2>
-        
-        <div class="post-content-preview">
-            
-
-drow.io源文件下载
-
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on March 3, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/03/03/bitcoin-chain/">
-        <h2 class="post-title">
-            比特币区块链
-        </h2>
-        
-        <div class="post-content-preview">
-            
-
-drow.io源文件下载
-
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on March 3, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/02/25/bitcoin-exchange/">
-        <h2 class="post-title">
-            比特币交易
-        </h2>
-        
-        <div class="post-content-preview">
-            
-
-drow.io源文件下载
-
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on February 25, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/02/21/bitcoin-wallet/">
-        <h2 class="post-title">
-            比特币钱包
-        </h2>
-        
-        <div class="post-content-preview">
-            
-
-drow.io源文件下载
-
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on February 21, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/02/21/bitcoin-address/">
-        <h2 class="post-title">
-            比特币地址&密钥
-        </h2>
-        
-        <div class="post-content-preview">
-            
-
-drow.io源文件下载
-
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on February 21, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2017/12/11/shadowsock/">
-        <h2 class="post-title">
-            shadowsock部署
-        </h2>
-        
-        <div class="post-content-preview">
-            
-  本文介绍的方案对我这种需要经常google来说还是不太友好，加上由于OSX升级后的SIP限制，在proxychains.conf文件中设置ss的socks5代理，无效了。我也不想再折腾这个proxychains，所以写了shadowsock部署 V2，推荐大家前往～
-
-
-部署
-
-我是选了网上大多数人推荐的vultr，性价比高，而且还有很骚的操作，后面讲。  
-1.选服务器，直接选最便...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on December 11, 2017
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2017/06/25/php-remember-login/">
-        <h2 class="post-title">
-            php实现记住登录
-        </h2>
-        
-        <div class="post-content-preview">
-            流程
-
-1.用户通过点击“记住密码”，提交登陆表单传递给服务器。  
-2.服务器生成唯一标识token，保存到数据库  
-3.写cookie，设置失效时间（这样token就保存到了客户端）  
-4.如果用户登陆失效，服务器取客户端token进行校验  
-5.token与服务器保存的token一致，且没有失效，则判定用户登录成功  
-6.token与服务器保存的token不一致或超过失效时间，...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on June 25, 2017
     </p>
 </div>
 <hr>
@@ -554,7 +625,7 @@ drow.io源文件下载
                             
                         
                             
-                                <a href="/tags/#精进" title="精进" rel="9">
+                                <a href="/tags/#精进" title="精进" rel="11">
                                     精进
                                 </a>
                             
@@ -566,6 +637,12 @@ drow.io源文件下载
                             
                                 <a href="/tags/#操作系统" title="操作系统" rel="2">
                                     操作系统
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#书籍" title="书籍" rel="8">
+                                    书籍
                                 </a>
                             
                         

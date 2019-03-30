@@ -211,15 +211,297 @@
             ">
     			
 <div class="post-preview">
-    <a href="/2018/05/27/hyperledger-fabric-chaincode/">
+    <a href="/2018/08/05/computer-select-poll-epoll/">
         <h2 class="post-title">
-            fabric - chaincode(链码)
+            「转载」select、poll与epoll
         </h2>
         
         <div class="post-content-preview">
-            Chaincode是一段由Go语言编写（支持其他编程语言，如Java），并能实现预定义接口的程序。Chaincode运行在一个受保护的Docker容器当中，与背书节点的运行互相隔离。Chaincode可通过应用提交的交易对账本状态初始化并进行管理。
+            
+  转载自大话 Select、Poll、Epoll
 
-一段chaincode通常处理由网络中的成员一致认可的业务逻辑，故我们很可能用“智能合约”来代指chaincode。一段chiancode创建...
+
+Linux的socket 事件wakeup callback机制
+
+言归正传，在介绍select、poll、epoll前，有必要说说linux(2.6+)内核的事件wakeup callback机制，这是IO多路复用机制存在的本质。Linux通过socket睡眠队列来管理所有等待socket的某个事件的process，同时通过wake...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on August 5, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/08/04/computer-io/">
+        <h2 class="post-title">
+            I/O模型
+        </h2>
+        
+        <div class="post-content-preview">
+            I/O发生过程涉及的对象：
+
+
+  调用该IO的线程(thread)
+  系统内核(kernel)
+
+
+I/O发生过程步骤：
+
+
+  等待数据准备
+  将数据从内核拷贝到用户的进程空间。
+
+
+阻塞型I/O（blocking I/O）
+
+
+
+用户thread在整个过程当中，都需要等待kernel返回数据，所以整个过程都是被block的。
+
+非阻塞型I/O（non-blocking I/O）
+
+...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on August 4, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/07/29/computer-thread/">
+        <h2 class="post-title">
+            进程与线程
+        </h2>
+        
+        <div class="post-content-preview">
+            先理解一下，什么是进程和线程：
+
+在现代操作系统中，进程支持多线程。
+
+
+  进程是资源管理的最小单元；
+  线程是程序执行的最小单元。
+
+
+它们之间的关系如下图所示：
+
+
+
+那么什么是程序执行的最小单位呢？
+
+线程作为调度和分配的基本单位（也被称为轻量级进程），这是因为他们共享进程的资源，所以没有太多的内存消耗。
+
+当多个程序同时在执行的时候，我们的cpu（当cpu数小于程序数）并不能同时...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on July 29, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/07/27/bhpws-service/">
+        <h2 class="post-title">
+            『构建高性能web站点』服务器并发
+        </h2>
+        
+        <div class="post-content-preview">
+            吞吐率
+
+单位时间内服务器处理的请求数 reqs/s
+
+用户并发数
+
+服务器最大并发数是有一定的利益前提的，就是服务器和用户双方所能接受的最大利益下。
+每个用户可以在同一时间发起不止一个请求（与浏览器、http版本有关），所以用户并发数 &gt; 请求并发数。
+
+请求等待时间
+
+分为以下两种
+
+
+  用户平均请求等待时间。
+  服务器平均请求处理时间（等于吞吐率的倒数）。
+
+
+线程与进程
+
+...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on July 27, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/07/14/perconaToolkit/">
+        <h2 class="post-title">
+            PerconaToolkit工具集合
+        </h2>
+        
+        <div class="post-content-preview">
+            pt-align
+
+将其它工具的输出按列对齐。
+
+pt-archiver
+
+将数据归档到另一张表或者文件。
+
+pt-config-diff
+
+对比数据库配置、环境变量差异
+
+pt-deadlock-logger
+
+记录死锁日志，并保存到文件或者数据表
+
+pt-diskstats
+
+功能和iostat类似，给出磁盘的I/O统计信息
+
+pt-duplicate-key-checker
+
+检测表中...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on July 14, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/07/14/bhpws-network/">
+        <h2 class="post-title">
+            『构建高性能web站点』网络传输
+        </h2>
+        
+        <div class="post-content-preview">
+            OSI七层网络协议&amp;四层协议
+
+
+
+每层功能如下表所示：
+
+
+  
+    
+      层
+      功能
+      典型设备
+      典型协议、标准和应用
+    
+  
+  
+    
+      应用层
+      用户接口、应用程序
+      网关
+      TELNET, FTP, HTTP
+    
+    
+      表示层
+      数据的表示、压缩...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on July 14, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/06/30/mysql-innodb-index/">
+        <h2 class="post-title">
+            mysql系列教程 - B+Tree索引
+        </h2>
+        
+        <div class="post-content-preview">
+            了解B+树前，我们先了解下二叉查找树、平衡二叉查找树、B-Tree。
+
+二叉查找树
+
+二叉查找树具有以下性质：左子树的键值小于根的键值，右子树的键值大于根的键值。如下图所示：
+
+
+
+由于它可以任意构造，所以也可以按照赢下方式构建二叉树。
+
+
+
+我们知道，二叉树查找一个节点所需的最大时间取决于树高，所以如果像上图所示进行查找，效率会非常低。所以，要提高查找效率，需要这颗树是平衡的，从而引出了平...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on June 30, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/06/23/mysql-innodb-lock/">
+        <h2 class="post-title">
+            mysql系列教程 - innodb锁
+        </h2>
+        
+        <div class="post-content-preview">
+            lock和latch
+
+锁分为两种类型 lock 和 latch ，它们之间的差异如下表所示：
+
+
+  
+    
+      -
+      lock
+      latch
+    
+  
+  
+    
+      对象
+      事务
+      线程
+    
+    
+      保护
+      数据库内容
+      内存数据结构
+    
+    
+      持续时间
+...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on June 23, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/05/27/hyperledger-fabric/">
+        <h2 class="post-title">
+            fabric - 架构&执行流程
+        </h2>
+        
+        <div class="post-content-preview">
+            本文简单讲述fabric架构&amp;执行流程，帮助同学快速理解&amp;入门。
+
+架构
+
+
+
+Identity
+
+Identity，也就是身份管理，Fabric是目前为止在设计上最贴近联盟链思想的区块链。联盟链考虑到商业应用对安全、隐私、监管、审计、性能的需求，提高准入门槛，成员必须被许可才能加入网络。Fabric成员管理服务为整个区块链网络提供身份管理、隐私、保密和可审计的服务。成员管理...
         </div>
     </a>
     <p class="post-meta">
@@ -229,241 +511,37 @@
 <hr>
 
 <div class="post-preview">
-    <a href="/2018/05/18/eth-private-network-ubuntu/">
+    <a href="/2018/05/27/hyperledger-fabric-sdk/">
         <h2 class="post-title">
-            搭建以太坊私有网络(ubuntn)
+            fabric - Node.js SDK
         </h2>
         
         <div class="post-content-preview">
-            mac版请参考搭建以太坊私有网络
+            这里使用官方示例。
 
-安装node&amp;npm
+如果之前没有部署过环境，先按照fabric入门（一）安装进行环境部署。
 
-sudo apt-get install nodejs-legacy
-sudo apt-get install npm
+安装
 
-# 升级npm
-sudo npm install npm@latest -g
+首先进入示例目录
 
-# 升级node
-sudo npm i -g n
+cd fabric-samples/balance-transfer/
 
-# 安装最新版可执行
-# sudo n stable
-# 由于mist限...
+
+有两种方法可以运行示例：
+
+方法一（推荐）
+
+1.通过docker启动网络
+
+docker-compose -f artifacts/docker-compose.yaml up
+
+
+2.安装f...
         </div>
     </a>
     <p class="post-meta">
-        Posted by Ben Blog on May 18, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/05/13/hyperledger-fabric-5/">
-        <h2 class="post-title">
-            fabric入门（五）安装和实例化链码
-        </h2>
-        
-        <div class="post-content-preview">
-            安装启动链码
-
-首先，在将示例代码安装到4个peer节点中的其中一个。这个命令将源代码放到peer节点的文件系统中。
-
-peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric-samples/chaincode/chaincode_example02/go/chaincode_example02
-
-
-接下来...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on May 13, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/05/13/hyperledger-fabric-4/">
-        <h2 class="post-title">
-            fabric入门（四）启动网络
-        </h2>
-        
-        <div class="post-content-preview">
-            启动网络
-
-我们将利用docker-compose脚本来启动我们的区块链网络。
-
-在开始前，我们先注释掉docker-compose-cli.yml的一段command: /bin/bash代码，不然该脚本将在网络启动时执行所有命令.
-
- cli:
-    container_name: cli
-    image: hyperledger/fabric-tools:$IMAGE_TAG
- ...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on May 13, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/05/13/hyperledger-fabric-3/">
-        <h2 class="post-title">
-            fabric入门（三）加密&交易生成器
-        </h2>
-        
-        <div class="post-content-preview">
-            通过查看./byfn.sh这个shell启动脚本，我们知道一开始的执行流程。
-
-#Create the network using docker compose
-if [ "${MODE}" == "up" ]; then
-  networkUp
-elif [ "${MODE}" == "down" ]; then ## Clear the network
-  networkDown
-eli...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on May 13, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/05/13/hyperledger-fabric-2/">
-        <h2 class="post-title">
-            fabric入门（二）启动&关闭网络
-        </h2>
-        
-        <div class="post-content-preview">
-            进入官方示例
-
-cd $GOPATH/src/github.com/hyperledger/fabric-samples/first-network
-
-
-第一步生成我们各种网络实体的所有证书和密钥，genesis block用于引导排序服务，以及配置Channel所需要的一组交易配置集合。
-运行以下命令：
-
-./byfn.sh -m generate
-
-
-接下来可以使用以下命令来启动整个网络...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on May 13, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/05/13/hyperledger-fabric-1/">
-        <h2 class="post-title">
-            fabric入门（一）安装
-        </h2>
-        
-        <div class="post-content-preview">
-            安装镜像
-
-镜像可以自己安装，也可以借助官网的samples来帮我们实现。
-
-从官网可以看到，安装需要执行一个脚本：
-
-curl -sSL https://goo.gl/6wtTN5 | bash -s 1.1.0
-
-
-不过这个需要翻墙，可以直接把文本下载下来。
-
-#!/bin/bash
-#
-# Copyright IBM Corp. All Rights Reserved.
-#
-# SPD...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on May 13, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/04/30/network-udp/">
-        <h2 class="post-title">
-            网络基础 - 用户数据报协议(UDP)
-        </h2>
-        
-        <div class="post-content-preview">
-            介绍
-
-用户数据报协议（User Datagram Protocol, UDP）是在现代网络中最常使用的另外一种第4层协议。如果说TCP是为了满足带有内在错误检测的可靠数据传输，那么UDP主要是为了提供高速的传输。处于这个原因，UDP是一种尽力服务，通常会被称为无连接协议。一个无连接协议并不会正式的建立和结束主机之前的连接，也不会像TCP那样存在握手和终止进程。
-
-无连接协议意味着不可靠服务...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on April 30, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/04/30/network-tcp/">
-        <h2 class="post-title">
-            网络基础 - 传输控制协议(TCP)
-        </h2>
-        
-        <div class="post-content-preview">
-            传输控制协议（Transmission Control Protocol, TCP）的最终目的是为数据提供可靠的端到端传输。
-
-TCP 头
-
-数据结构如下图所示：
-
-
-
-
-  源端口（Source Port）
-
-
-用来传输数据包的端口。
-
-
-  目的端口（Destination Port）
-
-
-数据包将要被发送到的端口。
-
-
-  序号（Sequence Number）
-
-
-这个数字用来表示一...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on April 30, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/04/30/network-ip/">
-        <h2 class="post-title">
-            网络基础 - IP协议
-        </h2>
-        
-        <div class="post-content-preview">
-            IPv4
-
-IP地址是一个32位的二进制数，通常被分割为4个“8位二进制数”（也就是4个字节）。IP地址通常用“点分十进制”表示成（a.b.c.d）的形式，其中，a,b,c,d都是0~255之间的十进制整数。例：点分十进IP地址（100.4.5.6），实际上是32位二进制数（01100100.00000100.00000101.00000110）。
-
-IP地址呗分成4个独立部分，是因为每个I...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on April 30, 2018
+        Posted by Ben Blog on May 27, 2018
     </p>
 </div>
 <hr>
@@ -614,7 +692,7 @@ IP地址呗分成4个独立部分，是因为每个I...
                             
                         
                             
-                                <a href="/tags/#精进" title="精进" rel="9">
+                                <a href="/tags/#精进" title="精进" rel="11">
                                     精进
                                 </a>
                             
@@ -626,6 +704,12 @@ IP地址呗分成4个独立部分，是因为每个I...
                             
                                 <a href="/tags/#操作系统" title="操作系统" rel="2">
                                     操作系统
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#书籍" title="书籍" rel="8">
+                                    书籍
                                 </a>
                             
                         
