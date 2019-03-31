@@ -211,6 +211,39 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2018/10/07/smarty-cache/">
+        <h2 class="post-title">
+            smarty缓存应用
+        </h2>
+        
+        <div class="post-content-preview">
+            执行流程
+
+
+
+开启缓存
+
+$smarty-&gt;caching = true;
+$smarty-&gt;cache_lifetime = 3600;
+
+
+判断是否已有缓存
+
+if ($smarty-&gt;isCached('index.htm')) {
+    $smarty-&gt;display('index.htm');
+    exit(0);
+}
+
+// do somethi...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on October 7, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/10/07/opcode-cache/">
         <h2 class="post-title">
             php加速器
@@ -492,47 +525,6 @@ pt-duplicate-key-checker
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2018/06/23/mysql-innodb-lock/">
-        <h2 class="post-title">
-            mysql系列教程 - innodb锁
-        </h2>
-        
-        <div class="post-content-preview">
-            lock和latch
-
-锁分为两种类型 lock 和 latch ，它们之间的差异如下表所示：
-
-
-  
-    
-      -
-      lock
-      latch
-    
-  
-  
-    
-      对象
-      事务
-      线程
-    
-    
-      保护
-      数据库内容
-      内存数据结构
-    
-    
-      持续时间
-...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on June 23, 2018
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -601,7 +593,7 @@ pt-duplicate-key-checker
                             
                         
                             
-                                <a href="/tags/#工具" title="工具" rel="4">
+                                <a href="/tags/#工具" title="工具" rel="5">
                                     工具
                                 </a>
                             
