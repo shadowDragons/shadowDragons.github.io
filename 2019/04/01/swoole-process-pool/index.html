@@ -10,7 +10,7 @@
     <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
     <meta name="theme-color" content="#000000">
     
-    <title>swoole 学习笔记 - ben blog</title>
+    <title>「Swoole」Process/Pool 进程池 - ben blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2018/10/15/swoole-note/">
+    <link rel="canonical" href="http://localhost:4000/2019/04/01/swoole-process-pool/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -204,12 +204,12 @@
                         <a class="tag" href="/tags/#php" title="php">php</a>
                         
                     </div>
-                    <h1>swoole 学习笔记</h1>
+                    <h1>「Swoole」Process/Pool 进程池</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Ben Blog on October 15, 2018</span>
+                    <span class="meta">Posted by Ben Blog on April 1, 2019</span>
                 </div>
             </div>
         </div>
@@ -230,91 +230,223 @@
                 <!-- Multi-Lingual -->
                 
 
-				<p>最近需要用到多进程处理任务，先学习一番。</p>
+				<blockquote>
+  <p>进程池，基于<code class="highlighter-rouge">Server</code>的<code class="highlighter-rouge">Manager</code>模块实现。可管理多个工作进程。该模块的核心功能为进程管理，相比<code class="highlighter-rouge">Process</code>实现多进程，<code class="highlighter-rouge">Process\Pool</code>更加简单，封装层次更高，开发者无需编写过多代码即可实现进程管理功能。</p>
+</blockquote>
 
-<h3 id="安装">安装</h3>
+<h3 id="接口">接口</h3>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pecl <span class="nb">install </span>swoole
+<h5 id="构造-__construct">构造 __construct</h5>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">Process</span><span class="nx">\Pool</span><span class="o">::</span><span class="na">__construct</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$worker_num</span><span class="p">,</span> <span class="nx">int</span> <span class="nv">$ipc_type</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">int</span> <span class="nv">$msgqueue_key</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
 </code></pre></div></div>
 
-<h5 id="安装遇到的问题">安装遇到的问题</h5>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$worker_num</code></td>
+      <td style="text-align: left">指定工作进程的数量</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$ipc_type</code></td>
+      <td style="text-align: left">进程间通信的模式，默认为<code class="highlighter-rouge">0</code><br /><code class="highlighter-rouge">0</code>：表示不使用任何进程间通信特性。必须设置<code class="highlighter-rouge">onWorkerStart</code>回调，并且必须在<code class="highlighter-rouge">onWorkerStart</code>中实现循环逻辑，当<code class="highlighter-rouge">onWorkerStart</code>函数退出时工作进程会立即退出;<br /><code class="highlighter-rouge">SWOOLE_IPC_MSGQUEUE</code>：表示使用系统消息队列通信，可设置<code class="highlighter-rouge">$msgqueue_key</code>指定消息队列的<code class="highlighter-rouge">KEY</code>，未设置消息队列<code class="highlighter-rouge">KEY</code>，将申请私有队列(必须设置onMessage回调，onWorkerStart变更为可选)；<br /><code class="highlighter-rouge">SWOOLE_IPC_SOCKET</code>：示使用<code class="highlighter-rouge">Socket</code>进行通信，需要使用<code class="highlighter-rouge">listen</code>方法指定监听的地址和端口(必须设置onMessage回调，onWorkerStart变更为可选)。</td>
+    </tr>
+  </tbody>
+</table>
 
-<p>我选择了支持openssl，安装过程中遇到了两个错误</p>
+<h5 id="设置回调-on">设置回调 on</h5>
 
-<p>1、 <code class="highlighter-rouge">fatal error: 'openssl/ssl.h' file not found</code></p>
+<p>设置进程池回调函数。</p>
 
-<p>解决方法： <br />
-一般用brew安装的软件，都会把需要include的文件自动放到/usr/local/include里的，但是不知为什么安装openssl的时候没有放到那里。</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">Process</span><span class="nx">\Pool</span><span class="o">::</span><span class="na">on</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$event</span><span class="p">,</span> <span class="nx">callable</span> <span class="nv">$function</span><span class="p">;</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$event</code></td>
+      <td style="text-align: left">事件：<br /><code class="highlighter-rouge">WorkerStart</code>：进程启动;<br /><code class="highlighter-rouge">WorkerStop</code>：进程结束;<br /><code class="highlighter-rouge">Message</code>：接收到消息</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$function</code></td>
+      <td style="text-align: left">回调函数</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>可以简写为 <code class="highlighter-rouge">{on+$event}(Swoole\Process\Pool $pool, int $workerId)</code> 的形式。</p>
+
+<p>例如：</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$pool</span><span class="o">-&gt;</span><span class="na">on</span><span class="p">(</span><span class="s1">'WorkerStart'</span><span class="p">,</span> <span class="k">function</span><span class="p">())</span>
+<span class="c1">//等同于</span>
+<span class="nv">$pool</span><span class="o">-&gt;</span><span class="na">onWorkerStart</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>其中<code class="highlighter-rouge">WorkerStart</code>和<code class="highlighter-rouge">WorkerStop</code>的回调函数接受两个参数：</p>
 
 <ul>
-  <li><code class="highlighter-rouge">cp -R /usr/local/opt/openssl/include/openssl /usr/local/include</code></li>
-  <li><code class="highlighter-rouge">ln -s /usr/local/opt/openssl/include/openssl /usr/local/include/openssl</code>（推荐）</li>
+  <li><code class="highlighter-rouge">$pool</code>：进程对象</li>
+  <li><code class="highlighter-rouge">$WorkerId</code>：当前工作进程的编号，底层会对子进程进行标号，范围是[<code class="highlighter-rouge">0</code>-<code class="highlighter-rouge">$worker_num</code>]</li>
 </ul>
 
-<p>2、<code class="highlighter-rouge">Enable openssl support, require openssl library.</code></p>
+<p><code class="highlighter-rouge">Message</code> 的回调函数接受两个参数：</p>
 
-<p>查看 openssl 信息 <code class="highlighter-rouge">brew info openssl</code>，可以查看一下信息</p>
+<ul>
+  <li><code class="highlighter-rouge">$pool</code>：进程对象</li>
+  <li><code class="highlighter-rouge">$data</code>：传入的数据</li>
+</ul>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For compilers to find openssl you may need to <span class="nb">set</span>:
-  <span class="nb">export </span><span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">"-L/usr/local/opt/openssl/lib"</span>
-  <span class="nb">export </span><span class="nv">CPPFLAGS</span><span class="o">=</span><span class="s2">"-I/usr/local/opt/openssl/include"</span>
+<h5 id="指定监听端口-listen">指定监听端口 listen</h5>
+
+<p>监听<code class="highlighter-rouge">SOCKET</code>，必须在<code class="highlighter-rouge">$ipc_mode</code>为<code class="highlighter-rouge">SWOOLE_IPC_SOCKET</code>时才能使用。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">Process</span><span class="nx">\Pool</span><span class="o">::</span><span class="na">listen</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$host</span><span class="p">,</span> <span class="nx">int</span> <span class="nv">$port</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">int</span> <span class="nv">$backlog</span> <span class="o">=</span> <span class="mi">2048</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>添加环境变量即可修复这个问题。</p>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$host</code></td>
+      <td style="text-align: left">监听的地址，支持<code class="highlighter-rouge">TCP</code>和<code class="highlighter-rouge">UnixSocket</code>两种类型。<br /><code class="highlighter-rouge">127.0.0.1</code>表示监听<code class="highlighter-rouge">TCP</code>地址，需要指定<code class="highlighter-rouge">$port</code>。<br /><code class="highlighter-rouge">unix:/tmp/php.sock</code>监听<code class="highlighter-rouge">UnixSocket</code>地址。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$port</code></td>
+      <td style="text-align: left">监听的端口，在<code class="highlighter-rouge">TCP</code>模式下需要指定。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$backlog</code></td>
+      <td style="text-align: left">监听的队列长度</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">返回</td>
+      <td style="text-align: left">成功返回<code class="highlighter-rouge">true</code>，失败<code class="highlighter-rouge">false</code>，调用<code class="highlighter-rouge">swoole_errno</code>获取错误码。监听失败后，调用<code class="highlighter-rouge">start</code>时会立即返回<code class="highlighter-rouge">false</code></td>
+    </tr>
+  </tbody>
+</table>
 
-<h3 id="多进程">多进程</h3>
+<p>实例</p>
 
-<p><a href="https://wiki.swoole.com/wiki/page/p-process.html">官方文档</a></p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$pool</span><span class="o">-&gt;</span><span class="na">listen</span><span class="p">(</span><span class="s1">'127.0.0.1'</span><span class="p">,</span> <span class="mi">8089</span><span class="p">);</span>
+<span class="nv">$pool</span><span class="o">-&gt;</span><span class="na">listen</span><span class="p">(</span><span class="s1">'unix:/tmp/php.sock'</span><span class="p">);</span>
+</code></pre></div></div>
 
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<h5 id="写数据-write">写数据 write</h5>
 
-<span class="nv">$url_arr</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
-<span class="k">for</span> <span class="p">(</span><span class="nv">$i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nv">$i</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span><span class="nv">$i</span><span class="o">++</span><span class="p">){</span>
-    <span class="nv">$url_arr</span><span class="p">[]</span> <span class="o">=</span> <span class="s2">"www.baidu.com?wd="</span><span class="o">.</span><span class="nv">$i</span><span class="p">;</span>
-<span class="p">}</span>
+<p>向对端写入数据，必须在<code class="highlighter-rouge">$ipc_mode</code>为<code class="highlighter-rouge">SWOOLE_IPC_SOCKET</code>时才能使用。</p>
 
-<span class="nv">$workers</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">Process</span><span class="nx">\Pool</span><span class="o">::</span><span class="na">write</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$data</span><span class="p">);</span>
+</code></pre></div></div>
 
-<span class="c1">// 创建子进程</span>
-<span class="k">for</span> <span class="p">(</span><span class="nv">$i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nv">$i</span><span class="o">&lt;</span><span class="mi">5</span><span class="p">;</span><span class="nv">$i</span><span class="o">++</span><span class="p">){</span>
-  <span class="nv">$process</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">swoole_process</span><span class="p">(</span><span class="s1">'getContents'</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
-  <span class="nv">$pid</span> <span class="o">=</span> <span class="nv">$process</span><span class="o">-&gt;</span><span class="na">start</span><span class="p">();</span>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$data</code></td>
+      <td style="text-align: left">写入的数据内容。可多次调用<code class="highlighter-rouge">write</code>，底层会在<code class="highlighter-rouge">onMessage</code>函数退出后将数据全部写入<code class="highlighter-rouge">socket</code>中，并<code class="highlighter-rouge">close</code>连接。</td>
+    </tr>
+  </tbody>
+</table>
 
-  <span class="c1">// 向管道内写入数据</span>
-  <span class="nv">$process</span><span class="o">-&gt;</span><span class="na">write</span><span class="p">(</span><span class="nv">$i</span><span class="p">);</span>
-  <span class="nv">$workers</span><span class="p">[</span><span class="nv">$pid</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$process</span><span class="p">;</span>
-<span class="p">}</span>
+<p>实例</p>
 
-<span class="c1">//主进程数据结果</span>
-<span class="k">foreach</span> <span class="p">(</span><span class="nv">$workers</span> <span class="k">as</span> <span class="nv">$process</span><span class="p">){</span>
-    <span class="k">echo</span> <span class="nv">$process</span><span class="o">-&gt;</span><span class="na">read</span><span class="p">();</span>
-    <span class="k">echo</span> <span class="nx">PHP_EOL</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$pool</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Swoole\Process\Pool</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nx">SWOOLE_IPC_SOCKET</span><span class="p">);</span>
 
-<span class="k">function</span> <span class="nf">getContents</span><span class="p">(</span><span class="nx">swoole_process</span> <span class="nv">$worker</span><span class="p">){</span>
-    <span class="c1">// 从管道中读取数据</span>
-    <span class="nv">$i</span> <span class="o">=</span> <span class="nv">$worker</span><span class="o">-&gt;</span><span class="na">read</span><span class="p">();</span>
-    <span class="k">global</span> <span class="nv">$url_arr</span><span class="p">;</span>
-    <span class="nv">$res1</span> <span class="o">=</span> <span class="nx">execCurl</span><span class="p">(</span><span class="nv">$url_arr</span><span class="p">[(</span><span class="nv">$i</span><span class="o">*</span><span class="mi">2</span><span class="p">)]);</span>
-    <span class="nb">sleep</span><span class="p">(</span><span class="nb">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">));</span>
-    <span class="nv">$res2</span> <span class="o">=</span> <span class="nx">execCurl</span><span class="p">(</span><span class="nv">$url_arr</span><span class="p">[(</span><span class="nv">$i</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">)]);</span>
-    <span class="k">echo</span> <span class="nv">$res1</span><span class="o">.</span><span class="nx">PHP_EOL</span><span class="o">.</span><span class="nv">$res2</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="nv">$pool</span><span class="o">-&gt;</span><span class="na">on</span><span class="p">(</span><span class="s2">"Message"</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nv">$pool</span><span class="p">,</span> <span class="nv">$message</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"Message: </span><span class="si">{</span><span class="nv">$message</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="nv">$pool</span><span class="o">-&gt;</span><span class="na">write</span><span class="p">(</span><span class="s2">"hello "</span><span class="p">);</span>
+    <span class="nv">$pool</span><span class="o">-&gt;</span><span class="na">write</span><span class="p">(</span><span class="s2">"world "</span><span class="p">);</span>
+    <span class="nv">$pool</span><span class="o">-&gt;</span><span class="na">write</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">);</span>
+<span class="p">});</span>
 
-<span class="k">function</span> <span class="nf">execCurl</span><span class="p">(</span><span class="nv">$url</span><span class="p">){</span>
-    <span class="k">return</span> <span class="s2">"handle "</span><span class="o">.</span><span class="nv">$url</span><span class="o">.</span><span class="s2">" finished"</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="nv">$pool</span><span class="o">-&gt;</span><span class="na">listen</span><span class="p">(</span><span class="s1">'127.0.0.1'</span><span class="p">,</span> <span class="mi">8089</span><span class="p">);</span>
+<span class="nv">$pool</span><span class="o">-&gt;</span><span class="na">start</span><span class="p">();</span>
+</code></pre></div></div>
 
-<span class="c1">////回收子进程</span>
-<span class="k">while</span><span class="p">(</span><span class="nb">count</span><span class="p">(</span><span class="nv">$workers</span><span class="p">)){</span>
-    <span class="k">foreach</span><span class="p">(</span><span class="nv">$workers</span> <span class="k">as</span> <span class="nv">$pid</span><span class="o">=&gt;</span><span class="nv">$worker</span><span class="p">){</span>
-        <span class="nv">$ret</span> <span class="o">=</span> <span class="nx">swoole_process</span><span class="o">::</span><span class="na">wait</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
-        <span class="k">if</span><span class="p">(</span><span class="nv">$ret</span><span class="p">){</span>
-            <span class="k">echo</span> <span class="s2">"worker exit: </span><span class="nv">$pid</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
-            <span class="nb">unset</span><span class="p">(</span><span class="nv">$workers</span><span class="p">[</span><span class="nv">$pid</span><span class="p">]);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<h5 id="启动-start">启动 start</h5>
+
+<p>启动工作进程。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">Process</span><span class="nx">\Pool</span><span class="o">::</span><span class="na">start</span><span class="p">()</span> <span class="o">:</span> <span class="nx">bool</span><span class="p">;</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">返回</td>
+      <td style="text-align: left">成功返回<code class="highlighter-rouge">true</code>，当前进程进入<code class="highlighter-rouge">wait</code>状态，管理工作进程;<br />失败，返回<code class="highlighter-rouge">false</code>，可使用<code class="highlighter-rouge">swoole_errno</code>获取错误码</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="获取进程对象-getprocess">获取进程对象 getProcess</h5>
+
+<p>获取当前工作进程对象。返回<code class="highlighter-rouge">Swoole\Process</code>对象。</p>
+
+<p>必须在<code class="highlighter-rouge">start</code>之后，在工作进程的<code class="highlighter-rouge">onWorkerStart</code>或其他回调函数中调用。</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">Process</span><span class="nx">\Pool</span><span class="o">-&gt;</span><span class="na">getProcess</span><span class="p">();</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">返回</td>
+      <td style="text-align: left"><code class="highlighter-rouge">Swoole\Process</code>对象，单例模式，在工作进程中重复调用将返回同一个对象</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>实例</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$workerNum</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="nv">$pool</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Swoole\Process\Pool</span><span class="p">(</span><span class="nv">$workerNum</span><span class="p">);</span>
+
+<span class="nv">$pool</span><span class="o">-&gt;</span><span class="na">on</span><span class="p">(</span><span class="s2">"WorkerStart"</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nv">$pool</span><span class="p">,</span> <span class="nv">$workerId</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$process</span> <span class="o">=</span> <span class="nv">$pool</span><span class="o">-&gt;</span><span class="na">getProcess</span><span class="p">();</span>
+    <span class="nv">$process</span><span class="o">-&gt;</span><span class="na">exec</span><span class="p">(</span><span class="s2">"/bin/sh"</span><span class="p">,</span> <span class="p">[</span><span class="s2">"ls"</span><span class="p">,</span> <span class="s1">'-l'</span><span class="p">]);</span>
+<span class="p">});</span>
+
+<span class="nv">$pool</span><span class="o">-&gt;</span><span class="na">on</span><span class="p">(</span><span class="s2">"WorkerStop"</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nv">$pool</span><span class="p">,</span> <span class="nv">$workerId</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"Worker#</span><span class="si">{</span><span class="nv">$workerId</span><span class="si">}</span><span class="s2"> is stopped</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="nv">$pool</span><span class="o">-&gt;</span><span class="na">start</span><span class="p">();</span>
 </code></pre></div></div>
 
 
@@ -323,19 +455,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/10/11/bhpws-brower-cache/" data-toggle="tooltip" data-placement="top" title="『构建高性能web站点』浏览器缓存">
+                        <a href="/2019/03/31/stock/" data-toggle="tooltip" data-placement="top" title="股票的一些概念">
                         Previous<br>
-                        <span>『构建高性能web站点』浏览器缓存</span>
+                        <span>股票的一些概念</span>
                         </a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2018/10/29/mouse-algorithm/" data-toggle="tooltip" data-placement="top" title="“老鼠试药”算法">
-                        Next<br>
-                        <span>“老鼠试药”算法</span>
-                        </a>
-                    </li>
                     
                 </ul>
 
