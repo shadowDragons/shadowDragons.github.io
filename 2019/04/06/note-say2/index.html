@@ -10,7 +10,7 @@
     <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
     <meta name="theme-color" content="#000000">
     
-    <title>jsonp实现异步请求跨域 - ben blog</title>
+    <title>「笔记」《说话之道2》 - ben blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2016/11/13/jsonp/">
+    <link rel="canonical" href="http://localhost:4000/2019/04/06/note-say2/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -201,15 +201,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#jsonp" title="jsonp">jsonp</a>
+                        <a class="tag" href="/tags/#书籍" title="书籍">书籍</a>
                         
                     </div>
-                    <h1>jsonp实现异步请求跨域</h1>
+                    <h1>「笔记」《说话之道2》</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Ben Blog on November 13, 2016</span>
+                    <span class="meta">Posted by Ben Blog on April 6, 2019</span>
                 </div>
             </div>
         </div>
@@ -230,122 +230,8 @@
                 <!-- Multi-Lingual -->
                 
 
-				<p>ajax 和 jsonp的区别  <br />
-ajax是通过XmlHttpRequest来获取非本页内容，而jsonp是通过动态添加<code class="highlighter-rouge">&lt;script&gt;</code>来调用服务器提供的脚本。</p>
+				<p><a href="/assets/img/posts/2019-04-06-note-say2/1.png"><img src="/assets/img/posts/2019-04-06-note-say2/1.png" alt="1.png" title="查看原图" /></a></p>
 
-<p>为什么jsonp能够跨服  <br />
-因为在web调用js文件是不受跨服影响的，不仅如此，凡是拥有src属性的都有跨服的能力。</p>
-
-<h4 id="方案1">方案1</h4>
-
-<p>www.b.com/remote.js</p>
-
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">alert</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</code></pre></div></div>
-
-<p>www.a.com/json.html</p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</span> 
-<span class="nt">&lt;html</span> <span class="na">xmlns=</span><span class="s">"http://www.w3.org/1999/xhtml"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;head&gt;</span>
-<span class="nt">&lt;title&gt;&lt;/title&gt;</span>
-<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"http://remoteserver.com/remote.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
-<span class="nt">&lt;/head&gt;</span>
-<span class="nt">&lt;body&gt;</span>
-<span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
-</code></pre></div></div>
-
-<h4 id="方案2">方案2</h4>
-
-<p>现在我们在jsonp.html页面定义一个函数，然后在远程remote.js中传入数据进行调用。</p>
-
-<p>www.a.com/json.html</p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</span>
-<span class="nt">&lt;html</span> <span class="na">xmlns=</span><span class="s">"http://www.w3.org/1999/xhtml"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;head&gt;</span>
-<span class="nt">&lt;title&gt;&lt;/title&gt;</span>
-<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
-<span class="kd">var</span> <span class="nx">localHandler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
-<span class="nx">alert</span><span class="p">(</span><span class="s1">'我是本地函数，可以被跨域的remote.js文件调用，远程js带来的数据是：'</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">result</span><span class="p">);</span>
-<span class="p">};</span>
-<span class="nt">&lt;/script&gt;</span>
-<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"http://remoteserver.com/remote.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
-<span class="nt">&lt;/head&gt;</span>
-<span class="nt">&lt;body&gt;</span>
-<span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
-</code></pre></div></div>
-
-<p>www.b.com/remote.js</p>
-
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">localHandler</span><span class="p">({</span><span class="s2">"result"</span><span class="p">:</span><span class="s2">"我是远程js带来的数据"</span><span class="p">});</span>
-</code></pre></div></div>
-
-<h4 id="方案3">方案3</h4>
-
-<p>使用callback</p>
-
-<p>www.a.com/json.html</p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</span>
-<span class="nt">&lt;html</span> <span class="na">xmlns=</span><span class="s">"http://www.w3.org/1999/xhtml"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;head&gt;</span>
-<span class="nt">&lt;title&gt;&lt;/title&gt;</span>
-<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
-<span class="c1">// 得到航班信息查询结果后的回调函数</span>
-<span class="kd">var</span> <span class="nx">flightHandler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
-    <span class="nx">alert</span><span class="p">(</span><span class="s1">'你查询的航班结果是：票价 '</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">price</span> <span class="o">+</span> <span class="s1">' 元，'</span> <span class="o">+</span> <span class="s1">'余票 '</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">tickets</span> <span class="o">+</span> <span class="s1">' 张。'</span><span class="p">);</span>
-<span class="p">};</span>
-<span class="c1">// 提供jsonp服务的url地址（不管是什么类型的地址，最终生成的返回值都是一段javascript代码）</span>
-<span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s2">"http://www.b.com/json.php?callback=flightHandler"</span><span class="p">;</span>
-<span class="c1">// 创建script标签，设置其属性</span>
-<span class="kd">var</span> <span class="nx">script</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">'script'</span><span class="p">);</span>
-<span class="nx">script</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">'src'</span><span class="p">,</span> <span class="nx">url</span><span class="p">);</span>
-<span class="c1">// 把script标签加入head，此时调用开始</span>
-<span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">'head'</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">script</span><span class="p">);</span>
-<span class="nt">&lt;/script&gt;</span>
-<span class="nt">&lt;/head&gt;</span>
-<span class="nt">&lt;body&gt;</span>
-<span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
-</code></pre></div></div>
-
-<p>www.b.com/json.php</p>
-
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
-<span class="k">echo</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">'callback'</span><span class="p">]</span> <span class="o">.</span> <span class="s1">'('</span> <span class="o">.</span> <span class="nb">json_encode</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">.</span> <span class="s1">')'</span><span class="p">;</span><span class="k">exit</span><span class="p">;</span>
-<span class="c1">####实例四 使用jquery</span>
-
-<span class="o">&lt;!</span><span class="nx">DOCTYPE</span> <span class="nx">html</span> <span class="nx">PUBLIC</span> <span class="s2">"-//W3C//DTD XHTML 1.0 Transitional//EN"</span> <span class="s2">"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"</span><span class="o">&gt;</span>
-<span class="o">&lt;</span><span class="nx">html</span> <span class="nx">xmlns</span><span class="o">=</span><span class="s2">"http://www.w3.org/1999/xhtml"</span> <span class="o">&gt;</span>
-<span class="o">&lt;</span><span class="nx">head</span><span class="o">&gt;</span>
-<span class="o">&lt;</span><span class="nx">title</span><span class="o">&gt;</span><span class="nx">Untitled</span> <span class="nx">Page</span><span class="o">&lt;/</span><span class="nx">title</span><span class="o">&gt;</span>
-<span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"text/javascript"</span> <span class="nx">src</span><span class="o">=</span><span class="s2">"jquery.min.js"</span><span class="o">&gt;&lt;/</span><span class="nx">script</span><span class="o">&gt;</span>
-<span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"text/javascript"</span><span class="o">&gt;</span>
-<span class="nx">jQuery</span><span class="p">(</span><span class="nx">document</span><span class="p">)</span><span class="o">.</span><span class="nx">ready</span><span class="p">(</span><span class="k">function</span><span class="p">(){</span>
-    <span class="err">$</span><span class="o">.</span><span class="nx">ajax</span><span class="p">({</span>
-        <span class="nx">type</span><span class="o">:</span> <span class="s2">"get"</span><span class="p">,</span>
-        <span class="nx">async</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-        <span class="nx">url</span><span class="o">:</span> <span class="s2">"http://www.b.com/jsonp.php"</span><span class="p">,</span>
-        <span class="nx">dataType</span><span class="o">:</span> <span class="s2">"jsonp"</span><span class="p">,</span>
-        <span class="nx">jsonp</span><span class="o">:</span> <span class="s2">"callback"</span><span class="p">,</span><span class="c1">//传递给请求处理程序或页面的，用以获得jsonp回调函数名的参数名(一般默认为:callback)</span>
-        <span class="nx">jsonpCallback</span><span class="o">:</span><span class="s2">"flightHandler"</span><span class="p">,</span><span class="c1">//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名，也可以写"?"，jQuery会自动为你处理数据</span>
-        <span class="nx">success</span><span class="o">:</span> <span class="k">function</span><span class="p">(</span><span class="nx">json</span><span class="p">){</span>
-            <span class="nx">alert</span><span class="p">(</span><span class="s1">'您查询到航班信息：票价： '</span> <span class="o">+</span> <span class="nx">json</span><span class="o">.</span><span class="nx">price</span> <span class="o">+</span> <span class="s1">' 元，余票： '</span> <span class="o">+</span> <span class="nx">json</span><span class="o">.</span><span class="nx">tickets</span> <span class="o">+</span> <span class="s1">' 张。'</span><span class="p">);</span>
-        <span class="p">},</span>
-        <span class="nx">error</span><span class="o">:</span> <span class="k">function</span><span class="p">(){</span>
-            <span class="nx">alert</span><span class="p">(</span><span class="s1">'fail'</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">});</span>
-<span class="p">});</span>
-<span class="o">&lt;/</span><span class="nx">script</span><span class="o">&gt;</span>
-<span class="o">&lt;/</span><span class="nx">head</span><span class="o">&gt;</span>
-<span class="o">&lt;</span><span class="nx">body</span><span class="o">&gt;</span>
-<span class="o">&lt;/</span><span class="nx">body</span><span class="o">&gt;</span>
-<span class="o">&lt;/</span><span class="nx">html</span><span class="o">&gt;</span>
-</code></pre></div></div>
 
 
                 <hr style="visibility: hidden;">
@@ -353,19 +239,12 @@ ajax是通过XmlHttpRequest来获取非本页内容，而jsonp是通过动态添
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2016/11/13/hash-table/" data-toggle="tooltip" data-placement="top" title="哈希表">
+                        <a href="/2019/04/01/swoole-process-pool/" data-toggle="tooltip" data-placement="top" title="「Swoole」Process/Pool 进程池">
                         Previous<br>
-                        <span>哈希表</span>
+                        <span>「Swoole」Process/Pool 进程池</span>
                         </a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2016/11/13/link/" data-toggle="tooltip" data-placement="top" title="链表">
-                        Next<br>
-                        <span>链表</span>
-                        </a>
-                    </li>
                     
                 </ul>
 
