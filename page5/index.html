@@ -211,6 +211,35 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2018/10/11/bhpws-brower-cache/">
+        <h2 class="post-title">
+            『构建高性能web站点』浏览器缓存
+        </h2>
+        
+        <div class="post-content-preview">
+            我们可以通过http头信息来实现浏览器缓存。
+
+Last-Modified
+
+这种信息需要后台来判定是否过期。流程如下：
+
+
+
+sequenceDiagram;
+    participant 客户端
+    participant 服务端
+    客户端-&gt;服务端: 请求静态文件
+    服务端-&gt;客户端: 返回头信息 Last-Modified: {最后修改时间} GMT
+ ...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on October 11, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/10/07/strace-dtruss/">
         <h2 class="post-title">
             系统调用跟踪 - strace、dtruss
@@ -486,46 +515,6 @@ pt-duplicate-key-checker
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2018/07/14/bhpws-network/">
-        <h2 class="post-title">
-            『构建高性能web站点』网络传输
-        </h2>
-        
-        <div class="post-content-preview">
-            OSI七层网络协议&amp;四层协议
-
-
-
-每层功能如下表所示：
-
-
-  
-    
-      层
-      功能
-      典型设备
-      典型协议、标准和应用
-    
-  
-  
-    
-      应用层
-      用户接口、应用程序
-      网关
-      TELNET, FTP, HTTP
-    
-    
-      表示层
-      数据的表示、压缩...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on July 14, 2018
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -682,7 +671,7 @@ pt-duplicate-key-checker
                             
                         
                             
-                                <a href="/tags/#书籍" title="书籍" rel="9">
+                                <a href="/tags/#书籍" title="书籍" rel="10">
                                     书籍
                                 </a>
                             
