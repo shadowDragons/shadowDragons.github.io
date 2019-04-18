@@ -211,6 +211,31 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2019/03/19/swoole-atomic/">
+        <h2 class="post-title">
+            「Swoole」atomic 计数器
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  swoole_atomic是swoole扩展提供的原子计数操作类，可以方便整数的无锁原子增减。  
+使用共享内存，可以在不同的进程之间操作计数。  
+swoole_atomic基于gcc提供的CPU原子指令，无需加锁。  
+swoole_atomic在服务器程序中必须在swoole_server-&gt;start前创建才能在Worker进程中使用。
+
+
+接口
+
+构造方法 __cons...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on March 19, 2019
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2019/03/18/thread-group-session-terminal/">
         <h2 class="post-title">
             进程、进程组、会话与控制终端
@@ -462,41 +487,6 @@ Docker
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2018/10/29/mouse-algorithm/">
-        <h2 class="post-title">
-            “老鼠试药”算法
-        </h2>
-        
-        <div class="post-content-preview">
-            昨天在网上看到一个视频，了解到了一个很有趣的算法。
-
-“老鼠试药”
-
-题目是这样的：有100瓶药水，只有1瓶毒药。毒性发作需要1周时间，请问至少需要机智老鼠才能用1周时间找到那瓶毒药。
-
-我们可以用二进制来轻松的解决这个问题。
-
-1、首先把100瓶药水按1到100排号。
-2、将序号转换为二进制。如下表所示：
-
-
-  
-    
-      药品序号
-      二进制
-    
-  
-  
-...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on October 29, 2018
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -653,7 +643,7 @@ Docker
                             
                         
                             
-                                <a href="/tags/#书籍" title="书籍" rel="10">
+                                <a href="/tags/#书籍" title="书籍" rel="11">
                                     书籍
                                 </a>
                             
