@@ -211,6 +211,31 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2019/03/19/swoole-timer/">
+        <h2 class="post-title">
+            「Swoole」Timer 毫秒精度的定时器
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  毫秒精度的定时器。底层基于epoll_wait和setitimer实现，数据结构使用最小堆，可支持添加大量定时器。   
+在同步进程中使用setitimer和信号实现，如Manager和TaskWorker进程。  
+在异步进程中使用epoll_wait/kevent/poll/select超时时间实现。
+
+
+间隔时钟定时器 tick
+
+
+  设置一个间隔时钟定时器，与after定时器...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on March 19, 2019
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2019/03/19/swoole-atomic/">
         <h2 class="post-title">
             「Swoole」atomic 计数器
@@ -451,42 +476,6 @@ Windows其他版本
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2018/11/12/docker-base/">
-        <h2 class="post-title">
-            「Docker」基础
-        </h2>
-        
-        <div class="post-content-preview">
-            
-  本篇主要让大家知道如何安装、 Docker的基本知识点、Docker的基本使用
-
-
-安装
-
-Docker
-
-由于我本机是mac系统，所以这里以mac安装为例子。其他系统的安装请自行查看官方文档&gt;。
-
-进入官网下载页面&gt;下载。
-
-
-
-下载完成后，直接安装。
-
-完成后，直接打开Docker应用程序，如果这时顶部导航会显示Docker图标，说明已经启动了。
-
-
-
-查看版本，输入以...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 12, 2018
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -643,7 +632,7 @@ Docker
                             
                         
                             
-                                <a href="/tags/#书籍" title="书籍" rel="11">
+                                <a href="/tags/#书籍" title="书籍" rel="12">
                                     书籍
                                 </a>
                             
