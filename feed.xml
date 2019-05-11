@@ -5,8 +5,8 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 10 May 2019 16:18:16 +0800</pubDate>
-    <lastBuildDate>Fri, 10 May 2019 16:18:16 +0800</lastBuildDate>
+    <pubDate>Sat, 11 May 2019 18:37:04 +0800</pubDate>
+    <lastBuildDate>Sat, 11 May 2019 18:37:04 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -407,6 +407,50 @@
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;关键字 filetype:文件类型&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-03-30-google-skill/5.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-03-30-google-skill/5.png&quot; alt=&quot;5.png&quot; title=&quot;点击查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;按时间搜索&quot;&gt;按时间搜索&lt;/h3&gt;
+
+&lt;p&gt;在页面链接加上以下参数:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;参数&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;说明&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;最新结果&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;&amp;amp;tbs=rltm:1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;一天内&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;&amp;amp;tbs=qdr:d&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;两天内&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;&amp;amp;tbs=qdr:d2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;一周内&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;&amp;amp;tbs=qdr:w&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;一个月内&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;&amp;amp;tbs=qdr:m&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;一年内&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;&amp;amp;tbs=qdr:y&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;按范围搜索:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;amp;tbs=cdr:1,cd_min:2010-05-31,cd_max:2010-06-01
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </description>
         <pubDate>Sat, 30 Mar 2019 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2019/03/30/google-skill/</link>
