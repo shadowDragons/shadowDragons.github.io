@@ -211,6 +211,39 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2018/07/29/computer-thread/">
+        <h2 class="post-title">
+            进程与线程
+        </h2>
+        
+        <div class="post-content-preview">
+            先理解一下，什么是进程和线程：
+
+在现代操作系统中，进程支持多线程。
+
+
+  进程是资源管理的最小单元；
+  线程是程序执行的最小单元。
+
+
+它们之间的关系如下图所示：
+
+
+
+那么什么是程序执行的最小单位呢？
+
+线程作为调度和分配的基本单位（也被称为轻量级进程），这是因为他们共享进程的资源，所以没有太多的内存消耗。
+
+当多个程序同时在执行的时候，我们的cpu（当cpu数小于程序数）并不能同时...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on July 29, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/07/27/bhpws-service/">
         <h2 class="post-title">
             『构建高性能web站点』服务器并发
@@ -502,29 +535,6 @@ sudo npm i -g n
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2018/05/13/hyperledger-fabric-5/">
-        <h2 class="post-title">
-            fabric入门（五）安装和实例化链码
-        </h2>
-        
-        <div class="post-content-preview">
-            安装启动链码
-
-首先，在将示例代码安装到4个peer节点中的其中一个。这个命令将源代码放到peer节点的文件系统中。
-
-peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric-samples/chaincode/chaincode_example02/go/chaincode_example02
-
-
-接下来...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on May 13, 2018
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -684,6 +694,8 @@ peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric-samples/c
                                 <a href="/tags/#书籍" title="书籍" rel="12">
                                     书籍
                                 </a>
+                            
+                        
                             
                         
                             
