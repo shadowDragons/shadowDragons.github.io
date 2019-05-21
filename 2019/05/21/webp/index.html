@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一个小白的成长学习历程">
+    <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
+    <meta name="theme-color" content="#000000">
+    
+    <title>WebP 图片转换 - ben blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2019/05/21/webp/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- mermaid CSS -->
+    <link rel="stylesheet" href="/assets/css/mermaid.css">
+
+    <script type="text/javascript"
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- google adsense -->
+    <!-- <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-4009748690576137",
+        enable_page_level_ads: true
+      });
+    </script>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-4009748690576137",
+              enable_page_level_ads: true
+        });
+    </script> -->
+
+    <!-- 百度收录 -->
+    <script>
+      (function(){
+          var bp = document.createElement('script');
+          var curProtocol = window.location.protocol.split(':')[0];
+          if (curProtocol === 'https') {
+              bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+          }
+          else {
+              bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+          }
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(bp, s);
+      })();
+    </script>
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Ben Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/book/">Book</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/">Tags</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg.jpg')
+    }
+
+    
+</style>
+<header class="intro-header" >
+    <div class="header-mask"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#工具" title="工具">工具</a>
+                        
+                    </div>
+                    <h1>WebP 图片转换</h1>
+                    
+                    
+                    <h2 class="subheading"></h2>
+                    
+                    <span class="meta">Posted by Ben Blog on May 21, 2019</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<blockquote>
+  <p><code class="highlighter-rouge">WebP</code>是Google推出的一种同时提供了有损压缩与无损压缩（可逆压缩）的图片文件格式。</p>
+</blockquote>
+
+<p>根据Google的测试，无损压缩后的WebP比PNG文件少了26％的体积，有损压缩后的<code class="highlighter-rouge">WebP</code>图片相比于等效质量指标的JPEG图片减少了25％~34%的体积。</p>
+
+<h3 id="安装">安装</h3>
+
+<p>以<code class="highlighter-rouge">Ubuntu16.04</code>为例：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get update
+<span class="nb">sudo </span>apt-get <span class="nb">install </span>webp 
+</code></pre></div></div>
+
+<p>其他Linux版本或操作系统，查看<a href="https://developers.google.com/speed/webp/docs/precompiled">官方文档</a>，或者<a href="https://github.com/webmproject/libwebp">Github文档</a></p>
+
+<h3 id="使用">使用</h3>
+
+<h5 id="cwebp-编码">cwebp 编码</h5>
+
+<p>将其他格式的图片转换为<code class="highlighter-rouge">WebP</code></p>
+
+<p>我们实际场景来说明，这里将一张<code class="highlighter-rouge">aa.jpg</code>图片转换为质量85、宽高为300乘200的<code class="highlighter-rouge">WebP</code>格式，并起名为<code class="highlighter-rouge">bb</code>：</p>
+
+<p><a href="/assets/img/posts/2019-05-21-webp/aa.jpg"><img src="/assets/img/posts/2019-05-21-webp/aa.jpg" alt="aa.jpg" title="查看原图" /></a></p>
+
+<p>执行命令：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cwebp -q 85 -resize 300 200  aa.jpg -o bb.webp
+</code></pre></div></div>
+
+<p>参数说明：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cwebp -q [质量] -resize [宽] [高]  [原图片] -o [输出文件]
+</code></pre></div></div>
+
+<p>输出结果：</p>
+
+<p>bb.webp</p>
+
+<p><a href="/assets/img/posts/2019-05-21-webp/bb.webp"><img src="/assets/img/posts/2019-05-21-webp/bb.webp" alt="bb.webp" title="查看原图" /></a></p>
+
+<p>参看所有可选项及说明：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> cwebp <span class="nt">-longhelp</span>
+
+Usage:
+ cwebp <span class="o">[</span><span class="nt">-preset</span> &lt;...&gt;] <span class="o">[</span>options] in_file <span class="o">[</span><span class="nt">-o</span> out_file]
+
+If input size <span class="o">(</span><span class="nt">-s</span><span class="o">)</span> <span class="k">for </span>an image is not specified, it is
+assumed to be a PNG, JPEG, TIFF or WebP file.
+
+Options:
+  <span class="nt">-h</span> / <span class="nt">-help</span> ............. short <span class="nb">help</span>
+  <span class="nt">-H</span> / <span class="nt">-longhelp</span> ......... long <span class="nb">help</span>
+  <span class="nt">-q</span> &lt;float&gt; ............. quality <span class="nb">factor</span> <span class="o">(</span>0:small..100:big<span class="o">)</span>, <span class="nv">default</span><span class="o">=</span>75
+  <span class="nt">-alpha_q</span> &lt;int&gt; ......... transparency-compression quality <span class="o">(</span>0..100<span class="o">)</span>,
+                           <span class="nv">default</span><span class="o">=</span>100
+  <span class="nt">-preset</span> &lt;string&gt; ....... preset setting, one of:
+                            default, photo, picture,
+                            drawing, icon, text
+     <span class="nt">-preset</span> must come first, as it overwrites other parameters
+  <span class="nt">-z</span> &lt;int&gt; ............... activates lossless preset with given
+                           level <span class="k">in</span> <span class="o">[</span>0:fast, ..., 9:slowest]
+
+  <span class="nt">-m</span> &lt;int&gt; ............... compression method <span class="o">(</span><span class="nv">0</span><span class="o">=</span>fast, <span class="nv">6</span><span class="o">=</span>slowest<span class="o">)</span>, <span class="nv">default</span><span class="o">=</span>4
+  <span class="nt">-segments</span> &lt;int&gt; ........ number of segments to use <span class="o">(</span>1..4<span class="o">)</span>, <span class="nv">default</span><span class="o">=</span>4
+  <span class="nt">-size</span> &lt;int&gt; ............ target size <span class="o">(</span><span class="k">in </span>bytes<span class="o">)</span>
+  <span class="nt">-psnr</span> &lt;float&gt; .......... target PSNR <span class="o">(</span><span class="k">in </span>dB. typically: 42<span class="o">)</span>
+
+  <span class="nt">-s</span> &lt;int&gt; &lt;int&gt; ......... input size <span class="o">(</span>width x height<span class="o">)</span> <span class="k">for </span>YUV
+  <span class="nt">-sns</span> &lt;int&gt; ............. spatial noise shaping <span class="o">(</span>0:off, 100:max<span class="o">)</span>, <span class="nv">default</span><span class="o">=</span>50
+  <span class="nt">-f</span> &lt;int&gt; ............... filter strength <span class="o">(</span><span class="nv">0</span><span class="o">=</span>off..100<span class="o">)</span>, <span class="nv">default</span><span class="o">=</span>60
+  <span class="nt">-sharpness</span> &lt;int&gt; ....... filter sharpness <span class="o">(</span>0:most .. 7:least sharp<span class="o">)</span>, <span class="nv">default</span><span class="o">=</span>0
+  <span class="nt">-strong</span> ................ use strong filter instead of simple <span class="o">(</span>default<span class="o">)</span>
+  <span class="nt">-nostrong</span> .............. use simple filter instead of strong
+  <span class="nt">-sharp_yuv</span> ............. use sharper <span class="o">(</span>and slower<span class="o">)</span> RGB-&gt;YUV conversion
+  <span class="nt">-partition_limit</span> &lt;int&gt; <span class="nb">.</span> limit quality to fit the 512k limit on
+                           the first partition <span class="o">(</span><span class="nv">0</span><span class="o">=</span>no degradation ... <span class="nv">100</span><span class="o">=</span>full<span class="o">)</span>
+  <span class="nt">-pass</span> &lt;int&gt; ............ analysis pass number <span class="o">(</span>1..10<span class="o">)</span>
+  <span class="nt">-crop</span> &lt;x&gt; &lt;y&gt; &lt;w&gt; &lt;h&gt; .. crop picture with the given rectangle
+  <span class="nt">-resize</span> &lt;w&gt; &lt;h&gt; ........ resize picture <span class="o">(</span>after any cropping<span class="o">)</span>
+  <span class="nt">-mt</span> .................... use multi-threading <span class="k">if </span>available
+  <span class="nt">-low_memory</span> ............ reduce memory usage <span class="o">(</span>slower encoding<span class="o">)</span>
+  <span class="nt">-map</span> &lt;int&gt; ............. print map of extra info
+  <span class="nt">-print_psnr</span> ............ prints averaged PSNR distortion
+  <span class="nt">-print_ssim</span> ............ prints averaged SSIM distortion
+  <span class="nt">-print_lsim</span> ............ prints local-similarity distortion
+  <span class="nt">-d</span> &lt;file.pgm&gt; .......... dump the compressed output <span class="o">(</span>PGM file<span class="o">)</span>
+  <span class="nt">-alpha_method</span> &lt;int&gt; .... transparency-compression method <span class="o">(</span>0..1<span class="o">)</span>, <span class="nv">default</span><span class="o">=</span>1
+  <span class="nt">-alpha_filter</span> &lt;string&gt; <span class="nb">.</span> predictive filtering <span class="k">for </span>alpha plane,
+                           one of: none, fast <span class="o">(</span>default<span class="o">)</span> or best
+  <span class="nt">-exact</span> ................. preserve RGB values <span class="k">in </span>transparent area, <span class="nv">default</span><span class="o">=</span>off
+  <span class="nt">-blend_alpha</span> &lt;hex&gt; ..... blend colors against background color
+                           expressed as RGB values written <span class="k">in
+                           </span>hexadecimal, e.g. 0xc0e0d0 <span class="k">for </span><span class="nv">red</span><span class="o">=</span>0xc0
+                           <span class="nv">green</span><span class="o">=</span>0xe0 and <span class="nv">blue</span><span class="o">=</span>0xd0
+  <span class="nt">-noalpha</span> ............... discard any transparency information
+  <span class="nt">-lossless</span> .............. encode image losslessly, <span class="nv">default</span><span class="o">=</span>off
+  <span class="nt">-near_lossless</span> &lt;int&gt; ... use near-lossless image
+                           preprocessing <span class="o">(</span>0..100<span class="o">=</span>off<span class="o">)</span>, <span class="nv">default</span><span class="o">=</span>100
+  <span class="nt">-hint</span> &lt;string&gt; ......... specify image characteristics hint,
+                           one of: photo, picture or graph
+
+  <span class="nt">-metadata</span> &lt;string&gt; ..... comma separated list of metadata to
+                           copy from the input to the output <span class="k">if </span>present.
+                           Valid values: all, none <span class="o">(</span>default<span class="o">)</span>, exif, icc, xmp
+
+  <span class="nt">-short</span> ................. condense printed message
+  <span class="nt">-quiet</span> ................. don<span class="s1">'t print anything
+  -version ............... print version number and exit
+  -noasm ................. disable all assembly optimizations
+  -v ..................... verbose, e.g. print encoding/decoding times
+  -progress .............. report encoding progress
+
+Experimental Options:
+  -jpeg_like ............. roughly match expected JPEG size
+  -af .................... auto-adjust filter strength
+  -pre &lt;int&gt; ............. pre-processing filter
+</span></code></pre></div></div>
+
+<h5 id="dwebp-解码">dwebp 解码</h5>
+
+<p>将<code class="highlighter-rouge">WebP</code>格式的图片转换为其他格式</p>
+
+<p>我们还是以上一步生成的<code class="highlighter-rouge">bb.webp</code>来演示，这次将它转换为<code class="highlighter-rouge">PNG</code>格式，并起名<code class="highlighter-rouge">cc</code>：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dwebp bb.webp -o cc.png
+</code></pre></div></div>
+
+<p>参数说明：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dwebp [原图片] -o [输出文件]
+</code></pre></div></div>
+
+<p>输出结果：</p>
+
+<p>cc.png</p>
+
+<p><a href="/assets/img/posts/2019-05-21-webp/cc.png"><img src="/assets/img/posts/2019-05-21-webp/cc.png" alt="cc.png" title="查看原图" /></a></p>
+
+<p>参看所有可选项及说明：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> dwebp <span class="nt">-h</span>
+
+Usage: dwebp in_file <span class="o">[</span>options] <span class="o">[</span><span class="nt">-o</span> out_file]
+
+Decodes the WebP image file to PNG format <span class="o">[</span>Default]
+Use following options to convert into alternate image formats:
+  <span class="nt">-pam</span> ......... save the raw RGBA samples as a color PAM
+  <span class="nt">-ppm</span> ......... save the raw RGB samples as a color PPM
+  <span class="nt">-bmp</span> ......... save as uncompressed BMP format
+  <span class="nt">-tiff</span> ........ save as uncompressed TIFF format
+  <span class="nt">-pgm</span> ......... save the raw YUV samples as a grayscale PGM
+                 file with IMC4 layout
+  <span class="nt">-yuv</span> ......... save the raw YUV samples <span class="k">in </span>flat layout
+
+ Other options are:
+  <span class="nt">-version</span> ..... print version number and <span class="nb">exit</span>
+  <span class="nt">-nofancy</span> ..... don<span class="s1">'t use the fancy YUV420 upscaler
+  -nofilter .... disable in-loop filtering
+  -nodither .... disable dithering
+  -dither &lt;d&gt; .. dithering strength (in 0..100)
+  -alpha_dither  use alpha-plane dithering if needed
+  -mt .......... use multi-threading
+  -crop &lt;x&gt; &lt;y&gt; &lt;w&gt; &lt;h&gt; ... crop output with the given rectangle
+  -resize &lt;w&gt; &lt;h&gt; ......... scale the output (*after* any cropping)
+  -flip ........ flip the output vertically
+  -alpha ....... only save the alpha plane
+  -incremental . use incremental decoding (useful for tests)
+  -h ........... this help message
+  -v ........... verbose (e.g. print encoding/decoding times)
+  -quiet ....... quiet mode, don'</span>t print anything
+</code></pre></div></div>
+
+<h5 id="vwebp-浏览">vwebp 浏览</h5>
+
+<p>弹出一个<code class="highlighter-rouge">GUI</code>窗口显示<code class="highlighter-rouge">WebP</code>图片</p>
+
+<p>我们来浏览下<code class="highlighter-rouge">bb.webp</code>图片</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vwebp bb.webp
+</code></pre></div></div>
+
+<p>输出：</p>
+
+<p><a href="/assets/img/posts/2019-05-21-webp/vwebp.png"><img src="/assets/img/posts/2019-05-21-webp/vwebp.png" alt="vwebp.png" title="查看原图" /></a></p>
+
+<p>参看所有可选项及说明：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> vwebp <span class="nt">-h</span>
+
+Usage: vwebp in_file <span class="o">[</span>options]
+
+Decodes the WebP image file and visualize it using OpenGL
+Options are:
+  <span class="nt">-version</span> ..... print version number and <span class="nb">exit</span>
+  <span class="nt">-noicc</span> ....... don<span class="s1">'t use the icc profile if present
+  -nofancy ..... don'</span>t use the fancy YUV420 upscaler
+  <span class="nt">-nofilter</span> .... disable <span class="k">in</span><span class="nt">-loop</span> filtering
+  <span class="nt">-dither</span> &lt;int&gt;  dithering strength <span class="o">(</span>0..100<span class="o">)</span>, <span class="nv">default</span><span class="o">=</span>50
+  <span class="nt">-noalphadither</span> disable alpha plane dithering
+  <span class="nt">-usebgcolor</span> .. display background color
+  <span class="nt">-mt</span> .......... use multi-threading
+  <span class="nt">-info</span> ........ print info
+  <span class="nt">-h</span> ........... this <span class="nb">help </span>message
+
+Keyboard shortcuts:
+  <span class="s1">'c'</span> ................ toggle use of color profile
+  <span class="s1">'b'</span> ................ toggle background color display
+  <span class="s1">'i'</span> ................ overlay file information
+  <span class="s1">'d'</span> ................ disable blending &amp; disposal <span class="o">(</span>debug<span class="o">)</span>
+  <span class="s1">'q'</span> / <span class="s1">'Q'</span> / ESC .... quit
+</code></pre></div></div>
+
+<h5 id="img2webp-动画">img2webp 动画</h5>
+
+<p>将一组图片（<code class="highlighter-rouge">JPG</code>、<code class="highlighter-rouge">PNG</code>…）转为<code class="highlighter-rouge">WebP</code>动画</p>
+
+<p>这里准备了3张同样规格的图片(<code class="highlighter-rouge">a.jpg</code>、<code class="highlighter-rouge">b.png</code>、<code class="highlighter-rouge">c.jpg</code>)。</p>
+
+<p>a.jpg</p>
+
+<p><a href="/assets/img/posts/2019-05-21-webp/a.jpg"><img src="/assets/img/posts/2019-05-21-webp/a.jpg" alt="a.jpg" title="查看原图" /></a></p>
+
+<p>b.png</p>
+
+<p><a href="/assets/img/posts/2019-05-21-webp/b.png"><img src="/assets/img/posts/2019-05-21-webp/b.png" alt="b.png" title="查看原图" /></a></p>
+
+<p>c.jpg</p>
+
+<p><a href="/assets/img/posts/2019-05-21-webp/c.jpg"><img src="/assets/img/posts/2019-05-21-webp/c.jpg" alt="c.jpg" title="查看原图" /></a></p>
+
+<p>执行命令：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>img2webp  -loop 0 -lossy -d 1000 a.jpg -d 1500 b.png -d 2000 c.jpg -o out.webp
+</code></pre></div></div>
+
+<p>参数说明：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>img2webp  -loop [循环次数] -d [间隔时间] [原文件1] -d [间隔时间] [原文件2] -d [间隔时间] [原文件3] -o [目标文件]
+</code></pre></div></div>
+
+<p>输出结果：</p>
+
+<p>out.webp</p>
+
+<p><a href="/assets/img/posts/2019-05-21-webp/out.webp"><img src="/assets/img/posts/2019-05-21-webp/out.webp" alt="out.webp" title="查看原图" /></a></p>
+
+<p>参看所有可选项及说明：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> img2webp <span class="nt">-h</span>
+
+Usage:
+
+  img2webp <span class="o">[</span>file-level options] <span class="o">[</span>image files...] <span class="o">[</span>per-frame options...]
+
+File-level options <span class="o">(</span>only used at the start of compression<span class="o">)</span>:
+ <span class="nt">-min_size</span> ............ minimize size
+ <span class="nt">-loop</span> &lt;int&gt; .......... loop count <span class="o">(</span>default: 0, <span class="o">=</span> infinite loop<span class="o">)</span>
+ <span class="nt">-kmax</span> &lt;int&gt; .......... maximum number of frame between key-frames
+                        <span class="o">(</span><span class="nv">0</span><span class="o">=</span>only keyframes<span class="o">)</span>
+ <span class="nt">-kmin</span> &lt;int&gt; .......... minimum number of frame between key-frames
+                        <span class="o">(</span><span class="nv">0</span><span class="o">=</span>disable key-frames altogether<span class="o">)</span>
+ <span class="nt">-mixed</span> ............... use mixed lossy/lossless automatic mode
+ <span class="nt">-v</span> ................... verbose mode
+ <span class="nt">-h</span> ................... this <span class="nb">help</span>
+ <span class="nt">-version</span> ............. print version number and <span class="nb">exit
+
+</span>Per-frame options <span class="o">(</span>only used <span class="k">for </span>subsequent images input<span class="o">)</span>:
+ <span class="nt">-d</span> &lt;int&gt; ............. frame duration <span class="k">in </span>ms <span class="o">(</span>default: 100<span class="o">)</span>
+ <span class="nt">-lossless</span>  ........... use lossless mode <span class="o">(</span>default<span class="o">)</span>
+ <span class="nt">-lossy</span> ... ........... use lossy mode
+ <span class="nt">-q</span> &lt;float&gt; ........... quality
+ <span class="nt">-m</span> &lt;int&gt; ............. method to use
+</code></pre></div></div>
+
+<h5 id="gif2webp-gif转换">gif2webp GIF转换</h5>
+
+<p>将<code class="highlighter-rouge">GIF</code>格式图片转换为<code class="highlighter-rouge">WebP</code>格式</p>
+
+<p>这里准备了一张<code class="highlighter-rouge">giphy.gif</code>，我们来将它转换为<code class="highlighter-rouge">WebP</code>看看效果</p>
+
+<p><a href="/assets/img/posts/2019-05-21-webp/giphy.gif"><img src="/assets/img/posts/2019-05-21-webp/giphy.gif" alt="giphy.gif" title="查看原图" /></a></p>
+
+<p>执行命令：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gif2webp giphy.gif <span class="nt">-o</span> giphy.webp
+</code></pre></div></div>
+
+<p>输出结果：</p>
+
+<p>giphy.webp</p>
+
+<p><a href="/assets/img/posts/2019-05-21-webp/giphy.webp"><img src="/assets/img/posts/2019-05-21-webp/giphy.webp" alt="giphy.webp" title="查看原图" /></a></p>
+
+<p>参看所有可选项及说明：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> gif2webp <span class="nt">-h</span>
+
+Usage:
+ gif2webp <span class="o">[</span>options] gif_file <span class="nt">-o</span> webp_file
+Options:
+  <span class="nt">-h</span> / <span class="nt">-help</span> ............. this <span class="nb">help</span>
+  <span class="nt">-lossy</span> ................. encode image using lossy compression
+  <span class="nt">-mixed</span> ................. <span class="k">for </span>each frame <span class="k">in </span>the image, pick lossy
+                           or lossless compression heuristically
+  <span class="nt">-q</span> &lt;float&gt; ............. quality <span class="nb">factor</span> <span class="o">(</span>0:small..100:big<span class="o">)</span>
+  <span class="nt">-m</span> &lt;int&gt; ............... compression method <span class="o">(</span><span class="nv">0</span><span class="o">=</span>fast, <span class="nv">6</span><span class="o">=</span>slowest<span class="o">)</span>
+  <span class="nt">-min_size</span> .............. minimize output size <span class="o">(</span>default:off<span class="o">)</span>
+                           lossless compression by default<span class="p">;</span> can be
+                           combined with <span class="nt">-q</span>, <span class="nt">-m</span>, <span class="nt">-lossy</span> or <span class="nt">-mixed</span>
+                           options
+  <span class="nt">-kmin</span> &lt;int&gt; ............ min distance between key frames
+  <span class="nt">-kmax</span> &lt;int&gt; ............ max distance between key frames
+  <span class="nt">-f</span> &lt;int&gt; ............... filter strength <span class="o">(</span><span class="nv">0</span><span class="o">=</span>off..100<span class="o">)</span>
+  <span class="nt">-metadata</span> &lt;string&gt; ..... comma separated list of metadata to
+                           copy from the input to the output <span class="k">if </span>present
+                           Valid values: all, none, icc, xmp <span class="o">(</span>default<span class="o">)</span>
+  <span class="nt">-loop_compatibility</span> .... use compatibility mode <span class="k">for </span>Chrome
+                           version prior to M62 <span class="o">(</span>inclusive<span class="o">)</span>
+  <span class="nt">-mt</span> .................... use multi-threading <span class="k">if </span>available
+
+  <span class="nt">-version</span> ............... print version number and <span class="nb">exit</span>
+  <span class="nt">-v</span> ..................... verbose
+  <span class="nt">-quiet</span> ................. don<span class="s1">'t print anything
+</span></code></pre></div></div>
+
+
+                <hr style="visibility: hidden;">
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/05/15/how-to-ask-better-quesion/" data-toggle="tooltip" data-placement="top" title="「翻译」如何提问？">
+                        Previous<br>
+                        <span>「翻译」如何提问？</span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+
+
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+        				
+                            
+                				<a href="/tags/#php" title="php" rel="17">
+                                    php
+                                </a>
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#算法" title="算法" rel="7">
+                                    算法
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#数据结构" title="数据结构" rel="2">
+                                    数据结构
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#分布式" title="分布式" rel="2">
+                                    分布式
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#工具" title="工具" rel="6">
+                                    工具
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#区块链" title="区块链" rel="18">
+                                    区块链
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#比特币" title="比特币" rel="7">
+                                    比特币
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#密码学" title="密码学" rel="6">
+                                    密码学
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#以太坊" title="以太坊" rel="4">
+                                    以太坊
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#http" title="http" rel="12">
+                                    http
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#超级账本" title="超级账本" rel="8">
+                                    超级账本
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#fabric" title="fabric" rel="8">
+                                    fabric
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#MYSQL" title="MYSQL" rel="3">
+                                    MYSQL
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#web开发" title="web开发" rel="5">
+                                    web开发
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#计算机" title="计算机" rel="5">
+                                    计算机
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#转载" title="转载" rel="9">
+                                    转载
+                                </a>
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#精进" title="精进" rel="11">
+                                    精进
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+                				<a href="/tags/#书籍" title="书籍" rel="12">
+                                    书籍
+                                </a>
+                            
+        				
+                            
+        				
+                            
+        				
+        			</div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    
+
+
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/shadowdragons">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Ben Blog 2019
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async('/js/jquery.tagcloud.js',function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    if (document.domain == 'tudool.com' || document.domain == 'www.tudool.com') {
+        var _gaId = 'UA-89143952-3';
+        var _gaDomain = 'www.tudool.com';
+    } else {
+        var _gaId = 'UA-89143952-2';
+        var _gaDomain = 'shadowdragons.github.io';
+    }
+
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    if (document.domain == 'tudool.com' || document.domain == 'www.tudool.com') {
+        var _baId = '9a5ff48930575f65a9958d6277b9e28e';
+    } else {
+        var _baId = '2a8326534823f90fa4eef816aea2ef08';
+    }
+    
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

@@ -211,6 +211,35 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2016/11/13/jsonp/">
+        <h2 class="post-title">
+            jsonp实现异步请求跨域
+        </h2>
+        
+        <div class="post-content-preview">
+            ajax 和 jsonp的区别  
+ajax是通过XmlHttpRequest来获取非本页内容，而jsonp是通过动态添加&lt;script&gt;来调用服务器提供的脚本。
+
+为什么jsonp能够跨服  
+因为在web调用js文件是不受跨服影响的，不仅如此，凡是拥有src属性的都有跨服的能力。
+
+方案1
+
+www.b.com/remote.js
+
+alert(1)
+
+
+www.a.com/...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on November 13, 2016
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2016/11/13/hash-table/">
         <h2 class="post-title">
             哈希表
@@ -386,7 +415,7 @@ j = 0000001
                             
                         
                             
-                                <a href="/tags/#工具" title="工具" rel="5">
+                                <a href="/tags/#工具" title="工具" rel="6">
                                     工具
                                 </a>
                             

@@ -211,6 +211,42 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2019/03/28/shadowsock-v2/">
+        <h2 class="post-title">
+            shadowsock部署 V2
+        </h2>
+        
+        <div class="post-content-preview">
+            主机选择
+
+搬瓦工
+
+最好选择CN2线路的较稳定，里面有很多优惠活动，可以多留意下～
+
+shadowsocks部署
+
+使用ssh进入你购买主机的终端
+
+安装
+
+Debian / Ubuntu:
+
+apt-get install python-pip
+pip install shadowsocks
+
+
+CentOS:
+
+yum install python-setuptools &amp;&a...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on March 28, 2019
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2019/03/27/How-To-Ask-Questions-The-Smart-Way/">
         <h2 class="post-title">
             「转载」提问的智慧
@@ -486,38 +522,6 @@ set/get/del等方法是原子操作，用户代码中不需要担心数据加锁
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2019/03/20/swoole-lock/">
-        <h2 class="post-title">
-            「Swoole」Lock 锁
-        </h2>
-        
-        <div class="post-content-preview">
-            
-  创建一个锁，用来实现数据同步。
-
-
-支持五种类型锁：
-
-
-  文件锁 SWOOLE_FILELOCK
-  读写锁 SWOOLE_RWLOCK
-  信号量 SWOOLE_SEM
-  互斥锁 SWOOLE_MUTEX
-  自旋锁 SWOOLE_SPINLOCK
-
-
-请勿在onReceive等回调函数中创建锁，否则底层的GlobalMemory内存会持续增长，造成内存泄漏。
-
-不要循环创建/...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on March 20, 2019
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -586,7 +590,7 @@ set/get/del等方法是原子操作，用户代码中不需要担心数据加锁
                             
                         
                             
-                                <a href="/tags/#工具" title="工具" rel="5">
+                                <a href="/tags/#工具" title="工具" rel="6">
                                     工具
                                 </a>
                             
