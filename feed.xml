@@ -5,9 +5,162 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 04 Jun 2019 18:39:15 +0800</pubDate>
-    <lastBuildDate>Tue, 04 Jun 2019 18:39:15 +0800</lastBuildDate>
+    <pubDate>Tue, 04 Jun 2019 19:00:59 +0800</pubDate>
+    <lastBuildDate>Tue, 04 Jun 2019 19:00:59 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>php-fpm查看状态</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;php-fpm&lt;/code&gt;提供了一种方式，可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;web&lt;/code&gt;来查看自身运行状态。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;配置&quot;&gt;配置&lt;/h3&gt;
+
+&lt;h5 id=&quot;php-fpm&quot;&gt;php-fpm&lt;/h5&gt;
+
+&lt;p&gt;打开&lt;code class=&quot;highlighter-rouge&quot;&gt;php-fpm.conf&lt;/code&gt;文件，打开并设置下面的配置项：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pm.status_path = /status
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;nginx&quot;&gt;nginx&lt;/h5&gt;
+
+&lt;p&gt;设置虚拟主机，并对上面设置的&lt;code class=&quot;highlighter-rouge&quot;&gt;/status&lt;/code&gt;指向&lt;code class=&quot;highlighter-rouge&quot;&gt;php&lt;/code&gt;解析器：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;server {
+    listen       80;
+    server_name  local.phpfpm.com;
+    
+    location ~^/status$ {
+        fastcgi_pass   127.0.0.1:9000;
+        include        fastcgi_params;
+        fastcgi_param  SCRIPT_FILENAME $fastcgi_script_name;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;把&lt;code class=&quot;highlighter-rouge&quot;&gt;local.phpfpm.com&lt;/code&gt;添加到&lt;code class=&quot;highlighter-rouge&quot;&gt;host&lt;/code&gt;即可。&lt;/p&gt;
+
+&lt;h3 id=&quot;运行&quot;&gt;运行&lt;/h3&gt;
+
+&lt;h5 id=&quot;实例&quot;&gt;实例&lt;/h5&gt;
+
+&lt;p&gt;我们通过curl来访问&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl http://local.phpfpm.com/status
+pool:                 www
+process manager:      dynamic
+start &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;:           04/Jun/2019:07:33:50 +0000
+start since:          11858
+accepted conn:        234
+listen queue:         0
+max listen queue:     0
+listen queue len:     128
+idle processes:       4
+active processes:     1
+total processes:      5
+max active processes: 4
+max children reached: 0
+slow requests:        0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;参数说明&quot;&gt;参数说明&lt;/h5&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;参数&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;说明&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;pool&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;fpm池子名称，大多数为www&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;process manager&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;进程管理方式,值：static, dynamic or ondemand. dynamic&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;start time&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;启动日期,如果reload了php-fpm，时间会更新&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;start since&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;运行时长&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;accepted conn&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;当前池子接受的请求数&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;listen queue&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;请求等待队列&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;max listen queue&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;请求等待队列最高的数量&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;listen queue len&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;socket等待队列长度&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;idle processes&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;空闲进程数量&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;active processes&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;活跃进程数量&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;total processes&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;总进程数量&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;max active processes&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;最大的活跃进程数量（FPM启动开始算）&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;max children reached&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;达到进程最大数量限制的次数&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;slow requests&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;启用了php-fpm slow-log，缓慢请求的数量&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h5 id=&quot;结果输出&quot;&gt;结果输出&lt;/h5&gt;
+
+&lt;p&gt;可以指定结果的输出格式。&lt;/p&gt;
+
+&lt;p&gt;输出&lt;code class=&quot;highlighter-rouge&quot;&gt;json&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl http://local.phpfpm.com/status?json
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;输出&lt;code class=&quot;highlighter-rouge&quot;&gt;xml&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl http://local.phpfpm.com/status?xml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;输出&lt;code class=&quot;highlighter-rouge&quot;&gt;html&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl http://local.phpfpm.com/status?html
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Tue, 04 Jun 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/06/04/php-fpm-status/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/06/04/php-fpm-status/</guid>
+        
+        <category>php</category>
+        
+        
+      </item>
     
       <item>
         <title>「转载」Serverless 架构应用开发指南</title>
@@ -5513,47 +5666,6 @@ do here?”&lt;/p&gt;
         <guid isPermaLink="true">http://localhost:4000/2019/03/31/stock/</guid>
         
         <category>投资</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Github大文件上传 - git lfs</title>
-        <description>&lt;h5 id=&quot;安装&quot;&gt;安装&lt;/h5&gt;
-
-&lt;p&gt;这里以Mac为例&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;git-lfs
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h5 id=&quot;初始化&quot;&gt;初始化&lt;/h5&gt;
-
-&lt;p&gt;进入本地仓库执行：&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git lfs &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;此时会在本地仓库根目录生成配置文件&lt;code class=&quot;highlighter-rouge&quot;&gt;.gitattributes&lt;/code&gt;&lt;/p&gt;
-
-&lt;h5 id=&quot;设置跟踪文件类型&quot;&gt;设置跟踪文件类型&lt;/h5&gt;
-
-&lt;p&gt;可以直接编辑&lt;code class=&quot;highlighter-rouge&quot;&gt;.gitattributes&lt;/code&gt;，也可以直接执行命令：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git lfs track &quot;*.pdf&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;然后将.gitattributes文件添加进git仓库：&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git add .gitattributes
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;这样就完成了！可以像平时使用git那样正常使用了。&lt;/p&gt;
-</description>
-        <pubDate>Sun, 31 Mar 2019 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2019/03/31/git-lfs/</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/03/31/git-lfs/</guid>
-        
-        <category>工具</category>
         
         
       </item>

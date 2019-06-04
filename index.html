@@ -211,6 +211,41 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2019/06/04/php-fpm-status/">
+        <h2 class="post-title">
+            php-fpm查看状态
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  php-fpm提供了一种方式，可以通过web来查看自身运行状态。
+
+
+配置
+
+php-fpm
+
+打开php-fpm.conf文件，打开并设置下面的配置项：
+
+pm.status_path = /status
+
+
+nginx
+
+设置虚拟主机，并对上面设置的/status指向php解析器：
+
+server {
+    listen       80;
+    server_name  lo...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on June 4, 2019
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2019/05/24/serverless-app-dev-guide/">
         <h2 class="post-title">
             「转载」Serverless 架构应用开发指南
@@ -406,45 +441,6 @@ ROE是用来衡量公司对股东投入的资本的利用效率如何。ROE越�
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2019/03/31/git-lfs/">
-        <h2 class="post-title">
-            Github大文件上传 - git lfs
-        </h2>
-        
-        <div class="post-content-preview">
-            安装
-
-这里以Mac为例
-
-brew install git-lfs
-
-
-初始化
-
-进入本地仓库执行：
-
-git lfs install
-
-
-此时会在本地仓库根目录生成配置文件.gitattributes
-
-设置跟踪文件类型
-
-可以直接编辑.gitattributes，也可以直接执行命令：
-
-git lfs track "*.pdf"
-
-
-然后将.gitattributes文件添加进git仓...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on March 31, 2019
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -475,7 +471,7 @@ git lfs track "*.pdf"
                     <div class="tags">
                         
                             
-                                <a href="/tags/#php" title="php" rel="17">
+                                <a href="/tags/#php" title="php" rel="18">
                                     php
                                 </a>
                             

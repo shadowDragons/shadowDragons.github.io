@@ -10,7 +10,7 @@
     <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
     <meta name="theme-color" content="#000000">
     
-    <title>fabric入门（五）安装和实例化链码 - ben blog</title>
+    <title>php-fpm查看状态 - ben blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2018/05/13/hyperledger-fabric-5/">
+    <link rel="canonical" href="http://localhost:4000/2019/06/04/php-fpm-status/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -201,17 +201,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#超级账本" title="超级账本">超级账本</a>
-                        
-                        <a class="tag" href="/tags/#fabric" title="fabric">fabric</a>
+                        <a class="tag" href="/tags/#php" title="php">php</a>
                         
                     </div>
-                    <h1>fabric入门（五）安装和实例化链码</h1>
+                    <h1>php-fpm查看状态</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Ben Blog on May 13, 2018</span>
+                    <span class="meta">Posted by Ben Blog on June 4, 2019</span>
                 </div>
             </div>
         </div>
@@ -232,37 +230,146 @@
                 <!-- Multi-Lingual -->
                 
 
-				<h4 id="安装启动链码">安装启动链码</h4>
+				<blockquote>
+  <p><code class="highlighter-rouge">php-fpm</code>提供了一种方式，可以通过<code class="highlighter-rouge">web</code>来查看自身运行状态。</p>
+</blockquote>
 
-<p>首先，在将示例代码安装到4个peer节点中的其中一个。这个命令将源代码放到peer节点的文件系统中。</p>
+<h3 id="配置">配置</h3>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>peer chaincode <span class="nb">install</span> <span class="nt">-n</span> mycc <span class="nt">-v</span> 1.0 <span class="nt">-p</span> github.com/hyperledger/fabric-samples/chaincode/chaincode_example02/go/chaincode_example02
+<h5 id="php-fpm">php-fpm</h5>
+
+<p>打开<code class="highlighter-rouge">php-fpm.conf</code>文件，打开并设置下面的配置项：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pm.status_path = /status
 </code></pre></div></div>
 
-<p>接下来，在信道上实例化chaincode。这将初始化信道上的链码，设置链码的背书策略，为目标peer节点启动一个chaincode容器注意-P参数。这是我们需要指定的当这个chaincode的交易需要被验证的时侯的背书策略。</p>
+<h5 id="nginx">nginx</h5>
 
-<p>在下面的命令中，你会注意到我们指定 -P “OR (‘Org0MSP.member’,’Org1MSP.member’)” 作为背书策略。这意味着我们需要Org1或者Org2组织中的其中一个的节点的背书即可（即只有一个背书）。如果我们改变语法为AND那么我们就需要2个背书者。</p>
+<p>设置虚拟主机，并对上面设置的<code class="highlighter-rouge">/status</code>指向<code class="highlighter-rouge">php</code>解析器：</p>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>peer chaincode instantiate <span class="nt">-o</span> orderer.example.com:7050 <span class="nt">--tls</span> <span class="nv">$CORE_PEER_TLS_ENABLED</span> <span class="nt">--cafile</span> /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem <span class="nt">-C</span> <span class="nv">$CHANNEL_NAME</span> <span class="nt">-n</span> mycc <span class="nt">-v</span> 1.0 <span class="nt">-c</span> <span class="s1">'{"Args":["init","a", "100", "b","200"]}'</span> <span class="nt">-P</span> <span class="s2">"OR ('Org1MSP.member','Org2MSP.member')"</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>server {
+    listen       80;
+    server_name  local.phpfpm.com;
+    
+    location ~^/status$ {
+        fastcgi_pass   127.0.0.1:9000;
+        include        fastcgi_params;
+        fastcgi_param  SCRIPT_FILENAME $fastcgi_script_name;
+    }
+}
 </code></pre></div></div>
 
-<h4 id="调用">调用</h4>
+<p>把<code class="highlighter-rouge">local.phpfpm.com</code>添加到<code class="highlighter-rouge">host</code>即可。</p>
 
-<p>现在让我们从a账户转10到b账户。这个交易将创建一个新的区块并更新state DB。调用语法如下：</p>
+<h3 id="运行">运行</h3>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>peer chaincode invoke <span class="nt">-o</span> orderer.example.com:7050  <span class="nt">--tls</span> <span class="nv">$CORE_PEER_TLS_ENABLED</span> <span class="nt">--cafile</span> /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem  <span class="nt">-C</span> <span class="nv">$CHANNEL_NAME</span> <span class="nt">-n</span> mycc <span class="nt">-c</span> <span class="s1">'{"Args":["invoke","a","b","10"]}'</span>
+<h5 id="实例">实例</h5>
+
+<p>我们通过curl来访问</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl http://local.phpfpm.com/status
+pool:                 www
+process manager:      dynamic
+start <span class="nb">time</span>:           04/Jun/2019:07:33:50 +0000
+start since:          11858
+accepted conn:        234
+listen queue:         0
+max listen queue:     0
+listen queue len:     128
+idle processes:       4
+active processes:     1
+total processes:      5
+max active processes: 4
+max children reached: 0
+slow requests:        0
 </code></pre></div></div>
 
-<h4 id="查询">查询</h4>
+<h5 id="参数说明">参数说明</h5>
 
-<p>让我们确认下我们之前的调用被正确地执行了。我们初始化了a的值为100，在上一次调用的时侯转移了10给b。因此，查询a应该展示90。查询的语法如下：</p>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">参数</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">pool</td>
+      <td style="text-align: left">fpm池子名称，大多数为www</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">process manager</td>
+      <td style="text-align: left">进程管理方式,值：static, dynamic or ondemand. dynamic</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">start time</td>
+      <td style="text-align: left">启动日期,如果reload了php-fpm，时间会更新</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">start since</td>
+      <td style="text-align: left">运行时长</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">accepted conn</td>
+      <td style="text-align: left">当前池子接受的请求数</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">listen queue</td>
+      <td style="text-align: left">请求等待队列</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">max listen queue</td>
+      <td style="text-align: left">请求等待队列最高的数量</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">listen queue len</td>
+      <td style="text-align: left">socket等待队列长度</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">idle processes</td>
+      <td style="text-align: left">空闲进程数量</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">active processes</td>
+      <td style="text-align: left">活跃进程数量</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">total processes</td>
+      <td style="text-align: left">总进程数量</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">max active processes</td>
+      <td style="text-align: left">最大的活跃进程数量（FPM启动开始算）</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">max children reached</td>
+      <td style="text-align: left">达到进程最大数量限制的次数</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">slow requests</td>
+      <td style="text-align: left">启用了php-fpm slow-log，缓慢请求的数量</td>
+    </tr>
+  </tbody>
+</table>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>peer chaincode query <span class="nt">-C</span> <span class="nv">$CHANNEL_NAME</span> <span class="nt">-n</span> mycc <span class="nt">-c</span> <span class="s1">'{"Args":["query","a"]}'</span>
+<h5 id="结果输出">结果输出</h5>
+
+<p>可以指定结果的输出格式。</p>
+
+<p>输出<code class="highlighter-rouge">json</code></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://local.phpfpm.com/status?json
 </code></pre></div></div>
 
-<p>我们应该看到以下内容：</p>
+<p>输出<code class="highlighter-rouge">xml</code></p>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Query Result: 90
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://local.phpfpm.com/status?xml
+</code></pre></div></div>
+
+<p>输出<code class="highlighter-rouge">html</code></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://local.phpfpm.com/status?html
 </code></pre></div></div>
 
 
@@ -271,19 +378,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/05/13/hyperledger-fabric-4/" data-toggle="tooltip" data-placement="top" title="fabric入门（四）启动网络">
+                        <a href="/2019/05/24/serverless-app-dev-guide/" data-toggle="tooltip" data-placement="top" title="「转载」Serverless 架构应用开发指南">
                         Previous<br>
-                        <span>fabric入门（四）启动网络</span>
+                        <span>「转载」Serverless 架构应用开发指南</span>
                         </a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2018/05/18/eth-private-network-ubuntu/" data-toggle="tooltip" data-placement="top" title="搭建以太坊私有网络(ubuntn)">
-                        Next<br>
-                        <span>搭建以太坊私有网络(ubuntn)</span>
-                        </a>
-                    </li>
                     
                 </ul>
 
