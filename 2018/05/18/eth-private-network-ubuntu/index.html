@@ -81,6 +81,8 @@
       })();
     </script>
 
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
     <!-- ga & ba script hoook -->
     <script></script>
 </head>
@@ -407,7 +409,11 @@ make: <span class="k">***</span> <span class="o">[</span>geth] Error 1
                 
 
                 
-            </div>  
+
+                
+                <div id="vcomments"></div>
+                
+            </div>
 
     <!-- Side Catalog Container -->
         
@@ -634,6 +640,15 @@ make: <span class="k">***</span> <span class="o">[</span>geth] Error 1
     }
 </style>
 
+
+
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: "yjDNDYxdT3CibWERUoLCWk51-gzGzoHsz",
+        appKey: "qtdtfd1Y24nNbIjhcwqbDBO5"
+    })
+</script>
 
 
     <!-- Footer -->
