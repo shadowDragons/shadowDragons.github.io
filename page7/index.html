@@ -213,6 +213,47 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2018/06/23/mysql-innodb-lock/">
+        <h2 class="post-title">
+            mysql系列教程 - innodb锁
+        </h2>
+        
+        <div class="post-content-preview">
+            lock和latch
+
+锁分为两种类型 lock 和 latch ，它们之间的差异如下表所示：
+
+
+  
+    
+      -
+      lock
+      latch
+    
+  
+  
+    
+      对象
+      事务
+      线程
+    
+    
+      保护
+      数据库内容
+      内存数据结构
+    
+    
+      持续时间
+...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on June 23, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/05/27/hyperledger-fabric/">
         <h2 class="post-title">
             fabric - 架构&执行流程
@@ -450,26 +491,6 @@ curl -sSL https://goo.gl/6wtTN5 | bash -s 1.1.0
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2018/04/30/network-udp/">
-        <h2 class="post-title">
-            网络基础 - 用户数据报协议(UDP)
-        </h2>
-        
-        <div class="post-content-preview">
-            介绍
-
-用户数据报协议（User Datagram Protocol, UDP）是在现代网络中最常使用的另外一种第4层协议。如果说TCP是为了满足带有内在错误检测的可靠数据传输，那么UDP主要是为了提供高速的传输。处于这个原因，UDP是一种尽力服务，通常会被称为无连接协议。一个无连接协议并不会正式的建立和结束主机之前的连接，也不会像TCP那样存在握手和终止进程。
-
-无连接协议意味着不可靠服务...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on April 30, 2018
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -538,7 +559,7 @@ curl -sSL https://goo.gl/6wtTN5 | bash -s 1.1.0
                             
                         
                             
-                                <a href="/tags/#工具" title="工具" rel="6">
+                                <a href="/tags/#工具" title="工具" rel="7">
                                     工具
                                 </a>
                             

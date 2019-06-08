@@ -10,7 +10,7 @@
     <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
     <meta name="theme-color" content="#000000">
     
-    <title>ben blog</title>
+    <title>制作电子书其实很简单 - ben blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/page6/">
+    <link rel="canonical" href="http://localhost:4000/2019/05/26/gitbook/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -182,555 +182,419 @@
 </script>
 
 
-    <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg.jpg')
+    }
+
+    
+</style>
+<header class="intro-header" >
+    <div class="header-mask"></div>
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
-                <div class="site-heading">
-                    <h1>Ben Blog</h1>
-                    <!--<hr class="small">-->
-                    <span class="subheading">一个小白的成长学习历程</span>
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#工具" title="工具">工具</a>
+                        
+                    </div>
+                    <h1>制作电子书其实很简单</h1>
+                    
+                    
+                    <h2 class="subheading"></h2>
+                    
+                    <span class="meta">Posted by Ben Blog on May 26, 2019</span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-	<div class="row">
-        
-
-<!-- USE SIDEBAR -->
-    <!-- PostList Container -->
-    		<div class="
-                col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                postlist-container
-            ">
-    			
-<div class="post-preview">
-    <a href="/2018/10/07/smarty-cache/">
-        <h2 class="post-title">
-            smarty缓存应用
-        </h2>
-        
-        <div class="post-content-preview">
-            执行流程
-
-
-
-开启缓存
-
-$smarty-&gt;caching = true;
-$smarty-&gt;cache_lifetime = 3600;
-
-
-判断是否已有缓存
-
-if ($smarty-&gt;isCached('index.htm')) {
-    $smarty-&gt;display('index.htm');
-    exit(0);
-}
-
-// do somethi...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on October 7, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/10/07/opcode-cache/">
-        <h2 class="post-title">
-            php加速器
-        </h2>
-        
-        <div class="post-content-preview">
-            opcache(推荐)
-
-新一代PHP加速器，由Zend公司研发，其实现原理与Xcache类似，都是把PHP执行后的数据缓冲到内存中从而避免重复的编译过程，能够直接使用缓冲区已编译的代码从而提高速度，降低服务器负载，但性能却比Xcache更加优越。
-
-PHP 5.5.0 及后续版本中已经绑定了 opcache 扩展。 对于 PHP 5.2，5.3 和 5.4 版本可以使用PECL扩展中的 o...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on October 7, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/08/11/php-nginx-connect/">
-        <h2 class="post-title">
-            nginx与php-fpm 连接数
-        </h2>
-        
-        <div class="post-content-preview">
-            Apache连接请求机制
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
 
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
 
+                <!-- Multi-Lingual -->
+                
 
-Apache的处理机制是每有一个请求就会去fork一个子进程来处理请求。
-这样带来的缺点很明显：
-当请求量大的时候，需要开启一样数量的进程，这样一来系统内存的消耗，二来cpu执行切换带来的上下文切换消耗非常大。
+				<p>有时候我们会有这样一个困扰，怎么样可以把自己的知识体系制作成电子书？一来方便分享，二来也便于查看。</p>
 
-Nginx是如何解决这些问题的呢？答案是使用I/O复用技术。
-下面只是简单讲解什么是I/O复用，有兴趣的同学可以参考I/O模型
+<p>接下来给大家推荐一个制作电子书的命令行工具<code class="highlighter-rouge">Gitbook</code>。</p>
 
-Nginx使用的I...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on August 11, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/08/05/computer-select-poll-epoll/">
-        <h2 class="post-title">
-            「转载」select、poll与epoll
-        </h2>
-        
-        <div class="post-content-preview">
-            
-  转载自大话 Select、Poll、Epoll
+<h3 id="安装">安装</h3>
 
+<p>这里以<code class="highlighter-rouge">mac</code>电脑安装为例。</p>
 
-Linux的socket 事件wakeup callback机制
+<p><code class="highlighter-rouge">GitBook</code>的安装其实非常简单。最好方法是通过<code class="highlighter-rouge">npm</code>安装。</p>
 
-言归正传，在介绍select、poll、epoll前，有必要说说linux(2.6+)内核的事件wakeup callback机制，这是IO多路复用机制存在的本质。Linux通过socket睡眠队列来管理所有等待socket的某个事件的process，同时通过wake...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on August 5, 2018
-    </p>
-</div>
-<hr>
+<p>首先安装<code class="highlighter-rouge">nodejs</code>和<code class="highlighter-rouge">npm</code>。</p>
 
-<div class="post-preview">
-    <a href="/2018/08/04/computer-io/">
-        <h2 class="post-title">
-            I/O模型
-        </h2>
-        
-        <div class="post-content-preview">
-            I/O发生过程涉及的对象：
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install </span>node
+brew <span class="nb">install </span>npm
+</code></pre></div></div>
 
+<p>接下来就可以安装<code class="highlighter-rouge">gitbook</code>了。</p>
 
-  调用该IO的线程(thread)
-  系统内核(kernel)
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install </span>gitbook-cli <span class="nt">-g</span>
+</code></pre></div></div>
 
+<p>执行执行<code class="highlighter-rouge">gitbook -V</code>验证：</p>
 
-I/O发生过程步骤：
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ gitbook -V
+CLI version: 2.3.2
+GitBook version: 3.2.3
+</code></pre></div></div>
 
+<p>到这里安装就完成了。</p>
 
-  等待数据准备
-  将数据从内核拷贝到用户的进程空间。
+<h3 id="初始化">初始化</h3>
 
+<p>进入创建书籍的目录，执行：</p>
 
-阻塞型I/O（blocking I/O）
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gitbook init
+</code></pre></div></div>
 
+<p>这时会在目录下生成两个文件。</p>
 
-
-用户thread在整个过程当中，都需要等待kernel返回数据，所以整个过程都是被block的。
-
-非阻塞型I/O（non-blocking I/O）
-
-...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on August 4, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/07/29/computer-thread/">
-        <h2 class="post-title">
-            进程与线程
-        </h2>
-        
-        <div class="post-content-preview">
-            先理解一下，什么是进程和线程：
-
-在现代操作系统中，进程支持多线程。
-
-
-  进程是资源管理的最小单元；
-  线程是程序执行的最小单元。
-
-
-它们之间的关系如下图所示：
-
-
-
-那么什么是程序执行的最小单位呢？
-
-线程作为调度和分配的基本单位（也被称为轻量级进程），这是因为他们共享进程的资源，所以没有太多的内存消耗。
-
-当多个程序同时在执行的时候，我们的cpu（当cpu数小于程序数）并不能同时...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on July 29, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/07/27/bhpws-service/">
-        <h2 class="post-title">
-            『构建高性能web站点』服务器并发
-        </h2>
-        
-        <div class="post-content-preview">
-            吞吐率
-
-单位时间内服务器处理的请求数 reqs/s
-
-用户并发数
-
-服务器最大并发数是有一定的利益前提的，就是服务器和用户双方所能接受的最大利益下。
-每个用户可以在同一时间发起不止一个请求（与浏览器、http版本有关），所以用户并发数 &gt; 请求并发数。
-
-请求等待时间
-
-分为以下两种
-
-
-  用户平均请求等待时间。
-  服务器平均请求处理时间（等于吞吐率的倒数）。
-
-
-线程与进程
-
-...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on July 27, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/07/14/perconaToolkit/">
-        <h2 class="post-title">
-            PerconaToolkit工具集合
-        </h2>
-        
-        <div class="post-content-preview">
-            pt-align
-
-将其它工具的输出按列对齐。
-
-pt-archiver
-
-将数据归档到另一张表或者文件。
-
-pt-config-diff
-
-对比数据库配置、环境变量差异
-
-pt-deadlock-logger
-
-记录死锁日志，并保存到文件或者数据表
-
-pt-diskstats
-
-功能和iostat类似，给出磁盘的I/O统计信息
-
-pt-duplicate-key-checker
-
-检测表中...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on July 14, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/07/14/bhpws-network/">
-        <h2 class="post-title">
-            『构建高性能web站点』网络传输
-        </h2>
-        
-        <div class="post-content-preview">
-            OSI七层网络协议&amp;四层协议
-
-
-
-每层功能如下表所示：
-
-
-  
-    
-      层
-      功能
-      典型设备
-      典型协议、标准和应用
-    
-  
-  
-    
-      应用层
-      用户接口、应用程序
-      网关
-      TELNET, FTP, HTTP
-    
-    
-      表示层
-      数据的表示、压缩...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on July 14, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/06/30/mysql-innodb-index/">
-        <h2 class="post-title">
-            mysql系列教程 - B+Tree索引
-        </h2>
-        
-        <div class="post-content-preview">
-            了解B+树前，我们先了解下二叉查找树、平衡二叉查找树、B-Tree。
-
-二叉查找树
-
-二叉查找树具有以下性质：左子树的键值小于根的键值，右子树的键值大于根的键值。如下图所示：
-
-
-
-由于它可以任意构造，所以也可以按照赢下方式构建二叉树。
-
-
-
-我们知道，二叉树查找一个节点所需的最大时间取决于树高，所以如果像上图所示进行查找，效率会非常低。所以，要提高查找效率，需要这颗树是平衡的，从而引出了平...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on June 30, 2018
-    </p>
-</div>
-<hr>
-
-
-<!-- Pager -->
-
-<ul class="pager">
-    
-    <li class="previous">
-        <a href="/page5">&larr; Newer Posts</a>
-    </li>
-    
-    
-    <li class="next">
-        <a href="/page7">Older Posts &rarr;</a>
-    </li>
-    
+<ul>
+  <li><code class="highlighter-rouge">README.md</code> 书籍的简介</li>
+  <li><code class="highlighter-rouge">SUMMARY.md</code> 书籍的目录</li>
 </ul>
 
+<p>我们可以执行<code class="highlighter-rouge">gitbook serve</code>来预览</p>
 
-    		</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Live reload server started on port: 35729
+Press CTRL+C to quit ...
+
+info: 7 plugins are installed
+info: loading plugin "livereload"... OK
+info: loading plugin "highlight"... OK
+info: loading plugin "search"... OK
+info: loading plugin "lunr"... OK
+info: loading plugin "sharing"... OK
+info: loading plugin "fontsettings"... OK
+info: loading plugin "theme-default"... OK
+info: found 1 pages
+info: found 0 asset files
+info: &gt;&gt; generation finished with success in 0.5s !
+
+Starting server ...
+Serving book on http://localhost:4000
+</code></pre></div></div>
+
+<p>接下来就可以在浏览器输入<code class="highlighter-rouge">http://localhost:4000</code>来预览了。</p>
+
+<p><a href="/assets/img/posts/2019-05-26-gitbook/b.png"><img src="/assets/img/posts/2019-05-26-gitbook/b.png" alt="b.png" title="查看原图" /></a></p>
+
+<p>后续在编写过程中也可以通过预览来实时查看。</p>
+
+<h3 id="写书">写书</h3>
+
+<p>一般<code class="highlighter-rouge">GitBook</code>的目录结构是这样的:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.
+├── book.json
+├── README.md
+├── SUMMARY.md
+├── chapter-1/
+|   ├── README.md
+|   └── something.md
+└── chapter-2/
+    ├── README.md
+    └── something.md
+</code></pre></div></div>
+
+<p>由于初始化只生成了<code class="highlighter-rouge">README.md</code>和<code class="highlighter-rouge">SUMMARY.md</code>，其他文件和目录需要我们手动创建。</p>
+
+<h5 id="bookjson">book.json</h5>
+
+<p>这个文件相当于书籍的配置文件，书籍相关的配置包括书名、作者等信息。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">变量</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">root</td>
+      <td style="text-align: left">包含所有图书文件的根文件夹的路径，除了<code class="highlighter-rouge">book.json</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">structure</td>
+      <td style="text-align: left">指定自述，摘要，词汇表等的路径。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">title</td>
+      <td style="text-align: left">书的标题，默认值从README中提取。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">description</td>
+      <td style="text-align: left">您的图书说明，默认值从自述文件中提取。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">author</td>
+      <td style="text-align: left">作者姓名。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">isbn</td>
+      <td style="text-align: left">书的国际码ISBN</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">language</td>
+      <td style="text-align: left">语言ISO规范的书的语言，默认值是<code class="highlighter-rouge">en</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">direction</td>
+      <td style="text-align: left">文本的方向。可以是<code class="highlighter-rouge">rtl</code>或<code class="highlighter-rouge">ltr</code>，默认值取决于<code class="highlighter-rouge">language</code>的值</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">gitbook</td>
+      <td style="text-align: left"><code class="highlighter-rouge">GitBook</code>的版本。使用SemVer规范并接受诸如“&gt; = 3.0.0”的条件</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="summarymd">SUMMARY.md</h5>
+
+<p><code class="highlighter-rouge">SUMMARY.md</code>文件定义文档的菜单。</p>
+
+<p>里面的<code class="highlighter-rouge">[]</code>内的内容是标题，<code class="highlighter-rouge">()</code>内是文档的路径，章节和子章节用四个空格或者tab键来分级。</p>
+
+<p>示例如下：</p>
+
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh"># 概述</span>
+
+<span class="gu">### 第一部分</span>
+<span class="p">
+*</span> <span class="p">[</span><span class="nv">第一部分</span><span class="p">](</span><span class="sx">part1/README.md</span><span class="p">)</span>
+<span class="p">    *</span> <span class="p">[</span><span class="nv">Writing很牛</span><span class="p">](</span><span class="sx">part1/README.md#writing</span><span class="p">)</span>
+<span class="p">    *</span> <span class="p">[</span><span class="nv">GitBook很牛</span><span class="p">](</span><span class="sx">part1/README.md#gitbook</span><span class="p">)</span>
+<span class="p">*</span> <span class="p">[</span><span class="nv">第二部分</span><span class="p">](</span><span class="sx">part2/README.md</span><span class="p">)</span>
+<span class="p">    *</span> <span class="p">[</span><span class="nv">我们喜欢社交网络</span><span class="p">](</span><span class="sx">part2/README.md#feedback</span><span class="p">)</span>
+<span class="p">    *</span> <span class="p">[</span><span class="nv">更好的写作工具</span><span class="p">](</span><span class="sx">part2/README.md#tools</span><span class="p">)</span>
+</code></pre></div></div>
+
+
+
+                <hr style="visibility: hidden;">
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/05/24/serverless-app-dev-guide/" data-toggle="tooltip" data-placement="top" title="「转载」Serverless 架构应用开发指南">
+                        Previous<br>
+                        <span>「转载」Serverless 架构应用开发指南</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2019/06/04/php-fpm-status/" data-toggle="tooltip" data-placement="top" title="php-fpm查看状态">
+                        Next<br>
+                        <span>php-fpm查看状态</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+
+
+                
+
+                
+
+                
+                <div id="vcomments"></div>
+                
+            </div>
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
     <!-- Sidebar Container -->
             <div class="
-                col-lg-3 col-lg-offset-0
-                col-md-3 col-md-offset-0
-                col-sm-12
-                col-xs-12
-                sidebar-container
-            ">
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
                 <!-- Featured Tags -->
                 
                 <section>
                     <hr class="hidden-sm hidden-xs">
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
-                        
+        				
                             
-                                <a href="/tags/#php" title="php" rel="18">
+                				<a href="/tags/#php" title="php" rel="18">
                                     php
                                 </a>
                             
-                        
+        				
                             
-                        
+        				
                             
-                                <a href="/tags/#算法" title="算法" rel="7">
+                				<a href="/tags/#算法" title="算法" rel="7">
                                     算法
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#数据结构" title="数据结构" rel="2">
+                				<a href="/tags/#数据结构" title="数据结构" rel="2">
                                     数据结构
                                 </a>
                             
-                        
+        				
                             
-                        
+        				
                             
-                        
+        				
                             
-                                <a href="/tags/#分布式" title="分布式" rel="2">
+                				<a href="/tags/#分布式" title="分布式" rel="2">
                                     分布式
                                 </a>
                             
-                        
+        				
                             
-                        
+        				
                             
-                        
+        				
                             
-                                <a href="/tags/#工具" title="工具" rel="7">
+                				<a href="/tags/#工具" title="工具" rel="7">
                                     工具
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#区块链" title="区块链" rel="18">
+                				<a href="/tags/#区块链" title="区块链" rel="18">
                                     区块链
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#比特币" title="比特币" rel="7">
+                				<a href="/tags/#比特币" title="比特币" rel="7">
                                     比特币
                                 </a>
                             
-                        
+        				
                             
-                        
+        				
                             
-                        
+        				
                             
-                                <a href="/tags/#密码学" title="密码学" rel="6">
+                				<a href="/tags/#密码学" title="密码学" rel="6">
                                     密码学
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#以太坊" title="以太坊" rel="4">
+                				<a href="/tags/#以太坊" title="以太坊" rel="4">
                                     以太坊
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#http" title="http" rel="12">
+                				<a href="/tags/#http" title="http" rel="12">
                                     http
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#超级账本" title="超级账本" rel="8">
+                				<a href="/tags/#超级账本" title="超级账本" rel="8">
                                     超级账本
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#fabric" title="fabric" rel="8">
+                				<a href="/tags/#fabric" title="fabric" rel="8">
                                     fabric
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#MYSQL" title="MYSQL" rel="3">
+                				<a href="/tags/#MYSQL" title="MYSQL" rel="3">
                                     MYSQL
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#web开发" title="web开发" rel="5">
+                				<a href="/tags/#web开发" title="web开发" rel="5">
                                     web开发
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#计算机" title="计算机" rel="6">
+                				<a href="/tags/#计算机" title="计算机" rel="6">
                                     计算机
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#转载" title="转载" rel="11">
+                				<a href="/tags/#转载" title="转载" rel="11">
                                     转载
                                 </a>
                             
-                        
+        				
                             
-                        
+        				
                             
-                                <a href="/tags/#精进" title="精进" rel="11">
+                				<a href="/tags/#精进" title="精进" rel="11">
                                     精进
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#微服务" title="微服务" rel="2">
+                				<a href="/tags/#微服务" title="微服务" rel="2">
                                     微服务
                                 </a>
                             
-                        
+        				
                             
-                        
+        				
                             
-                                <a href="/tags/#书籍" title="书籍" rel="12">
+                				<a href="/tags/#书籍" title="书籍" rel="12">
                                     书籍
                                 </a>
                             
-                        
+        				
                             
-                        
+        				
                             
-                        
-                    </div>
+        				
+        			</div>
                 </section>
                 
 
-                <!-- Short About -->
-                <section class="visible-md visible-lg">
-                    <hr><h5><a href="/about/">ABOUT ME</a></h5>
-                    <div class="short-about">
-                        
-                            <img src="/img/avatar.jpg" />
-                        
-                        
-                            <p>最美的风景往往在没有路的地方</p>
-                        
-                        <!-- SNS Link -->
-                        <ul class="list-inline">
-                            
-                            
-                            
-                            
-                            
-                            
-                            <li>
-                                <a target="_blank" href="https://github.com/shadowdragons">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            
-                            
-                        </ul>
-                    </div>
-                </section>
                 <!-- Friends Blog -->
                 
                 <hr>
@@ -739,10 +603,62 @@ pt-duplicate-key-checker
                     
                 </ul>
                 
-    		</div>
-        
-	</div>
-</div>
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: "yjDNDYxdT3CibWERUoLCWk51-gzGzoHsz",
+        appKey: "qtdtfd1Y24nNbIjhcwqbDBO5"
+    })
+</script>
 
 
     <!-- Footer -->
@@ -898,6 +814,64 @@ pt-duplicate-key-checker
 
 
 <!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
 
 
 
