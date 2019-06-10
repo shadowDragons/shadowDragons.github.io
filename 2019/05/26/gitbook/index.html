@@ -10,7 +10,7 @@
     <meta name="keywords"  content="小白, 博客, 个人网站, 互联网, Web, php, mysql, 分布式, 区块链, nginx">
     <meta name="theme-color" content="#000000">
     
-    <title>制作电子书其实很简单 - ben blog</title>
+    <title>gitbook制作电子书 - ben blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -206,7 +206,7 @@
                         <a class="tag" href="/tags/#工具" title="工具">工具</a>
                         
                     </div>
-                    <h1>制作电子书其实很简单</h1>
+                    <h1>gitbook制作电子书</h1>
                     
                     
                     <h2 class="subheading"></h2>
@@ -232,11 +232,7 @@
                 <!-- Multi-Lingual -->
                 
 
-				<p>有时候我们会有这样一个困扰，怎么样可以把自己的知识体系制作成电子书？一来方便分享，二来也便于查看。</p>
-
-<p>接下来给大家推荐一个制作电子书的命令行工具<code class="highlighter-rouge">Gitbook</code>。</p>
-
-<h3 id="安装">安装</h3>
+				<h3 id="安装">安装</h3>
 
 <p>这里以<code class="highlighter-rouge">mac</code>电脑安装为例。</p>
 
@@ -276,33 +272,6 @@ GitBook version: 3.2.3
   <li><code class="highlighter-rouge">SUMMARY.md</code> 书籍的目录</li>
 </ul>
 
-<p>我们可以执行<code class="highlighter-rouge">gitbook serve</code>来预览</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Live reload server started on port: 35729
-Press CTRL+C to quit ...
-
-info: 7 plugins are installed
-info: loading plugin "livereload"... OK
-info: loading plugin "highlight"... OK
-info: loading plugin "search"... OK
-info: loading plugin "lunr"... OK
-info: loading plugin "sharing"... OK
-info: loading plugin "fontsettings"... OK
-info: loading plugin "theme-default"... OK
-info: found 1 pages
-info: found 0 asset files
-info: &gt;&gt; generation finished with success in 0.5s !
-
-Starting server ...
-Serving book on http://localhost:4000
-</code></pre></div></div>
-
-<p>接下来就可以在浏览器输入<code class="highlighter-rouge">http://localhost:4000</code>来预览了。</p>
-
-<p><a href="/assets/img/posts/2019-05-26-gitbook/b.png"><img src="/assets/img/posts/2019-05-26-gitbook/b.png" alt="b.png" title="查看原图" /></a></p>
-
-<p>后续在编写过程中也可以通过预览来实时查看。</p>
-
 <h3 id="写书">写书</h3>
 
 <p>一般<code class="highlighter-rouge">GitBook</code>的目录结构是这样的:</p>
@@ -311,12 +280,15 @@ Serving book on http://localhost:4000
 ├── book.json
 ├── README.md
 ├── SUMMARY.md
+├── cover.png
 ├── chapter-1/
 |   ├── README.md
-|   └── something.md
+|   ├── something1.md
+|   └── something2.md
 └── chapter-2/
     ├── README.md
-    └── something.md
+    ├── something1.md
+    └── something2.md
 </code></pre></div></div>
 
 <p>由于初始化只生成了<code class="highlighter-rouge">README.md</code>和<code class="highlighter-rouge">SUMMARY.md</code>，其他文件和目录需要我们手动创建。</p>
@@ -374,24 +346,89 @@ Serving book on http://localhost:4000
 
 <h5 id="summarymd">SUMMARY.md</h5>
 
-<p><code class="highlighter-rouge">SUMMARY.md</code>文件定义文档的菜单。</p>
+<p><code class="highlighter-rouge">SUMMARY.md</code>定义文档的菜单。</p>
 
 <p>里面的<code class="highlighter-rouge">[]</code>内的内容是标题，<code class="highlighter-rouge">()</code>内是文档的路径，章节和子章节用四个空格或者tab键来分级。</p>
 
 <p>示例如下：</p>
 
-<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh"># 概述</span>
-
-<span class="gu">### 第一部分</span>
-<span class="p">
-*</span> <span class="p">[</span><span class="nv">第一部分</span><span class="p">](</span><span class="sx">part1/README.md</span><span class="p">)</span>
-<span class="p">    *</span> <span class="p">[</span><span class="nv">Writing很牛</span><span class="p">](</span><span class="sx">part1/README.md#writing</span><span class="p">)</span>
-<span class="p">    *</span> <span class="p">[</span><span class="nv">GitBook很牛</span><span class="p">](</span><span class="sx">part1/README.md#gitbook</span><span class="p">)</span>
-<span class="p">*</span> <span class="p">[</span><span class="nv">第二部分</span><span class="p">](</span><span class="sx">part2/README.md</span><span class="p">)</span>
-<span class="p">    *</span> <span class="p">[</span><span class="nv">我们喜欢社交网络</span><span class="p">](</span><span class="sx">part2/README.md#feedback</span><span class="p">)</span>
-<span class="p">    *</span> <span class="p">[</span><span class="nv">更好的写作工具</span><span class="p">](</span><span class="sx">part2/README.md#tools</span><span class="p">)</span>
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">*</span> <span class="p">[</span><span class="nv">简介</span><span class="p">](</span><span class="sx">README.md</span><span class="p">)</span>
+<span class="p">*</span> <span class="p">[</span><span class="nv">第一部分</span><span class="p">](</span><span class="sx">chapter-1/README.md</span><span class="p">)</span>
+<span class="p">    *</span> <span class="p">[</span><span class="nv">Writing很牛</span><span class="p">](</span><span class="sx">chapter-1/something1.md</span><span class="p">)</span>
+<span class="p">    *</span> <span class="p">[</span><span class="nv">GitBook很牛</span><span class="p">](</span><span class="sx">chapter-1/something2.md</span><span class="p">)</span>
+<span class="p">*</span> <span class="p">[</span><span class="nv">第二部分</span><span class="p">](</span><span class="sx">chapter-1/README.md</span><span class="p">)</span>
+<span class="p">    *</span> <span class="p">[</span><span class="nv">我们喜欢社交网络</span><span class="p">](</span><span class="sx">chapter-1/something1.md</span><span class="p">)</span>
+<span class="p">    *</span> <span class="p">[</span><span class="nv">更好的写作工具</span><span class="p">](</span><span class="sx">chapter-1/something2.md</span><span class="p">)</span>
 </code></pre></div></div>
 
+<h5 id="coverpng">cover.png</h5>
+
+<p>书籍封面。</p>
+
+<p>我们可以通过模板快速制作我们的封面。<a href="https://www.chuangkit.com/sj-pi1-si168-or0-pt0-pn1.html">工具链接 &gt;</a></p>
+
+<p>通过在线工具生成了我们下面的测试封面。</p>
+
+<p><a href="/assets/img/posts/2019-05-26-gitbook/2.png"><img src="/assets/img/posts/2019-05-26-gitbook/2.png" alt="2.png" title="查看原图" /></a></p>
+
+<h3 id="调试">调试</h3>
+
+<p>在书籍根目录下运行：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gitbook serve
+</code></pre></div></div>
+
+<p>输出结果：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>gitbook serve
+Live reload server started on port: 35729
+Press CTRL+C to quit ...
+
+info: 7 plugins are installed 
+info: loading plugin <span class="s2">"livereload"</span>... OK 
+info: loading plugin <span class="s2">"highlight"</span>... OK 
+info: loading plugin <span class="s2">"search"</span>... OK 
+info: loading plugin <span class="s2">"lunr"</span>... OK 
+info: loading plugin <span class="s2">"sharing"</span>... OK 
+info: loading plugin <span class="s2">"fontsettings"</span>... OK 
+info: loading plugin <span class="s2">"theme-default"</span>... OK 
+info: found 7 pages 
+info: found 1 asset files 
+info: <span class="o">&gt;&gt;</span> generation finished with success <span class="k">in </span>0.7s <span class="o">!</span> 
+
+Starting server ...
+Serving book on http://localhost:4000
+</code></pre></div></div>
+
+<p>现在就可以通过浏览器访问<code class="highlighter-rouge">http://localhost:4000</code>进行浏览。</p>
+
+<p><a href="/assets/img/posts/2019-05-26-gitbook/1.png"><img src="/assets/img/posts/2019-05-26-gitbook/1.png" alt="1.png" title="查看原图" /></a></p>
+
+<h3 id="生成书籍">生成书籍</h3>
+
+<p>命令语法：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gitbook <span class="o">[</span>文件类型] <span class="o">[</span>书籍根目录] <span class="o">[</span>生成文件路径/文件名]
+</code></pre></div></div>
+
+<h4 id="生成pdf文件">生成PDF文件</h4>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>gitbook pdf ./ ./mybook.pdf
+</code></pre></div></div>
+
+<p>结果截图：</p>
+
+<p><a href="/assets/img/posts/2019-05-26-gitbook/3.png"><img src="/assets/img/posts/2019-05-26-gitbook/3.png" alt="3.png" title="查看原图" /></a></p>
+
+<h5 id="生成epub文件">生成ePub文件</h5>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>gitbook epub ./ ./mybook.epub
+</code></pre></div></div>
+
+<h5 id="生成mobi文件">生成Mobi文件</h5>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>gitbook mobi ./ ./mybook.mobi
+</code></pre></div></div>
 
 
                 <hr style="visibility: hidden;">

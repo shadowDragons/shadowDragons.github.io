@@ -5,9 +5,9 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 09 Jun 2019 00:12:54 +0800</pubDate>
-    <lastBuildDate>Sun, 09 Jun 2019 00:12:54 +0800</lastBuildDate>
-    <generator>Jekyll v3.8.4</generator>
+    <pubDate>Mon, 10 Jun 2019 14:12:03 +0800</pubDate>
+    <lastBuildDate>Mon, 10 Jun 2019 14:12:03 +0800</lastBuildDate>
+    <generator>Jekyll v3.8.5</generator>
     
       <item>
         <title>「转载」命令行的艺术</title>
@@ -975,12 +975,8 @@ slow requests:        0
       </item>
     
       <item>
-        <title>制作电子书其实很简单</title>
-        <description>&lt;p&gt;有时候我们会有这样一个困扰，怎么样可以把自己的知识体系制作成电子书？一来方便分享，二来也便于查看。&lt;/p&gt;
-
-&lt;p&gt;接下来给大家推荐一个制作电子书的命令行工具&lt;code class=&quot;highlighter-rouge&quot;&gt;Gitbook&lt;/code&gt;。&lt;/p&gt;
-
-&lt;h3 id=&quot;安装&quot;&gt;安装&lt;/h3&gt;
+        <title>gitbook制作电子书</title>
+        <description>&lt;h3 id=&quot;安装&quot;&gt;安装&lt;/h3&gt;
 
 &lt;p&gt;这里以&lt;code class=&quot;highlighter-rouge&quot;&gt;mac&lt;/code&gt;电脑安装为例。&lt;/p&gt;
 
@@ -1020,33 +1016,6 @@ GitBook version: 3.2.3
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SUMMARY.md&lt;/code&gt; 书籍的目录&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;我们可以执行&lt;code class=&quot;highlighter-rouge&quot;&gt;gitbook serve&lt;/code&gt;来预览&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Live reload server started on port: 35729
-Press CTRL+C to quit ...
-
-info: 7 plugins are installed
-info: loading plugin &quot;livereload&quot;... OK
-info: loading plugin &quot;highlight&quot;... OK
-info: loading plugin &quot;search&quot;... OK
-info: loading plugin &quot;lunr&quot;... OK
-info: loading plugin &quot;sharing&quot;... OK
-info: loading plugin &quot;fontsettings&quot;... OK
-info: loading plugin &quot;theme-default&quot;... OK
-info: found 1 pages
-info: found 0 asset files
-info: &amp;gt;&amp;gt; generation finished with success in 0.5s !
-
-Starting server ...
-Serving book on http://localhost:4000
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;接下来就可以在浏览器输入&lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:4000&lt;/code&gt;来预览了。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-05-26-gitbook/b.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-05-26-gitbook/b.png&quot; alt=&quot;b.png&quot; title=&quot;查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;后续在编写过程中也可以通过预览来实时查看。&lt;/p&gt;
-
 &lt;h3 id=&quot;写书&quot;&gt;写书&lt;/h3&gt;
 
 &lt;p&gt;一般&lt;code class=&quot;highlighter-rouge&quot;&gt;GitBook&lt;/code&gt;的目录结构是这样的:&lt;/p&gt;
@@ -1055,12 +1024,15 @@ Serving book on http://localhost:4000
 ├── book.json
 ├── README.md
 ├── SUMMARY.md
+├── cover.png
 ├── chapter-1/
 |   ├── README.md
-|   └── something.md
+|   ├── something1.md
+|   └── something2.md
 └── chapter-2/
     ├── README.md
-    └── something.md
+    ├── something1.md
+    └── something2.md
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;由于初始化只生成了&lt;code class=&quot;highlighter-rouge&quot;&gt;README.md&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;SUMMARY.md&lt;/code&gt;，其他文件和目录需要我们手动创建。&lt;/p&gt;
@@ -1118,24 +1090,89 @@ Serving book on http://localhost:4000
 
 &lt;h5 id=&quot;summarymd&quot;&gt;SUMMARY.md&lt;/h5&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SUMMARY.md&lt;/code&gt;文件定义文档的菜单。&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SUMMARY.md&lt;/code&gt;定义文档的菜单。&lt;/p&gt;
 
 &lt;p&gt;里面的&lt;code class=&quot;highlighter-rouge&quot;&gt;[]&lt;/code&gt;内的内容是标题，&lt;code class=&quot;highlighter-rouge&quot;&gt;()&lt;/code&gt;内是文档的路径，章节和子章节用四个空格或者tab键来分级。&lt;/p&gt;
 
 &lt;p&gt;示例如下：&lt;/p&gt;
 
-&lt;div class=&quot;language-markdown highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gh&quot;&gt;# 概述&lt;/span&gt;
-
-&lt;span class=&quot;gu&quot;&gt;### 第一部分&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;
-*&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;第一部分&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;](&lt;/span&gt;&lt;span class=&quot;sx&quot;&gt;part1/README.md&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;    *&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;Writing很牛&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;](&lt;/span&gt;&lt;span class=&quot;sx&quot;&gt;part1/README.md#writing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;    *&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;GitBook很牛&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;](&lt;/span&gt;&lt;span class=&quot;sx&quot;&gt;part1/README.md#gitbook&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;第二部分&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;](&lt;/span&gt;&lt;span class=&quot;sx&quot;&gt;part2/README.md&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;    *&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;我们喜欢社交网络&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;](&lt;/span&gt;&lt;span class=&quot;sx&quot;&gt;part2/README.md#feedback&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;    *&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;更好的写作工具&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;](&lt;/span&gt;&lt;span class=&quot;sx&quot;&gt;part2/README.md#tools&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;div class=&quot;language-markdown highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;简介&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;](&lt;/span&gt;&lt;span class=&quot;sx&quot;&gt;README.md&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;第一部分&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;](&lt;/span&gt;&lt;span class=&quot;sx&quot;&gt;chapter-1/README.md&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;    *&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;Writing很牛&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;](&lt;/span&gt;&lt;span class=&quot;sx&quot;&gt;chapter-1/something1.md&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;    *&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;GitBook很牛&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;](&lt;/span&gt;&lt;span class=&quot;sx&quot;&gt;chapter-1/something2.md&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;第二部分&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;](&lt;/span&gt;&lt;span class=&quot;sx&quot;&gt;chapter-1/README.md&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;    *&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;我们喜欢社交网络&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;](&lt;/span&gt;&lt;span class=&quot;sx&quot;&gt;chapter-1/something1.md&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;    *&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;更好的写作工具&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;](&lt;/span&gt;&lt;span class=&quot;sx&quot;&gt;chapter-1/something2.md&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
+&lt;h5 id=&quot;coverpng&quot;&gt;cover.png&lt;/h5&gt;
+
+&lt;p&gt;书籍封面。&lt;/p&gt;
+
+&lt;p&gt;我们可以通过模板快速制作我们的封面。&lt;a href=&quot;https://www.chuangkit.com/sj-pi1-si168-or0-pt0-pn1.html&quot;&gt;工具链接 &amp;gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;通过在线工具生成了我们下面的测试封面。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-05-26-gitbook/2.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-05-26-gitbook/2.png&quot; alt=&quot;2.png&quot; title=&quot;查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;调试&quot;&gt;调试&lt;/h3&gt;
+
+&lt;p&gt;在书籍根目录下运行：&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gitbook serve
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;输出结果：&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gitbook serve
+Live reload server started on port: 35729
+Press CTRL+C to quit ...
+
+info: 7 plugins are installed 
+info: loading plugin &lt;span class=&quot;s2&quot;&gt;&quot;livereload&quot;&lt;/span&gt;... OK 
+info: loading plugin &lt;span class=&quot;s2&quot;&gt;&quot;highlight&quot;&lt;/span&gt;... OK 
+info: loading plugin &lt;span class=&quot;s2&quot;&gt;&quot;search&quot;&lt;/span&gt;... OK 
+info: loading plugin &lt;span class=&quot;s2&quot;&gt;&quot;lunr&quot;&lt;/span&gt;... OK 
+info: loading plugin &lt;span class=&quot;s2&quot;&gt;&quot;sharing&quot;&lt;/span&gt;... OK 
+info: loading plugin &lt;span class=&quot;s2&quot;&gt;&quot;fontsettings&quot;&lt;/span&gt;... OK 
+info: loading plugin &lt;span class=&quot;s2&quot;&gt;&quot;theme-default&quot;&lt;/span&gt;... OK 
+info: found 7 pages 
+info: found 1 asset files 
+info: &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; generation finished with success &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;0.7s &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt; 
+
+Starting server ...
+Serving book on http://localhost:4000
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;现在就可以通过浏览器访问&lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:4000&lt;/code&gt;进行浏览。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-05-26-gitbook/1.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-05-26-gitbook/1.png&quot; alt=&quot;1.png&quot; title=&quot;查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;生成书籍&quot;&gt;生成书籍&lt;/h3&gt;
+
+&lt;p&gt;命令语法：&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gitbook &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;文件类型] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;书籍根目录] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;生成文件路径/文件名]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;生成pdf文件&quot;&gt;生成PDF文件&lt;/h4&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gitbook pdf ./ ./mybook.pdf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;结果截图：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-05-26-gitbook/3.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-05-26-gitbook/3.png&quot; alt=&quot;3.png&quot; title=&quot;查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;生成epub文件&quot;&gt;生成ePub文件&lt;/h5&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gitbook epub ./ ./mybook.epub
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;生成mobi文件&quot;&gt;生成Mobi文件&lt;/h5&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gitbook mobi ./ ./mybook.mobi
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </description>
         <pubDate>Sun, 26 May 2019 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2019/05/26/gitbook/</link>
