@@ -5,9 +5,328 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 10 Jun 2019 14:44:02 +0800</pubDate>
-    <lastBuildDate>Mon, 10 Jun 2019 14:44:02 +0800</lastBuildDate>
+    <pubDate>Tue, 11 Jun 2019 10:43:25 +0800</pubDate>
+    <lastBuildDate>Tue, 11 Jun 2019 10:43:25 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>PHP-流(Stream)</title>
+        <description>&lt;p&gt;在现代的&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;特性中，流或许是最出色但最少使用的。虽然&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt; 4.3.0就 引人了流，但是
+很多开发者不知道流的存在, 因为人们很少提及流，而且流的文档也匮乏。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;流在&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt; 4.3.0 中引入，作用是使用统一的方式处理文件、网络和数据压缩等共用同一套函数和用法的操作。 简单而言，流是具有流式行为的资源对象。因此，流可以线性读写，或许还能使用&lt;code class=&quot;highlighter-rouge&quot;&gt;fseek()&lt;/code&gt;函数定位到流中的任何位置。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这段定义很难理解是吧，下面我们简化一下，以便更易于理解。流的作用是在出发地和目的地之闾传输数据。就这么简单。 出发地和目的地可以是文件、命令行进程、网络连接、 &lt;code class=&quot;highlighter-rouge&quot;&gt;ZIP&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;TAR&lt;/code&gt;压缩文件、临时内存、标准输入或输出，或者是通过&lt;a href=&quot;http://php.net/manual/wrappers.php&quot;&gt;PHP流封装协议&lt;/a&gt;实现的任何其他资源。&lt;/p&gt;
+
+&lt;p&gt;如果你读写过文件，就使用过流;如果你从&lt;code class=&quot;highlighter-rouge&quot;&gt;php://stdin&lt;/code&gt;读取过数据，或者把数据写人过&lt;code class=&quot;highlighter-rouge&quot;&gt;php://stdout&lt;/code&gt;, 就使用过流。流为PHP的很多&lt;code class=&quot;highlighter-rouge&quot;&gt;IO&lt;/code&gt;函数提供了底层实现, 例如&lt;code class=&quot;highlighter-rouge&quot;&gt;fi1e_get_contents()&lt;/code&gt;、 &lt;code class=&quot;highlighter-rouge&quot;&gt;fopen()&lt;/code&gt;、 &lt;code class=&quot;highlighter-rouge&quot;&gt;fgets()&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;fwrite()&lt;/code&gt;。 &lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;的流函数提供了处理不同流资源 (出发地和目的地) 的统一接口。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;注意: 我把流理解为管道，相当于把水从一个地方引到另一个地方。在水从出发地流到目的地的过程中，我们可以过滤水，可以改变水质，可以添加水，也可以排出水（提示：水是数据的隐喻）。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;流封装协议&quot;&gt;流封装协议&lt;/h3&gt;
+
+&lt;p&gt;流式数据的种类各异，每种类型需要独特的协议，以便读写数据。我们称这些协议为&lt;a href=&quot;http://php.net/manual/wrappers.php&quot;&gt;流封装协议&lt;/a&gt;。例如，我们可以读写文件系统，可以通过HTTP、 HTTPS或SSH（安全的shell）与远程Web服务器通信，还可以打开并读写&lt;code class=&quot;highlighter-rouge&quot;&gt;ZIP&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;RAR&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;PHAR&lt;/code&gt;压缩文件。这些通信方式都包含下述相同的过程：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;开始通信。&lt;/li&gt;
+  &lt;li&gt;读取数据。&lt;/li&gt;
+  &lt;li&gt;写入数据。&lt;/li&gt;
+  &lt;li&gt;结束通信。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;虽然过程是一祥的，但是读写文件系统中文件的方式与收发&lt;code class=&quot;highlighter-rouge&quot;&gt;HTTP&lt;/code&gt;消息的方式有所不同。流封装协议的作用是使用通用的接口封装这种差异。&lt;/p&gt;
+
+&lt;p&gt;每个流邯有一个协议和一个目标。指定协议和目标的方法是使用流标识符，其格式如下所示，我们对此已经熟悉了:&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;scheme&amp;gt;&lt;/span&gt;://&lt;span class=&quot;nt&quot;&gt;&amp;lt;target&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;其中，&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;scheme&amp;gt;&lt;/code&gt;是流的封装协议，&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;target&amp;gt;&lt;/code&gt;是流的数据源。如下所示使用&lt;code class=&quot;highlighter-rouge&quot;&gt;HTTP&lt;/code&gt;流封装协议创建了一个与&lt;code class=&quot;highlighter-rouge&quot;&gt;Flickr API&lt;/code&gt;通信的&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流。&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$json&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;file_get_contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;'http://api.flickr.com/services/feeds/photos_public.gne?format=json'&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;不要误以为这是普通的网页&lt;code class=&quot;highlighter-rouge&quot;&gt;URL&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;file_get_contents()&lt;/code&gt;函数的字符串参数其实是一个流标识符。&lt;code class=&quot;highlighter-rouge&quot;&gt;http&lt;/code&gt;协议会让&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;HTTP&lt;/code&gt;流封装协议。 在这个参数中，&lt;code class=&quot;highlighter-rouge&quot;&gt;http&lt;/code&gt;之后是流的目标。流的目标之所以看起来像是普通的网页&lt;code class=&quot;highlighter-rouge&quot;&gt;URL&lt;/code&gt;，是因为&lt;code class=&quot;highlighter-rouge&quot;&gt;HTTP&lt;/code&gt;流封装协议就是这祥规定的。其他流封装协议可能不是这样。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;注意：前而一段要多读几遍，直到熟记为止。很多&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;开发者不知道普通的&lt;code class=&quot;highlighter-rouge&quot;&gt;URL&lt;/code&gt;其实是&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流封装协议标识符的伪装。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h5 id=&quot;file流封装协议&quot;&gt;file://流封装协议&lt;/h5&gt;
+
+&lt;p&gt;我们使用&lt;code class=&quot;highlighter-rouge&quot;&gt;fi1e_get_contents()&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;fopen()&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;fwrite()&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;fc1ose()&lt;/code&gt;函数读写文件系统。因为&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;默认使用的流封装协议是&lt;code class=&quot;highlighter-rouge&quot;&gt;file://&lt;/code&gt;，所以我们很少认为这些函数使用的是&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流。我们在不经意间就使用了&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流！如下所示使用&lt;code class=&quot;highlighter-rouge&quot;&gt;file://&lt;/code&gt;流封装协议创建了一个读写&lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/hosts&lt;/code&gt;文件的流。&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;fopen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'/etc/hosts'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'rb'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;feof&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;fgets&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$hand1e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;fclose&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;和下面示例的作用一样，不过这一次我们在流标识符中明确指定了&lt;code class=&quot;highlighter-rouge&quot;&gt;file://&lt;/code&gt;流封装协议。&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;fopen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'file:///etc/hosts'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'rb'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;feof&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$hand1e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;fgets&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;fclose&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;我们通常会省略&lt;code class=&quot;highlighter-rouge&quot;&gt;file://&lt;/code&gt;封装协议，因为这是&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;使用的默认值。&lt;/p&gt;
+
+&lt;h5 id=&quot;php流封装协议&quot;&gt;php://流封装协议&lt;/h5&gt;
+
+&lt;p&gt;编写命令行脚本的PHP开发者会感激&lt;code class=&quot;highlighter-rouge&quot;&gt;php://&lt;/code&gt;流封装协议。这个流封装协议的作用是与PHP脚本的标准输人、标准输出和标准错误文件描述符通信。我们可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;提供的文件系统函数打开、读取或写入下述四个流：&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;php://stdin&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;这是个只读&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流，其中的数据来自标准输入。例如，&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;脚本可以使用这个流接收命令行传入脚本的信息。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;php://stdout&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;这个&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流的作用是把数据写入当前的输出缓冲区。这个流只能写，无法读或寻址。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;php://memory&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;这个&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流的作用是从系统内存中读取数据，或者把数据写入系统内存。这个&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流的缺点是，可用内存是有限的。使用&lt;code class=&quot;highlighter-rouge&quot;&gt;php://temp&lt;/code&gt;流更安全。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;php://temp&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;这个&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流的作用和&lt;code class=&quot;highlighter-rouge&quot;&gt;php://memoey&lt;/code&gt;类似，不过，没有可用内存时，&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;会把数据写入临时文件。&lt;/p&gt;
+
+&lt;h5 id=&quot;其他流封装协议&quot;&gt;其他流封装协议&lt;/h5&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;扩展还提供了很多其他流封装协议，例如，与&lt;code class=&quot;highlighter-rouge&quot;&gt;ZIP&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;TAR&lt;/code&gt;压缩文件、&lt;code class=&quot;highlighter-rouge&quot;&gt;FTP&lt;/code&gt;服务器、数据压缩库、亚马逊&lt;code class=&quot;highlighter-rouge&quot;&gt;API&lt;/code&gt;等通信的流封装协议。开发者经常误以为&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;中的&lt;code class=&quot;highlighter-rouge&quot;&gt;fopen()&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;fgets()&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;fputs()&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;feof()&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;fc1ose()&lt;/code&gt;等文件系统函数只能用来处理文件系统中的文件。 事实并非如此。 PHP的文件系统函数能在所有支持这些函数的流封装协议中使用。例如，我们可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;fopen()&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;fgets()&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;fputs()&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;feof()&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;fc1ose()&lt;/code&gt;函数处理&lt;code class=&quot;highlighter-rouge&quot;&gt;ZIP&lt;/code&gt;压缩文件和亚马逊S3服务（通过自定义的S3封装协议，http://bit.1y/streamwrap），甚至还能处理&lt;code class=&quot;highlighter-rouge&quot;&gt;Dropbox&lt;/code&gt;中的文件（通过自定义的&lt;a href=&quot;http://www.dropbbox-php.com&quot;&gt;Dropbox封装协议&lt;/a&gt;）。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;注意: 关于&lt;code class=&quot;highlighter-rouge&quot;&gt;php://&lt;/code&gt;流封装协议的更多信息，请查看&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;的&lt;a href=&quot;http://bit.ly/s-wrapper&quot;&gt;网站&lt;/a&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h5 id=&quot;自定义流封装协议&quot;&gt;自定义流封装协议&lt;/h5&gt;
+
+&lt;p&gt;我们还可以白己编写&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流封装协议。&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;提供了一个示例&lt;code class=&quot;highlighter-rouge&quot;&gt;streamWrapper&lt;/code&gt;类，演示如何编写自定义的流封装协议，支持部分或全部&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;文件系统函数。关于如何编写自定义的&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流封装协议，更多信息参见：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://php.net/manual/class.streamwrapper.php&quot;&gt;http://php.net/manual/class.streamwrapper.php&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://php.net/manual/stream.streamwrapper.example-1.php&quot;&gt;http://php.net/manual/stream.streamwrapper.example-1.php&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;流上下文&quot;&gt;流上下文&lt;/h3&gt;
+
+&lt;p&gt;有些&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流能接受一系列可选的参数，这些参数叫流上下文，用干定制流的行为。不同的流封装协议使用的上下义参数有所不同。流上下文使用&lt;code class=&quot;highlighter-rouge&quot;&gt;stream_context_create()&lt;/code&gt;函数创建。这个函数返回的上下文对象可以传入大多数文件系统和流函数。&lt;/p&gt;
+
+&lt;p&gt;例如, 你知道可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;fi1e_get_contents()&lt;/code&gt;函数发送&lt;code class=&quot;highlighter-rouge&quot;&gt;HTTP POST&lt;/code&gt;请求吗? 如果想这么做，可以使用一个流上下文对象 (如下所示) 。&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$quuestBody&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{&quot;username&quot;:&quot;josh&quot;}'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$context&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;stream_context_create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;'http'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'method'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'POST'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'header'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Content-Type: application/json;charset=utf-8;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\r\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+                    &lt;span class=&quot;s2&quot;&gt;&quot;Content-Length: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;mb_strlen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$requestBody&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'content'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$requestBody&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$response&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;file_get_contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'https://my-api.com/users'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;流上下文是个关联数组，最外层键是流封装协议的名称。流上下文数组中的值针对每个具体的流封装协议。可用的设置参见各个&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流封装协议的文档。&lt;/p&gt;
+
+&lt;h3 id=&quot;流过滤器&quot;&gt;流过滤器&lt;/h3&gt;
+
+&lt;p&gt;目前为止我们讨论了如何打开流，从流中读取数据，以及把数据写入流。可是，&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流真正强大的地方在于过滤、转换、添加或删除流中传输的数据。例如，我们可以打开一个流处理&lt;code class=&quot;highlighter-rouge&quot;&gt;Markdown&lt;/code&gt;文件，在把文件内容读入内存的过程中自动将其转换成HTML。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;注意：&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;内置了几个流过滤器: &lt;code class=&quot;highlighter-rouge&quot;&gt;string.rot13&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;string.toupper&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;string.tolower&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;string.strip_tags&lt;/code&gt;。这些过滤器没什么用，我们要使用自定义的过滤器。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;若想把过滤器附加到现有的流上，要使用&lt;code class=&quot;highlighter-rouge&quot;&gt;stream_filter_append()&lt;/code&gt;函数。如下所示从本地文件系统中的文本文件里读取数据时使用了&lt;code class=&quot;highlighter-rouge&quot;&gt;string.toupper&lt;/code&gt;过滤器，目的是把义件中的内容转换成大写字母。我不建议使用这个过滤器，这里只是演示如何把过滤器附加到流上。&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;fopen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'data.txt'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'rb'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;stream_filter_append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'string.toupper'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;feof&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;fgets&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// &amp;lt;-- 输出的全是大写字母&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;fclose&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;我们还可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;php://filter&lt;/code&gt;流封装协议把过滤器附加到流上。不过，使用这种方式之前必须先打开PHP流。和下面的示例的作用和前一个示例一样，可是这里我们使用&lt;code class=&quot;highlighter-rouge&quot;&gt;php://filter&lt;/code&gt;方式附加过滤器。&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;fopen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'php://filter/read=string.toupper/resource-data.txt'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'rb'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;whi1e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;feof&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;fgets&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$hand1e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// &amp;lt;-- 输出的全是大写字母&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;fclose&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;我们要特别注意&lt;code class=&quot;highlighter-rouge&quot;&gt;fopen()&lt;/code&gt;函数的第一个参数。这个参数的值是&lt;code class=&quot;highlighter-rouge&quot;&gt;php://&lt;/code&gt;流封装协议的流标识符。达个流标识符中的目标如下所示:&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;filter_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;resource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;scheme&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;://&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这种方式和&lt;code class=&quot;highlighter-rouge&quot;&gt;stream_fi1ter_append()&lt;/code&gt;函数相比较为繁琐。可是，&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;的某些文件系统函数在调用后无法附加过滤器，例如&lt;code class=&quot;highlighter-rouge&quot;&gt;f11e()&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;fpassthru()&lt;/code&gt;。所以，使用这些函数时只能使用&lt;code class=&quot;highlighter-rouge&quot;&gt;php://filter&lt;/code&gt;流封装协议附加流过滤器。&lt;/p&gt;
+
+&lt;p&gt;下面看个更实际的流过滤器示例。 在&lt;a href=&quot;http://www.newmediacampaigns.com&quot;&gt;New Media Campaigns&lt;/a&gt;，我们内部的内容管理系统会把&lt;code class=&quot;highlighter-rouge&quot;&gt;nginx&lt;/code&gt;访问日志保存到&lt;a href=&quot;http://rsync.net&quot;&gt;rsync.net&lt;/a&gt;。我们把一天的访问情况保存在一个日志文件中，而且会使用&lt;code class=&quot;highlighter-rouge&quot;&gt;bzip2&lt;/code&gt;压缩每个日志文件。日志文件的名称使用&lt;code class=&quot;highlighter-rouge&quot;&gt;yyyy-MM-DD.log.bz2&lt;/code&gt;格式。领导让我提取过去30天某个域名的访问数据，这听起来有很多事要做，对吧？我要计算日期范围，确定日志文件的名称，通过&lt;code class=&quot;highlighter-rouge&quot;&gt;FTP&lt;/code&gt;连接&lt;code class=&quot;highlighter-rouge&quot;&gt;rsync.net&lt;/code&gt;，下载文件，解压缩文件，逐行迭代每个文件，把相应的行提取出来，然后把访间数据写入一个输出目标。你可能不相信，使用&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流，不到20行代码就能做完所有这些事情（如下所示）。&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$dateStart&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;\DateTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$dateInterval&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;\DateInterval&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;createFromDateString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'-1 day'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$datePeriod&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;\DatePeriod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$dateStart&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$dateInterval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$datePeriod&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'sftp://USER:PASS@rsync.net/'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Y—m-d'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'.log.bz2'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;file_exists&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;fopen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'rb'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;stream_filter_append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$hand1e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'bzip2.decompress'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;feof&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$line&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;fgets&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;strpos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'www.example.com'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;nb&quot;&gt;fwrite&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;STDOUT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;fclose&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在上面的例子中：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;第2~4行创建一个持续30天的DatePeriod实例，一天一天反向向前推移。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;第6行使用每次迭代&lt;code class=&quot;highlighter-rouge&quot;&gt;DatePeriod&lt;/code&gt;实例得到的&lt;code class=&quot;highlighter-rouge&quot;&gt;DateTime&lt;/code&gt;实例创建日志文件的文件名。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;第8~9行使用&lt;code class=&quot;highlighter-rouge&quot;&gt;SFTP&lt;/code&gt;流封装协议打开位于&lt;code class=&quot;highlighter-rouge&quot;&gt;rsync.net&lt;/code&gt;上的日志文件流资源。我们把&lt;code class=&quot;highlighter-rouge&quot;&gt;bzip2-decompress&lt;/code&gt;流过滤器附加到日志文件流资源上，实时解压缩&lt;code class=&quot;highlighter-rouge&quot;&gt;bzip2&lt;/code&gt;格式的日志文件。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;第10~15行使用&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;原生的文件系统函数迭代解压缩后的日志文件。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;第12~14行检查各行日志，看访问的是不是指定域名。如果是，把这一行日志写入标准输出。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;bzip2.decompress&lt;/code&gt;流过滤器可以在读取日志文件的同时自动解压缩。除此之外，我们还可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;shell_exe()&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;bzdecompress()&lt;/code&gt;函数，手动把日志文件解压缩到临时目录中，然后迭代解压缩后的文件，等&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;脚本完成任务后再清理这些解压缩后的文件。不过，使用&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流更简单，也更忧雅。&lt;/p&gt;
+
+&lt;h3 id=&quot;自定义流过滤器&quot;&gt;自定义流过滤器&lt;/h3&gt;
+
+&lt;p&gt;我们还可以编写自定义的流过滤器。其实，犬多数情况下部要使用自定义的流过滤器。自定义的流过滤器是个&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;类，扩展内置的&lt;a href=&quot;http://php.net/manual/en/Class.php—user-filter.php&quot;&gt;php_user_filter类&lt;/a&gt;这个类必须实现&lt;code class=&quot;highlighter-rouge&quot;&gt;filter()&lt;/code&gt;、 &lt;code class=&quot;highlighter-rouge&quot;&gt;onCreate()&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;onC1ose()&lt;/code&gt;方法。而且，必须使用&lt;code class=&quot;highlighter-rouge&quot;&gt;stream_filter_register()&lt;/code&gt;函数注册自定义的流过滤器。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;注意 &lt;strong&gt;桶排成一排流过来了!&lt;/strong&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流会把数据分成按次序排列的桶，一个桶中盛放的流数据量是固定的（例如4096字节）。如果还用管道比喻，就是把水放在一个个水桶中，顺着管道从出发地溧流到目的地，在漂流的过程中会经过流过滤器，流过滤器一次能接收并处理一个或多个桶。一定时闾内过滤器接收到的桶叫做桶队列。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;下面我们自定义一个流过滤器，在把流中的数据读入内存时审查其中的脏字 (如下所示) 。首先，我们必须创建一个PHP类，让它扩展&lt;code class=&quot;highlighter-rouge&quot;&gt;php_user_filter&lt;/code&gt;类。这个类必须实现&lt;code class=&quot;highlighter-rouge&quot;&gt;filter()&lt;/code&gt;方法，这个方法是个筛子，用于过滤流经的桶。这个方法的参数是上游漂来的桶队列，处理过队列中的每个桶对象后，再把桶排成一排，向下游的目的地漂去。我们自定义的&lt;code class=&quot;highlighter-rouge&quot;&gt;DirtyWordsFilter&lt;/code&gt;流过滤器如下所示。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;建议: 桶队列中的每个桶对象都有两个公开属性：&lt;code class=&quot;highlighter-rouge&quot;&gt;data&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;datalen&lt;/code&gt;。这两个属性的值分别是桶中的内容和内容的长度。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DirtyWordsFilter&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;php_user_fi1ter&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;sd&quot;&gt;/**
+    * @param resource $in 流来的桶队列
+    * @param resource $out 流走的桶队列
+    * @param int $consumed 处理的字节数
+    * @param bool $closing 是流中的最后一个桶排序吗？
+    */&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$consumed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$closing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$words&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'inme'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'dirt'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'grease'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$wordData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$words&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$replacement&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;array_fill&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;mh_strlen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'*'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$wordData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;implode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;, &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$replacement&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;);
+        }
+        &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$bad&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; = array_keys(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$wordData&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;);
+        &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$good&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; = array_values(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$wordData&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;);
+
+        // 迭代流来的桶队列中的每个桶
+
+        while (&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$bucket&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; = stream_bucket_make_writeable(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$in&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;)) {
+            // 审查桶数据中的脏字
+            &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$bucket-&amp;gt;data&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; = str_replace(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$bad&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;, &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$good&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;, &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$bucket-&amp;gt;data&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;);
+
+            // 增加已处理的数据量
+
+            &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$consumed&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; += &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$bucket-&amp;gt;datalen&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;;
+
+            // 把桶放入流向下游的队列中
+            stream_bucket_append(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$out&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;, &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$bucket&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;);
+        }
+        return PSFS_PASS_ON;
+    }
+}
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;filter()&lt;/code&gt;方法的作用是接收、处理再转运桶中的流数据。在&lt;code class=&quot;highlighter-rouge&quot;&gt;filter()&lt;/code&gt;方法中，我们迭代桶队列&lt;code class=&quot;highlighter-rouge&quot;&gt;$in&lt;/code&gt;中的桶，把脏字替换成审查后的值。这个方法的返回值是&lt;code class=&quot;highlighter-rouge&quot;&gt;PSFS_PASS_ON&lt;/code&gt;常量，表示操作成功。这个方法接收四个参数:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$in&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;上游流来的一个队列，有一个或多个桶，桶中是从出发地流来的数据。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$out&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;由一个桶或多个桶组成的队列，流向下游的流目的地。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;$consumed&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;自定义的过滤器处理的流数据总字节数。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$closing&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;filter())&lt;/code&gt;方法接收的是最后一个桶队列吗?&lt;/p&gt;
+
+&lt;p&gt;然后，我们必须使用&lt;code class=&quot;highlighter-rouge&quot;&gt;stream_filter_register&lt;/code&gt;函数注册这个自定义的&lt;code class=&quot;highlighter-rouge&quot;&gt;DirtyWordsFilter&lt;/code&gt;流过滤器（如下所示）。&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;stream_filter_register&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'dirty_words_filter'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'DirtyNordsFilter'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;第一个参数是用于识别这个自定义过滤器的过滤器名，第二个参数是这个自定义过滤器的类名。现在可以使用这个自定义的流过滤器了（如下所示）。&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$hand1e&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;fopen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'data.txt'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'rb'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;stream_filter_append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'dirty_words_filter'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;feof&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;fgets&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$hand1e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// &amp;lt;-- 输出审查后的文本&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;fclose&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;建议：如果想进一步学习&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流，请观看&lt;code class=&quot;highlighter-rouge&quot;&gt;Nomad PHP&lt;/code&gt;网站中&lt;a href=&quot;http://bit.ly/nomad-php&quot;&gt;伊丽莎白-史密斯的演讲&lt;/a&gt;。这个视频不是免费的, 但值那个价。你还可以阅读&lt;a href=&quot;http://php.net/manual/en/books.stream.php&quot;&gt;PHP文档&lt;/a&gt;，进一步学习&lt;code class=&quot;highlighter-rouge&quot;&gt;PHP&lt;/code&gt;流。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+</description>
+        <pubDate>Mon, 10 Jun 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/06/10/php-stream/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/06/10/php-stream/</guid>
+        
+        <category>php</category>
+        
+        
+      </item>
     
       <item>
         <title>「转载」命令行的艺术</title>
@@ -6401,20 +6720,6 @@ do here?”&lt;/p&gt;
         <pubDate>Sun, 07 Apr 2019 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2019/04/07/note-excelsior/</link>
         <guid isPermaLink="true">http://localhost:4000/2019/04/07/note-excelsior/</guid>
-        
-        <category>书籍</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>「笔记」《说话之道》</title>
-        <description>&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-04-06-note-say/1.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-04-06-note-say/1.png&quot; alt=&quot;1.png&quot; title=&quot;查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Sat, 06 Apr 2019 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2019/04/06/note-say/</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/04/06/note-say/</guid>
         
         <category>书籍</category>
         

@@ -213,6 +213,33 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2019/03/09/xpack-crack/">
+        <h2 class="post-title">
+            Elasticsearch6.x-xpack破解
+        </h2>
+        
+        <div class="post-content-preview">
+            
+  这里有我之前已经破解的6.5.4的包，有需要可以直接下载
+
+
+去掉license校验
+
+下载luyten反编译JAVA工具
+
+用luyent打开Elasticsearch目录下的modules/x-pack-core/x-pack-core-x.x.x.jar
+
+找到 org.elasticsearch.license.LicenseVerifier文件，提取出来做以下修改：
+Lice...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on March 9, 2019
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2019/03/09/serverless/">
         <h2 class="post-title">
             微服务框架技术选型
@@ -486,44 +513,6 @@ sequenceDiagram;
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2018/10/07/strace-dtruss/">
-        <h2 class="post-title">
-            系统调用跟踪 - strace、dtruss
-        </h2>
-        
-        <div class="post-content-preview">
-            linux工具strace
-
-安装
-
-
-  Debian
-
-
-sudo apt-get update &amp; apt-get install strace
-
-
-
-  Ubuntu
-
-
-sudo yum install strace
-
-
-语法
-
-strace [-dffhiqrtttTvVxx] [-a column] [-e expr] ... [-o file]
-
-          ...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on October 7, 2018
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -558,7 +547,7 @@ strace [-dffhiqrtttTvVxx] [-a column] [-e expr] ... [-o file]
                     <div class="tags">
                         
                             
-                                <a href="/tags/#php" title="php" rel="18">
+                                <a href="/tags/#php" title="php" rel="19">
                                     php
                                 </a>
                             
