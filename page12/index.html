@@ -213,6 +213,34 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2016/11/18/php-about-thred-safe/">
+        <h2 class="post-title">
+            php线程安全
+        </h2>
+        
+        <div class="post-content-preview">
+            线程不安全
+
+线程不安全就是不提供数据访问保护，有可能出现多个线程先后更改数据造成所得到的数据是脏数据。  
+比如一个 ArrayList 类，在添加一个元素的时候，它可能会有两步来完成：
+
+
+  在 Items[Size] 的位置存放此元素；
+  增大 Size 的值。
+
+
+在单线程运行的情况下，如果 Size = 0，添加一个元素后，此元素在位置 0，而且 Size=1；
+
+而如果是在多...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Ben Blog on November 18, 2016
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2016/11/14/machinelearning-supervised/">
         <h2 class="post-title">
             监督学习与梯度下降
@@ -486,28 +514,6 @@ j = 0000001
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2016/11/11/php-nginx/">
-        <h2 class="post-title">
-            NGINX+PHP运行原理
-        </h2>
-        
-        <div class="post-content-preview">
-            前向代理与反向代理
-
-前向代理作为客户端的代理，将从互联网上获取的资源返回给一个或多个的客户端，服务器端（如Web服务器）只知道代理的IP地址而不知道客户端的IP地址。
-
-
-
-而反向代理是作为服务器端（如Web服务器）的代理使用，而不是客户端。客户端借由前向代理可以间接访问很多不同互联网服务器（簇）的资源，而反向代理是供很多客户端都通过它间接访问不同后端服务器上的资源，而不需要知道这些后端服...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Ben Blog on November 11, 2016
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -517,6 +523,10 @@ j = 0000001
         <a href="/page11">&larr; Newer Posts</a>
     </li>
     
+    
+    <li class="next">
+        <a href="/page13">Older Posts &rarr;</a>
+    </li>
     
 </ul>
 
@@ -636,7 +646,7 @@ j = 0000001
                             
                         
                             
-                                <a href="/tags/#计算机" title="计算机" rel="6">
+                                <a href="/tags/#计算机" title="计算机" rel="7">
                                     计算机
                                 </a>
                             

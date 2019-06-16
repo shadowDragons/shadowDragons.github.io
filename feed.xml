@@ -5,9 +5,22 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 11 Jun 2019 10:43:25 +0800</pubDate>
-    <lastBuildDate>Tue, 11 Jun 2019 10:43:25 +0800</lastBuildDate>
-    <generator>Jekyll v3.8.5</generator>
+    <pubDate>Sun, 16 Jun 2019 17:17:35 +0800</pubDate>
+    <lastBuildDate>Sun, 16 Jun 2019 17:17:35 +0800</lastBuildDate>
+    <generator>Jekyll v3.8.4</generator>
+    
+      <item>
+        <title>如何选择开源许可协议</title>
+        <description>&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-06-16-open-licence/1.jpg&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-06-16-open-licence/1.jpg&quot; alt=&quot;1.jpg&quot; title=&quot;查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 16 Jun 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/06/16/open-licence/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/06/16/open-licence/</guid>
+        
+        <category>计算机</category>
+        
+        
+      </item>
     
       <item>
         <title>PHP-流(Stream)</title>
@@ -6706,20 +6719,6 @@ do here?”&lt;/p&gt;
         <pubDate>Thu, 18 Apr 2019 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2019/04/18/note-say-2/</link>
         <guid isPermaLink="true">http://localhost:4000/2019/04/18/note-say-2/</guid>
-        
-        <category>书籍</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>「笔记」《精进：如何成为一个很厉害的人》</title>
-        <description>&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-04-07-note-excelsior/1.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-04-07-note-excelsior/1.png&quot; alt=&quot;1.png&quot; title=&quot;查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Sun, 07 Apr 2019 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2019/04/07/note-excelsior/</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/04/07/note-excelsior/</guid>
         
         <category>书籍</category>
         
