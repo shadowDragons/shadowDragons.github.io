@@ -5,8 +5,8 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 16 Jun 2019 17:17:35 +0800</pubDate>
-    <lastBuildDate>Sun, 16 Jun 2019 17:17:35 +0800</lastBuildDate>
+    <pubDate>Sun, 16 Jun 2019 21:26:20 +0800</pubDate>
+    <lastBuildDate>Sun, 16 Jun 2019 21:26:20 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
     
       <item>
@@ -18,6 +18,19 @@
         <guid isPermaLink="true">http://localhost:4000/2019/06/16/open-licence/</guid>
         
         <category>计算机</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>「笔记」《蔡康永的情商课》</title>
+        <description>&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-06-16-note-eq/1.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-06-16-note-eq/1.png&quot; alt=&quot;1.png&quot; title=&quot;查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 16 Jun 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/06/16/note-eq/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/06/16/note-eq/</guid>
+        
+        <category>书籍</category>
         
         
       </item>
@@ -6705,20 +6718,6 @@ do here?”&lt;/p&gt;
         <pubDate>Sat, 04 May 2019 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2019/05/04/note-etf/</link>
         <guid isPermaLink="true">http://localhost:4000/2019/05/04/note-etf/</guid>
-        
-        <category>书籍</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>「笔记」《说话之道2》</title>
-        <description>&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-04-18-note-say-2/1.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-04-18-note-say-2/1.png&quot; alt=&quot;1.png&quot; title=&quot;查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Thu, 18 Apr 2019 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2019/04/18/note-say-2/</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/04/18/note-say-2/</guid>
         
         <category>书籍</category>
         
