@@ -5,9 +5,24 @@
     <description>一个小白的成长学习历程</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 16 Jun 2019 21:26:20 +0800</pubDate>
-    <lastBuildDate>Sun, 16 Jun 2019 21:26:20 +0800</lastBuildDate>
+    <pubDate>Sun, 23 Jun 2019 21:24:53 +0800</pubDate>
+    <lastBuildDate>Sun, 23 Jun 2019 21:24:53 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
+    
+      <item>
+        <title>「笔记」《师北辰写作课》</title>
+        <description>&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-06-23-note-sbc-write-course/1.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-06-23-note-sbc-write-course/1.png&quot; alt=&quot;1.png&quot; title=&quot;查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 23 Jun 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/06/23/note-sbc-write-course/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/06/23/note-sbc-write-course/</guid>
+        
+        <category>视频课程</category>
+        
+        <category>笔记</category>
+        
+        
+      </item>
     
       <item>
         <title>如何选择开源许可协议</title>
@@ -31,6 +46,8 @@
         <guid isPermaLink="true">http://localhost:4000/2019/06/16/note-eq/</guid>
         
         <category>书籍</category>
+        
+        <category>笔记</category>
         
         
       </item>
@@ -6706,20 +6723,6 @@ do here?”&lt;/p&gt;
         <guid isPermaLink="true">http://localhost:4000/2019/05/15/how-to-ask-better-quesion/</guid>
         
         <category>翻译</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>「笔记」《指数基金投资-从入门到精通》</title>
-        <description>&lt;p&gt;&lt;a href=&quot;/assets/img/posts/2019-05-04-note-etf/1.png&quot;&gt;&lt;img src=&quot;/assets/img/posts/2019-05-04-note-etf/1.png&quot; alt=&quot;1.png&quot; title=&quot;查看原图&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Sat, 04 May 2019 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2019/05/04/note-etf/</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/05/04/note-etf/</guid>
-        
-        <category>书籍</category>
         
         
       </item>
